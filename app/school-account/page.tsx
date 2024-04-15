@@ -1,0 +1,1 @@
+// Schools will be redirected to this route when they choose to register as schools to complete their registration
