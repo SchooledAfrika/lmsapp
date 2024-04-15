@@ -1,0 +1,1 @@
+// Parents will be redirected to this route when they choose to register as parents to complete their registration
