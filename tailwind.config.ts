@@ -2,12 +2,7 @@ import type { Config } from "tailwindcss"
 
 const config = {
   darkMode: ["class"],
-  content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+  content: ["app/**/*.{ts,tsx,jsx}", "components/**/*.{ts,tsx,jsx}"],
   prefix: "",
   theme: {
     container: {
@@ -18,12 +13,15 @@ const config = {
       },
     },
     extend: {
+      
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
+        dimYellow: "#FDA21A",
+        lightGreen: "#359C71",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -52,11 +50,31 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        
+      },
+      backgroundColor: {
+        gold: "#FFCE31",
+        secondary: "#359C71",
+        dimYellow: "#FDA21A",
+        dimOrange: "#FF6634",
       },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      
+      fontFamily: {
+        header: ["Quicksand"],
+        subtext: ["Nunito Sans"]
+      },
+      screens: {
+        xs: "480px",
+        ss: "620px",
+        sm: "768px",
+        md: "1060px",
+        lg: "1200px",
+        xl: "1700px",
       },
       keyframes: {
         "accordion-down": {
