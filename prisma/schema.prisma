@@ -1,0 +1,281 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// continue with all the many to many relationships, teachersSubject and students
+// students and schools
+// students and teachers
+// teachers and schools
+
+// TODO: check if normal prisma many to many will be able to work, if it does not work,
+// we may default to creating array and pushing the necessary id to it
+// then mapping it to and pushing it to new set of array that will be used instead
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// creating the teachers model
+model Teacher {
+  id                   String            @id @default(auto()) @map("_id") @db.ObjectId
+  name                 String?
+  email                String            @unique
+  role                 TeachersRole //weather the teacher is schooledAfrika teacher or as an external teacher
+  subscriped           Boolean? //shows true if the subscription have not expired
+  subscriptionDuration BigInt? //stores date base on the subscription the teacher made
+  acceptanceVideo      String? // here we store the string for the video the teacher made for us to accept them
+  nationalIdFront      String? // front of the national id card the teacher submited
+  nationalIdBack       String? // back of the national id card the teacher submited
+  profilePhoto         String? // for setting profile picture
+  briefDescription     String? // here the teacher submit brief description about them self not more than 300 words
+  ClassVideos          ClassVideos[]
+  TeachersArticle      TeachersArticle[]
+  rating               Float?
+  TeachersSubject      TeachersSubject[]
+  phoneNumber          String?
+  Session              Session[]
+  pricing              Int?
+  // creating the many to many relationship between student and teacher
+  studentIDs           String[]          @db.ObjectId
+  students             Student[]         @relation(fields: [studentIDs], references: [id])
+  // creating many to many relationship between teachers and school
+  schoolIDs            String[]          @db.ObjectId
+  schools              School[]          @relation(fields: [schoolIDs], references: [id])
+  Classes              Classes[]
+  // creating many to many relationship, teacher can have many vacancy he or she applied for
+  Vacancy              Vacancy[]         @relation(fields: [vacancyId], references: [id])
+  vacancyId            String[]          @db.ObjectId
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @default(now())
+}
+
+// creating the student model
+model Student {
+  id            String            @id @default(auto()) @map("_id") @db.ObjectId
+  name          String?
+  email         String
+  // creating the many to many relationship between student and teacher
+  // becasue the student can have many teachers
+  teacherIDs    String[]          @db.ObjectId
+  teachers      Teacher[]         @relation(fields: [teacherIDs], references: [id])
+  // creating many to many relationship between schools and student
+  // because students can have many schools
+  schoolIDs     String[]          @db.ObjectId
+  schools       School[]          @relation(fields: [schoolIDs], references: [id])
+  // student can access many articles that belongs to them
+  // that is, one student here many articles
+  articleIDs    String[]          @db.ObjectId
+  articles      TeachersArticle[] @relation(fields: [articleIDs], references: [id])
+  // creating many to many relation between student and class video
+  // student can have many class video
+  classVideoIDs String[]          @db.ObjectId
+  classVideos   ClassVideos[]     @relation(fields: [classVideoIDs], references: [id])
+  // creating a many to many relationship between classes and students
+  // a student can decide to join one or many classes
+  classIDs      String[]          @db.ObjectId
+  classes       Classes[]         @relation(fields: [classIDs], references: [id])
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @default(now())
+}
+
+// creating the school model
+model School {
+  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  email            String
+  schoolbanner     String?
+  schoolLogo       String?
+  briefDescription String?
+  // creating many to many relationship between school and teachers
+  // because the school can have many teachets
+  teachersIDs      String[]  @db.ObjectId
+  teachers         Teacher[] @relation(fields: [teachersIDs], references: [id])
+  // creating many to many relationship between school and students
+  // because the school can have many students
+  studentsIDs      String[]  @db.ObjectId
+  students         Student[] @relation(fields: [studentsIDs], references: [id])
+  // vacancies created by the school, it may be one or many
+  Vacancy          Vacancy[]
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @default(now())
+}
+
+// creating the model for parents
+model Parents {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String?
+  email     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+// creating models for videos
+// this are videos taken during live classes
+// each classes had, the teacher can save a video link to the data base
+model ClassVideos {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  subject    String
+  title      String
+  teacher    Teacher   @relation(fields: [teacherId], references: [id])
+  teacherId  String    @db.ObjectId
+  // creating a many to many relationship between student and videos
+  // video can contain array of students that owns it
+  studentIDs String[]  @db.ObjectId
+  students   Student[] @relation(fields: [studentIDs], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+}
+
+// here we created the model where teachers can upload article
+// the link to the pdf or article is stored here
+// students under this teacher should be able to access this
+model TeachersArticle {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  subject    String
+  title      String
+  teacher    Teacher   @relation(fields: [teacherId], references: [id])
+  teacherId  String    @db.ObjectId
+  // there is many to many relationship between students and articles
+  // here, article can contain many student using it
+  studentIDs String[]  @db.ObjectId
+  students   Student[] @relation(fields: [studentIDs], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @default(now())
+}
+
+// once a teacher is registered
+// there should be a place to register the courses he offer
+// those courses is saved down here 
+// Single teacher can have many subjects
+// this subjects also contains the list of student offering it
+// there is many to many relationship between students and the teachersSubject
+model TeachersSubject {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  subject   Subjects //Subjects enum are defined below
+  teacher   Teacher   @relation(fields: [teacherId], references: [id])
+  teacherId String    @db.ObjectId
+  Session   Session[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
+}
+
+// below is the session model, each time a teacher has class
+// there should be a session created in respect of the class
+// here, we will save the generated id for the online meeting
+// and also, the teacher id is stored in this session
+// we should also have many sessions for a particular subject, conducted by a particular teacher
+// and there should be list of students that is expected to be in this session
+model Session {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  teacher           Teacher         @relation(fields: [teacherId], references: [id])
+  teacherId         String          @db.ObjectId
+  videoLink         String
+  subject           String
+  topic             String
+  sectionSubject    TeachersSubject @relation(fields: [teachersSubjectId], references: [id])
+  teachersSubjectId String          @db.ObjectId
+  listOfStudent     String[] //this will contain the list of all the students for this particular section
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @default(now())
+}
+
+// below is the model for classes
+// teachers can create their one or many classes i.e there will be one to many relationship between
+// teachers and classes
+// student will have many to many relationship with classes
+// since students can have many classes and classes can have many students
+model Classes {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  subject      Subjects
+  classDays    ClassDay[]
+  timeInterval String
+  amount       Float
+  classBanner  String
+  rating       Float
+  // here, there is one to many relationship between classes and teacher
+  // a teacher can have many classes
+  teacher      Teacher    @relation(fields: [teacherId], references: [id])
+  teacherId    String     @db.ObjectId
+  // there will be many to many relationship between classes and students
+  // classes can have many students
+  studentIDs   String[]   @db.ObjectId
+  students     Student[]  @relation(fields: [studentIDs], references: [id])
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @default(now())
+}
+
+// below is the model for get in touch
+// any one can send a message, irrespective if you are registered or not
+// only school afrika portal or admin dashboard should be able to see this
+model GetInTouch {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  phoneNo   String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+// below we create a model for vacancy adverts
+// this advert should be created by schools only
+// only registered teachers are allowed to apply for the vacancy
+// there will be a many to many relationship between vacancy and teachers
+model Vacancy {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  level          String
+  location       String
+  contractType   ContractType
+  details        String
+  qualifications String[]
+  // one to many relationship between school and vacancy
+  // school can have many vacancy, vacancy can have only one school
+  school         School       @relation(fields: [schoolId], references: [id])
+  schoolId       String       @db.ObjectId
+  // there will be many to many relationship between teachers and vancacy
+  // vacancy can contain many teachers,
+  teacherIDs     String[]     @db.ObjectId
+  teachers       Teacher[]    @relation(fields: [teacherIDs], references: [id])
+  deadLine       DateTime
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @default(now())
+}
+
+// below is the enum for teachers role
+enum TeachersRole {
+  INTERNAL
+  EXTERNAL
+}
+
+// below is the enum for the subjects the app offers
+enum Subjects {
+  CHEMISTRY
+  PHYSICS
+  BIOLOGY
+  GOVERNMENT
+  ENGLISH
+  LITERATURE
+  CRS
+}
+
+// enums for vacancy contract types
+enum ContractType {
+  FULLTIME
+  PARTTIME
+}
+
+// creating enums for the days of the week
+enum ClassDay {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+}
