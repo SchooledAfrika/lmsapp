@@ -12,7 +12,6 @@ import { navData } from "@/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 
-
 const MobileNavLink = ({ children, ...props }) => {
   return (
     <Popover.Button
@@ -26,7 +25,6 @@ const MobileNavLink = ({ children, ...props }) => {
 };
 
 const Header = () => {
-  
   const [isScrolled, setIsScrolled] = useState(false);
   const handleScroll = () => {
     const scrollY = window.scrollY;
@@ -59,11 +57,16 @@ const Header = () => {
           </div>
           {/* Buttons */}
           <div className="flex items-center gap-6">
-           
-            <Button href="/register" className="hidden bg-secondary text-white  text-[16.5px] px-6 py-3 lg:block">
+            <Button
+              href="/register"
+              className="hidden bg-secondary text-white  text-[16.5px] px-6 py-3 lg:block"
+            >
               Register
             </Button>
-            <Button href="/login" className="hidden bg-dimOrange text-white  text-[16.5px] px-6 py-3 lg:block">
+            <Button
+              href="/login"
+              className="hidden bg-dimOrange text-white  text-[16.5px] px-6 py-3 lg:block"
+            >
               Login
             </Button>
             {/* Mobile NavLinks */}
@@ -113,10 +116,19 @@ const Header = () => {
                             ))}
                           </div>
                           <div className="mt-8 flex flex-col gap-4">
-                            <Button href="/register" className="bg-secondary text-white" variant="outline">
+                            <Button
+                              href="/register"
+                              className="bg-secondary text-white"
+                              variant="outline"
+                            >
                               Register
                             </Button>
-                            <Button className="bg-dimOrange text-white" href="/login">Login</Button>
+                            <Button
+                              className="bg-dimOrange text-white"
+                              href="/login"
+                            >
+                              Login
+                            </Button>
                           </div>
                         </Popover.Panel>
                       </>
