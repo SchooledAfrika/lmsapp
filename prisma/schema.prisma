@@ -26,6 +26,7 @@ datasource db {
 model Teacher {
   id                   String            @id @default(auto()) @map("_id") @db.ObjectId
   name                 String?
+  password             String?
   email                String            @unique
   role                 TeachersRole //weather the teacher is schooledAfrika teacher or as an external teacher
   subscriped           Boolean? //shows true if the subscription have not expired
@@ -60,7 +61,9 @@ model Teacher {
 model Student {
   id            String            @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
-  email         String
+  email         String            @unique
+  password      String?
+  profilePhoto  String?
   // creating the many to many relationship between student and teacher
   // becasue the student can have many teachers
   teacherIDs    String[]          @db.ObjectId
@@ -89,10 +92,12 @@ model Student {
 model School {
   id               String    @id @default(auto()) @map("_id") @db.ObjectId
   name             String?
-  email            String
+  email            String    @unique
   schoolbanner     String?
   schoolLogo       String?
   briefDescription String?
+  password         String?
+  profilePhoto     String?
   // creating many to many relationship between school and teachers
   // because the school can have many teachets
   teachersIDs      String[]  @db.ObjectId
@@ -109,11 +114,13 @@ model School {
 
 // creating the model for parents
 model Parents {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String?
-  email     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  name         String?
+  email        String   @unique
+  password     String?
+  profilePhoto String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
 }
 
 // creating models for videos
