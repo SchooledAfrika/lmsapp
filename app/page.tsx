@@ -12,17 +12,16 @@ import Testimonials from "@/components/Testimonials";
 export default function Home() {
   return (
     <div className="bg-stone-100">
-      
-      <Header  />
-        <Hero />
-       <Offer /> 
-      <PopularSubjects/>
+      <Header />
+      <Hero />
+      <Offer />
+      <PopularSubjects />
       <Virtual />
       <PrivateSession />
       <HomeworkSupport />
       <PopularClasses />
       <GetStarted />
-      <Testimonials />  
+      <Testimonials />
     </div>
-  )
+  );
 }
