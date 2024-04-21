@@ -5,6 +5,12 @@ const config = {
   content: ["app/**/*.{ts,tsx,jsx}", "components/**/*.{ts,tsx,jsx}"],
   prefix: "",
   theme: {
+    maxWidth: {
+      container: "1440px",
+      contentContainer: "1140px",
+      containerSmall: "1024px",
+      containerxs: "768px",
+    },
     container: {
       center: true,
       padding: "2rem",
@@ -58,6 +64,7 @@ const config = {
         dimYellow: "#FDA21A",
         dimOrange: "#FF6634",
       },
+     
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
