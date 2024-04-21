@@ -1,6 +1,7 @@
 import Login from "@/components/Login";
+import React from "react";
 
-const LoginPage = () => {
+const page = () => {
   return (
     <div className="bg-[#F8F7F4]">
       <Login />
@@ -8,4 +9,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default page;
