@@ -14,13 +14,19 @@ const Header = () => {
   };
 
   return (
-    <div className=" md:top-0 font-subtext border-b-2 font-semibold   md:shadow-none z-20 ">
+    <div className=" bg-stone-50 sticky md:top-0 font-subtext border-b-2 font-semibold h-[75px]   md:shadow-none z-[999] ">
       {/* DESKTOP */}
-      <div className=" hidden lg:block animate-in fade-in zoom-in  p-4 ">
+      <div className=" hidden lg:block p-4 ">
         <div className="flex justify-between items-center">
           {/* The logo image seems to be problematic as it is causing issues with the header section overflowing, do confirm please */}
           <div>
-            <Image src={Logo} alt="logo" className="w-[100px] " />
+            <Image
+              src={"/logo.png"}
+              alt="logo"
+              width={100}
+              height={100}
+              className="w-[100px] "
+            />
           </div>
           <div className="flex gap-[20px] xl:gap-[50px] text-[16.5px] space-x-6 justify-center items-center select-none">
             <Link href="/find-tutors">Find Tutors</Link>
@@ -54,7 +60,13 @@ const Header = () => {
       >
         <div className="flex justify-between  mx-[10px]">
           <div className="flex gap-[50px] text-[16px] items-center select-none">
-            <Image src={Logo} alt="logo" className="w-[150px] h-[150px]" />
+            <Image
+              src={"/logo.png"}
+              alt="logo"
+              width={100}
+              height={100}
+              className="w-[100px] "
+            />
           </div>
           <div className="flex items-center gap-[40px]">
             {menu ? (
@@ -132,6 +144,13 @@ const Header = () => {
     //         </Button>
     //       </div>
 
+    //     <div className="sm:hidden z-[5] flex flex-1 mr-4 justify-end  items-center">
+    //       <Image
+    //         src={toggle ? close : menu}
+    //         alt="menu"
+    //         className="w-[28px]  h-[28px] object-contain"
+    //         onClick={() => setToggle((prev) => !prev)}
+    //       />
     //     <div className="sm:hidden z-[5] flex flex-1 mr-4 justify-end  items-center">
     //       <Image
     //         src={toggle ? close : menu}

@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 const config = {
   darkMode: ["class"],
@@ -19,7 +19,6 @@ const config = {
       },
     },
     extend: {
-      
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -56,7 +55,6 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        
       },
       backgroundColor: {
         gold: "#FFCE31",
@@ -64,24 +62,16 @@ const config = {
         dimYellow: "#FDA21A",
         dimOrange: "#FF6634",
       },
-     
+
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      
+
       fontFamily: {
         header: ["Quicksand"],
-        subtext: ["Nunito Sans"]
-      },
-      screens: {
-        xs: "480px",
-        ss: "620px",
-        sm: "768px",
-        md: "1060px",
-        lg: "1200px",
-        xl: "1700px",
+        subtext: ["Nunito Sans"],
       },
       keyframes: {
         "accordion-down": {
@@ -100,6 +90,6 @@ const config = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-} satisfies Config
+} satisfies Config;
 
-export default config
+export default config;
