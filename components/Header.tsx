@@ -60,7 +60,13 @@ const Header = () => {
       >
         <div className="flex justify-between  mx-[10px]">
           <div className="flex gap-[50px] text-[16px] items-center select-none">
-            <Image src={Logo} alt="logo" className="w-[150px] h-[150px]" />
+            <Image
+              src={"/logo.png"}
+              alt="logo"
+              width={100}
+              height={100}
+              className="w-[100px] "
+            />
           </div>
           <div className="flex items-center gap-[40px]">
             {menu ? (
