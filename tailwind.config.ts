@@ -73,14 +73,14 @@ const config = {
         header: ["Quicksand"],
         subtext: ["Nunito Sans"],
       },
-      screens: {
-        xs: "480px",
-        ss: "620px",
-        sm: "768px",
-        md: "1060px",
-        lg: "1200px",
-        xl: "1700px",
-      },
+      // screens: {
+      //   xs: "480px",
+      //   ss: "620px",
+      //   sm: "768px",
+      //   md: "1060px",
+      //   lg: "1200px",
+      //   xl: "1700px",
+      // },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },

@@ -17,7 +17,7 @@ const HeroRight = () => {
     return () => clearInterval(setTimer);
   }, []);
   return (
-    <div className=" hidden md:block flex-1 relative w-full h-full overflow-hidden ">
+    <div className=" hidden md:block pl-20 lg:pl-0 flex-1 relative w-full h-full overflow-hidden ">
       <motion.div
         animate={{ translateY: [-10, 0, -10] }}
         transition={{
@@ -26,14 +26,14 @@ const HeroRight = () => {
           ease: "easeInOut",
           repeatType: "loop",
         }}
-        className=" max-sm:hidden absolute w-12 aspect-square rounded-full  bottom-16 left-20 overflow-hidden"
+        className=" hidden lg:block absolute w-12 aspect-square rounded-full  bottom-16 left-20 overflow-hidden"
       >
         <Image
           className=" w-full h-full object-cover"
           src={"/slide-1.jpg"}
           alt="slider1"
-          width={20}
-          height={20}
+          width={200}
+          height={200}
         />
       </motion.div>
       <motion.div
@@ -44,14 +44,14 @@ const HeroRight = () => {
           ease: "easeInOut",
           repeatType: "loop",
         }}
-        className="  absolute w-12 aspect-square rounded-full  top-32 left-32 overflow-hidden"
+        className=" hidden lg:block  absolute w-12 aspect-square rounded-full  top-32 left-32 overflow-hidden"
       >
         <Image
           className=" w-full h-full object-cover"
           src={"/slide-2.jpg"}
           alt="slider2"
-          width={20}
-          height={20}
+          width={200}
+          height={200}
         />
       </motion.div>
       <motion.div
@@ -62,14 +62,14 @@ const HeroRight = () => {
           ease: "easeInOut",
           repeatType: "loop",
         }}
-        className="  absolute w-12 aspect-square rounded-full  top-24 left-36 overflow-hidden"
+        className=" hidden lg:block  absolute w-12 aspect-square rounded-full  top-24 left-36 overflow-hidden"
       >
         <Image
           className=" w-full h-full object-cover"
           src={"/slide-3.jpg"}
           alt="slider2"
-          width={20}
-          height={20}
+          width={200}
+          height={200}
         />
       </motion.div>
       <motion.div
@@ -80,14 +80,14 @@ const HeroRight = () => {
           ease: "easeInOut",
           repeatType: "loop",
         }}
-        className="  absolute w-12 aspect-square rounded-full  top-12 right-24 overflow-hidden"
+        className=" hidden lg:block  absolute w-12 aspect-square rounded-full  top-12 right-24 overflow-hidden"
       >
         <Image
           className=" w-full h-full object-cover"
           src={"/slide-4.jpg"}
           alt="slider2"
-          width={20}
-          height={20}
+          width={200}
+          height={200}
         />
       </motion.div>
       <motion.div
@@ -98,14 +98,14 @@ const HeroRight = () => {
           ease: "easeInOut",
           repeatType: "loop",
         }}
-        className="  absolute w-12 aspect-square rounded-full  top-60 right-0 overflow-hidden"
+        className=" hidden lg:block  absolute w-12 aspect-square rounded-full  top-60 right-0 overflow-hidden"
       >
         <Image
           className=" w-full h-full object-cover"
           src={"/slide-5.jpg"}
           alt="slider2"
-          width={20}
-          height={20}
+          width={200}
+          height={200}
         />
       </motion.div>
       <motion.div
@@ -116,14 +116,14 @@ const HeroRight = () => {
           ease: "easeInOut",
           repeatType: "loop",
         }}
-        className="  absolute w-12 aspect-square rounded-full  top-52 right-0 overflow-hidden"
+        className=" hidden lg:block  absolute w-12 aspect-square rounded-full  top-52 right-0 overflow-hidden"
       >
         <Image
           className=" w-full h-full object-cover"
           src={"/slide-6.jpg"}
           alt="slider2"
-          width={20}
-          height={20}
+          width={200}
+          height={200}
         />
       </motion.div>
       <motion.div
@@ -134,14 +134,14 @@ const HeroRight = () => {
           ease: "easeInOut",
           repeatType: "loop",
         }}
-        className="  absolute w-12 aspect-square rounded-full bottom-16 right-0 overflow-hidden"
+        className=" hidden lg:block  absolute w-12 aspect-square rounded-full bottom-16 right-0 overflow-hidden"
       >
         <Image
           className=" w-full h-full object-cover"
           src={"/slide-7.jpg"}
           alt="slider2"
-          width={20}
-          height={20}
+          width={200}
+          height={200}
         />
       </motion.div>
       {img === 1 ? <Imageshow1 /> : img === 2 ? <Imageshow2 /> : <Imageshow3 />}

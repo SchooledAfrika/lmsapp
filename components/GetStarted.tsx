@@ -5,8 +5,8 @@ import { BsSendArrowUp } from "react-icons/bs";
 
 const GetStarted = () => {
   return (
-    <Container className="mx-auto my-6 font-subtext  sm:mt-10 lg:mt-40">
-       <div className="-mx-6 rounded-full bg-dimYellow px-6 py-20  sm:mx-0 sm:py-32 md:px-12"> 
+    <Container>
+      <div className="-mx-6 hidden md:block rounded-full bg-dimYellow px-6 py-20  sm:mx-0 sm:py-32 md:px-12">
         <div className="flex sm:justify-between justify-evenly sm:flex-row flex-col sm:gap-16  gap-2 mx-auto">
           <div className=" mx-6 text-justify flex-1 font-poppins">
             <h2 className=" text-2xl font-medium text-black [text-wrap:balance] sm:text-3">

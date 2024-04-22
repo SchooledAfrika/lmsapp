@@ -8,7 +8,7 @@ const Imageshow3 = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeInOut" }}
-      className=" pb-8 flex items-end justify-center w-80 aspect-square  md:bg-dimYellow rounded-full absolute -bottom-8 md:translate-x-1/2"
+      className=" pb-8 flex items-end justify-center w-80 aspect-square  md:bg-dimYellow rounded-full absolute -bottom-8  lg:translate-x-1/2"
     >
       <motion.div
         initial={{ translateY: 100 }}
