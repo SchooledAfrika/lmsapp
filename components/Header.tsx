@@ -54,19 +54,13 @@ const Header = () => {
       </div>
       {/* MOBILE */}
       <div
-        className={` block lg:hidden shadow-sm rounded-xl   fixed top-0 w-full z-[999]   py-0 animate-in fade-in zoom-in  ${
+        className={` block lg:hidden shadow-sm rounded-xl  fixed top-0 w-full z-[999]   py-0 animate-in fade-in zoom-in  ${
           menu ? " bg-white py-2" : "bg-white"
         } `}
       >
         <div className="flex justify-between  mx-[10px]">
           <div className="flex gap-[50px] text-[16px] items-center select-none">
-            <Image
-              src={"/logo.png"}
-              alt="logo"
-              width={100}
-              height={100}
-              className="w-[100px] "
-            />
+            <Image src={Logo} alt="logo" className="w-[150px] h-[150px]" />
           </div>
           <div className="flex items-center gap-[40px]">
             {menu ? (
@@ -76,10 +70,8 @@ const Header = () => {
               />
             ) : (
               <Image
-                src={"/menu.svg"}
+                src={Menu}
                 alt="logo"
-                width={50}
-                height={50}
                 className="cursor-pointer animate-in fade-in zoom-in"
                 onClick={toggleMenu}
               />
@@ -146,6 +138,13 @@ const Header = () => {
     //         </Button>
     //       </div>
 
+    //     <div className="sm:hidden z-[5] flex flex-1 mr-4 justify-end  items-center">
+    //       <Image
+    //         src={toggle ? close : menu}
+    //         alt="menu"
+    //         className="w-[28px]  h-[28px] object-contain"
+    //         onClick={() => setToggle((prev) => !prev)}
+    //       />
     //     <div className="sm:hidden z-[5] flex flex-1 mr-4 justify-end  items-center">
     //       <Image
     //         src={toggle ? close : menu}

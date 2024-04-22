@@ -16,6 +16,7 @@ const HeroLeft = () => {
           alt="intro-gif"
           width={20}
           height={20}
+          unoptimized={true}
         />
       </div>
       <div>
