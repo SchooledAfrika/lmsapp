@@ -30,7 +30,7 @@ const PopularClassesCard = ({
   timing,
 }: Props) => {
   return (
-    <div className="w-full  overflow-hidden      font-subtext rounded-lg card flex flex-col justify-center gap-6 hover:-translate-y-2 transition-transform duration-300 group">
+    <div className="w-full   overflow-hidden      font-subtext rounded-lg card flex flex-col justify-center gap-6 hover:-translate-y-2 transition-transform duration-300 group">
       <div className="relative text-white">
         <Image
           className="w-full h-full object-cover"
@@ -57,16 +57,17 @@ const PopularClassesCard = ({
         </button>
       </div>
 
-      <p className="text-right mr-6 font-bold text-lightGreen">{pricing}</p>
+     
 
-      <div className="flex flex-col mb-6 justify-between mx-4 ">
-        <div className="my-4">
+      <div className="flex flex-col mb-10 justify-center mx-4 "> 
+      <p className="text-right mr-6 font-bold text-lightGreen">{pricing}</p>
+        <div className="my-1">
           <span className="text-base text-slate-600">Tutor</span>
           <p className="font-semibold">
             {tutor} {rating}
           </p>
         </div>
-        <div className="flex my-4 ">
+        <div className="flex my-2 ">
           <p>{subject}</p>
           <Image
             src={`${icon}`}
@@ -83,6 +84,7 @@ const PopularClassesCard = ({
     </div>
   );
 };
+
 
 const PopularClasses = () => {
   return (

@@ -71,11 +71,8 @@ export const subjects = [
     duration: "79+ Hours",
     rating: "⭐ 4.7/5",
   },
-];
-
-export const moreSubjects = [
   {
-    id: "more-1",
+    id: "subject-9",
     icon: "/govt.png",
     title: "Government",
     tutorNum: "143 Tutors",
@@ -83,7 +80,7 @@ export const moreSubjects = [
     rating: "⭐ 4.9/5",
   },
   {
-    id: "more-2",
+    id: "subject-10",
     icon: "/crs.png",
     title: "CRS",
     tutorNum: "44 Tutors",
@@ -91,7 +88,7 @@ export const moreSubjects = [
     rating: "⭐ 4.5/5",
   },
   {
-    id: "more-3",
+    id: "subject-11",
     icon: "/phy.png",
     title: "Physics",
     tutorNum: "138 Tutors",
@@ -99,15 +96,19 @@ export const moreSubjects = [
     rating: "⭐ 4.8/5",
   },
   {
-    id: "more-4",
+    id: "subject-12",
     icon: "/yoruba.png",
     title: "Yoruba",
     tutorNum: "23 Tutors",
     duration: "75+ Hours",
     rating: "⭐ 4.6/5",
   },
+];
+
+export const moreSubjects = [
+ 
   {
-    id: "more-5",
+    id: "more-1",
     icon: "/igbo.png",
     title: "Igbo",
     tutorNum: "38 Tutors",
@@ -115,7 +116,7 @@ export const moreSubjects = [
     rating: "⭐ 4.6/5",
   },
   {
-    id: "more-6",
+    id: "more-2",
     icon: "/hausa.png",
     title: "Hausa",
     tutorNum: "23 Tutors",

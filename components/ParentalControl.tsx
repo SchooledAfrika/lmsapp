@@ -1,22 +1,21 @@
 import React from "react";
 import Image from "next/image";
-import Container from "./Container";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
-const Virtual = () => {
+const ParentalControl = () => {
   return (
     <main className="mx-auto max-w-4xl">
       <section
         id="hero font-header"
-        className="widescreen:section-min-height tallscreen:section-min-height mb-12 flex scroll-mt-40 flex-col-reverse items-center justify-evenly gap-6 p-6 sm:flex-row-reverse"
+        className="widescreen:section-min-height tallscreen:section-min-height mb-12 flex scroll-mt-40 flex-col-reverse items-center justify-evenly gap-6 p-6 sm:flex-row"
       >
         <article className="sm:w-1/2">
           <p className="mt-6 font-header text-lg font-semibold text-dimYellow">
-            Virtual Schools
+            Parental Control
           </p>
 
-          <p className="mt-4 max-w-full text-justify text-lg font-subtext  sm:text-left">
+          <p className="mt-4 max-w-full text-justify text-lg font-subtext font-[300px] sm:text-left">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
             interdum sapien, id aliquam ligula. Maecenas eget neque id ligula
             egestas blandit. Suspendisse potenti. Phasellus efficitur nulla at
@@ -36,7 +35,7 @@ const Virtual = () => {
             <div className="w-full  h-full relative z-20 flex pl-6 lgl:pl-0">
               <Image
                 className="rounded-lg  mx-auto h-full w-full object-cover"
-                src={"/img-1.jpg"}
+                src={"/img-4.jpg"}
                 alt="profileImg"
                 width={200}
                 height={200}
@@ -50,4 +49,4 @@ const Virtual = () => {
   );
 };
 
-export default Virtual;
+export default ParentalControl;

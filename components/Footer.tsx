@@ -12,9 +12,9 @@ const Footer: React.FC = () => {
   return (
     <Container className="py-4">
       <nav>
-        <div className="block flex items-center justify-between px-[20px] md:px-[70px]">
+        <div className="block flex flex-col sm:flex-row font-subtext items-center justify-between px-[20px]">
           <div>
-            <Image src={Logo} alt="logo" className="w-[100px] " />
+            <Image src={Logo} alt="logo" className="w-[100px] mb-4 " />
           </div>
           <div className="flex gap-[20px] xl:gap-[50px] text-[16.5px] space-x-6 justify-center items-center select-none">
             <Link href="/find-tutors">Find Tutors</Link>
@@ -24,7 +24,7 @@ const Footer: React.FC = () => {
           </div>
         </div>
       </nav>
-      <div className="block md:flex items-center justify-between px-[20px] md:px-[70px]">
+      <div className="block md:flex items-center justify-between px-[20px]">
         <div className="w-full md:w-[35%]">
           <span className="font-bold">About Schooled Afrika</span>
           <p className="pt-2 text-[15px]">
@@ -33,23 +33,23 @@ const Footer: React.FC = () => {
             penatibus et magnis dis parturient montes, nascetur ridiculus mus.
           </p>
         </div>
-        <div className="flex items-center justify-between gap-10 py-[20px] md:py-[0]">
+        <div className="flex  items-center justify-between gap-10 py-[20px] md:py-[0]">
           <Link href="/">
-            <Image src={Instagram} alt="icon" />
+            <Image src={Instagram} alt="icon" className="w-[28px]" />
           </Link>
           <Link href="/">
-            <Image src={Twitter} alt="icon" />
+            <Image src={Twitter} alt="icon" className="w-[28px]" />
           </Link>
           <Link href="/">
-            <Image src={Facebook} alt="icon" />
+            <Image src={Facebook} alt="icon" className="w-[28px]" />
           </Link>
           <Link href="/">
-            <Image src={Tiktok} alt="icon" />
+            <Image src={Tiktok} alt="icon" className="w-[28px]" />
           </Link>
         </div>
       </div>
-      <hr className="border-gray-400 mx-[20px] md:mx-[70px] mt-[10px] md:mt-[50px] mb-[22px]" />
-      <div className="block md:flex items-center justify-between gap-10 px-[20px] md:px-[70px] text-[14px]">
+      <hr className="border-gray-400 mx-[20px]  mt-[10px] md:mt-[50px] mb-[22px]" />
+      <div className="block md:flex items-center justify-between gap-10 px-[20px]  text-[14px]">
         <span>
           Copyright © {new Date().getFullYear()}. Schooled Afrika. All Rights
           Reserved.
