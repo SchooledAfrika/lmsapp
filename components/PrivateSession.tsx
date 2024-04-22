@@ -42,7 +42,7 @@ const PrivateSession = () => {
               />
             </div>
           </div>
-          <div className=" lgl:inline-flex w-full h-80 border-2 border-lightGreen rounded-md group-hover:-translate-x-2 group-hover:-translate-y-2 transition-transform duration-300"></div>
+          <div className=" lgl:inline-flex w-full h-80 border-2 border-lightGreen rounded-md"></div>
         </div>
       </section>
     </main>

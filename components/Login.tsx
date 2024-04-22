@@ -11,16 +11,16 @@ import { Button } from "./ui/button";
 
 const Login: React.FC = () => {
   return (
-    <div className="w-full">
+    <div className="w-full font-subtext">
       <div className="flex flex-col md:flex-row justify-between items-center px-[1rem] md:px-[10rem] py-[1rem] md:py-[5rem] w-full">
         <div className="sm:w-full md:w-[45%]">
           <Link href="/">
-            <Image
-              src={logo}
+          <Image
+              src={"/logo.png"}
               alt="logo"
-              className={clsx(
-                "w-[100px] h-[100px] md:w-[180px] md:h-[180px] font-bold duration-300"
-              )}
+              width={100}
+              height={100}
+              className="w-[100px] mb-4 "
             />
           </Link>
           <span className="font-bold text-[22px]">
@@ -56,25 +56,25 @@ const Login: React.FC = () => {
               type="email"
               name="email"
               placeholder="Enter Email Address"
-              className="my-3 p-4 bg-white outline-none rounded-[8px] w-full bg-white"
+              className="my-3 p-4  outline-none rounded-[8px] w-full bg-white"
             />
             <br />
             <input
               type="password"
               name="password"
               placeholder="Enter Password"
-              className="mb-3 p-4 bg-white outline-none rounded-[8px] w-full bg-white"
+              className="mb-3 p-4  outline-none rounded-[8px] w-full bg-white"
             />
             <Button className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3">
               Login
             </Button>
           </form>
           <div className="flex flex-col justify-center">
-            <Button className="flex items-center bg-white text-black w-full text-[16px] px-6 py-7 my-3">
+            <Button className="flex items-center bg-white hover:bg-lightGreen text-black w-full text-[16px] px-6 py-7 my-3">
               Sign in with Google{" "}
               <Image src={Google} alt="Google" className="pl-2" />
             </Button>
-            <Button className="flex items-center bg-white text-black w-full text-[16px] px-6 py-7">
+            <Button className="flex items-center bg-white hover:bg-lightGreen text-black w-full text-[16px] px-6 py-7">
               Sign in with Apple ID{" "}
               <Image src={Apple} alt="Apple" className="pl-2" />
             </Button>

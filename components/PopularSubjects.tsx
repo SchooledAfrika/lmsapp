@@ -22,12 +22,12 @@ const PopularSubjectsCard = ({
   rating,
 }: Props) => {
   return (
-    <div className="w-full h-80 font-subtext rounded-lg bg-white p-7 flex flex-col justify-center gap-6 hover:-translate-y-2 transition-transform duration-300 group">
-      <div className="flex justify-between items-center">
+    <div className="w-[180px]  font-subtext rounded-lg bg-white p-6 flex flex-col justify-evenly gap-3 hover:-translate-y-2 transition-transform duration-300 group">
+      <div className="flex justify-center items-center">
         <Image src={`${icon}`} alt="icon" width={50} height={50} />
       </div>
       <div>
-        <h2 className="text-xl font-titleFont font-semibold tracking-wide group-hover:text-textGreen">
+        <h2 className="text-sm font-titleFont font-semibold tracking-wide group-hover:text-textGreen">
           {title}
         </h2>
         <p className="text-sm mt-3">{tutorNum}</p>
@@ -54,7 +54,7 @@ const PopularSubjects = () => {
             <span className="hidden md:inline-flex mb-2 w-20 py-[.5px] md:w-60 lgl:w-72 h-[.5px] bg-lightGreen ml-6"></span>
           </h2>
         </div>
-        <div className="grid  grid-cols-1 md:grid-cols-4 items-center xl:grid-cols-3 gap-6 mt-10 lgl:px-10">
+        <div className="grid   grid-cols-1 md:grid-cols-4 items-center lg:grid-cols-6 xl:grid-cols-6 gap-6 mt-10 lgl:px-10">
           {subjects.map((subject, index) => (
             <PopularSubjectsCard key={subject.id} {...subject} index={index} />
           ))}
@@ -72,7 +72,7 @@ const PopularSubjects = () => {
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
             >
-              <div className="grid  grid-cols-1 md:grid-cols-4 items-center xl:grid-cols-3 gap-6 mt-10 lgl:px-10">
+              <div className="grid   grid-cols-1 md:grid-cols-4 items-center lg:grid-cols-6 xl:grid-cols-6 gap-6 mt-10 lgl:px-10">
                 {moreSubjects.map((moreSubject, index) => (
                   <PopularSubjectsCard
                     key={moreSubject.id}
