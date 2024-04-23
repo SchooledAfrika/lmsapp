@@ -8,6 +8,8 @@ import HomeworkSupport from "@/components/HomeworkSupport";
 import PopularClasses from "@/components/PopularClasses";
 import GetStarted from "@/components/GetStarted";
 import Testimonials from "@/components/Testimonials";
+import ParentalControl from "@/components/ParentalControl";
+import Footer from "@/components/Footer";
 
 export default function Home() {
   return (
@@ -19,9 +21,11 @@ export default function Home() {
       <Virtual />
       <PrivateSession />
       <HomeworkSupport />
+      <ParentalControl />
       <PopularClasses />
       <GetStarted />
       <Testimonials />
+      <Footer/>
     </div>
   );
 }

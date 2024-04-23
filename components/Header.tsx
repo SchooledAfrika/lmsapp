@@ -6,27 +6,56 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Menu from "@/images/menu.svg";
 import Image from "next/image";
+import { usePathname } from "next/navigation";
+
+const navLinks = [
+  {name: "Find Tutors", href: "/find-tutors"},
+  {name: "Classes", href: "/find-classes"},
+  {name: "Apply to teach", href: "/apply-to-teach"},
+  {name: "Contact", href: "/contact"},
+]
 
 const Header = () => {
   const [menu, setMenu] = useState(false);
   const toggleMenu = () => {
     setMenu(!menu);
   };
+  const pathname = usePathname();
+ 
+
+ 
 
   return (
-    <div className=" md:top-0 font-subtext border-b-2 font-semibold   md:shadow-none z-20 ">
+    <div className=" bg-white sticky md:top-0 font-subtext border-b-2 font-semibold h-[75px]   md:shadow-none z-[999] ">
       {/* DESKTOP */}
-      <div className=" hidden lg:block animate-in fade-in zoom-in  p-4 ">
+      <div className=" hidden lg:block p-4 ">
+
         <div className="flex justify-between items-center">
+
           {/* The logo image seems to be problematic as it is causing issues with the header section overflowing, do confirm please */}
           <div>
-            <Image src={Logo} alt="logo" className="w-[100px] " />
+            <Image
+              src={"/logo.png"}
+              alt="logo"
+              width={100}
+              height={100}
+              className="w-[100px] ml-10 "
+            />
           </div>
           <div className="flex gap-[20px] xl:gap-[50px] text-[16.5px] space-x-6 justify-center items-center select-none">
-            <Link href="/find-tutors">Find Tutors</Link>
-            <Link href="/classes">Classes</Link>
-            <Link href="/apply-to-teach">Apply to teach</Link>
-            <Link href="/contact">Contact</Link>
+            {navLinks.map((link)=> {
+               const isActive = pathname.startsWith(link.href)
+              return(
+                <Link href={link.href} key={link.name}
+                  className={isActive ? "font-bold border-b-2  border-lightGreen" : "normal"}
+                
+                >
+                  {link.name}
+                </Link>
+              )
+
+            })}
+            
           </div>
 
           <div className="flex items-center mr-2 gap-6">
@@ -48,13 +77,19 @@ const Header = () => {
       </div>
       {/* MOBILE */}
       <div
-        className={` block lg:hidden shadow-sm rounded-xl  fixed top-0 w-full z-[999]   py-0 animate-in fade-in zoom-in  ${
+        className={` block lg:hidden  rounded-xl   fixed top-0 w-full z-[999]   py-6 animate-in fade-in zoom-in  ${
           menu ? " bg-white py-2" : "bg-white"
         } `}
       >
         <div className="flex justify-between  mx-[10px]">
           <div className="flex gap-[50px] text-[16px] items-center select-none">
-            <Image src={Logo} alt="logo" className="w-[150px] h-[150px]" />
+            <Image
+              src={"/logo.png"}
+              alt="logo"
+              width={100}
+              height={100}
+              className="w-[100px] "
+            />
           </div>
           <div className="flex items-center gap-[40px]">
             {menu ? (
@@ -132,6 +167,13 @@ const Header = () => {
     //         </Button>
     //       </div>
 
+    //     <div className="sm:hidden z-[5] flex flex-1 mr-4 justify-end  items-center">
+    //       <Image
+    //         src={toggle ? close : menu}
+    //         alt="menu"
+    //         className="w-[28px]  h-[28px] object-contain"
+    //         onClick={() => setToggle((prev) => !prev)}
+    //       />
     //     <div className="sm:hidden z-[5] flex flex-1 mr-4 justify-end  items-center">
     //       <Image
     //         src={toggle ? close : menu}
