@@ -17,7 +17,7 @@ const HeroRight = () => {
     return () => clearInterval(setTimer);
   }, []);
   return (
-    <div className=" hidden md:block pl-20 lg:pl-0 flex-1 relative w-full h-full overflow-hidden ">
+    <div className=" pl-20   lg:pl-0 flex-1 relative w-full h-full overflow-hidden ">
       <motion.div
         animate={{ translateY: [-10, 0, -10] }}
         transition={{
@@ -26,7 +26,7 @@ const HeroRight = () => {
           ease: "easeInOut",
           repeatType: "loop",
         }}
-        className=" hidden lg:block absolute w-12 aspect-square rounded-full  bottom-16 left-20 overflow-hidden"
+        className="hidden lg:block absolute w-12 aspect-square rounded-full  bottom-16 left-20 overflow-hidden"
       >
         <Image
           className=" w-full h-full object-cover"

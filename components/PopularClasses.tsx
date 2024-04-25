@@ -89,16 +89,9 @@ const PopularClassesCard = ({
 const PopularClasses = () => {
   return (
     <Container>
-      <div className="max-w-full  mx-auto px-4 py-24">
-        <div className="w-full  flex flex-col items-center">
-          <h2 className="text-2xl font-header text-lightGreen font-bold">
-            {" "}
-            <span className="hidden  md:inline-flex w-20 md:w-60 mb-2 py-[.5px]  lgl:w-72 h-[.5px] bg-lightGreen mr-6"></span>
-            Popular Classes{" "}
-            <span className="hidden md:inline-flex mb-2 w-20 py-[.5px] md:w-60 lgl:w-72 h-[.5px] bg-lightGreen ml-6"></span>
-          </h2>
-        </div>
-        <div className="grid  grid-cols-1 md:grid-cols-3 items-center xl:grid-cols-3 gap-6 mt-10 lgl:px-10">
+      <div className="max-w-full  mx-auto px-4 pt-16 pb-6">
+        
+        <div className="grid  grid-cols-1 xs:grid-cols-2 md:grid-cols-3 items-center xl:grid-cols-3 gap-6  lgl:px-10">
           {Classes.map((Class, index) => (
             <PopularClassesCard key={Class.id} {...Class} index={index} />
           ))}

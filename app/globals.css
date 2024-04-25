@@ -125,3 +125,8 @@
     }
   }
 }
+
+.disabled{
+  cursor: not-allowed;
+  background-color: gray;
+}

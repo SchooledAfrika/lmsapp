@@ -12,14 +12,14 @@ const Footer: React.FC = () => {
   return (
     <Container className="py-4">
       <nav>
-        <div className="block flex flex-col sm:flex-row font-subtext items-center justify-between px-[20px]">
+        <div className="flex flex-col sm:flex-row font-subtext items-center justify-between px-[20px]">
           <div>
-            <Image src={Logo} alt="logo" className="w-[100px] mb-4 " />
+            <Image src={Logo} alt="logo" className="w-[100px]  mb-4 " />
           </div>
-          <div className="flex gap-[20px] xl:gap-[50px] text-[16.5px] space-x-6 justify-center items-center select-none">
+          <div className=" flex gap-[20px] xl:gap-[50px] text-[16.5px] space-x-6 justify-center items-center select-none">
             <Link href="/find-tutors">Find Tutors</Link>
             <Link href="/classes">Classes</Link>
-            <Link href="/apply-to-teach">Apply to teach</Link>
+            <Link href="/apply-to-teach">Apply to teach </Link>
             <Link href="/contact">Contact</Link>
           </div>
         </div>

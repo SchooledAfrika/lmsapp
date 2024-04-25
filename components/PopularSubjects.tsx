@@ -6,7 +6,7 @@ import Image from "next/image";
 import Container from "./Container";
 
 interface Props {
-  icon?: string;
+  icon: string;
   title: string;
   tutorNum: string;
   duration: string;
@@ -22,7 +22,7 @@ const PopularSubjectsCard = ({
   rating,
 }: Props) => {
   return (
-    <div className="w-[180px]  font-subtext rounded-lg bg-white p-6 flex flex-col justify-evenly gap-3 hover:-translate-y-2 transition-transform duration-300 group">
+    <div className="md:w-[180px] w-full  font-subtext rounded-lg bg-white p-6 flex flex-col justify-evenly gap-3 hover:-translate-y-2 transition-transform duration-300 group">
       <div className="flex justify-center items-center">
         <Image src={`${icon}`} alt="icon" width={50} height={50} />
       </div>
@@ -54,7 +54,7 @@ const PopularSubjects = () => {
             <span className="hidden md:inline-flex mb-2 w-20 py-[.5px] md:w-60 lgl:w-72 h-[.5px] bg-lightGreen ml-6"></span>
           </h2>
         </div>
-        <div className="grid   grid-cols-1 md:grid-cols-4 items-center lg:grid-cols-6 xl:grid-cols-6 gap-6 mt-10 lgl:px-10">
+        <div className="grid  grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 items-center lg:grid-cols-6 xl:grid-cols-6 gap-6 mt-10 lgl:px-10">
           {subjects.map((subject, index) => (
             <PopularSubjectsCard key={subject.id} {...subject} index={index} />
           ))}
