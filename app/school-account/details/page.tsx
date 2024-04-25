@@ -1,10 +1,10 @@
-import SchoolLogin from "@/components/ui/school-login/SchoolLogin";
 import React from "react";
+import SchoolAccout from "@/components/SchoolAccount";
 
 const page = () => {
   return (
     <div className="bg-[#F8F7F4]">
-      <SchoolLogin />
+      <SchoolAccout />
     </div>
   );
 };
