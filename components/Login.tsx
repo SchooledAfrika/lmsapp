@@ -42,7 +42,7 @@ const Login: React.FC = () => {
           <div className="flex justify-end mb-[50px]">
             <Link href="/">
               <Image
-                src="/close.svg"
+                src="/svgs/close.svg"
                 alt="close"
                 width={100}
                 height={100}
