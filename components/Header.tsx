@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import { X } from "lucide-react";
-import Logo from "@/images/logo.png";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import Menu from "@/images/menu.svg";
@@ -31,8 +30,7 @@ const Header = () => {
       <div className=" hidden lg:block p-4 ">
 
         <div className="flex justify-between items-center">
-
-          {/* The logo image seems to be problematic as it is causing issues with the header section overflowing, do confirm please */}
+          <Link href="/">
           <div>
             <Image
               src={"/logo.png"}
@@ -42,12 +40,14 @@ const Header = () => {
               className="w-[100px] ml-10 "
             />
           </div>
+          </Link>
+          
           <div className="flex gap-[20px] xl:gap-[50px] text-[16.5px] space-x-6 justify-center items-center select-none">
             {navLinks.map((link)=> {
                const isActive = pathname.startsWith(link.href)
               return(
                 <Link href={link.href} key={link.name}
-                  className={isActive ? "font-bold border-b-2  border-lightGreen" : "normal"}
+                  className={isActive ? "font-bold border-b-2 leading-[57px]  border-lightGreen" : "normal leading-[20px]"}
                 
                 >
                   {link.name}
@@ -83,6 +83,7 @@ const Header = () => {
       >
         <div className="flex justify-between  mx-[10px]">
           <div className="flex gap-[50px] text-[16px] items-center select-none">
+            <Link href="/">
             <Image
               src={"/logo.png"}
               alt="logo"
@@ -90,6 +91,8 @@ const Header = () => {
               height={100}
               className="w-[100px] "
             />
+            </Link>
+            
           </div>
           <div className="flex items-center gap-[40px]">
             {menu ? (

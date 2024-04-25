@@ -5,18 +5,24 @@ const config = {
   content: ["app/**/*.{ts,tsx,jsx}", "components/**/*.{ts,tsx,jsx}"],
   prefix: "",
   theme: {
+    screens: {
+      xs: "480px",
+      ss: "620px",
+      sm: "768px",
+      md: "1060px",
+      lg: "1200px",
+      xl: "1700px",
+    },
     maxWidth: {
       container: "1440px",
       contentContainer: "1140px",
       containerSmall: "1024px",
-      containerxs: "768px",
+      
     },
     container: {
       center: true,
       padding: "2rem",
-      screens: {
-        "2xl": "1400px",
-      },
+     
     },
     extend: {
       colors: {
