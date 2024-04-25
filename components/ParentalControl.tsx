@@ -8,7 +8,7 @@ const ParentalControl = () => {
     <main className="mx-auto max-w-4xl">
       <section
         id="hero font-header"
-        className="widescreen:section-min-height tallscreen:section-min-height mb-12 flex scroll-mt-40 flex-col-reverse items-center justify-evenly gap-6 p-6 sm:flex-row"
+        className="widescreen:section-min-height tallscreen:section-min-height  flex scroll-mt-40 flex-col-reverse mb-20 items-center justify-evenly gap-6 p-6 sm:flex-row"
       >
         <article className="sm:w-1/2">
           <p className="mt-6 font-header text-lg font-semibold text-dimYellow">

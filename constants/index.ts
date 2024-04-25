@@ -161,6 +161,36 @@ export const Classes = [
   },
 ];
 
+
+export const Applies = [
+  {
+    id: "apply-1",
+    title: "Students",
+    result: "10,000+",
+  },
+  {
+    id: "apply-2",
+    title: "Tutors",
+    result: "3,000+",
+  },
+  
+  {
+    id: "apply-3",
+    title: "Subjects",
+    result: "200+",
+  },
+  {
+    id: "apply-4",
+    title: "Schools",
+    result: "800+",
+  },
+  {
+    id: "apply-5",
+    title: "Enrollments",
+    result: "10,000+",
+  },
+];
+
 export const feedbacks = [
   {
     id: "feedback-1",

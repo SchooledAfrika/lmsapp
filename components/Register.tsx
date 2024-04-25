@@ -6,6 +6,7 @@ import Career from "@/images/careers.png";
 import { RegisterType } from "@/constants/registerType";
 import Footer from "./Footer";
 import { Button } from "./ui/button";
+import Header from "./Header";
 
 const Register = () => {
   const [selectAccountType, setSelectAccountType] = useState(null);
@@ -29,7 +30,7 @@ const Register = () => {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row justify-between items-center gap-3 px-[1rem] md:px-[6rem] py-[1rem] md:pt-[2rem] md:pb-[5rem] w-full">
+      <div className="flex font-subtext flex-col md:flex-row justify-between items-center gap-3 px-[1rem] md:px-[6rem] py-[1rem] md:py-[5rem] w-full">
         <div className="sm:w-full md:w-[45%]">
           <p className="pb-2 font-bold text-orange-400">Get Started</p>
           <span className="font-bold text-[20px] md:text-[26px]">
@@ -40,7 +41,7 @@ const Register = () => {
             commodo ligula eget dolor. Aenean massa. Cum sociis natoque
             penatibus et magnis dis parturient montes, nascetur ridiculus mus.
           </p>
-          <Image src={Career} alt="career" />
+          <Image src={Career} alt="career" className="hidden sm:block" />
         </div>
         <div className="sm:w-full md:w-[45%]">
           <div className="flex justify-end mb-[50px]">
