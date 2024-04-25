@@ -62,7 +62,7 @@ const AllTutors = () => {
           <h3>Online </h3>
           <div className="w-[15px] h-[15px] mt-1 rounded-full ml-3 bg-lightGreen"></div>
         </div>
-        <div className="flex justify-between mt-10 md:items-start">
+        <div className="flex justify-between mt-3 md:items-start">
           <Button className=" bg-dimYellow bg-none rounded-lg hover:bg-gold  text-white text-sm mt-3 px-3 md:w-32 w-24 mr-2 py-2 text-start lg:block">
             1 on 1 sessions
           </Button>
@@ -73,7 +73,7 @@ const AllTutors = () => {
           <Button className=" bg-dimYellow rounded-lg hover:bg-gold text-white text-sm mt-3 px-3 w-28 mr-2  py-2 text-center lg:block">
             Open to Jobs
           </Button>
-          <Button className=" bg-dimYellow rounded-lg hover:bg-gold text-white text-sm mt-3 px-3 w-28 mr-2  py-2 text-center lg:block">
+          <Button className=" bg-dimYellow rounded-lg hover:bg-gold text-white text-sm mt-3 px-3 w-28   py-2 text-center lg:block">
             Group sessions
           </Button>
         </div>

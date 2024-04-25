@@ -36,32 +36,32 @@ const PageNav = () => {
           <PaginationItem>
             <PaginationLink href="#">2</PaginationLink>
           </PaginationItem>
-          <PaginationItem>
+          <PaginationItem className="">
             <PaginationLink href="#">3</PaginationLink>
           </PaginationItem>
-          <PaginationItem>
+          <PaginationItem className="hidden xs:block md:block">
             <PaginationLink href="#">4</PaginationLink>
           </PaginationItem>
-          <PaginationItem>
+          <PaginationItem className="hidden xs:block md:block">
             <PaginationLink href="#">5</PaginationLink>
           </PaginationItem>
           
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
-          <PaginationItem>
+          <PaginationItem className="hidden xs:hidden md:block">
             <PaginationLink href="#">21</PaginationLink>
           </PaginationItem>
-          <PaginationItem>
+          <PaginationItem className="hidden xs:hidden md:block">
             <PaginationLink href="#">22</PaginationLink>
           </PaginationItem>
-          <PaginationItem>
+          <PaginationItem className="hidden xs:hidden md:block">
             <PaginationLink href="#">23</PaginationLink>
           </PaginationItem>
-          <PaginationItem>
+          <PaginationItem className="hidden xs:hidden md:block">
             <PaginationLink href="#">24</PaginationLink>
           </PaginationItem>
-          <PaginationItem>
+          <PaginationItem className="hidden xs:hidden md:block">
             <PaginationLink href="#">25</PaginationLink>
           </PaginationItem>
           <PaginationItem>
