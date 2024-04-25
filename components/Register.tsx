@@ -3,8 +3,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Career from "@/images/careers.png";
-import Close from "@/images/svgs/close.svg";
-import { RegisterType } from "@/components/data/registerType";
+import { RegisterType } from "@/constants/registerType";
 import Footer from "./Footer";
 import { Button } from "./ui/button";
 import Header from "./Header";
@@ -23,15 +22,14 @@ const Register = () => {
       selectAccountType === "Parent Account" ||
       selectAccountType === "Teacher Account"
     ) {
-      return "#359C71";
+      return "#359C71 ";
     } else {
-      return "#333";
+      return "#359F61";
     }
   };
 
   return (
     <div>
-      <Header/>
       <div className="flex font-subtext flex-col md:flex-row justify-between items-center gap-3 px-[1rem] md:px-[6rem] py-[1rem] md:py-[5rem] w-full">
         <div className="sm:w-full md:w-[45%]">
           <p className="pb-2 font-bold text-orange-400">Get Started</p>
@@ -48,7 +46,13 @@ const Register = () => {
         <div className="sm:w-full md:w-[45%]">
           <div className="flex justify-end mb-[50px]">
             <Link href="/login">
-              <Image src={Close} alt="close" />
+              <Image
+                src="/svgs/close.svg"
+                alt="close"
+                width={100}
+                height={100}
+                className="w-[15px]"
+              />
             </Link>
           </div>
 
@@ -59,7 +63,12 @@ const Register = () => {
               onClick={() => handleSelectedItem(registered.title)}
             >
               <div>
-                <Image src={registered.Images} alt="School Account" />
+                <Image
+                  src={registered.Images}
+                  width={30}
+                  height={30}
+                  alt="School Account"
+                />
               </div>
               <div>
                 <p className="font-bold text-[16px]">{registered.title}</p>
@@ -76,19 +85,38 @@ const Register = () => {
               </div>
               <div>
                 {selectAccountType === registered.title ? (
-                  <Image src={registered.coloredTick} alt="Tick" />
+                  <Image
+                    src={registered.coloredTick}
+                    width={30}
+                    height={30}
+                    alt="Tick"
+                  />
                 ) : (
-                  <Image src={registered.tickIcon} alt="Tick" />
+                  <Image
+                    src={registered.tickIcon}
+                    width={30}
+                    height={30}
+                    alt="Tick"
+                  />
                 )}
               </div>
             </div>
           ))}
-          <Button
-            className={`bg-secondary w-full text-white text-[16px] px-6 py-6 my-6`}
-            style={{ backgroundColor: getButtonBackgroundColor() }}
-          >
-            Continue
-          </Button>
+          <Link href="/school-account">
+            <Button
+              className={`bg-secondary w-full text-white text-[16px] px-6 py-6 my-6 ${
+                selectAccountType === "School Account" ||
+                selectAccountType === "Student Account" ||
+                selectAccountType === "Parent Account" ||
+                selectAccountType === "Teacher Account"
+                  ? ""
+                  : "opacity-50"
+              }`}
+              style={{ backgroundColor: getButtonBackgroundColor() }}
+            >
+              Continue
+            </Button>
+          </Link>
         </div>
       </div>
       <Footer />

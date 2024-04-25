@@ -35,16 +35,40 @@ const Footer: React.FC = () => {
         </div>
         <div className="flex  items-center justify-between gap-10 py-[20px] md:py-[0]">
           <Link href="/">
-            <Image src={Instagram} alt="icon" className="w-[28px]" />
+            <Image
+              src="/svgs/instagram.svg"
+              alt="icon"
+              width={30}
+              height={30}
+              className="w-[28px]"
+            />
           </Link>
           <Link href="/">
-            <Image src={Twitter} alt="icon" className="w-[28px]" />
+            <Image
+              src="/svgs/twitter.svg"
+              alt="icon"
+              width={30}
+              height={30}
+              className="w-[28px]"
+            />
           </Link>
           <Link href="/">
-            <Image src={Facebook} alt="icon" className="w-[28px]" />
+            <Image
+              src="/svgs/facebook.svg"
+              alt="icon"
+              width={30}
+              height={30}
+              className="w-[28px]"
+            />
           </Link>
           <Link href="/">
-            <Image src={Tiktok} alt="icon" className="w-[28px]" />
+            <Image
+              src="/svgs/tiktok.svg"
+              alt="icon"
+              width={30}
+              height={30}
+              className="w-[28px]"
+            />
           </Link>
         </div>
       </div>

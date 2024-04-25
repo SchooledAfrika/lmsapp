@@ -1,13 +1,12 @@
-import React from "react";
 import Image from "next/image";
-import Footer from "./Footer";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "../button";
+import Footer from "@/components/Footer";
 
-const Login: React.FC = () => {
+const SchoolLogin: React.FC = () => {
   return (
     <div className="w-full font-subtext">
-      <div className="flex flex-col md:flex-row justify-between items-center px-[1rem] md:px-[10rem] py-[1rem] md:py-[5rem] w-full">
+      <div className="flex flex-col md:flex-row justify-between items-center px-[1rem] md:px-[10rem] py-[1rem] md:pt-[2rem] md:pb-[5rem] w-full">
         <div className="sm:w-full md:w-[45%]">
           <Link href="/">
             <Image
@@ -29,10 +28,10 @@ const Login: React.FC = () => {
             elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis...
           </p>
           <span className="text-gray-500 text-[12px]">
-            New User?
+            Have an account ?
             <Link href="/register">
               <span className="font-bold text-black underline pl-2 text-[14px]">
-                Register
+                Login
               </span>
             </Link>
           </span>
@@ -66,9 +65,11 @@ const Login: React.FC = () => {
               placeholder="Enter Password"
               className="mb-3 p-4  outline-none rounded-[8px] w-full bg-white"
             />
-            <Button className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3">
-              Login
-            </Button>
+            <Link href="/school-account/details">
+              <Button className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3">
+                Register
+              </Button>
+            </Link>
           </form>
           <div className="flex flex-col justify-center">
             <Button className="flex items-center bg-white hover:bg-lightGreen text-black w-full text-[16px] px-6 py-7 my-3">
@@ -99,4 +100,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default SchoolLogin;
