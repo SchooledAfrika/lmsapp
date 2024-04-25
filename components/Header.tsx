@@ -11,7 +11,9 @@ const navLinks = [
   {name: "Find Tutors", href: "/find-tutors"},
   {name: "Classes", href: "/find-classes"},
   {name: "Apply to teach", href: "/apply-to-teach"},
-  {name: "Contact", href: "/contact"},
+  {name: "Vacancies", href: "/vacancies"},
+  
+  {name: "Contact Us", href: "/contact"},
 ]
 
 const Header = () => {
@@ -117,7 +119,8 @@ const Header = () => {
                 <Link href="/find-tutors">Find Tutors</Link>
                 <Link href="/classes">Classes</Link>
                 <Link href="/apply-to-teach">Apply to teach</Link>
-                <Link href="/contact">Contact</Link>
+                <Link href="/vacancies">Vacancies</Link>
+                <Link href="/contact">Contact Us</Link>
               </div>
 
               <div className="flex flex-col  items-center mr-2 gap-6">
@@ -142,83 +145,7 @@ const Header = () => {
         )}
       </div>
     </div>
-    // const [toggle, setToggle] = useState(false);
-    // return (
-    //   <nav className=" bg-black font-subtext text-[16.5px]  w-full text-white font-semibold cursor-pointer py-6 flex justify-between items-center navbar ">
-    //     <Image src={Logo} alt="logo" className="w-[180px] z-[5] mr-20 h-[180px]  " />
-
-    //       <div className="sm:flex hidden space-x-6 justify-center flex-1 items-center ">
-    //         <Link href="/find-tutors">Find Tutors</Link>
-    //         <Link href="/classes">Classes</Link>
-    //         <Link href="/apply-to-teach">Apply to teach</Link>
-    //         <Link href="/contact">Contact</Link>
-
-    //       </div>
-    //       <div className="flex items-center mr-2 gap-6">
-    //         <Button
-    //           asChild
-    //           className="hidden bg-secondary items-center hover:bg-green-600 text-white   text-[16.5px] px-6 py-2 lg:block"
-    //         >
-    //           <Link href="/register">Register</Link>
-    //         </Button>
-
-    //         <Button
-    //           asChild
-    //           className="hidden bg-dimOrange hover:bg-orange-600 text-white  text-[16.5px] px-6 py-2 lg:block"
-    //         >
-    //           <Link href="/login">Login</Link>
-    //         </Button>
-    //       </div>
-
-    //     <div className="sm:hidden z-[5] flex flex-1 mr-4 justify-end  items-center">
-    //       <Image
-    //         src={toggle ? close : menu}
-    //         alt="menu"
-    //         className="w-[28px]  h-[28px] object-contain"
-    //         onClick={() => setToggle((prev) => !prev)}
-    //       />
-    //     <div className="sm:hidden z-[5] flex flex-1 mr-4 justify-end  items-center">
-    //       <Image
-    //         src={toggle ? close : menu}
-    //         alt="menu"
-    //         className="w-[28px]  h-[28px] object-contain"
-    //         onClick={() => setToggle((prev) => !prev)}
-    //       />
-
-    //       {/* MOBILE NAVBAR */}
-    //       <div
-    //         className={`${
-    //           toggle ? "flex" : "hidden"
-    //         } text-black z-[6] p-6 bg-white absolute top-20 right-0  mx-4 my-12 min-w-[200px] rounded-xl sidebar`}
-    //       >
-    //         <div className="flex flex-col  justify-end items-center   flex-1 text-[16px] text-black    ">
-    //           <div className="flex flex-col  justify-end items-center   flex-1 text-[16px] z-[6]">
-    //             <Link href="/find-tutors">Find Tutors</Link>
-    //             <Link href="/classes">Classes</Link>
-    //             <Link href="/apply-to-teach">Apply to teach</Link>
-    //             <Link href="/contact">Contact</Link>
-
-    //         </div>
-    /* <div className="flex items-center mr-2 gap-6">
-          <Button
-            asChild
-            className="hidden bg-secondary items-center hover:bg-green-600 text-white   text-[16.5px] px-6 py-2 lg:block"
-          >
-            <Link href="/register">Register</Link>
-          </Button>
-
-          <Button
-            asChild
-            className="hidden bg-dimOrange hover:bg-orange-600 text-white  text-[16.5px] px-6 py-2 lg:block"
-          >
-            <Link href="/login">Login</Link>
-          </Button>
-        </div>
-            */
-
-    //     </div>
-    //   </div>
-    // </nav>
+    
   );
 };
 

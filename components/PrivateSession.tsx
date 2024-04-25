@@ -25,7 +25,7 @@ const PrivateSession = () => {
 
           <Button
             asChild
-            className=" bg-green-600 rounded-xl text-white text-base mt-3 px-3 w-32  py-2 text-center lg:block"
+            className=" bg-lightGreen rounded-xl text-white text-base mt-3 px-3 w-32  py-2 text-center lg:block"
           >
             <Link href="/register">Get Started!</Link>
           </Button>
