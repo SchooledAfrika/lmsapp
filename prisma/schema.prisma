@@ -28,7 +28,7 @@ model Teacher {
   name                 String?
   password             String?
   email                String            @unique
-  role                 TeachersRole //weather the teacher is schooledAfrika teacher or as an external teacher
+  teachingRole         TeachersRole      @default(EXTERNAL) //weather the teacher is schooledAfrika teacher or as an external teacher
   subscriped           Boolean? //shows true if the subscription have not expired
   subscriptionDuration BigInt? //stores date base on the subscription the teacher made
   acceptanceVideo      String? // here we store the string for the video the teacher made for us to accept them
@@ -43,6 +43,7 @@ model Teacher {
   phoneNumber          String?
   Session              Session[]
   pricing              Int?
+  role                 Role
   // creating the many to many relationship between student and teacher
   studentIDs           String[]          @db.ObjectId
   students             Student[]         @relation(fields: [studentIDs], references: [id])
@@ -84,6 +85,7 @@ model Student {
   // a student can decide to join one or many classes
   classIDs      String[]          @db.ObjectId
   classes       Classes[]         @relation(fields: [classIDs], references: [id])
+  role          Role
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @default(now())
 }
@@ -108,6 +110,7 @@ model School {
   students         Student[] @relation(fields: [studentsIDs], references: [id])
   // vacancies created by the school, it may be one or many
   Vacancy          Vacancy[]
+  role             Role
   createdAt        DateTime  @default(now())
   updatedAt        DateTime  @default(now())
 }
@@ -119,6 +122,7 @@ model Parents {
   email        String   @unique
   password     String?
   profilePhoto String?
+  role         Role
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
 }
@@ -285,4 +289,12 @@ enum ClassDay {
   WEDNESDAY
   THURSDAY
   FRIDAY
+}
+
+enum Role {
+  Teacher
+  Student
+  Parents
+  School
+  Manager
 }

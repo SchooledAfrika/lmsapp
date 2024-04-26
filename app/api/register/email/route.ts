@@ -14,6 +14,7 @@ export async function POST(request: Request) {
   const cookieInstance = cookies();
   const role = cookieInstance.get("role")?.value;
   const hashPasword = bcrypt.hashSync(password, 12);
+
   // lets check if the user exist accross all our members database first
   // if is there, return with an error and a message
   const checkStudents = await prisma.student.findUnique({
@@ -51,6 +52,7 @@ export async function POST(request: Request) {
       data: {
         email: email,
         password: hashPasword,
+        role: "Student",
       },
       select: {
         id: true,
@@ -70,7 +72,7 @@ export async function POST(request: Request) {
       data: {
         email: email,
         password: hashPasword,
-        role: "EXTERNAL",
+        role: "Teacher",
       },
       select: {
         id: true,
@@ -80,7 +82,7 @@ export async function POST(request: Request) {
     // return info of the student register
     return new Response(JSON.stringify(student), {
       status: 200,
-      statusText: "student registered successfully",
+      statusText: "teacher registered successfully",
     });
   }
   if (role == "parents") {
@@ -89,6 +91,7 @@ export async function POST(request: Request) {
       data: {
         email: email,
         password: hashPasword,
+        role: "Parents",
       },
       select: {
         id: true,
@@ -98,7 +101,7 @@ export async function POST(request: Request) {
     // return info of the student register
     return new Response(JSON.stringify(student), {
       status: 200,
-      statusText: "student registered successfully",
+      statusText: "guardian or parent registered successfully",
     });
   }
   if (role == "school") {
@@ -107,6 +110,7 @@ export async function POST(request: Request) {
       data: {
         email: email,
         password: hashPasword,
+        role: "School",
       },
       select: {
         id: true,
@@ -116,7 +120,7 @@ export async function POST(request: Request) {
     // return info of the student register
     return new Response(JSON.stringify(student), {
       status: 200,
-      statusText: "student registered successfully",
+      statusText: "school registered successfully",
     });
   }
 }
