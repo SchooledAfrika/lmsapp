@@ -27,7 +27,7 @@ const Header = () => {
  
 
   return (
-    <div className=" bg-white sticky md:top-0 font-subtext border-b-2 font-semibold h-[75px]   md:shadow-none z-[999] ">
+    <div className=" bg-white sticky md:top-0 font-subtext border-b-2 font-semibold h-[75px]   md:shadow-none z-50 ">
       {/* DESKTOP */}
       <div className=" hidden lg:block p-4 ">
 
