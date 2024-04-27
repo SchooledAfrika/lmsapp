@@ -43,13 +43,6 @@ export async function GET(req: Request) {
   // TODO: use the nextauth method to get the id of the incoming user
   // then use the id to check the role of the user
   // if he is a admin, then proceed to give him the messages
-  // remove the body below and perform the action above later
-  const { id } = await req.json();
-  if (!id)
-    return new Response(JSON.stringify({ message: "you are not login" }), {
-      status: 401,
-      statusText: "required to login to get the messages",
-    });
   // TODO: get the user and check if he is an admin first
   try {
     const allMessages = await prisma.getInTouch.findMany();
@@ -58,6 +51,7 @@ export async function GET(req: Request) {
       statusText: "success",
     });
   } catch (error) {
+    console.log(error);
     throw new Error(
       JSON.stringify({
         message: "something went wrong getting all the messages",
