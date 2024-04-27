@@ -1,1 +1,1 @@
-Sarah you can continue building the authentication pages from what I have done. I have built the header section with its navigation. Look into the header, navlinks and logo component to understand this. If you have any question, you can reach out. Also, I added some custom styling to the tailwing config file, you might be needing some colors from there which are tghe colors we are using. Also, the screen sizes too. When you are done with the authentication and footer pages, create a branch for it. Finally, remember not to do any logic in the page routers. Thanks.
+
