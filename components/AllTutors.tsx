@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const AllTutors = () => {
   return (
-    <div className="md:w-[95%] overflow-hidden  w-[80%] mx-auto my-20 rounded-2xl shadow-md flex   bg-white h-full">
+    <div className="w-full md:w-[95%] overflow-hidden mx-auto my-20 rounded-2xl shadow-md flex bg-white h-full">
       {/* First flex section */}
       <div className="flex mx-auto flex-initial md:flex-initial   flex-col px-3">
         <Image
@@ -110,8 +110,6 @@ const AllTutors = () => {
           <p> ⭐ 4.7/5</p>
         </div>
       </div>
-
-     
     </div>
   );
 };
