@@ -13,7 +13,7 @@ const SchoolPersonalInfo: React.FC = () => {
     setTickBox(false);
   };
   return (
-    <section className="py-[1rem] md:pt-[3rem]">
+    <section className="py-[1rem] font-subtext md:pt-[3rem]">
       <Container>
         <Link href="/">
           <Image

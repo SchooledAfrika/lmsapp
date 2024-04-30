@@ -54,7 +54,7 @@ const AllTutors = () => {
         </ul>
         <Link
           className="text-lightGreen mx-auto md:mx-1 font-header underline text-sm mb-6"
-          href="/"
+          href="/find-tutors/test"
         >
           View Profile
         </Link>

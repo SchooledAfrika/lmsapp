@@ -11,7 +11,7 @@ interface SchoolInfoProps {
 
 const SchoolInfo: React.FC<SchoolInfoProps> = ({ onClickSchoolInfo }) => {
   return (
-    <section className="py-[1rem] md:pt-[3rem]">
+    <section className="py-[1rem] font-subtext md:pt-[3rem]">
       <Container>
         <Link href="/">
           <Image
@@ -59,6 +59,7 @@ const SchoolInfo: React.FC<SchoolInfoProps> = ({ onClickSchoolInfo }) => {
             />
             <div className="flex flex-col justify-center my-3 p-10 outline-none rounded-[8px] w-full bg-white">
               <Link href="/">
+               
                 <Image
                   src="/imageIcon.png"
                   alt="logo"
@@ -66,7 +67,8 @@ const SchoolInfo: React.FC<SchoolInfoProps> = ({ onClickSchoolInfo }) => {
                   height={60}
                   className="mx-auto"
                 />
-              </Link>
+              </Link> 
+              <input className="flex w-1/2 my-3 cursor-pointer mx-auto justify-center items-center" type="file" />
               <p className="py-4 text-center">School or Institute Cover</p>
               <p className="flex items-center justify-center gap-2 text-[12px]">
                 {" "}

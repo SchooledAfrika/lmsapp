@@ -1,5 +1,4 @@
 import React from "react";
-import Header from "./Header";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -14,7 +13,7 @@ import {
 
 import { FaQuoteLeft } from "react-icons/fa";
 import { MdPlayArrow } from "react-icons/md";
-import Footer from "./Footer";
+
 
 interface Props {
   title: string;
@@ -35,10 +34,9 @@ const ApplyCard = ({ title, result }: Props) => {
 
 const Apply = () => {
   return (
-    <div className="font-subtext overflow-hidden bg-stone-100">
-      <Header />
-      <div className="z-40 bg-black md:h-[80%] h-full">
-        <div className="relative z-40 h-full  text-white">
+    <div className="font-subtext bg-stone-100">
+      <div className=" bg-black md:h-[80%] h-full">
+        <div className="relative  h-full  text-white">
           <Image
             className="w-full h-full  z-0 opacity-40   object-cover"
             src={"/apply_bg.jpg"}
@@ -279,7 +277,6 @@ const Apply = () => {
   </AccordionItem>
 </Accordion>
 
-<Footer/>
 
     </div>
   );

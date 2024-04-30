@@ -73,7 +73,7 @@ const Contact = () => {
         </div>
 
         {/* Form starts */}
-        <div className="md:w-[35%] w-[90%] overflow-hidden md:h-[650px] h-[800px] z-50 bg-white absolute top-[493px] md:left-[700px] left-[25px] rounded-xl">
+        <div className="md:w-[35%] w-[90%] overflow-hidden md:h-[650px] h-[800px] z-40 bg-white absolute top-[493px] md:left-[700px] left-[25px] rounded-xl">
           <h3 className="font-subtext font-bold my-6 mx-4">
             Get in Touch With Us
           </h3>
