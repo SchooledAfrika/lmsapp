@@ -1,5 +1,4 @@
 import React from "react";
-import Header from "./Header";
 import { IoIosSearch } from "react-icons/io";
 import Cards from "./Cards";
 import CardsActive from "./CardsActive";
@@ -8,7 +7,6 @@ import CardsActive from "./CardsActive";
 const Vacancies = () => {
   return (
     <div className="bg-stone-100 font-subtext">
-      <Header />
       <h2 className="font-bold font-subtext my-20 text-2xl text-center">
         Job Listing
       </h2>

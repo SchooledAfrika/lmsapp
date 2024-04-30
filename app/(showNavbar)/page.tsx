@@ -1,4 +1,3 @@
-import Header from "@/components/Header";
 import Hero from "@/components/Hero";
 import Offer from "@/components/Offers";
 import PopularSubjects from "@/components/PopularSubjects";
@@ -9,12 +8,12 @@ import PopularClasses from "@/components/PopularClasses";
 import GetStarted from "@/components/GetStarted";
 import Testimonials from "@/components/Testimonials";
 import ParentalControl from "@/components/ParentalControl";
-import Footer from "@/components/Footer";
+
 
 export default function Home() {
   return (
-    <div className="bg-stone-100">
-      <Header />
+    <div>
+     
       <Hero />
       <Offer />
       <PopularSubjects />
@@ -33,7 +32,7 @@ export default function Home() {
       <PopularClasses />
       <GetStarted />
       <Testimonials />
-      <Footer/>
+      
     </div>
   );
 }
