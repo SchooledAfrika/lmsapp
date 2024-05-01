@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import Sidebar from "@/components/ui/school-dashboard/sidebar/sidebar";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,11 +16,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="">
-        <main className="bg-stone-100 flex">
-          <div className=" flex-2 px-6 py-10 bg-white h-screen sticky top-0 overflow-auto scrollbar-hide">
-            <Sidebar />
-          </div>
-          <div className=" flex-12 h-screen px-8">{children}</div>
+        <main className="bg-stone-100">
+          <Header />
+          {children}
+          <Footer />
         </main>
       </body>
     </html>

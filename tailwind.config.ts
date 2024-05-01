@@ -17,12 +17,10 @@ const config = {
       container: "1440px",
       contentContainer: "1140px",
       containerSmall: "1024px",
-      
     },
     container: {
       center: true,
       padding: "2rem",
-     
     },
     extend: {
       colors: {
@@ -92,6 +90,19 @@ const config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      flex: {
+        "3": "3 3 0%",
+        "12": "12 12 0%",
+        "6": "6 6 0%",
+        "2": "2 2 0%",
+        "4": "4 4 0%",
+        "5": "5 5 0%",
+        "7": "7 7 0%",
+        "8": "8 8 0%",
+        "9": "9 9 0%",
+        "10": "10 10 0%",
+        "11": "11 10 0%",
       },
     },
   },

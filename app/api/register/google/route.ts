@@ -72,6 +72,7 @@ export async function POST(request: Request) {
           email: email,
           profilePhoto: img,
           name,
+          role: "Student",
         },
         select: {
           id: true,
@@ -91,7 +92,7 @@ export async function POST(request: Request) {
         data: {
           email: email,
           profilePhoto: img,
-          role: "EXTERNAL",
+          role: "Teacher",
           name,
         },
         select: {
@@ -112,6 +113,7 @@ export async function POST(request: Request) {
           email: email,
           profilePhoto: img,
           name,
+          role: "Parents",
         },
         select: {
           id: true,
@@ -131,6 +133,7 @@ export async function POST(request: Request) {
           email: email,
           profilePhoto: img,
           name,
+          role: "School",
         },
         select: {
           id: true,

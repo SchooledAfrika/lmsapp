@@ -1,11 +1,10 @@
 import React from "react";
+import Apply from "@/components/Apply";
 
 const page = () => {
   return (
     <div>
-      <p>jjjjj</p>
-      <p>jjjjj</p>
-      <p>jjjjj</p>
+      <Apply />
     </div>
   );
 };
