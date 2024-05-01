@@ -9,19 +9,19 @@ export async function POST(request: Request) {
   // if it does not exist we return an error saying the user does not exist
   const fetchStudent = await prisma.student.findUnique({
     where: { email: email },
-    select: { id: true, password: true, name: true },
+    select: { id: true, password: true, name: true, role: true },
   });
   const fetchTeacher = await prisma.teacher.findUnique({
     where: { email: email },
-    select: { id: true, password: true, name: true },
+    select: { id: true, password: true, name: true, role: true },
   });
   const fetchParent = await prisma.parents.findUnique({
     where: { email: email },
-    select: { id: true, password: true, name: true },
+    select: { id: true, password: true, name: true, role: true },
   });
   const fetchSchool = await prisma.school.findUnique({
     where: { email: email },
-    select: { id: true, password: true, name: true },
+    select: { id: true, password: true, name: true, role: true },
   });
   // here, we return an error because the user does not exist
   if (!fetchParent && !fetchSchool && !fetchStudent && !fetchTeacher) {

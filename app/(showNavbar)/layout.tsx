@@ -18,10 +18,8 @@ export default function RootLayout({
       <body className="">
         <main className="bg-stone-100">
           <Header />
-
           {children}
-          <Footer/>
-
+          <Footer />
         </main>
       </body>
     </html>

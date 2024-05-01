@@ -1,15 +1,12 @@
-import React from 'react'
-import Apply from '@/components/Apply'
-
+import React from "react";
+import Apply from "@/components/Apply";
 
 const page = () => {
   return (
     <div>
-        <Apply/>
-        
-        
+      <Apply />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

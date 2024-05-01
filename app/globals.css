@@ -126,7 +126,15 @@
   }
 }
 
-.disabled{
+.disabled {
   cursor: not-allowed;
   background-color: gray;
+}
+.scrollbar-hide {
+  /* Firefox */
+  scrollbar-width: none;
+  /* Webkit */
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }

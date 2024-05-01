@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 // continue with all the many to many relationships, teachersSubject and students
 // students and schools
 // students and teachers
@@ -24,11 +18,11 @@ datasource db {
 
 // creating the teachers model
 model Teacher {
-  id                   String            @id @default(auto()) @map("_id") @db.ObjectId
+  id                   String               @id @default(auto()) @map("_id") @db.ObjectId
   name                 String?
   password             String?
-  email                String            @unique
-  role                 TeachersRole //weather the teacher is schooledAfrika teacher or as an external teacher
+  email                String               @unique
+  teachingRole         TeachersRole         @default(EXTERNAL) //weather the teacher is schooledAfrika teacher or as an external teacher
   subscriped           Boolean? //shows true if the subscription have not expired
   subscriptionDuration BigInt? //stores date base on the subscription the teacher made
   acceptanceVideo      String? // here we store the string for the video the teacher made for us to accept them
@@ -43,73 +37,69 @@ model Teacher {
   phoneNumber          String?
   Session              Session[]
   pricing              Int?
+  role                 Role
   // creating the many to many relationship between student and teacher
-  studentIDs           String[]          @db.ObjectId
-  students             Student[]         @relation(fields: [studentIDs], references: [id])
-  // creating many to many relationship between teachers and school
-  schoolIDs            String[]          @db.ObjectId
-  schools              School[]          @relation(fields: [schoolIDs], references: [id])
+  studentIDs           String[]             @db.ObjectId
+  students             Student[]            @relation(fields: [studentIDs], references: [id])
   Classes              Classes[]
   // creating many to many relationship, teacher can have many vacancy he or she applied for
-  Vacancy              Vacancy[]         @relation(fields: [vacancyId], references: [id])
-  vacancyId            String[]          @db.ObjectId
-  createdAt            DateTime          @default(now())
-  updatedAt            DateTime          @default(now())
+  Vacancy              Vacancy[]            @relation(fields: [vacancyId], references: [id])
+  vacancyId            String[]             @db.ObjectId
+  SchoolTeachers       SchoolTeacher[]
+  SchoolClassTeacher   SchoolClassTeacher[]
+  createdAt            DateTime             @default(now())
+  updatedAt            DateTime             @default(now())
 }
 
 // creating the student model
 model Student {
-  id            String            @id @default(auto()) @map("_id") @db.ObjectId
-  name          String?
-  email         String            @unique
-  password      String?
-  profilePhoto  String?
+  id           String    @id @default(auto()) @map("_id") @db.ObjectId
+  name         String?
+  email        String    @unique
+  password     String?
+  profilePhoto String?
   // creating the many to many relationship between student and teacher
   // becasue the student can have many teachers
-  teacherIDs    String[]          @db.ObjectId
-  teachers      Teacher[]         @relation(fields: [teacherIDs], references: [id])
-  // creating many to many relationship between schools and student
-  // because students can have many schools
-  schoolIDs     String[]          @db.ObjectId
-  schools       School[]          @relation(fields: [schoolIDs], references: [id])
+  teacherIDs   String[]  @db.ObjectId
+  teachers     Teacher[] @relation(fields: [teacherIDs], references: [id])
+
   // student can access many articles that belongs to them
   // that is, one student here many articles
-  articleIDs    String[]          @db.ObjectId
-  articles      TeachersArticle[] @relation(fields: [articleIDs], references: [id])
+  articleIDs         String[]             @db.ObjectId
+  articles           TeachersArticle[]    @relation(fields: [articleIDs], references: [id])
   // creating many to many relation between student and class video
   // student can have many class video
-  classVideoIDs String[]          @db.ObjectId
-  classVideos   ClassVideos[]     @relation(fields: [classVideoIDs], references: [id])
+  classVideoIDs      String[]             @db.ObjectId
+  classVideos        ClassVideos[]        @relation(fields: [classVideoIDs], references: [id])
   // creating a many to many relationship between classes and students
   // a student can decide to join one or many classes
-  classIDs      String[]          @db.ObjectId
-  classes       Classes[]         @relation(fields: [classIDs], references: [id])
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @default(now())
+  classIDs           String[]             @db.ObjectId
+  classes            Classes[]            @relation(fields: [classIDs], references: [id])
+  role               Role
+  SchoolStudent      SchoolStudent[]
+  SchoolClassStudent SchoolClassStudent[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now())
 }
 
 // creating the school model
 model School {
-  id               String    @id @default(auto()) @map("_id") @db.ObjectId
+  id               String          @id @default(auto()) @map("_id") @db.ObjectId
   name             String?
-  email            String    @unique
+  email            String          @unique
   schoolbanner     String?
   schoolLogo       String?
   briefDescription String?
   password         String?
   profilePhoto     String?
-  // creating many to many relationship between school and teachers
-  // because the school can have many teachets
-  teachersIDs      String[]  @db.ObjectId
-  teachers         Teacher[] @relation(fields: [teachersIDs], references: [id])
-  // creating many to many relationship between school and students
-  // because the school can have many students
-  studentsIDs      String[]  @db.ObjectId
-  students         Student[] @relation(fields: [studentsIDs], references: [id])
+  SchoolTeachers   SchoolTeacher[]
+  SchoolStudent    SchoolStudent[]
   // vacancies created by the school, it may be one or many
   Vacancy          Vacancy[]
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @default(now())
+  role             Role
+  SchoolClass      SchoolClass[]
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now())
 }
 
 // creating the model for parents
@@ -119,6 +109,7 @@ model Parents {
   email        String   @unique
   password     String?
   profilePhoto String?
+  role         Role
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
 }
@@ -255,6 +246,99 @@ model Vacancy {
   updatedAt      DateTime     @default(now())
 }
 
+// this is the model that creates a connection getween teachers and school they are working with
+// this can help us to be able to use pending, active and rejected status
+model SchoolTeacher {
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  school    School         @relation(fields: [schoolId], references: [id])
+  schoolId  String         @db.ObjectId
+  teacher   Teacher        @relation(fields: [teacherId], references: [id])
+  teacherId String         @db.ObjectId
+  status    ContractStatus @default(PENDING)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @default(now())
+
+  @@index([schoolId, teacherId], name: "school_teacher_id")
+}
+
+// here we also create a model for school students
+// this will contain the id of students and school for query reasons
+model SchoolStudent {
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  student   Student        @relation(fields: [studentId], references: [id])
+  studentId String         @db.ObjectId
+  school    School         @relation(fields: [schoolId], references: [id])
+  schoolId  String         @db.ObjectId
+  status    ContractStatus @default(PENDING)
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @default(now())
+
+  @@index([studentId, schoolId], name: "school_student_id")
+}
+
+// this is the model for school classes
+model SchoolClass {
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  classDesc          String
+  grade              Grade[]
+  name               String
+  subject            Subjects[]
+  schoolName         String
+  school             School               @relation(fields: [schoolId], references: [id])
+  schoolId           String               @db.ObjectId
+  SchoolClassTeacher SchoolClassTeacher[]
+  SchoolClassStudent SchoolClassStudent[]
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @default(now())
+
+  @@index([schoolId], name: "school_class")
+}
+
+// creating a model for school class teachers
+// this will serve as a relationship model between the school class and the teachers working in the class
+model SchoolClassTeacher {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  class         SchoolClass @relation(fields: [schoolClassId], references: [id])
+  schoolClassId String      @db.ObjectId
+  teacher       Teacher     @relation(fields: [teacherId], references: [id])
+  teacherId     String      @db.ObjectId
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+
+  @@index([schoolClassId, teacherId], name: "school_class_teacher")
+}
+
+// creating a model for school class and student
+// this will be a relationship model between the school class and students
+model SchoolClassStudent {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  class         SchoolClass @relation(fields: [schoolClassId], references: [id])
+  schoolClassId String      @db.ObjectId
+  student       Student     @relation(fields: [studentId], references: [id])
+  studentId     String      @db.ObjectId
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+
+  @@index([schoolClassId, studentId], name: "school_class_student_id")
+}
+
+// this is enum for grades
+// TODO: check how many grade system we have
+enum Grade {
+  Grade1
+  Grade2
+  Grade3
+  Grade4
+  Grade5
+}
+
+// enum for contract status
+enum ContractStatus {
+  PENDING
+  ACTIVE
+  REJECTED
+}
+
 // below is the enum for teachers role
 enum TeachersRole {
   INTERNAL
@@ -285,4 +369,12 @@ enum ClassDay {
   WEDNESDAY
   THURSDAY
   FRIDAY
+}
+
+enum Role {
+  Teacher
+  Student
+  Parents
+  School
+  Admin
 }
