@@ -47,7 +47,7 @@ const Sidebar = () => {
         ))}
       </div>
       {/* then the last part for log out */}
-      <div className=" w-full h-[120px] bg-green-800 mt-16  flex items-end justify-center  relative rounded-lg">
+      <div className="w-full h-[120px] bg-green-800 mt-16  flex items-end justify-center  relative rounded-lg">
         <div className=" w-3/5 h-[120px] left-1/2 rounded-xl transform -translate-x-1/2 bg-white absolute gap-1 -translate-y-1/2 flex flex-col items-center justify-center">
           <Image
             className=" w-[60px] aspect-square rounded-full object-cover"
