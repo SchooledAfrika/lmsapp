@@ -1,20 +1,42 @@
 "use client";
-import { SchoolNavbar } from "@/constants/schoolNavbar";
+import { SchoolNavbar, SchoolNavType, Subtype } from "@/constants/schoolNavbar";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useState, useEffect } from "react";
 
 const Navbar = () => {
-  const path = usePathname();
+  const path = usePathname().split("/");
 
+  const [present, setPresent] = useState<SchoolNavType | Subtype>();
+  useEffect(() => {
+    // making use of this function and if statement to rerender our text
+    const checkPath = () => {
+      if (path.length === 2) {
+        const getOneItem = SchoolNavbar.find(
+          (item) => item.path === "overview"
+        );
+        return setPresent(getOneItem);
+      } else if (path.length === 3) {
+        const currentPathString = path[2];
+        const getOneItem = SchoolNavbar.find(
+          (item) => item.path === currentPathString
+        );
+        return setPresent(getOneItem);
+      } else {
+        const currentPathString = path[2];
+        const getOneItem = SchoolNavbar.find(
+          (item) => item.path === currentPathString
+        );
+        return setPresent(getOneItem?.subDetails);
+      }
+    };
+    checkPath();
+  }, [path]);
   return (
     <div className="flex justify-between items-center pt-5">
       <div>
-        <h1 className="font-bold text-[18px]">
-          Welcome to Your School Dashboard
-        </h1>
-        <span className="text-sm">
-          Lorem ipsum dolor sit amet, consectetuer adipiscing eli
-        </span>
+        <h1 className="font-bold text-[18px]">{present?.title}</h1>
+        <span className="text-sm">{present?.description}</span>
       </div>
 
       <div className="flex items-center gap-[30px]">
