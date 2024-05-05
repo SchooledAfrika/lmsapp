@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Sidebar from "@/components/ui/school-dashboard/sidebar/sidebar";
@@ -16,18 +15,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className="">
-        <main className="bg-stone-100 flex font-header">
-          <div className=" flex-2 font-semibold  px-6 py-10 bg-white h-screen sticky top-0 overflow-auto scrollbar-hide">
-            <Sidebar />
-          </div>
-          <div className=" flex-12 h-full px-8">
-            <Navbar />
-            {children}
-          </div>
-        </main>
-      </body>
-    </html>
+    <>
+      <main className="bg-stone-100 flex font-header">
+        <div className=" flex-2 font-semibold  px-6 py-10 bg-white h-screen sticky top-0 overflow-auto scrollbar-hide">
+          <Sidebar />
+        </div>
+        <div className=" flex-12 h-full px-8">
+          <Navbar />
+          {children}
+        </div>
+      </main>
+    </>
   );
 }
