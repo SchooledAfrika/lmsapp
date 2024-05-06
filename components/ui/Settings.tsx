@@ -37,14 +37,14 @@ const Settings = () => {
           </label>
           <input
             type="text"
-            className="outline-none p-3 mb-4 rounded-[5px] border-2 w-full"
+            className="outline-none p-3 my-4 rounded-[5px] border-2 w-full"
             placeholder="Permanent House Address"
           />
           <hr className="my-4" />
           <label className="font-bold text-[#9F9F9F]">School Details</label>
           <input
             type="text"
-            className="outline-none p-3 mb-4 rounded-[5px] border-2 w-full"
+            className="outline-none p-3 my-4 rounded-[5px] border-2 w-full"
             placeholder="School or Institute Name"
           />
           <input
