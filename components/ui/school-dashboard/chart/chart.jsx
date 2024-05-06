@@ -72,7 +72,7 @@ const Chart = () => {
        
       </div>
 
-      <div className="flex md:flex-7 overflow-hidden bg-white rounded-md py-6 px-3 flex-col">
+      <div className="flex md:flex-7 mb-6 overflow-hidden bg-white rounded-md py-6 px-3 flex-col">
         <div className="flex justify-between">
           <p>Student Perfomance</p>
           <div className="flex justify-end">
@@ -82,7 +82,7 @@ const Chart = () => {
             </p>
           </div>
         </div>
-        <div className="flex mt-6 text-[13px] font-bold">
+        <div className="flex my-6 text-[13px] font-bold">
           <p className="inline mr-2">
             <GoDotFill className="inline text-green-600" />
             Excellent
