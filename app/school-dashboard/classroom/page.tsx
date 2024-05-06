@@ -1,7 +1,10 @@
+import Classroom from "@/components/Classroom";
 import React from "react";
 
 const page = () => {
-  return <div>classroom</div>;
+  return <div>
+     <Classroom/>
+  </div>;
 };
 
 export default page;
