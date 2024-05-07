@@ -9,7 +9,9 @@ import {
 } from "@/components/ui/table";
 
 import Image from "next/image";
-
+import Link from "next/link";
+import { OptionsDialog } from "./OptionsDialog";
+import { AssignDialog } from "./AssignDialog";
 const ClassroomType = [
   {
     id: "1",
@@ -36,7 +38,7 @@ const ClassroomType = [
 
 export default function Tables() {
   return (
-    <Table className="bg-white    rounded-md mt-12">
+    <Table className="bg-white overflow-x-auto    rounded-md mt-12">
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
@@ -69,12 +71,12 @@ export default function Tables() {
                   : " border-lightGreen cursor-pointer text-lightGreen rounded-xl"
               }`}
             >
-              {Class.TeacherInitial || Class.assign}
+              {Class.TeacherInitial || <AssignDialog/>}
             </TableCell>
 
             <TableCell>{Class.students}</TableCell>
-            <TableCell className="text-right text-3xl text-lightGreen cursor-pointer">
-              {Class.options}
+            <TableCell className="flex justify-end text-[14px]  text-lightGreen cursor-pointer">
+             <OptionsDialog/>
             </TableCell>
           </TableRow>
         ))}

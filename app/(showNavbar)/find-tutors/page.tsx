@@ -1,3 +1,7 @@
+<<<<<<< HEAD
+
+=======
+>>>>>>> 0409aa41f011ad4244308d114ba69748c4e7334a
 import React from "react";
 import FindTutors from "@/components/FindTutors";
 import Search from "@/components/Search";
@@ -14,8 +18,17 @@ const page = () => {
       <FindTutors />
       <FindTutors />
       <PageNav />
+<<<<<<< HEAD
+      <Footer />
+
+</div>
+  )
+}
+
+=======
     </div>
   );
 };
+>>>>>>> 0409aa41f011ad4244308d114ba69748c4e7334a
 
 export default page;
