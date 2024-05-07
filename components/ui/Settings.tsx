@@ -74,9 +74,51 @@ const Settings = () => {
           </p>
         </div>
         <hr className="my-4" />
+        <div>
+          <div>
+            <p className="text-[14px] text-gray-400 font-bold pb-3">
+              Subscription Plan
+            </p>
+            <span className="font-bold text-[16px]">
+              Upgrade and get more out of Skooled Afika
+            </span>
+            <p className="font-medium text-[13px] pt-2 pb-6">
+              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
+              commodo
+            </p>
+            <span className="font-bold text-[16px]">Current Plan</span>
+            <p className="font-bold">
+              <span className="text-[#359C71] text-[14px] pr-2 md:pr-5 underline">
+                Basic Plan
+              </span>
+              <span className="text-[12px] text-[#000000] ">
+                Expires May 24, 2024
+              </span>
+            </p>
+          </div>
+          <Link href="/">
+            <Image src="/" width={10} height={10} alt="" />
+            <Button className="bg-secondary text-white text-[14px] py-5 mb-10">
+              View Plans
+            </Button>
+          </Link>
+          <div>
+            <p className="font-bold text-[16px]">Need Help ?</p>
+            <span className="font-medium text-[13px] pt-2 pb-6">
+              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
+              commodo
+            </span>
+            <Link href="/">
+              <Image src="/" width={10} height={10} alt="" />
+              <Button className="border border-[#359C71] bg-[#FFFFFF] w-fit text-[#359C71] text-[14px] py-5 mb-3">
+                Contact Support
+              </Button>
+            </Link>
+          </div>
+        </div>
       </div>
       <div className="flex-4 rounded-[5px]">
-        <div className="flex items-center gap-4 h-[20%] bg-[#FFFFFF] px-6 rounded-[5px]">
+        <div className="flex items-center gap-4  w-full bg-[#FFFFFF] p-6 rounded-[5px]">
           <Image
             src="/schoolpic.png"
             width={200}
