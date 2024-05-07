@@ -3,7 +3,7 @@ import React from 'react'
 
 const RecentlyAdded = () => {
   return (
-    <div className='mt-12 w-[32%] hidden md:block absolute -bottom-52 overflow-hidden px-3 bg-white  text-[15px] py-6 rounded-md'>
+    <div className='mt-12 w-[35%] hidden md:block absolute -bottom-60 overflow-hidden px-3 bg-white  text-[15px] py-6 rounded-md'>
         <h3 className='text-slate-600 font-bold'>Recently Added</h3>
         <div className='flex space-x-2 mt-3'>
             <Image src="/green-book.png" alt="" width={100} height={100} className='w-[30px] h-[30px]'/>

@@ -1,5 +1,5 @@
 import * as React from "react"
-import { ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
+import { ArrowLeft, ChevronLeft, ChevronRight, MoreHorizontal } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import { ButtonProps, buttonVariants } from "@/components/ui/button"
@@ -8,7 +8,7 @@ const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
   <nav
     role="navigation"
     aria-label="pagination"
-    className={cn("mx-auto flex w-full justify-center", className)}
+    className={cn("md:mx-auto  flex w-[50%] sm:w-full justify-center", className)}
     {...props}
   />
 )
@@ -69,8 +69,8 @@ const PaginationPrevious = ({
     className={cn("gap-1 pl-2.5 text-lightGreen", className)}
     {...props}
   >
-    <ChevronLeft className="h-4 w-4 text-lightGreen" />
-    <span>Previous</span>
+    <ChevronLeft className="h-5 w-5 rounded-[3px]  bg-lightGreen text-green-300" />
+    <span></span>
   </PaginationLink>
 )
 PaginationPrevious.displayName = "PaginationPrevious"
@@ -85,8 +85,8 @@ const PaginationNext = ({
     className={cn("gap-1 pr-2.5 text-lightGreen", className)}
     {...props}
   >
-    <span>Next</span>
-    <ChevronRight className="h-4 w-4 text-lightGreen" />
+    <span></span>
+    <ChevronRight className="h-5 w-5 rounded-[3px]  bg-lightGreen text-green-300" />
   </PaginationLink>
 )
 PaginationNext.displayName = "PaginationNext"

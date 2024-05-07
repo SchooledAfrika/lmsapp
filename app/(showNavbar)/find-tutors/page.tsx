@@ -1,4 +1,4 @@
-<<<<<<< HEAD:app/find-tutors/page.tsx
+
 import React from "react";
 import FindTutors from "@/components/FindTutors";
 
@@ -20,28 +20,10 @@ const page = () => {
       <FindTutors />
       <PageNav />
       <Footer />
-=======
-import React from 'react'
-import FindTutors from '@/components/FindTutors'
-import Search from '@/components/Search'
-import PageNav from '@/components/PageNav'
 
+</div>
+  )
+}
 
-const page = () => {
-  return (
-    <div>
-        
-        <h2 className="font-bold my-20 text-2xl text-center">Tutors Listing</h2>
-        <Search/>
-        <FindTutors />
-        <FindTutors />
-        <FindTutors />
-        <FindTutors />
-        <FindTutors />
-        <PageNav/>
->>>>>>> 4f74f7e2d3201a8de768a4134624c93fb05c37bd:app/(showNavbar)/find-tutors/page.tsx
-    </div>
-  );
-};
 
 export default page;

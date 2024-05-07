@@ -20,8 +20,8 @@ export default function RootLayout({
         <div className=" flex-2 font-semibold  px-6 py-10 bg-white h-screen sticky top-0 overflow-auto scrollbar-hide">
           <Sidebar />
         </div>
-        <div className=" flex-12 h-full px-8">
-          <Navbar />
+        <div className="bg-stone-100 flex-12 h-full px-8">
+           <Navbar /> 
           {children}
         </div>
       </main>

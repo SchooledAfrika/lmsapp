@@ -6,7 +6,7 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend, ResponsiveContainer
+  Legend
 } from "recharts";
 
 const data = [
@@ -56,16 +56,16 @@ export default function ChartDialog() {
         bottom: 5
       }}
     >
-      <CartesianGrid strokeDasharray="3 3" />
+      <CartesianGrid strokeDasharray="5 5" />
       <XAxis dataKey="name" />
-      <YAxis />
+      <YAxis dataKey="" />
       <Tooltip />
       <Legend />
       <Line
         type="monotone"
         dataKey="Grade"
         stroke="#359C71"
-        strokeDasharray="3 4 4"
+        strokeDasharray="3 4"
         activeDot={{ r: 8 }}
       />
       <Line type="monotone" dataKey="number" stroke="#FF6634" strokeDasharray="5 5" />
