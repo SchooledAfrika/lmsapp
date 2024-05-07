@@ -1,4 +1,4 @@
-import Settings from "@/components/ui/Settings";
+import Settings from "@/components/Settings";
 import React from "react";
 
 const page = () => {
