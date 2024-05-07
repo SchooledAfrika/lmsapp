@@ -10,10 +10,10 @@ import Image from "next/image";
 
 const Chart = () => {
   return (
-    <div className="mt-12 flex md:flex-row flex-col relative  text-[15px] gap-3   md:gap-6 rounded-md">
-      <div className="flex md:flex-5 h-full overflow-hidden  px-3 bg-white rounded-md py-8  flex-col">
-        <div className="flex justify-between">
-          <p>Student Attendance Rate</p>
+    <div className="mt-12 flex md:flex-row flex-col relative  text-[15px] gap-3   md:gap-3 rounded-md">
+      <div className="flex md:flex-4 h-full overflow-hidden  px-3 bg-white rounded-md py-8  flex-col">
+        <div className="flex flex-1 justify-between">
+          <p className="pl-3">Student Attendance Rate</p>
           <div className="flex justify-end">
             <p className="inline justify-end text-sm">
               Monthly
@@ -22,10 +22,10 @@ const Chart = () => {
           </div>
         </div>
 
-        <div className="flex justify-evenly ">
+        <div className="flex  justify-center ">
           <PieCharts />
-          <div className="flex flex-col px-2 justify-between py-4">
-            <div className="flex mt-6 text-[13px] font-bold">
+          <div className="flex flex-col pl-6 flex-1 py-4">
+            <div className="flex mt-6 text-[12px] font-bold">
               <p className="inline mr-2">
                 <GoDotFill className="inline text-green-600" />
                 Present
@@ -39,13 +39,13 @@ const Chart = () => {
                 Late
               </p>
             </div>
-            <div className="flex flex-col py-4">
+            <div className="flex pl-3 flex-col py-4">
               <p className="font-bold">28h 45m</p>
-              <p className="text-[13px]">Monthly Average</p>
+              <p className="text-[12px]">Monthly Average</p>
             </div>
-            <div className="flex flex-col">
+            <div className="flex pl-3 flex-col">
               <p className="font-bold text-sm">Attendance Report</p>
-              <p className="text-[13px]">
+              <p className="text-[12px]">
                 Student attendance increased by{" "}
                 <span className="text-lightGreen"> 55% </span> this month over
                 the monthly average of 28h 45m.
@@ -72,8 +72,8 @@ const Chart = () => {
        
       </div>
 
-      <div className="flex md:flex-7 overflow-hidden bg-white rounded-md py-6 px-3 flex-col">
-        <div className="flex justify-between">
+      <div className="flex md:flex-5 mb-6 overflow-hidden bg-white rounded-md py-6 px-2 flex-col">
+        <div className="flex pl-3 justify-between">
           <p>Student Perfomance</p>
           <div className="flex justify-end">
             <p className="inline justify-end text-sm">
@@ -82,7 +82,7 @@ const Chart = () => {
             </p>
           </div>
         </div>
-        <div className="flex mt-6 text-[13px] font-bold">
+        <div className="flex pl-3 my-6 text-[12px] font-bold">
           <p className="inline mr-2">
             <GoDotFill className="inline text-green-600" />
             Excellent
