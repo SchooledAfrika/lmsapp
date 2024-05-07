@@ -42,13 +42,11 @@ model Teacher {
   studentIDs           String[]             @db.ObjectId
   students             Student[]            @relation(fields: [studentIDs], references: [id])
   Classes              Classes[]
-  // creating many to many relationship, teacher can have many vacancy he or she applied for
-  Vacancy              Vacancy[]            @relation(fields: [vacancyId], references: [id])
-  vacancyId            String[]             @db.ObjectId
   SchoolTeachers       SchoolTeacher[]
   SchoolClassTeacher   SchoolClassTeacher[]
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @default(now())
+  VacancyTeacher       VacancyTeacher[]
 }
 
 // creating the student model
@@ -225,25 +223,43 @@ model GetInTouch {
 // below we create a model for vacancy adverts
 // this advert should be created by schools only
 // only registered teachers are allowed to apply for the vacancy
-// there will be a many to many relationship between vacancy and teachers
+// there will be a one to many relation between the vancancy advert and vacancy teachers
 model Vacancy {
-  id             String       @id @default(auto()) @map("_id") @db.ObjectId
-  level          String
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  level          Grade
   location       String
-  contractType   ContractType
-  details        String
+  role           RoleType
+  description    String
+  responsibility String[]
   qualifications String[]
+  minSalary      String
+  maxSalary      String
+  jobTitle       String
+  state          String
+  note           String
   // one to many relationship between school and vacancy
   // school can have many vacancy, vacancy can have only one school
-  school         School       @relation(fields: [schoolId], references: [id])
-  schoolId       String       @db.ObjectId
-  // there will be many to many relationship between teachers and vancacy
-  // vacancy can contain many teachers,
-  teacherIDs     String[]     @db.ObjectId
-  teachers       Teacher[]    @relation(fields: [teacherIDs], references: [id])
-  deadLine       DateTime
-  createdAt      DateTime     @default(now())
-  updatedAt      DateTime     @default(now())
+  school         School           @relation(fields: [schoolId], references: [id])
+  schoolId       String           @db.ObjectId
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  VacancyTeacher VacancyTeacher[]
+}
+
+// creating a model that will link teacher and the vancancy advert model
+// a teacher can have many teacher advert
+// while an advert can also have one to many relationships witht the vancancy teacher model
+model VacancyTeacher {
+  id        String        @id @default(auto()) @map("_id") @db.ObjectId
+  teacher   Teacher       @relation(fields: [teacherId], references: [id])
+  teacherId String        @db.ObjectId
+  vacancy   Vacancy       @relation(fields: [vacancyId], references: [id])
+  vacancyId String        @db.ObjectId
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @default(now())
+  status    VacancyStatus @default(PENDING)
+
+  @@index([teacherId, vacancyId], name: "vacancy_teacher")
 }
 
 // this is the model that creates a connection getween teachers and school they are working with
@@ -356,12 +372,6 @@ enum Subjects {
   CRS
 }
 
-// enums for vacancy contract types
-enum ContractType {
-  FULLTIME
-  PARTTIME
-}
-
 // creating enums for the days of the week
 enum ClassDay {
   MONDAY
@@ -377,4 +387,16 @@ enum Role {
   Parents
   School
   Admin
+}
+
+// this is for vacancy status when a teacher applied
+enum VacancyStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+enum RoleType {
+  FULLTIME @map("Full-Time")
+  PARTTIME @map("Part-Time")
 }
