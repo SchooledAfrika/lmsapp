@@ -1,11 +1,12 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { LiaChalkboardTeacherSolid } from "react-icons/lia";
-import TeachersTable from "./TeachersTable";
-import DashboardPagination from "./DashboardPagination";
+import {  LiaGraduationCapSolid } from "react-icons/lia";
 
-const Teachers = () => {
+import DashboardPagination from "./DashboardPagination";
+import StudentsTable from "./StudentsTable";
+
+const Students = () => {
   return (
     <div className=" ">
       <div className="flex overflow-auto mt-6 justify-end items-center font-header font-semibold text-[14px]">
@@ -35,17 +36,17 @@ const Teachers = () => {
           className=" bg-lightGreen bg-none rounded-lg hover:bg-green-700  text-white text-[13px]  pl-2 pr-3 w-32  py-2 text-center lg:block"
         >
           <Link href="inline-block">
-            <LiaChalkboardTeacherSolid className="inline-block text-lg mr-1" />
-            Add Teacher
+            <LiaGraduationCapSolid className="inline-block text-lg mr-1" />
+            Add Student
           </Link>
         </Button>
       </div>
 
-      <TeachersTable />
+      <StudentsTable/>
 
       <DashboardPagination />
     </div>
   );
 };
 
-export default Teachers;
+export default Students;

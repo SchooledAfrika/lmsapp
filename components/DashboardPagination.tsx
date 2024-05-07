@@ -24,7 +24,7 @@ const DashboardPagination = () => {
   const ITEM_PER_PAGE = 6;
 
   return (
-    <Pagination className="font-subtext mt-24 w-[60%] mb-6 rounded-xl py-3">
+    <Pagination className="font-subtext mt-24  mb-6 rounded-xl py-3">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious onClick={() => "prev"} href="#" />
@@ -41,10 +41,10 @@ const DashboardPagination = () => {
         <PaginationItem className="">
           <PaginationLink href="#">4</PaginationLink>
         </PaginationItem>
-        <PaginationItem className="">
+        <PaginationItem className="md:block hidden">
           <PaginationLink href="#">5</PaginationLink>
         </PaginationItem>
-        <PaginationItem className="">
+        <PaginationItem className="md:block hidden">
           <PaginationLink href="#">6</PaginationLink>
         </PaginationItem>
 

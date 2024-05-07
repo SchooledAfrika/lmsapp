@@ -43,11 +43,11 @@ const TeachersType = [
 
 export default function TeachersTable() {
   return (
-    <Table className="bg-white    rounded-md mt-12">
+    <Table className="bg-white overflow-x-auto    rounded-md mt-12">
       <TableHeader>
         <TableRow>
           <TableHead>Name</TableHead>
-          <TableHead className="w-[100px]">Contact</TableHead>
+          <TableHead className="sm:w-[100px] w-full">Contact</TableHead>
           <TableHead>Subject</TableHead>
           <TableHead>Grade</TableHead>
           <TableHead>Date</TableHead>
@@ -57,7 +57,7 @@ export default function TeachersTable() {
       <TableBody>
         {TeachersType.map((Teacher) => (
           <TableRow key={Teacher.id} className="">
-            <TableCell className="font-semibold text-[14px]  flex  mr-1">
+            <TableCell className="font-semibold text-[14px] w-[300px] sm:w-full flex  mr-1">
               <Image
                 src={Teacher.icon}
                 alt="icon"
@@ -67,38 +67,38 @@ export default function TeachersTable() {
               />{" "}
               <div className="flex ml-1 flex-col">
                 <div>{Teacher.name}</div>
-                <div className="flex mt-2 justify-between">
+                <div className="flex  mt-2 justify-between">
                   <p
                     className={`${
                       Teacher.active
-                        ? "text-[12px] px-[20px] py-[5px] rounded-md mr-3 bg-lightGreen text-white"
-                        : "text-[12px] px-[20px] py-[5px] rounded-md mr-3 bg-gold text-white"
+                        ? "text-[11px] px-[20px] py-[5px] rounded-md mr-3 bg-lightGreen text-white"
+                        : "text-[11px] px-[20px] py-[5px] rounded-md mr-3 bg-gold text-white"
                     }`}
                   >
                     {Teacher.active || Teacher.pending}
                   </p>
-                  <p className="text-[12px] px-[20px] py-[5px]  rounded-md bg-dimOrange text-white">
+                  <p className="text-[12px] px-[20px] py-[5px]   rounded-md bg-dimOrange text-white">
                     {Teacher.status}
                   </p>
                 </div>
               </div>
             </TableCell>
-            <TableCell className="">
+            <TableCell className="sm:w-[200px] w-[300px]">
               <div className="flex flex-col">
-                <p className="inline">
-                  <FaEnvelope className="inline " />
+                <p className="inline mb-2">
+                  <FaEnvelope className="inline mr-1 " />
                   {Teacher.mail}
                 </p>
                 <p className="inline">
-                  <FaPhoneAlt className="inline" />
+                  <FaPhoneAlt className="inline mr-1" />
                   {Teacher.phone}
                 </p>
               </div>
             </TableCell>
-            <TableCell className="w-[100px]">{Teacher.subject}</TableCell>
+            <TableCell className="sm:w-[100px] w-[300px]">{Teacher.subject}</TableCell>
 
-            <TableCell className="w-[100px]">{Teacher.Grade}</TableCell>
-            <TableCell className="w-[100px]">{Teacher.Added}</TableCell>
+            <TableCell className="sm:w-[100px] w-[300px]">{Teacher.Grade}</TableCell>
+            <TableCell className="sm:w-[200px] w-[300px]">{Teacher.Added}</TableCell>
             <TableCell className="text-right mr-2 text-3xl text-lightGreen cursor-pointer">
               {Teacher.options}
             </TableCell>

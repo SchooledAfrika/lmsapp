@@ -33,13 +33,13 @@ const Navbar = () => {
     checkPath();
   }, [path]);
   return (
-    <div className="flex justify-between items-center pt-5">
+    <div className=" hidden sm:flex justify-between items-center pt-5">
       <div>
         <h1 className="font-bold text-[18px]">{present?.title}</h1>
         <span className="text-sm">{present?.description}</span>
       </div>
 
-      <div className="flex items-center gap-[30px]">
+      <div className=" sm:hidden md:flex items-center gap-[30px]">
         <div className="flex p-3 bg-[#FFFFFF] gap-[5px] border border-#359C71 rounded-[5px] w-[450px]">
           <Image src="/svgs/search.svg" width={20} height={20} alt="search" />
           <input

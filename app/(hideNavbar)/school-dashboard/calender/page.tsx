@@ -1,7 +1,7 @@
 import React from "react";
 
 const page = () => {
-  return <div>calender</div>;
+  return <div className="mt-[80px] md:mt-6">calender</div>;
 };
 
 export default page;
