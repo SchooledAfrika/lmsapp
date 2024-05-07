@@ -142,7 +142,7 @@ export async function DELETE(req: Request) {
 // this is for getting all the classes that belongs to a particular school,
 export async function GET() {
   // TODO: remember to remove this hard coded school id below and use the nextauth id
-  const schoolId = "66310faab8bd174df8392583";
+  const schoolId = "663940fb5cecf4479bcefe7a";
   try {
     const gottenClasses = await prisma.schoolClass.findMany({
       where: {

@@ -3,6 +3,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Sidebar from "@/components/ui/school-dashboard/sidebar/sidebar";
 import Navbar from "@/components/ui/school-dashboard/navbar/navbar";
+import MobileNav from "@/components/ui/school-dashboard/navbar/MobileNav";
+import MobileSideBar from "@/components/ui/school-dashboard/sidebar/MobileSideBar";
+import SchoolDashboardContext from "@/providers/Statecontext";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,15 +19,19 @@ export default function RootLayout({
 }>) {
   return (
     <>
-      <main className="bg-stone-100 flex font-header">
-        <div className=" flex-2 font-semibold  px-6 py-10 bg-white h-screen sticky top-0 overflow-auto scrollbar-hide">
-          <Sidebar />
-        </div>
-        <div className=" flex-12 h-full px-8">
-          <Navbar />
-          {children}
-        </div>
-      </main>
+      <SchoolDashboardContext>
+        <main className="bg-stone-100 flex flex-col sm:flex-row font-header">
+          <div className=" hidden sm:block sm:flex-4 md:flex-2 font-semibold  px-6 py-10 bg-white h-screen sticky top-0 overflow-auto scrollbar-hide">
+            <Sidebar />
+          </div>
+          <div className=" sm:flex-10 md:flex-12 h-full px-8">
+            <MobileSideBar />
+            <Navbar />
+            <MobileNav />
+            {children}
+          </div>
+        </main>
+      </SchoolDashboardContext>
     </>
   );
 }
