@@ -1,13 +1,14 @@
 "use client";
-import React from "react";
-import { SiGoogleclassroom } from "react-icons/si";
+import React, { useContext } from "react";
 import { SchoolSideBar, SchoolSideBarType } from "@/constants/schoolSideBar";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaPowerOff } from "react-icons/fa";
+import { SchoolDashboardContext } from "@/providers/Statecontext";
 
 const Sidebar = () => {
+  const { showSideBar, setShowSideBar } = useContext(SchoolDashboardContext);
   // manipulating the path values
   const path = usePathname().split("/");
   let findpath;
@@ -33,6 +34,9 @@ const Sidebar = () => {
       <div className=" w-full flex flex-col space-y-2">
         {SchoolSideBar.map((item: SchoolSideBarType, index) => (
           <Link
+            onClick={() => {
+              setShowSideBar(false);
+            }}
             href={`/school-dashboard/${item.path}`}
             className={` w-full p-2 cursor-pointer flex items-center space-x-2 ${
               findpath === item.path && "bg-green-800 text-white"

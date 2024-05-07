@@ -20,6 +20,9 @@ export async function POST(req: Request) {
       schoolId,
       studentId,
     },
+    select: {
+      id: true,
+    },
   });
   if (checkStudentExistence) {
     return new Response(JSON.stringify({ message: "Student already exists" }), {
@@ -61,6 +64,10 @@ export async function PUT(req: Request) {
     where: {
       id: offerId,
     },
+    select: {
+      id: true,
+      studentId: true,
+    },
   });
   if (getSchoolStudent?.studentId !== studentId) {
     return new Response(
@@ -83,6 +90,7 @@ export async function PUT(req: Request) {
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     throw new Error(JSON.stringify({ message: "something went wrong" }));
   }
 }
