@@ -1,9 +1,12 @@
+import SingleClassroom from '@/components/SingleClassroom'
 import React from 'react'
 
-const page = () => {
+const SingleClassPage = () => {
   return (
-    <div>page</div>
+    <div>
+       <SingleClassroom/>
+    </div>
   )
 }
 
-export default page
+export default SingleClassPage
