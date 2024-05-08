@@ -115,6 +115,7 @@ export async function PUT(req: Request) {
         data: {
           schoolId,
           teacherId: updatedApplication.teacherId,
+          status: "ACTIVE",
         },
       });
     }

@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       { status: 200 }
     );
   } catch (error) {
-    throw new Error(JSON.stringify({ message: "error, something went wrong" }));
+    throw new Error(JSON.stringify({ message: "something went wrong" }));
   }
 }
 
@@ -49,7 +49,7 @@ export async function DELETE(req: Request) {
       id: vacancyId,
     },
     select: {
-      schoolId,
+      schoolId: true,
     },
   });
   // returning error if the vacancy does not exist
@@ -73,7 +73,7 @@ export async function DELETE(req: Request) {
   // first, we will fetch all the vacancy teacher models associated with this advertisement
   try {
     // checking for the existence of vacancy teacher
-    const getVacancyTeacher = prisma.vacancyTeacher.findMany({
+    const getVacancyTeacher = await prisma.vacancyTeacher.findMany({
       where: {
         vacancyId,
       },
@@ -81,11 +81,12 @@ export async function DELETE(req: Request) {
         id: true,
       },
     });
+
     // creating a forloop to delete all the assocaited vacancy teacher models
-    for (const item in getVacancyTeacher) {
+    for (const item of getVacancyTeacher) {
       await prisma.vacancyTeacher.delete({
         where: {
-          id: item,
+          id: item.id,
         },
       });
     }
@@ -95,7 +96,12 @@ export async function DELETE(req: Request) {
         id: vacancyId,
       },
     });
+    return new Response(
+      JSON.stringify({ message: "advert deleted successfully" }),
+      { status: 200 }
+    );
   } catch (error) {
+    console.log(error);
     throw new Error(
       JSON.stringify({
         message: "something went wrong deleting the advertisement",
@@ -141,9 +147,34 @@ export async function PUT(req: Request) {
         ...others,
       },
     });
+    return new Response(
+      JSON.stringify({ message: "update successfully done" }),
+      { status: 200 }
+    );
   } catch (error) {
     throw new Error(
       JSON.stringify({ message: "something went wrong, try again" })
     );
+  }
+}
+
+// here, a school can get there adverts
+// here we will replace the query parameter school id we pass to nextauth id
+export async function GET(req: Request) {
+  const querys = new URL(req.url).searchParams;
+  const schoolId = querys.get("schoolId");
+
+  try {
+    const schoolAdverts = await prisma.vacancy.findMany({
+      where: {
+        schoolId: schoolId!,
+      },
+      include: {
+        VacancyTeacher: true,
+      },
+    });
+    return new Response(JSON.stringify(schoolAdverts), { status: 200 });
+  } catch (error) {
+    throw new Error(JSON.stringify({ message: "somemthing went wrong" }));
   }
 }
