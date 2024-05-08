@@ -5,6 +5,7 @@ import prisma from "@/prisma/prismaConnect";
 
 // post request to add new teachers
 export async function POST(req: Request) {
+  console.log("entered1");
   // TODO: replace this school id here, and make use of next auth provided id,
   // we can then pass only the teachers id through the body
   const { teacherId, schoolId } = await req.json();
@@ -22,7 +23,11 @@ export async function POST(req: Request) {
       schoolId,
       teacherId,
     },
+    select: {
+      id: true,
+    },
   });
+  console.log(checkTeacherExistence);
   if (checkTeacherExistence) {
     return new Response(JSON.stringify({ message: "Teacher already exists" }), {
       status: 404,
@@ -30,6 +35,7 @@ export async function POST(req: Request) {
   }
   // lets proceed to creating the schoolTeacher for this particular teacher
   try {
+    console.log("entered");
     await prisma.schoolTeacher.create({
       data: {
         schoolId: schoolId,
@@ -41,6 +47,7 @@ export async function POST(req: Request) {
       { status: 200, statusText: "success" }
     );
   } catch (error) {
+    console.log(error);
     throw new Error(JSON.stringify({ mesage: "server error" }));
   }
 }

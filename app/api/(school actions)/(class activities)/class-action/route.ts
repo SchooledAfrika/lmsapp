@@ -2,13 +2,12 @@
 // using our post request
 // then later we can modify the or update the class when we want to add students or teachers to the platform
 import prisma from "@/prisma/prismaConnect";
-import Error from "next/error";
 
 // lets create class
 export async function POST(req: Request) {
   // TODO: REMEMBER TO CHANGE THE SCHOOLID FROM THIS BODY AND USE NEXTAUTH ID
   const { schoolId, ...others } = await req.json();
-  if (others) {
+  if (!others) {
     return new Response(JSON.stringify({ message: "inputs needed" }), {
       status: 400,
     });
@@ -48,6 +47,13 @@ export async function PUT(req: Request) {
       id: classId,
     },
   });
+  // lets return an error if the class does not exist first
+  if (!getClass) {
+    return new Response(JSON.stringify({ message: "Class does not exist" }), {
+      status: 400,
+    });
+  }
+  // check if is the school that actually created the class they want to modify
   if (getClass?.schoolId !== schoolId) {
     return new Response(
       JSON.stringify({
@@ -60,7 +66,7 @@ export async function PUT(req: Request) {
   try {
     await prisma.schoolClass.update({
       where: {
-        id: schoolId,
+        id: classId,
       },
       data: {
         ...others,
@@ -130,5 +136,25 @@ export async function DELETE(req: Request) {
     return new Response(JSON.stringify({ message: "something went wrong" }), {
       status: 500,
     });
+  }
+}
+
+// this is for getting all the classes that belongs to a particular school,
+export async function GET() {
+  // TODO: remember to remove this hard coded school id below and use the nextauth id
+  const schoolId = "663940fb5cecf4479bcefe7a";
+  try {
+    const gottenClasses = await prisma.schoolClass.findMany({
+      where: {
+        schoolId,
+      },
+      include: {
+        SchoolClassStudent: true,
+        SchoolClassTeacher: true,
+      },
+    });
+    return new Response(JSON.stringify(gottenClasses), { status: 200 });
+  } catch (error) {
+    throw new Error(JSON.stringify({ message: "something went wrong" }));
   }
 }

@@ -3,6 +3,7 @@ import React from "react";
 import { AddTeacher } from "./add/page";
 
 const page = () => {
+<<<<<<< HEAD
   return <div>
     <div className="flex overflow-auto mt-6 justify-end items-center font-header font-semibold text-[14px]">
         <div className="flex ">
@@ -30,6 +31,13 @@ const page = () => {
       </div>
     <Teachers/>
   </div>;
+=======
+  return (
+    <div className="mt-[80px] md:mt-6">
+      <Teachers />
+    </div>
+  );
+>>>>>>> 84cbb2dff81b2e64d3fa94fe6b885dcb4afc8b6c
 };
 
 export default page;

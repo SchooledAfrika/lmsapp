@@ -5,7 +5,7 @@ import RecentlyAdded from "@/components/RecentlyAdded";
 
 const page = () => {
   return (
-    <div>
+    <div className="mt-[80px] md:mt-6">
       <Card />
       <Chart />
       <RecentlyAdded />
