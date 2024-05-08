@@ -9,6 +9,7 @@ import {
 
 import Image from "next/image";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+import { TeacherOptions } from "./TeacherOptions";
 
 
 const TeachersType = [
@@ -71,15 +72,13 @@ export default function TeachersTable() {
                   <p
                     className={`${
                       Teacher.active
-                        ? "text-[11px] px-[20px] py-[5px] rounded-md mr-3 bg-lightGreen text-white"
-                        : "text-[11px] px-[20px] py-[5px] rounded-md mr-3 bg-gold text-white"
+                        ? "text-[11px] px-[20px] py-[5px] w-28 text-center rounded-md mr-3 bg-lightGreen text-white"
+                        : "text-[11px] px-[20px] py-[5px] w-28 text-center rounded-md mr-3 bg-gold text-white"
                     }`}
                   >
                     {Teacher.active || Teacher.pending}
                   </p>
-                  <p className="text-[12px] px-[20px] py-[5px]   rounded-md bg-dimOrange text-white">
-                    {Teacher.status}
-                  </p>
+                  
                 </div>
               </div>
             </TableCell>
@@ -95,12 +94,12 @@ export default function TeachersTable() {
                 </p>
               </div>
             </TableCell>
-            <TableCell className="sm:w-[100px] w-[300px]">{Teacher.subject}</TableCell>
+            <TableCell className="">{Teacher.subject}</TableCell>
 
-            <TableCell className="sm:w-[100px] w-[300px]">{Teacher.Grade}</TableCell>
+            <TableCell className="">{Teacher.Grade}</TableCell>
             <TableCell className="sm:w-[200px] w-[300px]">{Teacher.Added}</TableCell>
-            <TableCell className="text-right mr-2 text-3xl text-lightGreen cursor-pointer">
-              {Teacher.options}
+            <TableCell className="flex justify-end text-[14px]  text-lightGreen cursor-pointer">
+             <TeacherOptions/>
             </TableCell>
           </TableRow>
         ))}
