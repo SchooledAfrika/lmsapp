@@ -1,7 +1,10 @@
+import SingleStudent from "@/components/SingleStudent";
 import React from "react";
 
 const page = () => {
-  return <div>single student</div>;
+  return <div>
+    <SingleStudent/>
+  </div>;
 };
 
 export default page;
