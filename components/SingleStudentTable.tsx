@@ -54,7 +54,7 @@ import { FaEllipsisH } from "react-icons/fa";
         <TableBody>
           {SingleTeacherType.map((Teacher) => (
             <TableRow key={Teacher.id} className="">
-              <TableCell className="font-semibold text-[14px] flex  mr-1">
+              <TableCell className="font-semibold text-[14px] w-[250px] flex  mr-1">
                 <Image
                   src={Teacher.icon}
                   alt="icon"

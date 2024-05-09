@@ -23,7 +23,7 @@ export function RemoveStudent() {
                 Remove
               </p>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] font-subtext">
+      <DialogContent className="sm:max-w-[500px] w-[380px] font-subtext">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold">
             Remove
