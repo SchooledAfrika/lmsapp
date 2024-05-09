@@ -10,7 +10,7 @@ const PricingBtn = ({ index, text, currentIndex, setIndex }: btnInterface) => {
   return (
     <div
       onClick={() => setIndex(index)}
-      className={` text-[10px] px-6 py-1 cursor-pointer  ${
+      className={` md:text-[10px] px-3 text-[8px]   md:px-6 py-1 cursor-pointer  ${
         currentIndex == index
           ? "bg-green-600 text-white"
           : "bg-transparent text-black font-bold hover:bg-green-600 hover:text-white"

@@ -4,13 +4,29 @@ import PricingBtn from "./PricingBtn";
 import { eachPrice, monthlyPlans } from "@/constants/pricing/school";
 import EachPricing from "../EachPricing";
 import { IoCloseSharp } from "react-icons/io5";
+import { SchoolDashboardContext } from "@/providers/Statecontext";
 
 const PricingLayout = () => {
   const [currentIndex, setIndex] = useState<number>(0);
+  const { showPricing, setShowPricing } = useContext(SchoolDashboardContext);
+  const closeModel = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    setShowPricing(false);
+  };
   return (
-    <div className=" flex px-6 md:px-24 py-3 items-center justify-center fixed top-0 left-0 w-full h-screen bg-[rgba(0,0,0,0.4)] z-[999]">
-      <div className=" relative scrollbar-hide w-full h-full bg-white rounded-md flex flex-col gap-4 px-6 py-5 overflow-auto">
-        <div className=" absolute top-6 right-3 text-xl cursor-pointer">
+    <div
+      onClick={closeModel}
+      className={` ${
+        showPricing ? "flex" : "hidden"
+      } px-6 md:px-24 py-3 items-center justify-center fixed top-0 left-0 w-full h-screen bg-[rgba(0,0,0,0.4)] z-[999]`}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        className=" relative scrollbar-hide w-full h-full bg-white rounded-md flex flex-col gap-4 px-6 py-5 overflow-auto"
+      >
+        <div
+          onClick={closeModel}
+          className=" absolute top-6 right-3 text-xl cursor-pointer"
+        >
           <IoCloseSharp />
         </div>
         <div className=" bg-gray-100 w-fit px-4 py-2 rounded-md flex self-center items-center gap-3">
@@ -55,7 +71,7 @@ const PricingLayout = () => {
           ))}
         </div>
         <div className=" mt-10 text-green-600 flex justify-center text-sm font-bold cursor-pointer hover:underline">
-          <div>No Thank You</div>
+          <div onClick={closeModel}>No Thank You</div>
         </div>
       </div>
     </div>
