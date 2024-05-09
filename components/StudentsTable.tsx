@@ -8,8 +8,8 @@ import {
   } from "@/components/ui/table";
   
   import Image from "next/image";
-  import { Button } from "@/components/ui/button";
   import Link from "next/link";
+import { StudentOptions } from "./StudentOptions";
   
   const StudentsType = [
     {
@@ -39,14 +39,14 @@ import {
         <TableHeader>
           <TableRow>
             <TableHead>Name</TableHead>
-            <TableHead className="sm:w-[100px] w-full">Classrooms</TableHead>
+            <TableHead className="">Classrooms</TableHead>
             <TableHead className="text-right">Options</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {StudentsType.map((Student) => (
             <TableRow key={Student.id} className="">
-              <TableCell className="font-semibold text-[14px] w-[300px] sm:w-full flex  mr-1">
+              <TableCell className="font-semibold text-[14px] flex  mr-1">
                 <Image
                   src={Student.icon}
                   alt="icon"
@@ -60,36 +60,22 @@ import {
                     <p
                       className={`${
                         Student.active
-                          ? "text-[11px] px-[20px] py-[5px] rounded-md mr-3 bg-lightGreen text-white"
-                          : "text-[11px] px-[20px] py-[5px] rounded-md mr-3 bg-gold text-white"
+                          ? "text-[11px] px-[20px] w-28 py-[5px] text-center rounded-md mr-3 bg-lightGreen text-white"
+                          : "text-[11px] px-[20px] w-28 py-[5px] text-center rounded-md mr-3 bg-gold text-white"
                       }`}
                     >
                       {Student.active || Student.pending}
                     </p>
-                    <p className="text-[12px] px-[20px] py-[5px]   rounded-md bg-dimOrange text-white">
-                      {Student.status}
-                    </p>
+                   
                   </div>
                 </div>
               </TableCell>
              
-              <TableCell className="sm:w-[100px] w-[300px]">{Student.classrooms}</TableCell>
+              <TableCell className="">{Student.classrooms}</TableCell>
   
-              <TableCell className="text-right mr-2 text-3xl text-lightGreen cursor-pointer">
-                {Student.options || <div className="flex  mt-2 items-center justify-end">
-                <Link href="/ ">
-                        <p className="bg-lightGreen  rounded-lg hover:bg-green-700  text-white text-[12px]  pl-2 py-1 pr-3 w-24 mr-3   text-center lg:block"> {Student.accept}</p>
-                       
-                    </Link> 
-                   
-                    <Link href="/ ">
-                        <p className="bg-dimOrange  rounded-lg hover:bg-gold  text-white text-[12px]  pl-2 py-1 pr-3 w-24 mr-3   text-center lg:block"> {Student.reject}</p>
-                       
-                    </Link> 
-                   
-                    
-                  </div>}
-              </TableCell>
+              <TableCell className="flex justify-end text-[14px]  text-lightGreen cursor-pointer">
+             <StudentOptions/>
+            </TableCell>
             </TableRow>
           ))}
         </TableBody>
