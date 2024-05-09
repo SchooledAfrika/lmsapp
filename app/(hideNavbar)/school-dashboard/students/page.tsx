@@ -3,9 +3,9 @@ import React from "react";
 import { AddStudent } from "./add/page";
 
 const page = () => {
-
-  return ( <div>
-    <div className="flex overflow-auto mt-6 justify-end items-center font-header font-semibold text-[14px]">
+  return (
+    <div>
+      <div className="flex overflow-auto mt-6 justify-end items-center font-header font-semibold text-[14px]">
         <div className="flex ">
           <input
             type="checkbox"
@@ -27,14 +27,11 @@ const page = () => {
           />
           <p className="mr-3">Pending</p>
         </div>
-        <AddStudent/>
+        <AddStudent />
       </div>
-    <Students/>
-  </div>
-
- 
+      <Students />
+    </div>
   );
-
 };
 
 export default page;
