@@ -6,6 +6,7 @@ import Navbar from "@/components/ui/school-dashboard/navbar/navbar";
 import MobileNav from "@/components/ui/school-dashboard/navbar/MobileNav";
 import MobileSideBar from "@/components/ui/school-dashboard/sidebar/MobileSideBar";
 import SchoolDashboardContext from "@/providers/Statecontext";
+import PricingLayout from "@/components/ui/Pricing-layout";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -25,6 +26,8 @@ export default function RootLayout({
             <Sidebar />
           </div>
           <div className=" sm:flex-10 md:flex-12 h-full px-8">
+            {/* this component below serves the purpose of the pricing model */}
+            <PricingLayout />
             <MobileSideBar />
             <Navbar />
             <MobileNav />
