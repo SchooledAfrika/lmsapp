@@ -1,7 +1,14 @@
 import React from "react";
 import { eachPrice } from "@/constants/pricing/school";
+import { pricingChange } from "./ui/Pricing-layout";
 
-const EachPricing = ({ plan }: { plan: eachPrice }) => {
+const EachPricing = ({
+  plan,
+  multiple,
+}: {
+  plan: eachPrice;
+  multiple: pricingChange;
+}) => {
   return (
     <div
       className={` shadow ${
@@ -12,9 +19,9 @@ const EachPricing = ({ plan }: { plan: eachPrice }) => {
       <div>
         <p className=" text-[12px]">{plan.planName}</p>
         <p className="text-[14px]">
-          <span className="font-bold">${plan.amt}</span>
-          {plan.amt === 0 && <span className=" font-bold">(free)</span>}/per
-          Month
+          <span className="font-bold">${plan.amt * multiple.priceAmt}</span>
+          {plan.amt === 0 && <span className=" font-bold">(free)</span>}
+          {`/per ${multiple.duration}`}
         </p>
       </div>
       <div>

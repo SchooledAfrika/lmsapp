@@ -6,9 +6,17 @@ import EachPricing from "../EachPricing";
 import { IoCloseSharp } from "react-icons/io5";
 import { SchoolDashboardContext } from "@/providers/Statecontext";
 
+export interface pricingChange {
+  priceAmt: number;
+  duration: string;
+}
 const PricingLayout = () => {
   const [currentIndex, setIndex] = useState<number>(0);
   const { showPricing, setShowPricing } = useContext(SchoolDashboardContext);
+  const [multiple, setmultiple] = useState<pricingChange>({
+    priceAmt: 1,
+    duration: "Month",
+  });
   const closeModel = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setShowPricing(false);
   };
@@ -31,18 +39,27 @@ const PricingLayout = () => {
         </div>
         <div className=" bg-gray-100 w-fit px-4 py-2 rounded-md flex self-center items-center gap-3">
           <PricingBtn
+            setmultiple={setmultiple}
+            multipleValue={1}
+            duration="Month"
             setIndex={setIndex}
             currentIndex={currentIndex}
             text="Monthly"
             index={0}
           />
           <PricingBtn
+            setmultiple={setmultiple}
+            duration="Semi year"
+            multipleValue={5}
             setIndex={setIndex}
             currentIndex={currentIndex}
             text="Semi-yealy"
             index={1}
           />
           <PricingBtn
+            setmultiple={setmultiple}
+            duration="Year"
+            multipleValue={10}
             setIndex={setIndex}
             currentIndex={currentIndex}
             text="Yearly"
@@ -67,7 +84,7 @@ const PricingLayout = () => {
         </div>
         <div className=" grid grid-cols-1 xs:2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 mt-5 gap-3">
           {monthlyPlans.map((plan, index) => (
-            <EachPricing plan={plan} key={index} />
+            <EachPricing multiple={multiple} plan={plan} key={index} />
           ))}
         </div>
         <div className=" mt-10 text-green-600 flex justify-center text-sm font-bold cursor-pointer hover:underline">
