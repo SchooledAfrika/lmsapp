@@ -57,7 +57,7 @@ import { FaEllipsisH } from "react-icons/fa";
         <TableBody>
           {SingleclassType.map((Class) => (
             <TableRow key={Class.id} className="">
-              <TableCell className="font-semibold text-[14px] flex  mr-1">
+              <TableCell className="font-semibold w-[250px] text-[14px] flex  mr-1">
                 <Image
                   src={Class.icon}
                   alt="icon"
@@ -84,7 +84,7 @@ import { FaEllipsisH } from "react-icons/fa";
              
               <TableCell className="">{Class.start}</TableCell>
               <TableCell className="">{Class.sessionsAttended}</TableCell>
-              <TableCell className="flex justify-end text-[14px]  text-lightGreen cursor-pointer"><FaEllipsisH className="ml-3"/></TableCell>
+              <TableCell className="flex justify-end text-[14px]   text-lightGreen cursor-pointer"><FaEllipsisH className="ml-3"/></TableCell>
               
             </TableRow>
           ))}

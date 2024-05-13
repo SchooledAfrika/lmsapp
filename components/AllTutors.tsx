@@ -6,7 +6,7 @@ import Link from "next/link";
 
 const AllTutors = () => {
   return (
-    <div className="w-full md:w-[95%] overflow-hidden mx-auto my-20 rounded-2xl shadow-md flex bg-white h-full">
+    <div className="w-[90%] md:w-[95%] overflow-x-auto mx-auto my-20 rounded-2xl shadow-md md:flex grid grid-cols-1 bg-white h-full">
       {/* First flex section */}
       <div className="flex mx-auto flex-initial md:flex-initial   flex-col px-3">
         <Image
@@ -16,7 +16,7 @@ const AllTutors = () => {
           height={100}
           className="md:w-[200px] xs:w-[200px] xs:h-[200px] w-full rounded-md md:ml-6 ml-2 mt-6 "
         />
-        <div className="flex md:mx-5 flex-row justify-center  text-base md:p-3 py-3 px-1">
+        <div className="flex md:mx-3 flex-row justify-center  text-base md:p-3 py-3 px-1">
           <p className="md:mr-2 mr-1">25 Sessions</p>
           <p className="hidden md:block">|</p>
           <p className="md:ml-2 ml-1">8 Students</p>
@@ -28,7 +28,7 @@ const AllTutors = () => {
       </div>
 
       {/* Second flex section */}
-      <div className="flex w-full  md:flex-1   mr-6   py-6 flex-col items-start">
+      <div className="flex w-full  md:flex-1  md:mr-6   py-6 flex-col items-start">
         <h3 className="inline mx-auto md:mx-1 font-bold text-lg font-subtext">
           David Olushola <MdVerified className="inline text-lightGreen" />{" "}
         </h3>

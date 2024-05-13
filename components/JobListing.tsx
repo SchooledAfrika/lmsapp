@@ -23,11 +23,11 @@ const JobListing = () => {
         </Link>
       </div>
 
-      <div className="flex flex-wrap gap-4 justify-center md:justify-start ">
+      <div className="flex flex-wrap gap-3 justify-center md:justify-start ">
         {JobList.map((joblisting, index) => (
           <div
             key={index}
-            className="w-full lg:w-fit bg-[#FFFFFF] py-[17px] shadow-lg pl-6 pr-[65px] rounded-[10px]"
+            className="w-full lg:w-fit bg-[#FFFFFF] py-[17px] shadow-lg pl-4 pr-[45px] rounded-[10px]"
           >
             <p className="font-bold text-[18px] pb-2">{joblisting.subject}</p>
             <div className="flex gap-6">
@@ -65,15 +65,15 @@ const JobListing = () => {
                 {joblisting.numberOfApplicants}
               </div>
             </div>
-            <div className="flex gap-5">
+            <div className="flex gap-3">
               <Link href={"/school-dashboard/job-listing/new"}>
                 <Button className="border bg-[#FFFFFF] border-red-400 py-5 text-[12px] px-6 my-3 text-red-400">
                   {joblisting.edit}
                 </Button>
               </Link>
-              <Link href={""}>
+              <Link href={"/school-dashboard/job-listing/applicant"}>
                 <Button className="bg-secondary text-white text-[12px] py-5 my-3">
-                  {joblisting.viewApplicatants}
+                  {joblisting.viewApplicants}
                 </Button>
               </Link>
             </div>

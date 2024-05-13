@@ -19,7 +19,7 @@ export function AssignDialog() {
       <DialogTrigger asChild>
       <Button variant="outline" className="border border-lightGreen hover:text-lightGreen" >Assign</Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] font-subtext">
+      <DialogContent className="sm:max-w-[500px] w-[380px] font-subtext">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold">
             Assign Teacher
@@ -55,7 +55,7 @@ export function AssignDialog() {
           </div>
           <div className="flex flex-col border p-6 rounded-md">
             <p className="font-semibold inline text-[14px]"> <RiErrorWarningFill className="inline  text-lightGreen text-lg mr-2" />Can't Find Teacher Here?</p>
-            <p className="text-[14px] mt-3">Go to <Link href="" className="text-red-500">Teachers Tab</Link>  to invite them to your school</p>
+            <p className="text-[14px] mt-3">Go to <Link href="/find-tutors" className="text-red-500">Teachers Tab</Link>  to invite them to your school</p>
           </div>
           
           

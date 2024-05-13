@@ -10,7 +10,7 @@ export const JobList = [
     nameOfApplicants: "Applicants",
     numberOfApplicants: "2",
     edit: "Edit Listing",
-    viewApplicatants: "View Applicants",
+    viewApplicants: "View Applicants",
   },
   {
     subject: "Economics",
@@ -23,7 +23,7 @@ export const JobList = [
     nameOfApplicants: "Applicants",
     numberOfApplicants: "2",
     edit: "Edit Listing",
-    viewApplicatants: "View Applicants",
+    viewApplicants: "View Applicants",
   },
   {
     subject: "Economics",
@@ -36,7 +36,7 @@ export const JobList = [
     nameOfApplicants: "Applicants",
     numberOfApplicants: "2",
     edit: "Edit Listing",
-    viewApplicatants: "View Applicants",
+    viewApplicants: "View Applicants",
   },
   {
     subject: "Economics",
@@ -49,7 +49,7 @@ export const JobList = [
     nameOfApplicants: "Applicants",
     numberOfApplicants: "2",
     edit: "Edit Listing",
-    viewApplicatants: "View Applicants",
+    viewApplicants: "View Applicants",
   },
   {
     subject: "Economics",
@@ -62,6 +62,6 @@ export const JobList = [
     nameOfApplicants: "Applicants",
     numberOfApplicants: "2",
     edit: "Edit Listing",
-    viewApplicatants: "View Applicants",
+    viewApplicants: "View Applicants",
   },
 ];

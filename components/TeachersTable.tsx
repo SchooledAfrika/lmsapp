@@ -58,7 +58,7 @@ export default function TeachersTable() {
       <TableBody>
         {TeachersType.map((Teacher) => (
           <TableRow key={Teacher.id} className="">
-            <TableCell className="font-semibold text-[14px] w-[300px] sm:w-full flex  mr-1">
+            <TableCell className="font-semibold text-[14px] w-[250px] sm:w-full flex  mr-1">
               <Image
                 src={Teacher.icon}
                 alt="icon"
@@ -97,7 +97,7 @@ export default function TeachersTable() {
             <TableCell className="">{Teacher.subject}</TableCell>
 
             <TableCell className="">{Teacher.Grade}</TableCell>
-            <TableCell className="sm:w-[200px] w-[300px]">{Teacher.Added}</TableCell>
+            <TableCell className="">{Teacher.Added}</TableCell>
             <TableCell className="flex justify-end text-[14px]  text-lightGreen cursor-pointer">
              <TeacherOptions/>
             </TableCell>

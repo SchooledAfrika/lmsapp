@@ -11,7 +11,7 @@ import SingleClassTable from "./SingleClassTable";
 
 const SingleClassroom = () => {
   return (
-    <div className="font-header mt-12">
+    <div className="font-header md:mt-12 mt-24">
         <div className="flex justify-between">
             <p className="font-bold text-lg">Details</p>
             <Link href="/school-dashboard/classroom" className="cursor-pointer"> 
@@ -21,7 +21,7 @@ const SingleClassroom = () => {
            
         </div>
       
-      <div className="grid font-subtext grid-cols-3 gap-3 my-6">
+      <div className="grid font-subtext md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3 my-6">
         <div className="bg-white py-6 rounded-md">
           <div className="flex justify-between px-6 pt-3 pb-1">
             <p className="text-slate-500 text-[14px] font-semibold">Overview</p>

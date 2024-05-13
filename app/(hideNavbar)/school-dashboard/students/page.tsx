@@ -4,7 +4,31 @@ import { AddStudent } from "./add/page";
 
 const page = () => {
   return (
-    <div className="mt-[80px] md:mt-6">
+    <div>
+      <div className="flex overflow-auto mt-6 justify-end items-center font-header font-semibold text-[14px]">
+        <div className="flex ">
+          <input
+            type="checkbox"
+            className="accent-lightGreen text-white mr-1"
+          />
+          <p className="mr-3">All Status</p>
+        </div>
+        <div className="flex ">
+          <input
+            type="checkbox"
+            className="accent-lightGreen text-white mr-1"
+          />
+          <p className="mr-3">Active</p>
+        </div>
+        <div className="flex ">
+          <input
+            type="checkbox"
+            className="accent-lightGreen text-white mr-1"
+          />
+          <p className="mr-3">Pending</p>
+        </div>
+        <AddStudent />
+      </div>
       <Students />
     </div>
   );

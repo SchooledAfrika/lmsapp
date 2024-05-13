@@ -7,7 +7,7 @@ const Card = () => {
   return (
     <div className="w-full bg-stone-100">
       {/* Card section */}
-      <div className="md:flex md:flex-row  gap grid grid-cols-2 justify-evenly  items-center gap-3">
+      <div className="md:flex md:flex-row flex-wrap  gap grid grid-cols-2 justify-evenly  items-center gap-3">
         {/* First card */}
         <div className="flex md:flex-3 flex-2  py-[28.5px] px-2 space-x-2  bg-white rounded-md">
           <Image
