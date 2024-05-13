@@ -3,21 +3,24 @@ import React from "react";
 import { Button } from "./ui/button";
 import { JobList } from "@/constants/jobList";
 import DashboardPagination from "./DashboardPagination";
+import Link from "next/link";
 
 const JobListing = () => {
   return (
     <section>
       <div className="flex justify-end mb-2">
-        <Button className="bg-secondary text-white text-[12px] py-5 my-3">
-          <Image
-            src="/svgs/new-list.svg"
-            width={20}
-            height={20}
-            className="mr-2"
-            alt="Grade"
-          />
-          New Listing
-        </Button>
+        <Link href={"/school-dashboard/job-listing/new"}>
+          <Button className="bg-secondary text-white text-[12px] py-5 my-3">
+            <Image
+              src="/svgs/new-list.svg"
+              width={20}
+              height={20}
+              className="mr-2"
+              alt="Grade"
+            />
+            New Listing
+          </Button>
+        </Link>
       </div>
 
       <div className="flex flex-wrap gap-4 justify-center md:justify-start ">
@@ -63,12 +66,16 @@ const JobListing = () => {
               </div>
             </div>
             <div className="flex gap-5">
-              <Button className="border bg-[#FFFFFF] border-red-400 py-5 text-[12px] px-6 my-3 text-red-400">
-                {joblisting.edit}
-              </Button>
-              <Button className="bg-secondary text-white text-[12px] py-5 my-3">
-                {joblisting.viewApplicatants}
-              </Button>
+              <Link href={"/school-dashboard/job-listing/new"}>
+                <Button className="border bg-[#FFFFFF] border-red-400 py-5 text-[12px] px-6 my-3 text-red-400">
+                  {joblisting.edit}
+                </Button>
+              </Link>
+              <Link href={""}>
+                <Button className="bg-secondary text-white text-[12px] py-5 my-3">
+                  {joblisting.viewApplicatants}
+                </Button>
+              </Link>
             </div>
           </div>
         ))}
