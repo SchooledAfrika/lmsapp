@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import Container from "./Container";
 import Link from "next/link";
 import Image from "next/image";
@@ -14,10 +14,17 @@ const JobQualification: React.FC<JobQualificationProps> = ({
   const handleQualificationView = () => {
     onClickCurrentView("finalization");
   };
+
+  const [inputs, setInputs] = useState(["", "", "", "", ""]);
+
+  const addInputs = () => {
+    setInputs([...inputs, ""]);
+  };
+
   return (
     <section className="my-[80px] md:my-6">
       <Container>
-        <div className="flex justify-between mb-5">
+        <div className="flex justify-between items-center mb-5">
           <span className="font-bold">Details</span>
           <Link href="/school-dashboard/job-listing" className="cursor-pointer">
             <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />
@@ -58,36 +65,20 @@ const JobQualification: React.FC<JobQualificationProps> = ({
               <label className="font-bold text-[18px]">
                 What is lorem ipsum dolor sit ?
               </label>
-              <input
-                type="text"
-                name="text"
-                placeholder="Qualifications"
-                className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-              />
-              <input
-                type="text"
-                name="text"
-                placeholder="Qualifications"
-                className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-              />
-              <input
-                type="text"
-                name="text"
-                placeholder="Qualifications"
-                className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-              />
-              <input
-                type="text"
-                name="text"
-                placeholder="Qualifications"
-                className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-              />
-              <input
-                type="text"
-                name="text"
-                placeholder="Qualifications"
-                className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-              />
+              {inputs.map((inputField, index) => (
+                <input
+                  key="index"
+                  type="text"
+                  placeholder="Qualifications"
+                  className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
+                />
+              ))}
+              <button
+                onClick={addInputs}
+                className="font-bold text-[12px] hover:bg-green-200 rounded p-4 mt-2"
+              >
+                Add More Responsibilities +
+              </button>
               <Button
                 onClick={handleQualificationView}
                 className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"

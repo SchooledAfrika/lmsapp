@@ -7,7 +7,7 @@ const JobFinalization: React.FC = () => {
   return (
     <section className="my-[80px] md:my-6">
       <Container>
-        <div className="flex justify-between mb-5">
+        <div className="flex justify-between items-center mb-5">
           <span className="font-bold">Details</span>
           <Link href="/school-dashboard/job-listing" className="cursor-pointer">
             <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />
@@ -48,7 +48,7 @@ const JobFinalization: React.FC = () => {
               <label className="font-bold text-[18px]">
                 What is lorem ipsum dolor sit ?
               </label>
-              <div className="w-full md:w-[40vw]">
+              <div className="w-full md:w-[38vw]">
                 <textarea
                   rows={6}
                   cols={7}

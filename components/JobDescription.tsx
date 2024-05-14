@@ -18,7 +18,7 @@ const JobDescription: React.FC<JobDescriptionProps> = ({
   return (
     <section className="my-[80px] md:my-6">
       <Container>
-        <div className="flex justify-between mb-5">
+        <div className="flex justify-between items-center mb-5">
           <span className="font-bold">Details</span>
           <Link href="/school-dashboard/job-listing" className="cursor-pointer">
             <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />

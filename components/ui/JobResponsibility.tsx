@@ -1,4 +1,4 @@
-import React from "react";
+import { useState } from "react";
 import Container from "../Container";
 import Link from "next/link";
 import Image from "next/image";
@@ -13,6 +13,17 @@ const JobResponsibility: React.FC<JobResponsibilityProps> = ({
 }) => {
   const handleResponsibleView = () => {
     onClickCurrentView("qualification");
+  };
+  const [inputs, setInputs] = useState(["", "", "", "", ""]);
+
+  const addInputField = () => {
+    setInputs([...inputs, ""]);
+  };
+
+  const handleInputChange = (index: any, event: any) => {
+    const newInputs = [...inputs];
+    newInputs[index] = event.target.value;
+    setInputs(newInputs);
   };
 
   return (
@@ -59,43 +70,22 @@ const JobResponsibility: React.FC<JobResponsibilityProps> = ({
               <label className="font-bold text-[18px]">
                 What is lorem ipsum dolor sit ?
               </label>
-              <input
-                type="text"
-                name="text"
-                placeholder="Responsibility"
-                className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-              />
-              <input
-                type="text"
-                name="text"
-                placeholder="Responsibility"
-                className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-              />
-              <input
-                type="text"
-                name="text"
-                placeholder="Responsibility"
-                className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-              />
-              <input
-                type="text"
-                name="text"
-                placeholder="Responsibility"
-                className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-              />
-              <input
-                type="text"
-                name="text"
-                placeholder="Responsibility"
-                className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-              />
-              <input
-                type="text"
-                name="text"
-                placeholder="Responsibility"
-                className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-              />
-
+              {inputs.map((input, index) => (
+                <input
+                  key={index}
+                  type="text"
+                  value={input}
+                  onChange={(e) => handleInputChange(index, e)}
+                  placeholder="Responsibility"
+                  className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
+                />
+              ))}
+              <button
+                onClick={addInputField}
+                className="p-4 mt-2 font-bold rounded text-[12px] hover:bg-green-200"
+              >
+                Add More Responsibilities +
+              </button>
               <Button
                 onClick={handleResponsibleView}
                 className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
