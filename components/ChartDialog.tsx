@@ -44,7 +44,7 @@ const data = [
 
 export default function ChartDialog() {
   return (
-   <div className="mt-6">
+   <div className="mt-6 overflow-auto">
     <LineChart
       width={500}
       height={300}

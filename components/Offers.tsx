@@ -10,12 +10,12 @@ const Offers = () => {
       <section className="grid font-subtext  grid-cols-1 sm:px-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center xl:grid-cols-4 gap-6 mt-10">
         <div>
           <h3 className="text-3xl sm:text-2xl font-header font-semibold">Our Offers</h3>
-          <p className="mt-2">
+          <p className="mt-2 md:text-lg text-xl">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
             interdum sapien, id aliquam ligula. 
           </p>
         </div>
-        <div className="bg-white md:bg-stone-100 md:p-3 md:rounded-xl">
+        <div className="bg-white  md:bg-stone-100 py-3 pl-6 rounded-xl">
           <Image
             alt=""
             src={"/tutor.png"}
@@ -31,7 +31,7 @@ const Offers = () => {
           </p>
           
         </div>
-        <div className="bg-white md:bg-stone-100 md:p-3 md:rounded-xl">
+        <div className="bg-white md:bg-stone-100 py-3 pl-6 rounded-xl">
           <Image
             alt=""
             src={"/quiz.png"}
@@ -49,7 +49,7 @@ const Offers = () => {
           </p>
           
         </div>
-        <div className="bg-white md:bg-stone-100 md:p-3 md:rounded-xl">
+        <div className="bg-white md:bg-stone-100 py-3 pl-6 rounded-xl">
           <Image
             src={"/parent.png"}
             width={50}
@@ -67,7 +67,7 @@ const Offers = () => {
           </p>
           
         </div>
-        <div className="bg-white md:bg-stone-100 md:p-3 md:rounded-xl">
+        <div className="bg-white md:bg-stone-100 py-3 pl-6 rounded-xl">
           <Image
             src={"/homework.png"}
             width={50}

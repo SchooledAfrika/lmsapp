@@ -31,7 +31,7 @@ export const data = {
 
 const  PieCharts = () => {
   return (
-   <div className='w-[40%] flex flex-1 mt-6 ml-3'>
+   <div className='w-[50%] flex flex-1 mt-6 ml-3'>
      <Pie data={data} />
      
    </div>

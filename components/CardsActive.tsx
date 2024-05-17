@@ -16,9 +16,9 @@ import { FaSchoolFlag } from "react-icons/fa6";
 const CardsActive = () => {
   return (
     <div>
-      <Card className="md:w-[600px] xs:w-[400px] sm:w-[400px] h-[1000px]  mt-20 mb-6  rounded-xl">
+      <Card className="md:w-[600px] xs:w-[400px]  sm:w-[400px]  min-h-[1000px]  mt-20 mb-20  rounded-xl">
         <CardContent>
-          <div className="flex justify-between items-center py-4 text-base">
+          <div className="flex justify-between items-center py-[5px] text-base">
             <div>
               <h3 className="font-bold text-lg">Economics</h3>
 
