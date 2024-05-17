@@ -117,7 +117,7 @@ const Header = () => {
             <div className="flex flex-col gap-8 mt-8 mx-4 ">
               <div className="flex gap-[20px] xl:gap-[50px] text-[16px] flex-col select-none ">
                 <Link href="/find-tutors">Find Tutors</Link>
-                <Link href="/classes">Classes</Link>
+                <Link href="/find-classes">Classes</Link>
                 <Link href="/apply-to-teach">Apply to teach</Link>
                 <Link href="/vacancies">Vacancies</Link>
                 <Link href="/contact">Contact Us</Link>

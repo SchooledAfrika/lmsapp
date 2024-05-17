@@ -7,19 +7,57 @@ import Twitter from "@/images/svgs/twitter.svg";
 import Facebook from "@/images/svgs/facebook.svg";
 import Tiktok from "@/images/svgs/tiktok.svg";
 import Logo from "@/images/logo.png";
+import { FaEnvelope, FaMessage } from "react-icons/fa6";
+
+
+
+const NewsletterForm = () => {
+  return (
+    <form className="max-w-sm mt-6">
+      <h2 className=" text-medium font-semibold tracking-wider ">
+        Sign up to our newsletter
+      </h2>
+      <p className="mt-4 text-normal">
+        Subscribe to get the latest news, articles, resources and
+        inspiration.
+      </p>
+      <div className="relative mt-6">
+        <input
+          type="email"
+          placeholder="Email address"
+          autoComplete="email"
+          aria-label="Email address"
+          className="block w-full rounded-2xl border border-gray-400 bg-transparent py-4 pl-6 pr-20 text-base/6 text-black ring-4 ring-transparent transition placeholder:text-neutral-500 focus:border-neutral-400 "
+        />
+        <div className="absolute inset-y-1 right-1 flex justify-end">
+          <button
+            type="submit"
+            aria-label="Submit"
+            className="flex aspect-square rounded-full h-full items-center justify-center bg-dimOrange text-white transition hover:bg-neutral-200"
+          >
+             <FaEnvelope className="w-6" />
+          </button>
+        </div>
+      </div>
+    </form>
+  );
+};
+
 
 const Footer: React.FC = () => {
   return (
-    <Container className="py-4">
+    <Container className="py-4 font-header">
+      <div className="md:block hidden">
       <nav>
-        <div className="flex flex-col sm:flex-row font-subtext items-center justify-between px-[20px]">
+        <div className="flex flex-col sm:flex-row font-header font-semibold items-center justify-between px-[20px]">
           <div>
             <Image src={Logo} alt="logo" className="w-[100px]  mb-4 " />
           </div>
-          <div className=" flex gap-[20px] xl:gap-[50px] text-[16.5px] space-x-6 justify-center items-center select-none">
+          <div className=" flex gap-[20px]  xl:gap-[50px] text-[16.5px] space-x-6 md:justify-center   items-center select-none">
             <Link href="/find-tutors">Find Tutors</Link>
             <Link href="/classes">Classes</Link>
             <Link href="/apply-to-teach">Apply to teach </Link>
+            <Link href="/vacancies">Vacancies </Link>
             <Link href="/contact">Contact</Link>
           </div>
         </div>
@@ -32,15 +70,16 @@ const Footer: React.FC = () => {
             commodo ligula eget dolor. Aenean massa. Cum sociis natoque
             penatibus et magnis dis parturient montes, nascetur ridiculus mus.
           </p>
+          
         </div>
-        <div className="flex  items-center justify-between gap-10 py-[20px] md:py-[0]">
+        <div className="flex flex-row md:mt-0 mt-6">
           <Link href="/">
             <Image
               src="/svgs/instagram.svg"
               alt="icon"
               width={30}
               height={30}
-              className="w-[28px]"
+              className="w-[28px] mr-6"
             />
           </Link>
           <Link href="/">
@@ -49,7 +88,7 @@ const Footer: React.FC = () => {
               alt="icon"
               width={30}
               height={30}
-              className="w-[28px]"
+              className="w-[28px] mr-6"
             />
           </Link>
           <Link href="/">
@@ -58,7 +97,7 @@ const Footer: React.FC = () => {
               alt="icon"
               width={30}
               height={30}
-              className="w-[28px]"
+              className="w-[28px] mr-6"
             />
           </Link>
           <Link href="/">
@@ -67,7 +106,7 @@ const Footer: React.FC = () => {
               alt="icon"
               width={30}
               height={30}
-              className="w-[28px]"
+              className="w-[28px] mr-1 "
             />
           </Link>
         </div>
@@ -87,6 +126,108 @@ const Footer: React.FC = () => {
           </Link>
         </div>
       </div>
+      </div>
+
+      {/* Mobile screen */}
+
+      <div className={`flex md:hidden justify-center items-center sm:py-16 py-6 px-4 flex-col`}>
+    <div className={`flex justify-center items-start md:flex-row flex-col mb-8 w-full`}>
+    <div className="w-full ">
+    <div>
+            <Image src={Logo} alt="logo" className="w-[100px]  mb-4 " />
+          </div>
+          <span className="font-bold">About Schooled Afrika</span>
+          <p className="pt-2 text-[15px]">
+            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
+            commodo ligula eget dolor. Aenean massa. Cum sociis natoque
+            penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+          </p>
+          
+        </div>
+      
+
+      <div className="flex-[1.5] md:hidden w-full flex flex-row justify-between flex-wrap md:mt-0 mb-8 mt-10">
+        <div className="flex flex-col   my-4 min-w-[150px]">
+          <Link href="/find-tutors" className="leading-[28px]">Find Tutors</Link>
+            <Link href="/classes" className="leading-[28px]">Classes</Link>
+            <Link href="/apply-to-teach" className="leading-[28px]">Apply to teach </Link>
+            <Link href="/vacancies" className="leading-[28px]">Vacancies </Link>
+            <Link href="/contact" className="leading-[28px]">Contact</Link>
+
+           
+      
+        </div>
+        
+       
+      
+       
+         <div className="flex flex-col  my-4 min-w-[150px]">
+         <Link href="/">
+            <p className="leading-[28px]">Privacy Policy</p>
+          </Link>
+          <Link href="/">
+            <p className="leading-[28px]">Terms & Conditions</p>
+          </Link>
+
+         </div>
+        
+      </div>
+      <div className="flex flex-row  mt-6">
+           <Link href="/">
+            <Image
+              src="/svgs/instagram.svg"
+              alt="icon"
+              width={30}
+              height={30}
+              className="w-[28px] mr-6"
+            />
+          </Link>
+          <Link href="/">
+            <Image
+              src="/svgs/twitter.svg"
+              alt="icon"
+              width={30}
+              height={30}
+              className="w-[28px] mr-6"
+            />
+          </Link>
+          <Link href="/">
+            <Image
+              src="/svgs/facebook.svg"
+              alt="icon"
+              width={30}
+              height={30}
+              className="w-[28px] mr-6"
+            />
+          </Link>
+          <Link href="/">
+            <Image
+              src="/svgs/tiktok.svg"
+              alt="icon"
+              width={30}
+              height={30}
+              className="w-[28px] mr-1 "
+            />
+          </Link>
+          
+        
+      </div>
+      <div className="flex text-black lg:justify-end ml-0 sm:ml-3">
+            <NewsletterForm />
+          </div>
+    </div>
+
+   
+
+    <div className="w-full flex justify-between items-center md:flex-row flex-col pt-6 border-t-[1px] border-t-[#3F3E45]">
+      <p className=" font-normal text-center text-[14px] leading-[27px] text-black">
+        Copyright Ⓒ {new Date().getFullYear()}. Schooled Afrika. All Rights
+          Reserved.
+      </p>
+
+     
+    </div>
+  </div>
     </Container>
   );
 };

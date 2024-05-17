@@ -9,7 +9,7 @@ const HeroSearch = () => {
         placeholder="search tutor, classes, vacancies"
         className=" w-10/12 bg-transparent focus:outline-none"
       />
-      <div className=" w-[50px] font-bold aspect-square rounded-full flex items-center justify-center bg-orange-500 text-white">
+      <div className=" w-[50px] cursor-pointer font-bold aspect-square rounded-full flex items-center justify-center bg-orange-500 text-white">
         <IoIosSearch />
       </div>
     </div>

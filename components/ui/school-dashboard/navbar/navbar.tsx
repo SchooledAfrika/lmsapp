@@ -41,7 +41,7 @@ const Navbar = () => {
 
       <div className=" sm:hidden md:flex items-center gap-[30px]">
         <div className="flex p-3 bg-[#FFFFFF] gap-[5px] border border-#359C71 rounded-[5px] w-[450px]">
-          <Image src="/svgs/search.svg" width={20} height={20} alt="search" />
+          <Image src="/svgs/search.svg" width={20} height={20} alt="search" className="" />
           <input
             type="text"
             className="w-[400px] text-sm outline-none"
