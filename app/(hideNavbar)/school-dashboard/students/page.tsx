@@ -5,7 +5,7 @@ import { AddStudent } from "./add/page";
 const page = () => {
   return (
     <div>
-      <div className="flex overflow-auto mt-6 justify-end items-center font-header font-semibold text-[14px]">
+      <div className="flex overflow-auto mt-6 justify-end items-center font-header font-semibold text-[13px]">
         <div className="flex ">
           <input
             type="checkbox"
@@ -25,7 +25,7 @@ const page = () => {
             type="checkbox"
             className="accent-lightGreen text-white mr-1"
           />
-          <p className="mr-3">Pending</p>
+          <p className="mr-3">Offline</p>
         </div>
         <AddStudent />
       </div>

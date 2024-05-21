@@ -17,7 +17,7 @@ export function AssignDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-      <Button variant="outline" className="border border-lightGreen hover:text-lightGreen" >Assign</Button>
+      <Button variant="outline" className="border font-bold px-6 text-[13px] rounded-lg border-lightGreen hover:text-lightGreen" >Assign</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] w-[380px] font-subtext">
         <DialogHeader>

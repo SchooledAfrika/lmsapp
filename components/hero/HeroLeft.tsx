@@ -5,9 +5,9 @@ import HeroSearch from "./HeroSearch";
 
 const HeroLeft = () => {
   return (
-    <div className=" flex-1 md:pr-5 flex flex-col gap-6">
+    <div className="font-subtext flex-1 md:pr-5 flex flex-col gap-6">
       <div className=" flex gap-2 items-end">
-        <p className=" text-dimYellow text-lg font-bold">
+        <p className=" text-dimYellow font-header text-lg font-bold">
           Introducing Schooled Afrika
         </p>
         <Image
@@ -20,7 +20,7 @@ const HeroLeft = () => {
         />
       </div>
       <div>
-        <p className=" text-black text-3xl font-semibold">
+        <p className=" text-black text-3xl font-bold">
           Get the best Education & secure a{" "}
           <span className=" text-green-600">Better Future</span> for your kids
         </p>
@@ -29,7 +29,7 @@ const HeroLeft = () => {
         <p>
           Empower your childs journey with our comprehensive education solution,
           noturing their potential every step of the way, Together lets build a
-          foundation for life long success
+          foundation for lifelong success
         </p>
       </div>
       <div>

@@ -17,7 +17,7 @@ export function AddTeacher() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-lightGreen bg-none border-none rounded-lg hover:bg-green-700  text-white text-[14px]  px-3 sm:w-36 w-28  py-2 text-start lg:block">
+        <Button className="bg-lightGreen bg-none border-none rounded-lg hover:bg-green-700  text-white text-[14px]  px-3 font-bold sm:w-36 w-28  py-2 text-start lg:block">
           <LiaChalkboardTeacherSolid className="sm:inline-block text-lg hidden mr-1" />
           Add Teacher
         </Button>

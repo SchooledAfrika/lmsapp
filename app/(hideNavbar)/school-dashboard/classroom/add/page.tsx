@@ -16,7 +16,7 @@ export function AddClassroom() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-lightGreen mt-3 bg-none border-none rounded-lg hover:bg-green-700  text-white text-[14px]  px-3 sm:w-36 w-28  py-2 text-start lg:block">
+        <Button className="bg-lightGreen mt-3 bg-none border-none rounded-lg hover:bg-green-700  text-white text-[14px] font-semibold  px-3 sm:w-36   py-2 text-start lg:block">
           <SiGoogleclassroom className="sm:inline-block hidden mr-1" />
           Add Classroom
         </Button>

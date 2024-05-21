@@ -16,7 +16,7 @@ const TeachersType = [
   {
     id: "1",
     icon: "/teacher-img.png",
-    name: "Odo Maurice O",
+    name: "Odo Maurice ",
     mail: "odo@gmail.com",
     phone: "+2349130893924",
     subject: "Mathematics, English, Accounting",
@@ -47,18 +47,18 @@ export default function TeachersTable() {
     <Table className="bg-white overflow-x-auto    rounded-md mt-12">
       <TableHeader>
         <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead className="sm:w-[100px] w-full">Contact</TableHead>
-          <TableHead>Subject</TableHead>
-          <TableHead>Grade</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead className="text-right">Options</TableHead>
+          <TableHead className="text-[12px]">Name</TableHead>
+          <TableHead className=" text-[12px]">Contact</TableHead>
+          <TableHead className="text-[12px]">Subject</TableHead>
+          <TableHead className="text-[12px]">Grade</TableHead>
+          <TableHead className="text-[12px]">Date</TableHead>
+          <TableHead className="text-right text-[12px]">Options</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {TeachersType.map((Teacher) => (
           <TableRow key={Teacher.id} className="">
-            <TableCell className="font-semibold text-[14px] w-[250px] sm:w-full flex  mr-1">
+            <TableCell className="font-bold text-[13px] w-[200px]  flex  mr-1">
               <Image
                 src={Teacher.icon}
                 alt="icon"
@@ -82,23 +82,23 @@ export default function TeachersTable() {
                 </div>
               </div>
             </TableCell>
-            <TableCell className="sm:w-[200px] w-[300px]">
+            <TableCell className="">
               <div className="flex flex-col">
-                <p className="inline mb-2">
+                <p className="inline mb-2 text-[12px] font-semibold">
                   <FaEnvelope className="inline mr-1 " />
                   {Teacher.mail}
                 </p>
-                <p className="inline">
+                <p className="inline text-[12px] font-semibold">
                   <FaPhoneAlt className="inline mr-1" />
                   {Teacher.phone}
                 </p>
               </div>
             </TableCell>
-            <TableCell className="">{Teacher.subject}</TableCell>
+            <TableCell className="text-[12px]  font-semibold">{Teacher.subject}</TableCell>
 
-            <TableCell className="">{Teacher.Grade}</TableCell>
-            <TableCell className="">{Teacher.Added}</TableCell>
-            <TableCell className="flex justify-end text-[14px]  text-lightGreen cursor-pointer">
+            <TableCell className="text-[12px]  font-semibold">{Teacher.Grade}</TableCell>
+            <TableCell className="text-[12px]  font-semibold">{Teacher.Added}</TableCell>
+            <TableCell className="flex justify-center  text-[14px] items-center  text-lightGreen cursor-pointer">
              <TeacherOptions/>
             </TableCell>
           </TableRow>
