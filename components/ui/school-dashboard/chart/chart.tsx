@@ -11,20 +11,20 @@ import RecentlyAdded from "@/components/RecentlyAdded";
 const Chart = () => {
   return (
     <div className="mt-12  flex md:flex-row flex-col relative  text-[15px] gap-3   md:gap-3 rounded-md">
-      <div className="flex md:flex-4 h-full overflow-hidden  px-3 bg-white rounded-md py-8  flex-col">
+      <div className="flex md:flex-4 h-full   px-3 bg-white rounded-md py-6  flex-col">
         <div className="flex flex-1 justify-between">
-          <p className="pl-3">Student Attendance Rate</p>
+          <p className="pl-3 text-[14px] font-semibold text-slate-600">Student Attendance Rate</p>
           <div className="flex justify-end">
-            <p className="inline justify-end text-sm">
+            <p className="inline justify-end font-subtext text-lightGreen text-[13px]">
               Monthly
               <TiArrowSortedDown className="inline text-xl text-lightGreen" />
             </p>
           </div>
         </div>
 
-        <div className="flex mt-12 md:mb-24 mb-12 md:flex-row flex-col  justify-center ">
+        <div className="flex mt-[5px]  mb-6 overflow-hidden md:flex-row flex-col  justify-center ">
           <PieCharts />
-          <div className="flex flex-col pl-6 flex-1 py-4">
+          <div className="flex flex-col pl-6 flex-1 py-3">
             <div className="flex mt-6 text-[12px] font-bold">
               <p className="inline mr-2">
                 <GoDotFill className="inline text-green-600" />
@@ -52,18 +52,19 @@ const Chart = () => {
               </p>
             </div>
           </div>
-         
+          
         </div>
-        <RecentlyAdded/>
+       
+       <RecentlyAdded/>
        
        
       </div>
 
       <div className="flex md:flex-5 mb-6  bg-white rounded-md py-4 px-2 flex-col">
         <div className="flex pl-3 justify-between">
-          <p>Student Perfomance</p>
-          <div className="flex justify-end">
-            <p className="inline justify-end text-sm">
+          <p className="text-[14px] text-slate-500 font-semibold">Student Perfomance</p>
+          <div className="flex text-[13px] text-lightGreen font-subtext justify-end">
+            <p className="inline justify-end ">
               Monthly
               <TiArrowSortedDown className="inline text-xl text-lightGreen" />
             </p>

@@ -27,7 +27,7 @@ const Header = () => {
  
 
   return (
-    <div className=" bg-white sticky md:top-0 font-subtext border-b-2 font-semibold h-[75px]   md:shadow-none z-50 ">
+    <div className=" bg-white h-[75px] sticky md:top-0 font-subtext border-b-2 font-semibold    md:shadow-none z-50 ">
       {/* DESKTOP */}
       <div className=" hidden lg:block p-4 ">
 
@@ -39,17 +39,17 @@ const Header = () => {
               alt="logo"
               width={100}
               height={100}
-              className="w-[100px] ml-10 "
+              className="w-[100px] mb-2 overflow-hidden ml-10 "
             />
           </div>
           </Link>
           
-          <div className="flex gap-[20px] xl:gap-[50px] text-[16.5px] space-x-6 justify-center items-center select-none">
+          <div className="flex gap-[20px] font-header xl:gap-[50px] text-[14px] space-x-6  items-center select-none">
             {navLinks.map((link)=> {
                const isActive = pathname.startsWith(link.href)
               return(
                 <Link href={link.href} key={link.name}
-                  className={isActive ? "font-bold border-b-2 leading-[57px]  border-lightGreen" : "normal leading-[20px]"}
+                  className={isActive ? "font-bold border-b-2 leading-[57px]  border-lightGreen" : "font-semibold leading-[20px]"}
                 
                 >
                   {link.name}
@@ -60,26 +60,26 @@ const Header = () => {
             
           </div>
 
-          <div className="flex items-center mr-2 gap-6">
+          <div className="flex items-center leading-[20px] mr-8 gap-4">
             <Button
               asChild
-              className="hidden bg-secondary items-center hover:bg-green-600 text-white   text-[16.5px] px-6 py-2 lg:block"
+              className="hidden bg-secondary  rounded-[10px] items-center hover:bg-green-600 text-white   text-[13px] px-6 py-[11px] lg:block"
             >
-              <Link href="/register">Register</Link>
+              <Link href="/login">Login</Link>
             </Button>
 
             <Button
               asChild
-              className="hidden bg-dimOrange hover:bg-orange-600 text-white  text-[16.5px] px-6 py-2 lg:block"
+              className="hidden rounded-[10px]  bg-dimOrange hover:bg-orange-600 text-white  text-[13px] px-6 py-[11px] lg:block"
             >
-              <Link href="/login">Login</Link>
+              <Link href="/register">Register</Link>
             </Button>
           </div>
         </div>
       </div>
       {/* MOBILE */}
       <div
-        className={` block lg:hidden  rounded-xl   fixed top-0 w-full z-[999]   py-6 animate-in fade-in zoom-in  ${
+        className={` block md:hidden  rounded-xl   fixed top-0 w-full z-[999]   py-6 animate-in fade-in zoom-in  ${
           menu ? " bg-white py-2" : "bg-white"
         } `}
       >

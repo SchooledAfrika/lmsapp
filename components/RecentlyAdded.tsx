@@ -20,7 +20,7 @@ export default function RecentlyAdded() {
   return (
     <Carousel
       plugins={[plugin.current]}
-      className=" md:mt-24  md:w-[44.5%] w-full   -mx-3 md:absolute md:top-60  px-3 bg-white  text-[15px] md:py-6 rounded-md"
+      className=" md:mt-24  md:w-[44.5%] w-full mb-12   -mx-3 md:absolute md:top-[14rem]  px-3 bg-white   text-[15px] md:py-3 rounded-md"
       onMouseEnter={plugin.current.stop}
       onMouseLeave={plugin.current.reset}
     >
@@ -29,7 +29,7 @@ export default function RecentlyAdded() {
     <CarouselItem>
     <div className='p-3'>
         <h3 className='text-slate-600 font-bold'>Recently Added</h3>
-        <div className='flex space-x-2 mt-3'>
+        <div className='flex space-x-2 mt-2'>
            <Image src="/green-book.png" alt="" width={100} height={100} className='w-[30px] h-[30px]'/>
            <div className='flex flex-col'>
                <p className='font-bold'>How Europe Underdeveloped Africa</p>
@@ -40,11 +40,11 @@ export default function RecentlyAdded() {
           
 
         </div>
-        <hr className="my-4"/>
-        <div className="mt-8 flex md:space-x-6 space-x-2">
-           <div className="flex flex-col space-y-3">
+        <hr className="my-2"/>
+        <div className="mt-2 flex items-center md:space-x-6 space-x-2">
+           <div className="flex flex-col space-y-3 ">
             <p>Tutor</p>
-            <div className="flex space-x-2">
+            <div className="flex space-x-2 items-center">
                <Image src="/tutors.jpg" alt="" width={100} height={100} className="w-[40px] h-[40px] rounded-md"/>
             <h3 className="inline  font-bold text-[12px]">
             David Olushola <MdVerified className="inline text-lightGreen text-[15px]  md:mr-8" />{" "}
@@ -52,14 +52,14 @@ export default function RecentlyAdded() {
             </div>
            
            </div>
-           <div className="flex flex-col space-y-3">
+           <div className="flex flex-col space-y-2">
             <p>Time</p>
             <div className="flex space-x-2">
               <p className="text-[13px] font-semibold">2:30PM</p>
             </div>
            
            </div>
-           <div className="flex flex-col space-y-3">
+           <div className="flex flex-col space-y-2">
             <p>Date</p>
             <div className="flex space-x-2">
               <p className="text-[13px] font-semibold">July 15, 2024</p>
