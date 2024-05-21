@@ -16,7 +16,7 @@ export function TeacherOptions() {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <FaEllipsisH className="ml-3" />
+        <FaEllipsisH className="ml-3 items-center mb-3" />
       </PopoverTrigger>
       <PopoverContent className="w-40">
         <div className="grid gap-4 font-subtext">

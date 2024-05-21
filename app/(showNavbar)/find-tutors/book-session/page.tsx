@@ -57,7 +57,7 @@ const BookSession: React.FC = () => {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:w-[800px] bg-stone-100 overflow-x-auto   my-8 w-full font-subtext">
+      <DialogContent className="sm:w-[800px] bg-stone-100 overflow-x-auto    w-full font-subtext">
         <div className="grid gap-4 font-header py-4">
           {showDuration ? (
             <Duration onClickDurationInfo={handleDuration} />
