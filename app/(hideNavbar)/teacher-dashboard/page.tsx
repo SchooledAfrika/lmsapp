@@ -2,7 +2,7 @@
 import React from "react";
 
 const page = () => {
-  return <div className="mt-[80px]">overview page</div>;
+  return <div className="">overview page</div>;
 };
 
 export default page;

@@ -1,6 +1,6 @@
 import Teachers from "@/components/Teachers";
 import React from "react";
-import { AddTeacher } from "./add/page";
+import AddTeacher from "@/components/AddTeacher";
 
 const page = () => {
   return (
