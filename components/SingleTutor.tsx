@@ -12,7 +12,19 @@ import { ShareButton } from "./ShareButton";
 const SingleTutor = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   return (
+    <div>
+      <div className="flex ml-6 md:hidden mt-12 justify-between">
+            <p className="font-bold text-lg">Details</p>
+            <Link href="/find-tutors" className="cursor-pointer"> 
+            <Image src="/closeAlt.svg" alt="cancel" width={100} height={100} className="w-[20px] h-[20px]"  />
+            </Link>
+           
+           
+        </div>
+
+   
     <div className="w-[90%] my-6 h-full overflow-hidden flex md:flex-row flex-col">
+       
       <div className="flex flex-col">
         <div className="bg-white w-[90%]   rounded-xl md:w-[300px] md:h-[400px] h-[300px] text-center sm:mx-16 mx-10 my-6 ">
           <Image
@@ -222,7 +234,8 @@ const SingleTutor = () => {
         
        </div>
       </div>
-      {/* <div><Link href="/"><Image src={"/svgs/close.svg"} width={100} height={100} alt=""/></Link></div> */}
+     
+    </div>
     </div>
   );
 };

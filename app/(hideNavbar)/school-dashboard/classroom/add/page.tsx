@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -8,7 +10,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-
 import { Input } from "@/components/ui/input";
 import { SiGoogleclassroom } from "react-icons/si";
 
@@ -16,7 +17,7 @@ export function AddClassroom() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-lightGreen mt-3 bg-none border-none rounded-lg hover:bg-green-700  text-white text-[14px]  px-3 sm:w-36 w-28  py-2 text-start lg:block">
+        <Button className="bg-lightGreen mt-3 bg-none border-none rounded-lg hover:bg-green-700  text-white text-[14px] font-semibold  px-3 sm:w-36   py-2 text-start lg:block">
           <SiGoogleclassroom className="sm:inline-block hidden mr-1" />
           Add Classroom
         </Button>
@@ -44,7 +45,7 @@ export function AddClassroom() {
             />
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-          <Input
+            <Input
               id="grade"
               list="Grade"
               placeholder="Grade"
@@ -64,9 +65,6 @@ export function AddClassroom() {
               <option>Grade 11</option>
               <option>Grade 12</option>
             </datalist>
-           
-            
-
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
             <Input
@@ -92,7 +90,12 @@ export function AddClassroom() {
           </div>
         </div>
         <DialogFooter>
-          <Button type="submit" className="w-full py-6 bg-lightGreen hover:bg-green-700">Add Classroom</Button>
+          <Button
+            type="submit"
+            className="w-full py-6 bg-lightGreen hover:bg-green-700"
+          >
+            Add Classroom
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

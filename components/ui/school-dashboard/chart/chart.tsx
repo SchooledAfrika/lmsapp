@@ -4,27 +4,27 @@ import PieCharts from "@/components/PieChart";
 import React from "react";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { GoDotFill } from "react-icons/go";
-import RecentlyAdded from "@/components/RecentlyAdded";
 import ChartDetails from "@/components/ChartDetails";
 import Image from "next/image";
+import RecentlyAdded from "@/components/RecentlyAdded";
 
 const Chart = () => {
   return (
-    <div className="mt-12 flex md:flex-row flex-col relative  text-[15px] gap-3   md:gap-3 rounded-md">
-      <div className="flex md:flex-4 h-full overflow-hidden  px-3 bg-white rounded-md py-8  flex-col">
+    <div className="mt-12  flex md:flex-row flex-col relative  text-[15px] gap-3   md:gap-3 rounded-md">
+      <div className="flex md:flex-4 h-full   px-3 bg-white rounded-md py-6  flex-col">
         <div className="flex flex-1 justify-between">
-          <p className="pl-3">Student Attendance Rate</p>
+          <p className="pl-3 text-[14px] font-semibold text-slate-600">Student Attendance Rate</p>
           <div className="flex justify-end">
-            <p className="inline justify-end text-sm">
+            <p className="inline justify-end font-subtext text-lightGreen text-[13px]">
               Monthly
               <TiArrowSortedDown className="inline text-xl text-lightGreen" />
             </p>
           </div>
         </div>
 
-        <div className="flex  justify-center ">
+        <div className="flex mt-[5px]  mb-6 overflow-hidden md:flex-row flex-col  justify-center ">
           <PieCharts />
-          <div className="flex flex-col pl-6 flex-1 py-4">
+          <div className="flex flex-col pl-6 flex-1 py-3">
             <div className="flex mt-6 text-[12px] font-bold">
               <p className="inline mr-2">
                 <GoDotFill className="inline text-green-600" />
@@ -52,37 +52,25 @@ const Chart = () => {
               </p>
             </div>
           </div>
-         
-        </div>
-        <div className='mt-6 block md:hidden overflow-hidden px-3 bg-white  text-[15px] py-6 rounded-md'>
-        <h3 className='text-slate-600 font-bold'>Recently Added</h3>
-        <div className='flex space-x-2 mt-3'>
-            <Image src="/green-book.png" alt="" width={100} height={100} className='w-[30px] h-[30px]'/>
-            <div className='flex flex-col'>
-               <p className='font-bold'>How Europe Underdeveloped Africa</p>
-               <p className='text-[13px] pt-2'>Walter Rodney</p>
-               <p className='text-rose-500 text-[14px] pt-2'>Grade 12</p>
-               <p className='font-bold pt-2 inline'>Government<Image src="/govt.png" alt="" width={100} height={100} className='w-[30px] h-[30px] inline-block'/>  </p>
-            </div>
-
-        </div>
-        
           
-    </div>
+        </div>
+       
+       <RecentlyAdded/>
+       
        
       </div>
 
-      <div className="flex md:flex-5 mb-6 overflow-hidden bg-white rounded-md py-6 px-2 flex-col">
+      <div className="flex md:flex-5 mb-6  bg-white rounded-md py-4 px-2 flex-col">
         <div className="flex pl-3 justify-between">
-          <p>Student Perfomance</p>
-          <div className="flex justify-end">
-            <p className="inline justify-end text-sm">
+          <p className="text-[14px] text-slate-500 font-semibold">Student Perfomance</p>
+          <div className="flex text-[13px] text-lightGreen font-subtext justify-end">
+            <p className="inline justify-end ">
               Monthly
               <TiArrowSortedDown className="inline text-xl text-lightGreen" />
             </p>
           </div>
         </div>
-        <div className="flex pl-3 my-6 text-[12px] font-bold">
+        <div className="flex pl-3 my-3 text-[12px] font-bold">
           <p className="inline mr-2">
             <GoDotFill className="inline text-green-600" />
             Excellent
@@ -102,8 +90,8 @@ const Chart = () => {
         </div>
         <ChartDialog />
         <p className="font-bold text-center">Weeks (7) Days</p>
-        <hr className="my-6"/>
-        <p className="text-slate-600 font-semibold">Chart Details</p>
+        <hr className="my-3"/>
+        <p className="text-slate-600 px-4 font-semibold">Chart Details</p>
         <ChartDetails/>
       </div>
     </div>

@@ -16,7 +16,7 @@ const Virtual = () => {
             Virtual Schools
           </p>
 
-          <p className="mt-4 max-w-full text-justify text-lg font-subtext  sm:text-left">
+          <p className="mt-4 max-w-full text-start text-md font-subtext  sm:text-left">
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
             interdum sapien, id aliquam ligula. Maecenas eget neque id ligula
             egestas blandit. Suspendisse potenti. Phasellus efficitur nulla at
@@ -26,9 +26,9 @@ const Virtual = () => {
 
           <Button
             asChild
-            className=" bg-lightGreen rounded-xl text-white text-base mt-3 px-3 w-32  py-2 text-center lg:block"
+            className=" bg-lightGreen rounded-md text-white text-base mt-3 px-3 w-32  py-2 text-center lg:block"
           >
-            <Link href="/register">Get Started!</Link>
+            <Link href="/register">Get Started</Link>
           </Button>
         </article>
         <div className="w-full sm:w-1/3 lgl:w-1/3 h-80 relative group">

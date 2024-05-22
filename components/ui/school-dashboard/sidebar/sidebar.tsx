@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaPowerOff } from "react-icons/fa";
-import { SchoolDashboardContext } from "@/providers/Statecontext";
+import { CommonDashboardContext } from "@/providers/Statecontext";
+import { TeacherSideBar } from "@/constants/teacherSidebar";
 
-const Sidebar = () => {
-  const { showSideBar, setShowSideBar } = useContext(SchoolDashboardContext);
+const Sidebar = ({ dashboard }: { dashboard: string }) => {
+  const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
   // manipulating the path values
   const path = usePathname().split("/");
   let findpath;
@@ -31,25 +32,50 @@ const Sidebar = () => {
         />
       </div>
       {/* the side bar menu */}
-      <div className=" w-full flex flex-col space-y-2">
-        {SchoolSideBar.map((item: SchoolSideBarType, index) => (
-          <Link
-            onClick={() => {
-              setShowSideBar(false);
-            }}
-            href={`/school-dashboard/${item.path}`}
-            className={` w-full p-2 cursor-pointer flex items-center space-x-2 ${
-              findpath === item.path && "bg-green-800 text-white"
-            } rounded-md ease-in-out transform duration-200 ${
-              findpath !== item.path && "hover:text-green-700"
-            }`}
-            key={index}
-          >
-            <div className=" text-[20px]">{item.icon && <item.icon />}</div>
-            <p className=" text-[16px]">{item.name}</p>
-          </Link>
-        ))}
-      </div>
+      {
+        // if we are in the school dashboard this links should show
+        dashboard === "school" ? (
+          <div className=" w-full flex flex-col space-y-2">
+            {SchoolSideBar.map((item: SchoolSideBarType, index) => (
+              <Link
+                onClick={() => {
+                  setShowSideBar(false);
+                }}
+                href={`/school-dashboard/${item.path}`}
+                className={` w-full p-2 cursor-pointer flex items-center space-x-2 ${
+                  findpath === item.path && "bg-green-800 text-white"
+                } rounded-md ease-in-out transform duration-200 ${
+                  findpath !== item.path && "hover:text-green-700"
+                }`}
+                key={index}
+              >
+                <div className=" text-[20px]">{item.icon && <item.icon />}</div>
+                <p className=" text-[16px]">{item.name}</p>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className=" w-full flex flex-col space-y-2">
+            {TeacherSideBar.map((item: SchoolSideBarType, index) => (
+              <Link
+                onClick={() => {
+                  setShowSideBar(false);
+                }}
+                href={`/teacher-dashboard/${item.path}`}
+                className={` w-full p-2 cursor-pointer flex items-center space-x-2 ${
+                  findpath === item.path && "bg-green-800 text-white"
+                } rounded-md ease-in-out transform duration-200 ${
+                  findpath !== item.path && "hover:text-green-700"
+                }`}
+                key={index}
+              >
+                <div className=" text-[20px]">{item.icon && <item.icon />}</div>
+                <p className=" text-[14px]">{item.name}</p>
+              </Link>
+            ))}
+          </div>
+        )
+      }
       {/* then the last part for log out */}
       <div className="w-full h-[120px] bg-green-800 mt-16  flex items-end justify-center  relative rounded-lg">
         <div className=" w-3/5 h-[120px] left-1/2 rounded-xl transform -translate-x-1/2 bg-white absolute gap-1 -translate-y-1/2 flex flex-col items-center justify-center">
