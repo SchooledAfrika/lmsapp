@@ -1,6 +1,6 @@
 import Students from "@/components/Students";
 import React from "react";
-import { AddStudent } from "./add/page";
+import AddStudent from "@/components/Addstudent";
 
 const page = () => {
   return (

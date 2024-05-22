@@ -1,7 +1,7 @@
 "use client";
 
 import React, { createContext, useState } from "react";
-export const SchoolDashboardContext = createContext<any>("");
+export const CommonDashboardContext = createContext<any>("");
 const Statecontext = ({ children }: { children: React.ReactNode }) => {
   const [showSideBar, setShowSideBar] = useState<boolean>();
   const [showPricing, setShowPricing] = useState<boolean>(true);
@@ -12,9 +12,9 @@ const Statecontext = ({ children }: { children: React.ReactNode }) => {
     setShowPricing,
   };
   return (
-    <SchoolDashboardContext.Provider value={allContext}>
+    <CommonDashboardContext.Provider value={allContext}>
       {children}
-    </SchoolDashboardContext.Provider>
+    </CommonDashboardContext.Provider>
   );
 };
 

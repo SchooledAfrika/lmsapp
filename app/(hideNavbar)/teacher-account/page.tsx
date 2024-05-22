@@ -1,1 +1,0 @@
-// Teachers will be redirected to this route when they choose to register as teachers to complete their registration

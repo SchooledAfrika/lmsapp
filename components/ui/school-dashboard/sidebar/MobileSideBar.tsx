@@ -1,10 +1,10 @@
 "use client";
 import React, { useContext } from "react";
-import { SchoolDashboardContext } from "@/providers/Statecontext";
+import { CommonDashboardContext } from "@/providers/Statecontext";
 import Sidebar from "./sidebar";
 
-const MobileSideBar = () => {
-  const { showSideBar, setShowSideBar } = useContext(SchoolDashboardContext);
+const MobileSideBar = ({ dashboard }: { dashboard: string }) => {
+  const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
   return (
     <div
       onClick={(e) => setShowSideBar(false)}
@@ -18,7 +18,7 @@ const MobileSideBar = () => {
         }}
         className="  w-3/5 bg-white h-full px-6 py-3 overflow-auto"
       >
-        <Sidebar />
+        <Sidebar dashboard={dashboard} />
       </div>
     </div>
   );

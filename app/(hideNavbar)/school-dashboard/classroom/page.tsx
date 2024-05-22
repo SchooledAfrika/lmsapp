@@ -1,6 +1,6 @@
 import Classroom from "@/components/Classroom";
 import React from "react";
-import { AddClassroom } from "./add/page";
+import AddClassroom from "@/components/Addclassroom";
 import Link from "next/link";
 
 const page = () => {

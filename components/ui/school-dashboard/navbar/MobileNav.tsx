@@ -1,11 +1,11 @@
 "use client";
-import { SchoolDashboardContext } from "@/providers/Statecontext";
+import { CommonDashboardContext } from "@/providers/Statecontext";
 import Image from "next/image";
 import React, { useContext } from "react";
 import { GiHamburgerMenu } from "react-icons/gi";
 
 const MobileNav = () => {
-  const { showSideBar, setShowSideBar } = useContext(SchoolDashboardContext);
+  const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
   const handleSideBar = () => {
     setShowSideBar(true);
   };
