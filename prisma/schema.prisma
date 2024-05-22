@@ -44,9 +44,10 @@ model Teacher {
   Classes              Classes[]
   SchoolTeachers       SchoolTeacher[]
   SchoolClassTeacher   SchoolClassTeacher[]
+  VacancyTeacher       VacancyTeacher[]
+  OneOnOneSection      OneOnOneSection?
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @default(now())
-  VacancyTeacher       VacancyTeacher[]
 }
 
 // creating the student model
@@ -78,6 +79,7 @@ model Student {
   SchoolClassStudent SchoolClassStudent[]
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @default(now())
+  AppliedSection     AppliedSection[]
 }
 
 // creating the school model
@@ -188,23 +190,62 @@ model Session {
 // student will have many to many relationship with classes
 // since students can have many classes and classes can have many students
 model Classes {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  subject      Subjects
-  classDays    ClassDay[]
-  timeInterval String
-  amount       Float
-  classBanner  String
-  rating       Float
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  subject     Subjects
+  className   String
+  grade       Grade
+  duration    DateTime
+  classStarts DateTime
+  classEnds   DateTime
+  schedules   ClassDay[]
+  price       Float
+  classBanner String
+  rating      Float
+  publicClass Boolean    @default(true)
   // here, there is one to many relationship between classes and teacher
   // a teacher can have many classes
-  teacher      Teacher    @relation(fields: [teacherId], references: [id])
-  teacherId    String     @db.ObjectId
+  teacher     Teacher    @relation(fields: [teacherId], references: [id])
+  teacherId   String     @db.ObjectId
   // there will be many to many relationship between classes and students
   // classes can have many students
-  studentIDs   String[]   @db.ObjectId
-  students     Student[]  @relation(fields: [studentIDs], references: [id])
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @default(now())
+  studentIDs  String[]   @db.ObjectId
+  students    Student[]  @relation(fields: [studentIDs], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @default(now())
+}
+
+// below is the model for one on one section
+// this is created by a teacher once and can be edited if need arises
+// there will be one to one relationship between the Teacher and this model
+model OneOnOneSection {
+  id             String           @id @default(auto()) @map("_id") @db.ObjectId
+  teacher        Teacher          @relation(fields: [teacherId], references: [id])
+  teacherId      String           @unique @db.ObjectId
+  aboutTutor     String
+  subjects       Subjects[]       @default([ENGLISH, MATHEMATICS])
+  grade          Grade[]
+  preference     PreferSection[]  @default([oneOnOneSection])
+  minPrice       Float
+  maxPrice       Float
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @default(now())
+  AppliedSection AppliedSection[]
+}
+
+// model below will contain information about students that applied for one on one sections
+// there will be one to many relationship between this model and oneoneoneSection model
+// there will also be one to many relationship between students model and this model
+model AppliedSection {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  sectionOwner      OneOnOneSection @relation(fields: [oneOnOneSectionId], references: [id])
+  oneOnOneSectionId String          @db.ObjectId
+  student           Student         @relation(fields: [studentId], references: [id])
+  studentId         String          @db.ObjectId
+  subject           Subjects
+  grade             Grade
+  type              PreferSection
+  duration          DateTime
+  classStart        DateTime
 }
 
 // below is the model for get in touch
@@ -370,6 +411,7 @@ enum Subjects {
   ENGLISH
   LITERATURE
   CRS
+  MATHEMATICS
 }
 
 // creating enums for the days of the week
@@ -379,6 +421,8 @@ enum ClassDay {
   WEDNESDAY
   THURSDAY
   FRIDAY
+  SATURDAY
+  SUNDAY
 }
 
 enum Role {
@@ -399,4 +443,11 @@ enum VacancyStatus {
 enum RoleType {
   FULLTIME @map("Full-Time")
   PARTTIME @map("Part-Time")
+}
+
+enum PreferSection {
+  homeWorkSupport @map("home work support")
+  oneOnOneSection @map("1 on 1 section")
+  groupWork       @map("group work")
+  openToJobs      @map("open to jobs")
 }

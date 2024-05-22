@@ -8,16 +8,20 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-
 import { Input } from "@/components/ui/input";
 import { RiErrorWarningFill } from "react-icons/ri";
-import Image from "next/image"
-import Link from "next/link"
+import Image from "next/image";
+import Link from "next/link";
 export function AssignDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-      <Button variant="outline" className="border font-bold px-6 text-[13px] rounded-lg border-lightGreen hover:text-lightGreen" >Assign</Button>
+        <Button
+          variant="outline"
+          className="border font-bold px-6 text-[13px] rounded-lg border-lightGreen hover:text-lightGreen"
+        >
+          Assign
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[500px] w-[380px] font-subtext">
         <DialogHeader>
@@ -27,16 +31,15 @@ export function AssignDialog() {
         </DialogHeader>
         <div className="grid gap-4 font-header py-4">
           <div className="grid grid-cols-4 items-center gap-4">
-          <Input
+            <Input
               id="name"
               type="text"
               placeholder="Mathematics class"
               className="col-span-6 font-semibold w-full"
             />
-            
           </div>
           <div className="grid grid-cols-4 items-center gap-4">
-          <Input
+            <Input
               id="teacher"
               list="Teacher"
               placeholder="Teacher"
@@ -47,25 +50,30 @@ export function AssignDialog() {
               <option>Austine David</option>
               <option>Sarah Adebayor</option>
               <option>Promise Bamgbose</option>
-             
             </datalist>
-           
-            
-
           </div>
           <div className="flex flex-col border p-6 rounded-md">
-            <p className="font-semibold inline text-[14px]"> <RiErrorWarningFill className="inline  text-lightGreen text-lg mr-2" />Can't Find Teacher Here?</p>
-            <p className="text-[14px] mt-3">Go to <Link href="/find-tutors" className="text-red-500">Teachers Tab</Link>  to invite them to your school</p>
+            <p className="font-semibold inline text-[14px]">
+              {" "}
+              <RiErrorWarningFill className="inline  text-lightGreen text-lg mr-2" />
+              Can&apos;t Find Teacher Here?
+            </p>
+            <p className="text-[14px] mt-3">
+              Go to{" "}
+              <Link href="/find-tutors" className="text-red-500">
+                Teachers Tab
+              </Link>{" "}
+              to invite them to your school
+            </p>
           </div>
-          
-          
         </div>
         <DialogFooter className="">
-         
-             <Button type="submit" className="w-full py-8 text-lg bg-lightGreen hover:bg-green-700">Assign Teacher</Button>
-         
-       
-         
+          <Button
+            type="submit"
+            className="w-full py-8 text-lg bg-lightGreen hover:bg-green-700"
+          >
+            Assign Teacher
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

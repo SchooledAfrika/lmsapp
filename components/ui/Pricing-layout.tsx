@@ -4,7 +4,7 @@ import PricingBtn from "./PricingBtn";
 import { eachPrice, monthlyPlans } from "@/constants/pricing/school";
 import EachPricing from "../EachPricing";
 import { IoCloseSharp } from "react-icons/io5";
-import { SchoolDashboardContext } from "@/providers/Statecontext";
+import { CommonDashboardContext } from "@/providers/Statecontext";
 
 export interface pricingChange {
   priceAmt: number;
@@ -12,7 +12,7 @@ export interface pricingChange {
 }
 const PricingLayout = () => {
   const [currentIndex, setIndex] = useState<number>(0);
-  const { showPricing, setShowPricing } = useContext(SchoolDashboardContext);
+  const { showPricing, setShowPricing } = useContext(CommonDashboardContext);
   const [multiple, setmultiple] = useState<pricingChange>({
     priceAmt: 1,
     duration: "Month",
