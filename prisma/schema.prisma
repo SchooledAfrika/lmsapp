@@ -190,28 +190,32 @@ model Session {
 // student will have many to many relationship with classes
 // since students can have many classes and classes can have many students
 model Classes {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  subject     Subjects
-  className   String
-  grade       Grade
-  duration    DateTime
-  classStarts DateTime
-  classEnds   DateTime
-  schedules   ClassDay[]
-  price       Float
-  classBanner String
-  rating      Float
-  publicClass Boolean    @default(true)
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  subject         Subjects
+  className       String
+  grade           Grade
+  duration        DateTime
+  classStarts     DateTime
+  classEnds       DateTime
+  schedules       ClassDay[]
+  price           Float
+  classBanner     String
+  rating          Float
+  publicClass     Boolean    @default(true)
   // here, there is one to many relationship between classes and teacher
   // a teacher can have many classes
-  teacher     Teacher    @relation(fields: [teacherId], references: [id])
-  teacherId   String     @db.ObjectId
+  teacher         Teacher    @relation(fields: [teacherId], references: [id])
+  teacherId       String     @db.ObjectId
   // there will be many to many relationship between classes and students
   // classes can have many students
-  studentIDs  String[]   @db.ObjectId
-  students    Student[]  @relation(fields: [studentIDs], references: [id])
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @default(now())
+  studentIDs      String[]   @db.ObjectId
+  students        Student[]  @relation(fields: [studentIDs], references: [id])
+  maxCapacity     Float
+  currentCapacity Float      @default(0)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @default(now())
+
+  @@index([teacherId], name: "teachers_class_index")
 }
 
 // below is the model for one on one section
@@ -246,6 +250,8 @@ model AppliedSection {
   type              PreferSection
   duration          DateTime
   classStart        DateTime
+
+  @@index([oneOnOneSectionId, studentId], name: "applied_section")
 }
 
 // below is the model for get in touch
