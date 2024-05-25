@@ -31,6 +31,7 @@ const config = {
         foreground: "hsl(var(--foreground))",
         dimYellow: "#FDA21A",
         lightGreen: "#359C71",
+        dimOrange: "#FF6634",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
