@@ -30,7 +30,6 @@ model Teacher {
   nationalIdBack       String? // back of the national id card the teacher submited
   profilePhoto         String? // for setting profile picture
   briefDescription     String? // here the teacher submit brief description about them self not more than 300 words
-  ClassVideos          ClassVideos[]
   TeachersArticle      TeachersArticle[]
   rating               Float?
   TeachersSubject      TeachersSubject[]
@@ -52,24 +51,15 @@ model Teacher {
 
 // creating the student model
 model Student {
-  id           String    @id @default(auto()) @map("_id") @db.ObjectId
-  name         String?
-  email        String    @unique
-  password     String?
-  profilePhoto String?
+  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
+  name               String?
+  email              String               @unique
+  password           String?
+  profilePhoto       String?
   // creating the many to many relationship between student and teacher
   // becasue the student can have many teachers
-  teacherIDs   String[]  @db.ObjectId
-  teachers     Teacher[] @relation(fields: [teacherIDs], references: [id])
-
-  // student can access many articles that belongs to them
-  // that is, one student here many articles
-  articleIDs         String[]             @db.ObjectId
-  articles           TeachersArticle[]    @relation(fields: [articleIDs], references: [id])
-  // creating many to many relation between student and class video
-  // student can have many class video
-  classVideoIDs      String[]             @db.ObjectId
-  classVideos        ClassVideos[]        @relation(fields: [classVideoIDs], references: [id])
+  teacherIDs         String[]             @db.ObjectId
+  teachers           Teacher[]            @relation(fields: [teacherIDs], references: [id])
   // creating a many to many relationship between classes and students
   // a student can decide to join one or many classes
   classIDs           String[]             @db.ObjectId
@@ -114,38 +104,19 @@ model Parents {
   updatedAt    DateTime @default(now())
 }
 
-// creating models for videos
-// this are videos taken during live classes
-// each classes had, the teacher can save a video link to the data base
-model ClassVideos {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
-  subject    String
-  title      String
-  teacher    Teacher   @relation(fields: [teacherId], references: [id])
-  teacherId  String    @db.ObjectId
-  // creating a many to many relationship between student and videos
-  // video can contain array of students that owns it
-  studentIDs String[]  @db.ObjectId
-  students   Student[] @relation(fields: [studentIDs], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now())
-}
-
 // here we created the model where teachers can upload article
+// this article can be any media ranging from pdf, common link, and videos
 // the link to the pdf or article is stored here
-// students under this teacher should be able to access this
+// this article id can be pushed into the array inclasses so that students can actually access it
 model TeachersArticle {
-  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
   subject    String
   title      String
-  teacher    Teacher   @relation(fields: [teacherId], references: [id])
-  teacherId  String    @db.ObjectId
-  // there is many to many relationship between students and articles
-  // here, article can contain many student using it
-  studentIDs String[]  @db.ObjectId
-  students   Student[] @relation(fields: [studentIDs], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @default(now())
+  sourceLink String
+  teacher    Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId  String   @db.ObjectId
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now())
 }
 
 // once a teacher is registered
@@ -212,6 +183,8 @@ model Classes {
   students        Student[]  @relation(fields: [studentIDs], references: [id])
   maxCapacity     Float
   currentCapacity Float      @default(0)
+  // this will contain the arrays of the resources the teacher ass
+  resourcesIds    String[]   @default([])
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @default(now())
 
