@@ -14,13 +14,12 @@ import { GoDotFill } from "react-icons/go";
 
 import Image from "next/image"
 import Link from "next/link"
-export function RemoveStudent() {
+export function RejectStudent() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-      <p className="inline text-[14px] cursor-pointer  font-semibold">
-                <GoDotFill className="inline ml-0 text-lightGreen " />
-                Remove
+      <p className="text-[13px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-dimOrange text-white"> Reject
+               
               </p>
       </DialogTrigger>
       <DialogContent className="sm:w-[500px] w-[380px] font-subtext">

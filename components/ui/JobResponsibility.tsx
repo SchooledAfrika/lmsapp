@@ -20,12 +20,6 @@ const JobResponsibility: React.FC<JobResponsibilityProps> = ({
     setInputs([...inputs, ""]);
   };
 
-  const handleInputChange = (index: any, event: any) => {
-    const newInputs = [...inputs];
-    newInputs[index] = event.target.value;
-    setInputs(newInputs);
-  };
-
   return (
     <section className="my-[80px] md:my-6">
       <Container>
@@ -75,7 +69,6 @@ const JobResponsibility: React.FC<JobResponsibilityProps> = ({
                   key={index}
                   type="text"
                   value={input}
-                  onChange={(e) => handleInputChange(index, e)}
                   placeholder="Responsibility"
                   className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
                 />
