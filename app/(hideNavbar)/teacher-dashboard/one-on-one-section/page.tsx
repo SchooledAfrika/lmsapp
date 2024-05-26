@@ -1,7 +1,8 @@
 import React from "react";
+import OneOnOneSession from "@/components/OneOnOneSession";
 
 const page = () => {
-  return <div>page</div>;
+  return <OneOnOneSession />;
 };
 
 export default page;
