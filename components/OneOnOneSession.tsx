@@ -11,7 +11,7 @@ const OneOnOne = () => {
     <section className="my-[80px] md:my-4">
       <Container>
         <div className="flex justify-end mb-2">
-          <Link href={"/teacher-dashboard/edit-profile"}>
+          <Link href={"/teacher-dashboard/one-on-one-section/edit-profile"}>
             <Button className="bg-secondary text-white text-[12px] py-5 my-3 mr-0 md:mr-6">
               <Image
                 src="/svgs/edit.svg"
