@@ -29,7 +29,7 @@ const OneOnOne = () => {
           {OneOnOneList.map((details, index) => (
             <div
               key={index}
-              className="w-full lg:w-fit bg-[#FFFFFF] py-[17px] shadow-lg px-4 rounded-[10px]"
+              className="w-full lg:w-fit bg-[#FFFFFF] py-[10px] shadow-lg px-4 rounded-[10px]"
             >
               <div className="flex justify-between">
                 <div>
@@ -93,7 +93,7 @@ const OneOnOne = () => {
                     </div>
                   </div>
                   <div className="flex gap-3">
-                    <Link href={"/school-dashboard/job-listing/new"}>
+                    <Link href={"/teacher-dashboard/students/test"}>
                       <Button className="border bg-[#FFFFFF] border-green-700 font-medium py-5 text-[12px] px-8 my-3 text-green-700">
                         {details.viewDetails}
                       </Button>

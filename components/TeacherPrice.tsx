@@ -23,16 +23,14 @@ const TeacherPrice = () => {
               <span className="bg-[#359C71] px-[7px] rounded-full text-white">
                 1
               </span>
-              <p className="text-[#359C71] text-[12px] font-bold">
-                Profile Data
-              </p>
+              <p className="text-[#359C71] font-bold">Profile Data</p>
             </div>
             <p className="border-l-2 border-[#359C71] h-[40px] md:h-[80px] ml-[10px]"></p>
             <div className="flex gap-10">
-              <span className="bg-[#359C71] rounded-full px-[7px] py-[0] text-white">
+              <span className="bg-[#359C71] rounded-full px-[7px] text-white">
                 2
               </span>
-              <p className="text-[#359C71] text-[12px] font-bold">
+              <p className="text-[#359C71] font-bold">
                 Subject and Preferences
               </p>
             </div>
@@ -41,9 +39,7 @@ const TeacherPrice = () => {
               <span className="bg-[#359C71] rounded-full px-[7px] text-white">
                 3
               </span>
-              <p className="text-[#359C71] text-[12px] font-bold">
-                Pricing Details
-              </p>
+              <p className="text-[#359C71] font-bold">Pricing Details</p>
             </div>
           </div>
           <div>

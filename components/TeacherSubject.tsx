@@ -9,13 +9,19 @@ interface TeacherPrice {
 }
 
 const TeacherSubject: React.FC<TeacherPrice> = ({ onClickTeacherDetails }) => {
-  const [inputField, setInputField] = useState<number[]>([0]);
+  const [inputFields, setInputFields] = useState<string[]>([""]);
+  const preferences = [
+    "HomeWork Support",
+    "1 on 1 Sessions",
+    "Open to Jobs",
+    "Group Sessions",
+  ];
 
   const handleAddInput = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     event.preventDefault();
-    setInputField([...inputField, inputField.length]);
+    setInputFields([...inputFields, ""]);
   };
 
   const handlePriceView = () => {
@@ -44,7 +50,9 @@ const TeacherSubject: React.FC<TeacherPrice> = ({ onClickTeacherDetails }) => {
               <span className="bg-[#359C71] rounded-full px-[7px] text-white">
                 2
               </span>
-              <p>Subject and Preferences</p>
+              <p className="text-[#359C71] font-bold">
+                Subject and Preferences
+              </p>
             </div>
             <p className="border-l-2 border-[#E9ECEB] h-[40px] md:h-[80px] ml-[10px]"></p>
             <div className="flex gap-10">
@@ -59,101 +67,64 @@ const TeacherSubject: React.FC<TeacherPrice> = ({ onClickTeacherDetails }) => {
             <form className="flex flex-col pl-[0] md:pl-[100px] mt-[40px] md:mt-[0]">
               <label className="font-bold text-[16px]">Session Details</label>
               <div>
-                <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[70vh] bg-white">
-                  <input
-                    type="text"
-                    name="text"
-                    placeholder="English"
-                    className="outline-none w-full pr-4"
-                  />
-                  <Image
-                    src="/svgs/lock.svg"
-                    width={15}
-                    height={15}
-                    alt="Lock"
-                  />
-                </div>
-                <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[70vh] bg-white">
-                  <div className="flex items-center gap-2">
-                    <Image
-                      src="/svgs/calculate.svg"
-                      width={20}
-                      height={20}
-                      alt="Lock"
-                    />
+                {inputFields.map((_, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[70vh] bg-white"
+                  >
                     <input
                       type="text"
-                      name="text"
-                      placeholder="Mathematics"
+                      name={`subject-${index}`}
+                      placeholder={`Subject ${index + 1}`}
                       className="outline-none w-full pr-4"
                     />
+                    <Image
+                      src="/svgs/lock.svg"
+                      width={15}
+                      height={15}
+                      alt="Lock"
+                    />
                   </div>
-                  <Image
-                    src="/svgs/lock.svg"
-                    width={15}
-                    height={15}
-                    alt="Lock"
-                  />
-                </div>
-                <button
-                  onClick={handleAddInput}
-                  className="font-bold text-[12px] w-full hover:bg-green-200 rounded p-4 mt-2"
-                >
-                  <span className="text-green-700">Go Premium</span> Add Another
-                  Subject +
-                </button>
-                <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[70vh] bg-white">
-                  <input
-                    type="text"
-                    name="text"
-                    placeholder="Grade 10, Grade 11 & Grade 12"
-                    className="outline-none w-full pr-4"
-                  />
-                  <Image
-                    src="/svgs/polygon.svg"
-                    width={15}
-                    height={15}
-                    alt="Lock"
-                  />
-                </div>
-                <div>
-                  <label className="font-bold text-[16px]">Preferences</label>
-                  <div className="flex gap-2 w-full">
-                    <div className="flex gap-2 justify-between w-[50%] items-center my-2 px-4 py-3 outline-none rounded-[8px] bg-white">
+                ))}
+              </div>
+              <button
+                onClick={handleAddInput}
+                className="font-bold text-[12px] w-full hover:bg-green-200 rounded p-4 mt-2"
+              >
+                <span className="text-green-500">Go Premium</span> Add Another
+                Subject +
+              </button>
+              <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[70vh] bg-white">
+                <input
+                  type="text"
+                  name="text"
+                  placeholder="Grade 10, Grade 11 & Grade 12"
+                  className="outline-none w-full pr-4"
+                />
+                <Image
+                  src="/svgs/polygon.svg"
+                  width={15}
+                  height={15}
+                  alt="Lock"
+                />
+              </div>
+              <div>
+                <label className="font-bold text-[16px]">Preferences</label>
+                <div className="grid grid-cols-2 gap-x-2 w-full">
+                  {preferences.map((preference, index) => (
+                    <label
+                      key={index}
+                      className="flex justify-between items-center gap-2 my-2 px-4 py-3 outline-none rounded-[8px] bg-white cursor-pointer"
+                    >
+                      {preference}
                       <input
-                        type="text"
-                        name="text"
-                        placeholder="HomeWork Support"
-                        className="outline-none pr-4"
+                        type="checkbox"
+                        name="preferences"
+                        value={preference}
+                        className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-green-600 checked:border-transparent focus:outline-none"
                       />
-                    </div>
-                    <div className="flex gap-2 justify-between w-[50%] items-center my-2 px-4 py-3 outline-none rounded-[8px] bg-white">
-                      <input
-                        type="text"
-                        name="text"
-                        placeholder="1 on 1 Sessions"
-                        className="outline-none pr-4"
-                      />
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <div className="flex gap-2 justify-between items-center w-[50%] my-2 px-4 py-3 outline-none rounded-[8px] bg-white">
-                      <input
-                        type="text"
-                        name="text"
-                        placeholder="Open to Jobs"
-                        className="outline-none pr-4"
-                      />
-                    </div>
-                    <div className="flex gap-2 justify-between items-center w-[50%] my-2 px-4 py-3 outline-none rounded-[8px] bg-white">
-                      <input
-                        type="text"
-                        name="text"
-                        placeholder="Group Sessions"
-                        className="outline-none pr-4"
-                      />
-                    </div>
-                  </div>
+                    </label>
+                  ))}
                 </div>
               </div>
               <Button

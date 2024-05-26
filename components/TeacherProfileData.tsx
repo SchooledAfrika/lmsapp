@@ -53,7 +53,7 @@ const TeacherProfileData: React.FC<TeacherSubjectProps> = ({
             </div>
             <div>
               <div className="flex flex-col pl-[0] md:pl-[100px] mt-[40px] md:mt-[0]">
-                <p className="font-bold text-[18px]">
+                <p className="font-bold text-[16px]">
                   Edit Your Teachers Profile !
                 </p>
                 <div className="flex items-center gap-3 my-4">
@@ -68,26 +68,41 @@ const TeacherProfileData: React.FC<TeacherSubjectProps> = ({
                     <span className="text-[16px] font-bold">
                       David Olushola
                     </span>
-                    <div className="flex bg-[#FFFFFF] w-fit p-2">
+                    <div className="flex items-center bg-[#FFFFFF] w-fit py-1 pl-2 my-2 rounded">
                       <Image
                         src="/svgs/upload.svg"
                         width={15}
                         height={15}
                         alt="UplaodImage"
                       />
-                      <input type="file" name="upload" />
+                      <div>
+                        <label
+                          htmlFor="file-upload"
+                          className="cursor-pointer ml-2"
+                        >
+                          <span className="bg-transparent py-1 pr-2 text-[12px] font-medium">
+                            Upload New Image
+                          </span>
+                        </label>
+                        <input
+                          id="file-upload"
+                          type="file"
+                          name="upload"
+                          className="hidden"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
                 <textarea
-                  rows={5}
-                  cols={7}
-                  className="p-4 mb-4 outline-none my-1"
+                  rows={6}
+                  cols={10}
+                  className="p-4 mb-4 outline-none my-1 rounded-[10px]"
                   placeholder="About Yourself as a tutor"
                 ></textarea>
                 <Button
                   onClick={handleSubjectView}
-                  className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
+                  className="bg-secondary w-full md:w-[30vw] text-white text-[16px] px-6 py-7 my-3"
                 >
                   Proceed
                 </Button>
