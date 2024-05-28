@@ -2,17 +2,13 @@
 // such as links to pdf, images, our useful urls
 // they can also be able to delete the resources they added
 import prisma from "@/prisma/prismaConnect";
-import { serverError } from "@/prisma/utils/error";
+import { notAuthenticated, serverError } from "@/prisma/utils/error";
 
 // first, lets create a new resources
 export async function POST(req: Request) {
   // TODO: change the teacherId below to nextauthId
   const { teacherId, ...others } = await req.json();
-  if (!teacherId)
-    return new Response(
-      JSON.stringify({ message: "you are not authenticated" }),
-      { status: 404 }
-    );
+  if (!teacherId) return notAuthenticated();
   try {
     // create the resources to the database here
     await prisma.teachersArticle.create({
@@ -30,10 +26,7 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   // TODO: change teacherId to nextauth id
   const { teacherId, id } = await req.json();
-  if (!teacherId)
-    return new Response(
-      JSON.stringify({ message: "you are not authenticated" })
-    );
+  if (!teacherId) return notAuthenticated();
   // lets get the article and check if is the owner that is about to delete it
   const article = await prisma.teachersArticle.findUnique({
     where: {

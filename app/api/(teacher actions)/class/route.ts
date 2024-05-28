@@ -3,22 +3,30 @@
 // and also to get all their classes here
 // then in the applied-class route, the student will be able to be added to the class after making their payments
 import prisma from "@/prisma/prismaConnect";
-import { serverError } from "@/prisma/utils/error";
+import { notAuthenticated, serverError } from "@/prisma/utils/error";
 
 // here, teachers can create a class
 export async function POST(req: Request) {
   // TODO: remember to change the id here to the nextauth id
-  const { id, others } = await req.json();
-  if (!id) {
-    return new Response(
-      JSON.stringify({ message: "you are not authenticated" }),
-      { status: 401 }
-    );
+  const { teacherId, duration, classStarts, classEnds, ...others } =
+    await req.json();
+  if (!teacherId) {
+    return notAuthenticated();
   }
   try {
     await prisma.classes.create({
-      data: { teacherId: id, ...others },
+      data: {
+        teacherId,
+        duration: new Date(duration),
+        classStarts: new Date(classStarts),
+        classEnds: new Date(classEnds),
+        ...others,
+      },
     });
+    return new Response(
+      JSON.stringify({ message: "class created successfully" }),
+      { status: 200 }
+    );
   } catch (error) {
     throw new Error(JSON.stringify({ message: "something went wrong" }));
   }
@@ -29,10 +37,7 @@ export async function DELETE(req: Request) {
   // TODO: change the id to the next auth id
   const { id, teacherId } = await req.json();
   if (!teacherId) {
-    return new Response(
-      JSON.stringify({ message: "you are not authenticated" }),
-      { status: 400 }
-    );
+    return notAuthenticated();
   }
   // now lets get the class we want to delete
   // return an error if the class does not exist
@@ -54,6 +59,10 @@ export async function DELETE(req: Request) {
     await prisma.classes.delete({
       where: { id },
     });
+    return new Response(
+      JSON.stringify({ message: "class deleted successfully" }),
+      { status: 200 }
+    );
   } catch (error) {
     return serverError();
   }

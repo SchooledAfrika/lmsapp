@@ -110,7 +110,7 @@ model Parents {
 // this article id can be pushed into the array inclasses so that students can actually access it
 model TeachersArticle {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  subject    String
+  subject    Subjects
   title      String
   sourceLink String
   teacher    Teacher  @relation(fields: [teacherId], references: [id])
@@ -204,9 +204,11 @@ model OneOnOneSection {
   preference     PreferSection[]  @default([oneOnOneSection])
   minPrice       Float
   maxPrice       Float
+  // this will contain the list of connection between the student that 
+  // applied for one on one sections
+  AppliedSection AppliedSection[]
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @default(now())
-  AppliedSection AppliedSection[]
 }
 
 // model below will contain information about students that applied for one on one sections
@@ -223,9 +225,13 @@ model AppliedSection {
   type              PreferSection
   duration          DateTime
   classStart        DateTime
+  // this will contain the id of the resources that the teacher will push here
+  resources         String[]        @default([])
 
   @@index([oneOnOneSectionId, studentId], name: "applied_section")
 }
+
+// 
 
 // below is the model for get in touch
 // any one can send a message, irrespective if you are registered or not

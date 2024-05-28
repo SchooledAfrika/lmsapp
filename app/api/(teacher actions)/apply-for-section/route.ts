@@ -7,10 +7,16 @@ import prisma from "@/prisma/prismaConnect";
 
 export async function POST(req: Request) {
   // TODO:all this information coming from the body is what we will extract from our payment webhook response
-  const inputs = await req.json();
+  // we then check for authentication header and know if is coming from us actually
+  // return an error, if is not coming from our own payment webhook
+  const { duration, classStart, ...inputs } = await req.json();
   try {
     await prisma.appliedSection.create({
-      data: { ...inputs },
+      data: {
+        duration: new Date(duration),
+        classStart: new Date(classStart),
+        ...inputs,
+      },
     });
     return new Response(
       JSON.stringify({
