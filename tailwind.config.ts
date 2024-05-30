@@ -32,6 +32,7 @@ const config = {
         dimYellow: "#FDA21A",
         lightGreen: "#359C71",
         dimOrange: "#FF6634",
+        dimWhite: "#E9ECEB",
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
@@ -65,7 +66,8 @@ const config = {
         gold: "#FFCE31",
         secondary: "#359C71",
         dimYellow: "#FDA21A",
-        dimOrange: "#FF6634",
+        dimWhite: "#E9ECEB",
+        dimOrange: "#FF6634"
       },
 
       borderRadius: {

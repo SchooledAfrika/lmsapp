@@ -15,11 +15,11 @@ const NewsletterForm = () => {
   return (
     <form className="max-w-sm mt-6">
       <h2 className=" text-medium font-semibold tracking-wider ">
-        Sign up to our newsletter
+      Would you like to read from us?
       </h2>
       <p className="mt-4 text-normal">
-        Subscribe to get the latest news, articles, resources and
-        inspiration.
+      Get our newsletter and get Educational tips for your Child.
+      Enter Email .
       </p>
       <div className="relative mt-6">
         <input
@@ -66,10 +66,11 @@ const Footer: React.FC = () => {
         <div className="w-full md:w-[35%]">
           <span className="font-bold">About Schooled Afrika</span>
           <p className="pt-2 text-[15px]">
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-            commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-            penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-          </p>
+          At Schooled Afrika, we're committed to revolutionizing education by providing
+          accessible and convenient online learning solutions. Our platform offers a range
+          of features designed to support parents, teachers, and online schools in
+          enhancing the learning experience for students of all ages.
+                    </p>
           
         </div>
         <div className="flex flex-row md:mt-0 mt-6">

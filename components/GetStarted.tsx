@@ -6,16 +6,14 @@ import { BsSendArrowUp } from "react-icons/bs";
 const GetStarted = () => {
   return (
     <Container>
-      <div className="-mx-6 hidden md:block rounded-full bg-dimYellow px-6 py-20 my-20  sm:mx-0 sm:py-32 md:px-12">
+      <div className="-mx-6 font-header hidden md:block rounded-full bg-dimYellow px-6 py-20 my-20  sm:mx-0 sm:py-32 md:px-12">
         <div className="flex sm:justify-between justify-evenly sm:flex-row flex-col sm:gap-16  gap-2 mx-auto">
-          <div className=" mx-6 text-justify flex-1 font-poppins">
-            <h2 className=" text-2xl font-medium text-black [text-wrap:balance] sm:text-3">
-              Lorem
+          <div className=" mx-6 text-justify flex-1 ">
+            <h2 className=" text-xl font-medium text-black [text-wrap:balance] sm:text-3">
+            Would you like to read from us?
             </h2>
-            <p className="text-black my-6 font-normal leading-[20px]">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-              interdum sapien, id aliquam ligula. Maecenas eget neque id ligula
-              egestas blandit.
+            <p className="text-black text-md my-6 font-normal leading-[20px]">
+            Get our newsletter and get Educational tips for your Child. Enter Email .
             </p>
           </div>
           <div className="mt-8 flex flex-1 flex-wrap items-center gap-x-6 sm:gap-4">

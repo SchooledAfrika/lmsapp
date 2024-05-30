@@ -13,15 +13,13 @@ const Virtual = () => {
       >
         <article className="sm:w-1/2">
           <p className="mt-6 font-header text-lg font-semibold text-dimYellow">
-            Virtual Schools
+            Virtual School Ground
           </p>
 
           <p className="mt-4 max-w-full text-start text-md font-subtext  sm:text-left">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-            interdum sapien, id aliquam ligula. Maecenas eget neque id ligula
-            egestas blandit. Suspendisse potenti. Phasellus efficitur nulla at
-            justo aliquam placerat. In ullamcorper malesuada iaculis. Nullam
-            consectetur in leo sit amet ornare.
+          The best digital school for all your virtual school needs, assign
+          homework to students easily, create assessment in two minutes,post announcements and keep
+          tabs on both teacher and students progress
           </p>
 
           <Button

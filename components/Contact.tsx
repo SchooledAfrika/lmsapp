@@ -19,17 +19,17 @@ const Contact = () => {
           />
           <div className="flex flex-col mt-8 z-10 opacity-100 absolute md:top-[100px] top-8 md:left-[40px] left-4 justify-between">
             <p className="font-bold w-[144px]  font-header h-[28px] text-dimYellow">
-              Reach out to us.
+              Contact Us.
             </p>
             <h3 className="md:text-[40px] md:leading-[42px] text-xl w-[300px] md:w-[668px] font-bold font-subtext">
-              Lorem ipsum dolor sit amet, consectutuer adipsig elit.
+            Reach out to us.
             </h3>
             <p className="w-[300px] md:w-[668px] font-subtext md:font-[300px] mt-3 leading-[20px] md:leading-[32px]">
               {" "}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-              interdum sapien, id aliquam ligula. Maecenas eget neque id ligula
-              egestas blandit. Suspendisse potenti.
-            </p>
+              We Are Just One Click Away!
+              For any Questions, Request Or Remark, Send a Message and We will get back as soon as we
+              can! We are here for you.
+                          </p>
           </div>
         </div>
       </div>
@@ -44,8 +44,7 @@ const Contact = () => {
 
             <li className="border-dotted border-l-2  border-lightGreen text-lightGreen">
               <span className="ml-3 text-black text-sm">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-                interdum sapien,
+              Ikorodu, Lagos. Nigeria
               </span>
             </li>
             <li className="border-dotted border-l-2  border-lightGreen text-lightGreen">
@@ -55,7 +54,7 @@ const Contact = () => {
 
             <li className="border-dotted border-l-2  border-lightGreen text-lightGreen">
               <span className="ml-3 text-black text-sm">
-                +23491************
+                +2347025005584
               </span>
             </li>
 
@@ -66,7 +65,7 @@ const Contact = () => {
 
             <li className="border-dotted border-l-2  border-lightGreen text-lightGreen">
               <span className="ml-3 text-black text-sm">
-                Schookafrika@gmail.edu.ng
+                schooledafrika@gmail.edu.ng
               </span>
             </li>
           </ul>
@@ -78,7 +77,7 @@ const Contact = () => {
             Get in Touch With Us
           </h3>
           <p className="mx-4 mb-12 text-md font-subtext">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit.{" "}
+          We Are Just A Click Away!{" "}
           </p>
           <form className="w-full">
             <div className="md:flex hidden md:flex-row flex-col w-full items-center justify-between">

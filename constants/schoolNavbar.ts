@@ -13,12 +13,12 @@ export interface SchoolNavType {
 export const SchoolNavbar: SchoolNavType[] = [
   {
     title: "Welcome to Your School Dashboard",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Manage your school at a go! Just a click!",
     path: "overview",
   },
   {
     title: "Classroom",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Get your classroom ready",
     path: "classroom",
     subDetails: {
       title: " Single class here",
@@ -27,7 +27,7 @@ export const SchoolNavbar: SchoolNavType[] = [
   },
   {
     title: "Teachers",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Organize your teachers and review their data",
     path: "teachers",
     subDetails: {
       title: " Single teacher here",
@@ -36,7 +36,7 @@ export const SchoolNavbar: SchoolNavType[] = [
   },
   {
     title: "Students",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Organize your students and review their data",
     path: "students",
     subDetails: {
       title: " Single student here",
@@ -45,17 +45,17 @@ export const SchoolNavbar: SchoolNavType[] = [
   },
   {
     title: "Calendar",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "View schedules of your teachers and students",
     path: "calender",
   },
   {
     title: "Job Listing",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "View, update and delete jobs here.",
     path: "job-listing",
   },
   {
     title: "Settings",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Edit your settings here",
     path: "settings",
   },
 ];

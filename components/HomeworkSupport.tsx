@@ -16,11 +16,8 @@ const HomeworkSupport = () => {
           </p>
 
           <p className="mt-4 max-w-full text-start text-md font-subtext  sm:text-left">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-            interdum sapien, id aliquam ligula. Maecenas eget neque id ligula
-            egestas blandit. Suspendisse potenti. Phasellus efficitur nulla at
-            justo aliquam placerat. In ullamcorper malesuada iaculis. Nullam
-            consectetur in leo sit amet ornare.
+          Your child's after school work will be perfectly taken care of by
+          our tutors, giving them an upper edge in their conventional classes
           </p>
 
           <Button
