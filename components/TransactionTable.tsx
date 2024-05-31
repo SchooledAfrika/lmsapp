@@ -34,7 +34,16 @@ import Link from "next/link";
     },
     {
         id: "3",
-        icon: "/tutors.jpg",
+        icon: "/logo.png",
+        name: "Rotimi Wajabs",
+      type: "Withdrawal",
+      user: "User",
+      date: "April 20, 2024",
+      amount_withdraw: "-$570.50",
+      },
+      {
+        id: "4",
+        icon: "/logo.png",
         name: "Rotimi Wajabs",
       type: "Withdrawal",
       user: "User",
@@ -45,7 +54,7 @@ import Link from "next/link";
   
   export default function TransactionTable() {
     return (
-      <Table className="bg-white overflow-x-auto   rounded-md my-12">
+      <Table className="bg-white overflow-x-auto p-6   rounded-md my-4">
         <TableCaption className="px-3  py-3 rounded-md bg-white">
             <div className="flex font-semibold  justify-between">
                 <p>Recent Transactions</p> 
@@ -86,7 +95,7 @@ import Link from "next/link";
                   alt="icon"
                   width={100}
                   height={100}
-                  className="w-[40px] h-[40px] mt-2 rounded-md mr-1"
+                  className="w-[30px] h-[30px] mt-2 rounded-md mr-1"
                 />{" "}
                 <div className="flex ml-1 flex-col">
                   <div className="text-[12px]">{Transaction.name}</div>

@@ -11,7 +11,7 @@ const Offers = () => {
         <div>
           <h3 className="text-3xl sm:text-[24px] font-header font-bold">Our Offers</h3>
           <p className="mt-2 text-[16px]">
-            Lorem ipsum dolor sit amet, consectetur
+          We offer quality online classes that carters for all your child needs for a successful academic pursuit.
           </p>
         </div>
         <div className="bg-white  md:bg-stone-100 py-3 pl-4 rounded-xl">
@@ -25,8 +25,7 @@ const Offers = () => {
           <h3 className="text-[18px] mt-3 font-bold">Expert tutoring</h3>
 
           <p className="mb-3 mt-1 text-[16px]">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-            interdum sapien, id aliquam ligula. 
+          We have a plethora of professional tutors who are dedicated to success of students.
           </p>
           
         </div>
@@ -43,8 +42,7 @@ const Offers = () => {
           </h3>
 
           <p className="mb-3 mt-1 text-[16px]">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-            interdum sapien, id aliquam ligula.
+          Easy Access to a vast library of quiz and test videos that helps boost the confidence of your child at their convenience.
           </p>
           
         </div>
@@ -61,8 +59,8 @@ const Offers = () => {
           </h3>
 
           <p className="mb-3 mt-1 text-[16px]">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-            interdum sapien, id aliquam ligula. 
+          Monitor the progress of your child and hire one on one tutors that suit the needs of your child.
+
           </p>
           
         </div>

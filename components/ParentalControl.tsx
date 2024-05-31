@@ -16,11 +16,8 @@ const ParentalControl = () => {
           </p>
 
           <p className="mt-4 max-w-full text-start text-md font-subtext font-[300px] sm:text-left">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-            interdum sapien, id aliquam ligula. Maecenas eget neque id ligula
-            egestas blandit. Suspendisse potenti. Phasellus efficitur nulla at
-            justo aliquam placerat. In ullamcorper malesuada iaculis. Nullam
-            consectetur in leo sit amet ornare.
+          Easy access + Payments Equals to Best virtual learning ride. Pick
+          from a wide range of professional teachers
           </p>
 
           <Button
