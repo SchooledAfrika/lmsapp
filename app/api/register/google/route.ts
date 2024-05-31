@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import prisma from "@/prisma/prismaConnect";
+// =====> remember to check on upsert which can help to create or update a new user if it does not exist
 
 // here, we create a new user with their google account credentials
 // making use of post request
