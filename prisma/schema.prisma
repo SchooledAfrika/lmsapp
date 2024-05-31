@@ -47,6 +47,7 @@ model Teacher {
   OneOnOneSection      OneOnOneSection?
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @default(now())
+  Exams                Exams[]
 }
 
 // creating the student model
@@ -227,6 +228,7 @@ model AppliedSection {
   classStart        DateTime
   // this will contain the id of the resources that the teacher will push here
   resources         String[]        @default([])
+  StudentExam       StudentExam[]
 
   @@index([oneOnOneSectionId, studentId], name: "applied_section")
 }
@@ -364,6 +366,35 @@ model SchoolClassStudent {
   @@index([schoolClassId, studentId], name: "school_class_student_id")
 }
 
+// this model depict the exams that is set by teacher
+// there is one to many relationship between the teacher and the exams
+model Exams {
+  id        String          @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  teacher   Teacher         @relation(fields: [teacherId], references: [id])
+  teacherId String          @db.ObjectId
+  test      ExamQuestions[]
+  duration  String
+  grade     Grade
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @default(now())
+}
+
+// the model below shows the student exams
+// this is the model created and linked to appliedSection
+// that is there will be one to many relationship between the student exam and that oneoneoneSection
+model StudentExam {
+  id               String          @id @default(auto()) @map("_id") @db.ObjectId
+  completed        Boolean         @default(false)
+  score            Int
+  questions        ExamQuestions[]
+  // for one to many relationship between this model and appliedSection
+  section          AppliedSection  @relation(fields: [appliedSectionId], references: [id])
+  appliedSectionId String          @db.ObjectId
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @default(now())
+}
+
 // this is enum for grades
 // TODO: check how many grade system we have
 enum Grade {
@@ -435,4 +466,11 @@ enum PreferSection {
   oneOnOneSection @map("1 on 1 section")
   groupWork       @map("group work")
   openToJobs      @map("open to jobs")
+}
+
+// here, we create a composite type that will contain the exams
+type ExamQuestions {
+  question String
+  answer   String
+  options  String[]
 }
