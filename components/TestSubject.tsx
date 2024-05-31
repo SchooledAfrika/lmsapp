@@ -45,7 +45,7 @@ const TestSubject = () => {
           </TableBody>
         </Table>
 
-        <div className="flex items-center gap-10 pl-[20px] my-[40px]">
+        <div className="flex items-center gap-10 pl-[20px] my-[20px] md:my-[40px]">
           <div>
             <p className="font-medium pb-4 text-[14px]">No of Questions</p>
             <span className="font-bold text-[14px]">10</span>
@@ -62,7 +62,7 @@ const TestSubject = () => {
           href={"/teacher-dashboard/test-and-resources/view-details"}
           className="ml-4"
         >
-          <Button className="bg-secondary text-white text-[12px] py-5 my-3 mr-0 md:mr-6">
+          <Button className="bg-secondary text-white text-[12px] py-3 mr-0 md:mr-6">
             View Test Details
           </Button>
         </Link>

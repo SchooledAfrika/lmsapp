@@ -148,7 +148,7 @@ const TestAndResources = () => {
               </div>
             </div>
           </div>
-          <div className="flex-3 bg-[#FFFFFF] rounded-[8px] p-5">
+          <div className="flex-3 bg-[#FFFFFF] h-[60vh] rounded-[8px] p-5">
             {showComponent ? <TestSubject /> : <TestResources />}
           </div>
         </div>
