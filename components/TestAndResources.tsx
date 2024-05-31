@@ -6,6 +6,9 @@ import { Button } from "./ui/button";
 import Image from "next/image";
 import TestSubject from "./TestSubject";
 import TestResources from "./TestResources";
+import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { GoDotFill } from "react-icons/go";
+import { TestUploadResource } from "./TestUploadResource";
 
 const TestAndResources = () => {
   const [showComponent, setShowComponent] = useState(true);
@@ -22,18 +25,38 @@ const TestAndResources = () => {
     <section>
       <Container>
         <div className="flex justify-end mb-2">
-          <Link href={"/school-dashboard/job-listing/new"}>
-            <Button className="bg-secondary text-white text-[14px] p-5 font-bold my-3 mr-0 md:mr-6">
-              <Image
-                src="/svgs/test-item.svg"
-                width={20}
-                height={20}
-                className="mr-2"
-                alt="New Item"
-              />
-              New Item
-            </Button>
-          </Link>
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button className="bg-secondary text-white text-[14px] p-5 font-bold my-3 mr-0 md:mr-6">
+                <Image
+                  src="/svgs/test-item.svg"
+                  width={20}
+                  height={20}
+                  className="mr-2"
+                  alt="New Item"
+                />
+                New Item
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-40">
+              <div className="grid gap-4 font-subtext">
+                <div className="grid gap-2">
+                  <div className="flex justify-start">
+                    <Link
+                      href={`/teacher-dashboard/test-and-resources/details`}
+                    >
+                      <p className="inline text-[12px] font-semibold">
+                        <GoDotFill className="inline ml-0 text-lightGreen" />
+                        Create New Test
+                      </p>
+                    </Link>
+                  </div>
+                  <hr className="bg-black" />
+                  <TestUploadResource />
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
         </div>
         <div className="block md:flex gap-4">
           <div className="flex-2 bg-[#FFFFFF] rounded-[8px]">
