@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Container from "./Container";
 import Link from "next/link";
 import Image from "next/image";
@@ -9,8 +9,14 @@ interface TestTypeProps {
 }
 
 const TestType: React.FC<TestTypeProps> = ({ onChangeComponent }) => {
+  const [selectedOption, setSelectedOption] = useState("");
+
   const handleTestPaper = () => {
     onChangeComponent("TestPaper");
+  };
+
+  const handleOptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSelectedOption(event.target.value);
   };
 
   return (
@@ -25,7 +31,7 @@ const TestType: React.FC<TestTypeProps> = ({ onChangeComponent }) => {
             <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />
           </Link>
         </div>
-        <div className="flex flex-col md:flex-row  mb-[50px]">
+        <div className="flex flex-col md:flex-row mb-[50px]">
           <div>
             <div className="flex gap-10">
               <span className="bg-[#359C71] px-[7px] rounded-full text-white">
@@ -71,7 +77,11 @@ const TestType: React.FC<TestTypeProps> = ({ onChangeComponent }) => {
                 <div className="text-end">
                   <input
                     className="w-4 h-4 px-2 accent-lightGreen"
-                    type="checkbox"
+                    type="radio"
+                    name="questionType"
+                    value="typeQuestion"
+                    checked={selectedOption === "typeQuestion"}
+                    onChange={handleOptionChange}
                   />
                 </div>
                 <div className="flex flex-col items-center">
@@ -79,7 +89,7 @@ const TestType: React.FC<TestTypeProps> = ({ onChangeComponent }) => {
                     src="/svgs/type-question.svg"
                     width={50}
                     height={50}
-                    alt="Type Questio"
+                    alt="Type Question"
                   />
                   <span className="font-bold text-[14px] pb-8 pt-6">
                     Type Question Paper
@@ -90,7 +100,11 @@ const TestType: React.FC<TestTypeProps> = ({ onChangeComponent }) => {
                 <div className="text-end">
                   <input
                     className="w-4 h-4 px-2 accent-lightGreen"
-                    type="checkbox"
+                    type="radio"
+                    name="questionType"
+                    value="uploadQuestion"
+                    checked={selectedOption === "uploadQuestion"}
+                    onChange={handleOptionChange}
                   />
                 </div>
                 <div className="flex flex-col items-center">
@@ -98,7 +112,7 @@ const TestType: React.FC<TestTypeProps> = ({ onChangeComponent }) => {
                     src="/svgs/upload-question.svg"
                     width={50}
                     height={50}
-                    alt="Type Questio"
+                    alt="Upload Question"
                   />
                   <span className="font-bold text-[14px] pb-8 pt-6">
                     Upload Question Paper
