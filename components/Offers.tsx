@@ -25,7 +25,7 @@ const Offers = () => {
           <h3 className="text-[18px] mt-3 font-bold">Expert tutoring</h3>
 
           <p className="mb-3 mt-1 text-[16px]">
-          We have a plethora of professional tutors who are dedicated to students' success.
+          We have a plethora of professional tutors who are dedicated to success of students.
           </p>
           
         </div>
@@ -42,7 +42,7 @@ const Offers = () => {
           </h3>
 
           <p className="mb-3 mt-1 text-[16px]">
-          Easy Access to a vast library of quiz and test videos that helps boost your child's confidence at their convenience.
+          Easy Access to a vast library of quiz and test videos that helps boost the confidence of your child at their convenience.
           </p>
           
         </div>
@@ -59,7 +59,7 @@ const Offers = () => {
           </h3>
 
           <p className="mb-3 mt-1 text-[16px]">
-          Monitor your child's progress and hire one on one tutors that suit your child's needs.
+          Monitor the progress of your child and hire one on one tutors that suit the needs of your child.
 
           </p>
           

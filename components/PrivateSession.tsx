@@ -17,7 +17,7 @@ const PrivateSession = () => {
 
           <p className="mt-4 max-w-full text-start text-md font-subtext font-[300px] sm:text-left">
           Virtual one on one classes with qualified tutors who are well trained and
-          readily available to help your child's academic needs.
+          readily available to help the academic needs of your child.
 
           </p>
 

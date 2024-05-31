@@ -16,7 +16,7 @@ const HomeworkSupport = () => {
           </p>
 
           <p className="mt-4 max-w-full text-start text-md font-subtext  sm:text-left">
-          Your child's after school work will be perfectly taken care of by
+          The after school work of your child will be perfectly taken care of by
           our tutors, giving them an upper edge in their conventional classes
           </p>
 

@@ -8,11 +8,7 @@ import { KycSuccess } from "./KycSuccess";
 
 
 const TakePicture: React.FC = () => {
- 
-
-
-
-  return (
+   return (
     <section className="py-[1rem] font-header md:pt-[3rem]">
       <Container>
       <div className="flex my-6 justify-between ml-[0] md:ml-[40px]">

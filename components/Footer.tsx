@@ -66,7 +66,7 @@ const Footer: React.FC = () => {
         <div className="w-full md:w-[35%]">
           <span className="font-bold">About Schooled Afrika</span>
           <p className="pt-2 text-[15px]">
-          At Schooled Afrika, we're committed to revolutionizing education by providing
+          At Schooled Afrika, we are committed to revolutionizing education by providing
           accessible and convenient online learning solutions. Our platform offers a range
           of features designed to support parents, teachers, and online schools in
           enhancing the learning experience for students of all ages.
