@@ -378,6 +378,8 @@ model Exams {
   grade     Grade
   createdAt DateTime        @default(now())
   updatedAt DateTime        @default(now())
+
+  @@index([teacherId], name: "teacher_exams")
 }
 
 // the model below shows the student exams
@@ -386,13 +388,18 @@ model Exams {
 model StudentExam {
   id               String          @id @default(auto()) @map("_id") @db.ObjectId
   completed        Boolean         @default(false)
-  score            Int
+  score            Int?
+  percentage       String?
   questions        ExamQuestions[]
+  title            String
+  grade            Grade
   // for one to many relationship between this model and appliedSection
   section          AppliedSection  @relation(fields: [appliedSectionId], references: [id])
   appliedSectionId String          @db.ObjectId
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @default(now())
+
+  @@index([appliedSectionId, completed], name: "section_exam_for_students")
 }
 
 // this is enum for grades
@@ -470,7 +477,8 @@ enum PreferSection {
 
 // here, we create a composite type that will contain the exams
 type ExamQuestions {
-  question String
-  answer   String
-  options  String[]
+  question      String
+  answer        String
+  studentAnswer String?
+  options       String[]
 }
