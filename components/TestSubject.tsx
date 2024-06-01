@@ -47,11 +47,13 @@ const TestSubject = () => {
 
         <div className="flex items-center gap-10 pl-[20px] my-[20px] md:my-[40px]">
           <div>
-            <p className="font-medium pb-4 text-[14px]">No of Questions</p>
+            <p className="font-medium pb-4 text-[12px] md:text-[14px]">
+              No of Questions
+            </p>
             <span className="font-bold text-[14px]">10</span>
           </div>
           <div>
-            <p className="font-medium pb-4 text-[14px]">
+            <p className="font-medium pb-4 text-[12px] md:text-[14px]">
               Highest Attainable Score
             </p>
             <span className="font-bold text-[14px]">10</span>

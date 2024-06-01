@@ -19,7 +19,7 @@ const ViewAllQuestions = () => {
       </div>
 
       <div className="flex flex-col md:flex-row gap-6 mb-[50px]">
-        <div className="flex-4 px-8 py-5 bg-[#FFFFFF] w-full h-[30%] md:h-[100vh] overflow-y-auto">
+        <div className="flex-4 px-8 py-5 bg-[#FFFFFF] w-full h-[100vh] md:h-[80vh] overflow-y-scroll scrollbar-hide">
           <span className="font-bold ">All Questions</span>
           <div className="shadow-lg mt-3 ">
             <div className="flex flex-col bg-[#FFFFFF] p-5">
@@ -78,7 +78,7 @@ const ViewAllQuestions = () => {
           </div>
         </div>
 
-        <div className="flex-4 px-8 py-5 bg-[#FFFFFF] rounded-[8px] h-[50vh]">
+        <div className="flex-4 px-8 py-5 bg-[#FFFFFF] rounded-[8px] h-[60vh]">
           <div className="flex items-center pt-3 pb-2 gap-3 ">
             <Image
               src="/svgs/calculate.svg"
