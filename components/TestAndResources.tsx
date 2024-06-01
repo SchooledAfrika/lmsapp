@@ -78,7 +78,7 @@ const TestAndResources = () => {
                 />
                 <span className="font-bold text-[14px]">Mathematics</span>
               </div>
-              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[60px]">
+              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
                 <span>April 22, 2024.</span>
                 <span>12:09PM</span>
                 <span>25 Minutes</span>
@@ -99,7 +99,7 @@ const TestAndResources = () => {
                   docs.google.com/History of Economics/...
                 </span>
               </div>
-              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[60px]">
+              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
                 <span>April 22, 2024.</span>
                 <span>12:09PM</span>
                 <span>25 Minutes</span>
@@ -122,7 +122,7 @@ const TestAndResources = () => {
                   How Europe underdeveloped Africa
                 </span>
               </div>
-              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[60px]">
+              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
                 <span>April 22, 2024.</span>
                 <span>12:09PM</span>
                 <span>25 Minutes</span>
@@ -141,14 +141,14 @@ const TestAndResources = () => {
                 />
                 <span className="font-bold text-[14px]">Mathematics</span>
               </div>
-              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[60px]">
+              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
                 <span>April 22, 2024.</span>
                 <span>12:09PM</span>
                 <span>25 Minutes</span>
               </div>
             </div>
           </div>
-          <div className="flex-3 bg-[#FFFFFF] h-[60vh] rounded-[8px] p-5">
+          <div className="flex-3 bg-[#FFFFFF] h-[70vh] rounded-[8px] p-5">
             {showComponent ? <TestSubject /> : <TestResources />}
           </div>
         </div>

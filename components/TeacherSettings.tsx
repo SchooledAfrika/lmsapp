@@ -1,15 +1,15 @@
 import React from "react";
-import { Button } from "./button";
 import Link from "next/link";
 import Image from "next/image";
+import { Button } from "./ui/button";
 
-const Settings = () => {
+const TeacherSettings = () => {
   return (
-    <section className="flex flex-col md:flex-row mt-6 gap-4">
+    <section className="flex flex-col md:flex-row mt-[100px] md:mt-[30px] gap-4">
       <div className="flex-5 bg-[#FFFFFF] rounded-[5px] p-5 h-[100vh] overflow-y-scroll scrollbar-hide">
         <hr className="my-4" />
         <form>
-          <label className="font-bold text-[#9F9F9F]">
+          <label className="font-bold text-[14px] text-[#9F9F9F]">
             Personal Information
           </label>
           <br />
@@ -32,7 +32,7 @@ const Settings = () => {
             placeholder="Email Address"
           />
           <hr className="my-4" />
-          <label className="font-bold text-[#9F9F9F] my-4">
+          <label className="font-bold text-[14px] text-[#9F9F9F] my-4">
             Address Details
           </label>
           <input
@@ -41,39 +41,7 @@ const Settings = () => {
             placeholder="Permanent House Address"
           />
           <hr className="my-4" />
-          <label className="font-bold text-[#9F9F9F]">School Details</label>
-          <input
-            type="text"
-            className="outline-none p-3 my-4 rounded-[5px] border-2 w-full"
-            placeholder="School or Institute Name"
-          />
-          <input
-            type="text"
-            className="outline-none p-3 mb-4 rounded-[5px] border-2 w-full"
-            placeholder="School or Institute Address"
-          />
         </form>
-        <div className="flex flex-col justify-center border-2 my-3 p-8 outline-none rounded-[8px] w-full bg-white">
-          <Link href="/">
-            <Image
-              src="/imageIcon.png"
-              alt="logo"
-              width={60}
-              height={60}
-              className="mx-auto"
-            />
-          </Link>
-          <input
-            className="flex w-1/2 my-3 cursor-pointer mx-auto justify-center items-center"
-            type="file"
-          />
-          <p className="py-4 text-center">School or Institute Cover</p>
-          <p className="flex items-center justify-center gap-2 text-[12px]">
-            <Image src="/svgs/error.svg" alt="error" width={15} height={15} />
-            Note that the cover is visible as a banner to everyone.
-          </p>
-        </div>
-        <hr className="my-4" />
         <div className="flex flex-col justify-center outline-none rounded-[8px] w-full">
           <p className="font-bold text-[14px] text-[#9F9F9F] mb-4">
             Subscription Plan
@@ -127,35 +95,42 @@ const Settings = () => {
         </div>
       </div>
       <div className="flex-4 rounded-[5px]">
-        <div className="block md:flex items-center gap-4 bg-[#FFFFFF] p-6 h-[40vh] md:h-[30vh] rounded-[5px]">
-          <Image
-            src="/schoolpic.png"
-            width={200}
-            height={50}
-            className="h-[20vh]"
-            alt="School Image"
-          />
-          <div>
-            <span className="font-bold flex items-center my-4 gap-2 text-[14px]">
+        <div>
+          <form className="h-[55%] bg-[#FFFFFF] rounded-[5px] p-4">
+            <hr className="my-4" />
+            <div className="flex justify-between">
+              <label className="font-bold text-[#9F9F9F]">
+                Banking Information
+              </label>
               <Image
-                src="/svgs/schoollogo.svg"
-                width={15}
-                height={15}
-                alt="School Logo"
+                src="/svgs/colored-lock.svg"
+                width={20}
+                height={20}
+                alt="Lock"
               />
-              Brilliant Stars College
-            </span>
-            <span className="flex items-center gap-2 text-[12px]">
-              <Image
-                src="/svgs/location.svg"
-                width={15}
-                height={15}
-                alt="School Logo"
-              />
-              No 18, Westpoint Avenue, Mid-land, Birmingham, United Kingdom.
-            </span>
-          </div>
+            </div>
+            <input
+              type="text"
+              className="outline-none p-3 my-4 rounded-[5px] border-2 w-full"
+              placeholder="Bank Name"
+            />
+            <input
+              type="text"
+              className="outline-none p-3 mb-4 rounded-[5px] border-2 w-full"
+              placeholder="Account Number"
+            />
+            <input
+              type="text"
+              className="outline-none p-3 mb-4 rounded-[5px] border-2 w-full"
+              placeholder="Account Name"
+            />
+            <p className="text-[#359C71] text-center text-[12px]">
+              Contact <span className="font-bold">Support</span> to Change Your
+              Banking Information
+            </p>
+          </form>
         </div>
+
         <div>
           <form className="h-[55%] bg-[#FFFFFF] rounded-[5px] p-4 my-4">
             <hr className="my-4" />
@@ -187,4 +162,4 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default TeacherSettings;

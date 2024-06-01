@@ -52,7 +52,7 @@ const TestPaper: React.FC<TestPaperProps> = ({ onChangeComponent }) => {
         <div className="flex justify-between items-center mb-5">
           <span className="font-bold">Details</span>
           <Link
-            href="/teacher-dashboard/test-and-resources/details"
+            href="/teacher-dashboard/test-and-resources"
             className="cursor-pointer"
           >
             <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />

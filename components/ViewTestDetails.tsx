@@ -26,15 +26,17 @@ const ViewTestDetails: React.FC<ViewTestDetailsProps> = ({ onClickChange }) => {
           </Link>
         </div>
         <div className="flex flex-col md:flex-row gap-8 mb-[50px]">
-          <div className="flex-4 px-8 py-5 bg-[#FFFFFF]">
-            <div className="flex justify-between items-center">
-              <span className="font-bold">Test Overview</span>
+          <div className="flex-4 px-4 py-5 bg-[#FFFFFF]">
+            <div className="flex flex-col md:flex-row justify-between">
+              <span className="font-bold pb-[10px] text-center">
+                Test Overview
+              </span>
               <Button className="bg-transparent text-[#359C71] font-bold border border-[#359C71]">
                 Assign to Student
               </Button>
             </div>
-            <div className="flex justify-between my-8">
-              <div className="flex flex-col gap-4 items-center">
+            <div className="flex flex-col md:flex-row gap-2 justify-between my-8">
+              <div className="flex flex-col gap-2 md:gap-4 items-center">
                 <p className="text-[14px] font-medium">No. of Students</p>
                 <span className="text-[12px] font-bold">5</span>
               </div>
@@ -51,7 +53,7 @@ const ViewTestDetails: React.FC<ViewTestDetailsProps> = ({ onClickChange }) => {
               <span className="font-bold">Test Questions</span>
               <div className="shadow-lg mt-5">
                 <div className="flex flex-col bg-[#FFFFFF] p-5">
-                  <label className="font-bold">Question 2</label>
+                  <label className="font-bold">Question 1</label>
                   <input
                     type="text"
                     name="question"
