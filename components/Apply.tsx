@@ -23,7 +23,7 @@ interface Props {
 
 const ApplyCard = ({ title, result }: Props) => {
   return (
-    <div className="md:w-[180px] w-full text-white my-3  font-subtext rounded-lg md:ml-16 ml-6  py-3 px-3 md:p-3 flex flex-col justify-center gap-3">
+    <div className="md:w-[180px] w-full text-white  text-center my-3  font-subtext rounded-lg md:ml-16 ml-6  py-3 px-3 md:p-3 flex flex-col justify-center gap-3">
       <div>
         <h2 className="text-base  tracking-wide">{title}</h2>
         <p className="md:text-[30px] text-lg mt-3">{result}</p>
@@ -44,18 +44,17 @@ const Apply = () => {
             width={200}
             height={200}
           />
-          <div className="flex flex-col z-10 opacity-100 absolute md:top-[100px] top-8 md:left-[40px] left-4 justify-between">
+          <div className="flex flex-col z-10 opacity-100 absolute md:top-[200px]  top-8 md:left-[40px] left-4 justify-between">
             <p className="font-bold w-[144px]  font-header h-[28px] text-dimYellow">
               Join us today
             </p>
             <h3 className="md:text-[40px] md:leading-[42px] text-xl w-[300px] md:w-[668px] font-bold font-subtext">
-              Lorem ipsum dolor sit amet, consectutuer adipsig elit.
+            Be a smart teacher, Enjoy what you do and earn in six figures!
             </h3>
             <p className="w-[300px] md:w-[668px] font-subtext md:font-[300px] mt-3 leading-[20px] md:leading-[32px]">
               {" "}
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-              interdum sapien, id aliquam ligula. Maecenas eget neque id ligula
-              egestas blandit. Suspendisse potenti. 
+              With schooledAfrika, you have access to students who are ready to dive into your world of
+              knowledge, right in the comfort of your home at your own scheduled time
             </p>
 
             <Button
@@ -91,8 +90,9 @@ const Apply = () => {
             </h3>
 
             <p className="my-4 text-base">
-              Publish the subject you want, in the way you want, and always have
-              control of your own lessons.
+            Work at your time and pace. You can work anytime and anywhere, fix
+            your target teaching hours per day and work from your comfort zone.
+
             </p>
           </div>
           <div className="text-center">
@@ -108,8 +108,8 @@ const Apply = () => {
             </h3>
 
             <p className="my-4 text-base">
-              Expand your professional network, build your expertise, and earn
-              money on each paid enrollment.
+            Earn in six figures. Your earnings can be better. Get good pay as a
+            teacher.
             </p>
           </div>
           <div className="text-center">
@@ -125,13 +125,14 @@ const Apply = () => {
             </h3>
 
             <p className="my-4 text-base">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-              interdum sapien, id aliquam ligula.
+            Grow professionally. We help you grow as you stay with us, you
+            have access to professional courses that will sharpen your teaching skills and help you
+            take more grounds around the world
             </p>
           </div>
         </section>
       </Container>
-      <div className="grid mx-auto  grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 overflow-hidden bg-lightGreen md:grid-cols-5 items-center lg:grid-cols-5 xl:grid-cols-5  mt-3 lgl:px-10">
+      <div className="grid mx-auto py-3 shadow-md rounded-md  grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 overflow-hidden bg-lightGreen md:grid-cols-5 items-center lg:grid-cols-5 xl:grid-cols-5  mt-3 lgl:px-10">
         {Applies.map((apply, index) => (
           <ApplyCard key={apply.id} {...apply} index={index} />
         ))}
@@ -155,22 +156,20 @@ const Apply = () => {
             <div>
               <h3 className="font-bold text-xl mb-2">Complete Registration</h3>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-                interdum sapien, id aliquam ligula.{" "}
+              Provide your details and answer all questions correctly{" "}
               </p>
             </div>
             <div>
               <h3 className="font-bold text-xl mb-2">Create your Subjects</h3>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-                interdum sapien, id aliquam ligula.{" "}
+              Set your preferred time and subject and be ready to dive into the world of possibilities.{" "}
               </p>
             </div>
             <div>
               <h3 className="font-bold text-xl mb-2">Teach and Get Paid</h3>
               <p>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac
-                interdum sapien, id aliquam ligula.{" "}
+              Get connected with students from any part of the world. Do what you love best and get paid
+              doing it. Enjoy !{" "}
               </p>
             </div>
           </div>
@@ -203,13 +202,8 @@ const Apply = () => {
                 <FaQuoteLeft />
               </div>
               <p>
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-                commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-                penatibus et magnis dis parturient montes, nascetur ridiculus
-                mus. Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-                natoque penatibus et magnis dis parturient montes, nascetur
-                ridiculus mus.
+              Bukola Aleriwa Idowu is a seasoned teacher who believes that the possibilities and
+              advantages of technology can help teachers, school and students learn, grow and earn. 
               </p>
               <p className="text-lightGreen text-lg font-semibold my-3">Mrs Bukola</p>
               <p>Founder, SchooledAfrika</p>
@@ -244,35 +238,39 @@ const Apply = () => {
   
   <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> How Much Can I Make From SchooledAfrika?</AccordionTrigger>
     <AccordionContent>
-    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+    You can earn six figures in two weeks depending on your periods per day
     </AccordionContent>
   </AccordionItem>
   <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-1">
   
-  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> How Much Can I Make From SchooledAfrika?</AccordionTrigger>
+  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> How many periods can I have per day?</AccordionTrigger>
     <AccordionContent>
-    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+    This totally depends on your availability and strength .
     </AccordionContent>
   </AccordionItem>
   <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-1">
   
-  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> How Much Can I Make From SchooledAfrika?</AccordionTrigger>
+  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> What do i need to be a teacher with schooled Afrika?</AccordionTrigger>
     <AccordionContent>
-    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+    Teaching experience
+Good teaching skills
+Good internet connection
+A good phone or laptop
     </AccordionContent>
   </AccordionItem>
   <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-1">
   
-  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> How Much Can I Make From SchooledAfrika?</AccordionTrigger>
+  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> When do I get paid?</AccordionTrigger>
     <AccordionContent>
-    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+    Every mid Month and end of the month.
+
     </AccordionContent>
   </AccordionItem>
   <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-1">
   
-  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> How Much Can I Make From SchooledAfrika?</AccordionTrigger>
+  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> Will I be invited for an interview before I am accepted?</AccordionTrigger>
     <AccordionContent>
-    Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+   Yes!
     </AccordionContent>
   </AccordionItem>
 </Accordion>

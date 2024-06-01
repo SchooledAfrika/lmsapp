@@ -24,7 +24,7 @@ const PageNav = () => {
  
   return (
    
-       <Pagination className="font-subtext bg-white w-[60%] mb-6 rounded-xl py-3">
+       <Pagination className="font-subtext  w-[60%] mb-6 rounded-xl py-3">
         <PaginationContent>
           <PaginationItem>
             <PaginationPrevious 

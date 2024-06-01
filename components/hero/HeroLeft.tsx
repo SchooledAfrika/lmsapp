@@ -21,15 +21,14 @@ const HeroLeft = () => {
       </div>
       <div>
         <p className=" text-black text-3xl font-bold">
-          Get the best Education & secure a{" "}
-          <span className=" text-green-600">Better Future</span> for your kids
+        Best choice for{" "}
+          <span className=" text-green-600">online</span> classes.
         </p>
       </div>
       <div>
         <p>
-          Empower your childs journey with our comprehensive education solution,
-          noturing their potential every step of the way, Together lets build a
-          foundation for lifelong success
+        Let's be a part of your child's academic success, empower them with the best tools for a great
+        future, build their confidence,and encourage learning in a seamless and convenient way.
         </p>
       </div>
       <div>

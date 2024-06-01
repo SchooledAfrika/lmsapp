@@ -24,7 +24,7 @@ const JobDescription: React.FC<JobDescriptionProps> = ({
             <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />
           </Link>
         </div>
-        <div className="flex flex-col md:flex-row  mb-[50px]">
+        <div >
           <div>
             <div className="flex gap-10">
               <span className="bg-[#359C71] px-[7px] rounded-full text-white">
