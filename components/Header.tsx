@@ -8,13 +8,13 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 const navLinks = [
-  {name: "Find Tutors", href: "/find-tutors"},
-  {name: "Classes", href: "/find-classes"},
-  {name: "Apply to teach", href: "/apply-to-teach"},
-  {name: "Vacancies", href: "/vacancies"},
-  
-  {name: "Contact Us", href: "/contact"},
-]
+  { name: "Find Tutors", href: "/find-tutors" },
+  { name: "Classes", href: "/find-classes" },
+  { name: "Apply to teach", href: "/apply-to-teach" },
+  { name: "Vacancies", href: "/vacancies" },
+
+  { name: "Contact Us", href: "/contact" },
+];
 
 const Header = () => {
   const [menu, setMenu] = useState(false);
@@ -22,42 +22,42 @@ const Header = () => {
     setMenu(!menu);
   };
   const pathname = usePathname();
- 
-
- 
 
   return (
     <div className=" bg-white h-[75px] sticky md:top-0 font-subtext border-b-2 font-semibold    md:shadow-none z-50 ">
       {/* DESKTOP */}
       <div className=" hidden lg:block p-4 ">
-
         <div className="flex justify-between items-center">
           <Link href="/">
-          <div>
-            <Image
-              src={"/logo.png"}
-              alt="logo"
-              width={100}
-              height={100}
-              className="w-[100px] mb-2 overflow-hidden ml-10 "
-            />
-          </div>
+            <div>
+              <Image
+                src={"/logo.png"}
+                alt="logo"
+                width={100}
+                height={100}
+                priority={true}
+                className="w-[100px] mb-2 overflow-hidden ml-10 "
+              />
+            </div>
           </Link>
-          
+
           <div className="flex gap-[20px] font-header xl:gap-[50px] text-[14px] space-x-6  items-center select-none">
-            {navLinks.map((link)=> {
-               const isActive = pathname.startsWith(link.href)
-              return(
-                <Link href={link.href} key={link.name}
-                  className={isActive ? "font-bold border-b-2 leading-[57px]  border-lightGreen" : "font-semibold leading-[20px]"}
-                
+            {navLinks.map((link) => {
+              const isActive = pathname.startsWith(link.href);
+              return (
+                <Link
+                  href={link.href}
+                  key={link.name}
+                  className={
+                    isActive
+                      ? "font-bold border-b-2 leading-[57px]  border-lightGreen"
+                      : "font-semibold leading-[20px]"
+                  }
                 >
                   {link.name}
                 </Link>
-              )
-
+              );
             })}
-            
           </div>
 
           <div className="flex items-center leading-[20px] mr-8 gap-4">
@@ -86,15 +86,14 @@ const Header = () => {
         <div className="flex justify-between  mx-[10px]">
           <div className="flex gap-[50px] text-[16px] items-center select-none">
             <Link href="/">
-            <Image
-              src={"/logo.png"}
-              alt="logo"
-              width={100}
-              height={100}
-              className="w-[100px] "
-            />
+              <Image
+                src={"/logo.png"}
+                alt="logo"
+                width={100}
+                height={100}
+                className="w-[100px] "
+              />
             </Link>
-            
           </div>
           <div className="flex items-center gap-[40px]">
             {menu ? (
@@ -145,7 +144,6 @@ const Header = () => {
         )}
       </div>
     </div>
-    
   );
 };
 
