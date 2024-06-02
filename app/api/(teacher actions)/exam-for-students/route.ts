@@ -32,6 +32,9 @@ export async function POST(req: Request) {
         grade: exam.grade,
       },
     });
+    return new Response(
+      JSON.stringify({ message: "exam successfully created" })
+    );
   } catch (error) {
     throw new Error(JSON.stringify({ message: "something went wrong" }));
   }

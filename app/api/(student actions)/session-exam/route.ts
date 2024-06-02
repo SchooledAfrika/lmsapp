@@ -9,13 +9,24 @@ export async function PUT(req: Request) {
   // TODO: change this studentId to nextauth id
   const { studentId, studentExamId, answeredTest } = await req.json();
   if (!studentId) return notAuthenticated();
+  // here, lets fetch the studentExam and know if the exam was complated before
+  // we will return an error if it is completed already
+  const checkExamStatus = await prisma.studentExam.findUnique({
+    where: { id: studentExamId },
+    select: { completed: true },
+  });
+  if (checkExamStatus?.completed)
+    return new Response(
+      JSON.stringify({ message: "this exam has been completed already" }),
+      { status: 404 }
+    );
   // continue here to calculate the total score of the test written
   //   first, we will map the answered test and return the total number that was answered correctly
-  const correctAnswer = answeredTest.map(
+  const correctAnswer = answeredTest.filter(
     (item: IexamType) => item.answer === item.studentAnswer
   );
   const getPercent = (correctAnswer.length / answeredTest.length) * 100;
-  const percentage = getPercent.toFixed(2).toString();
+  const percentage = getPercent.toFixed(2).toString().concat("%");
   // now, lets update the studentExam now
   try {
     await prisma.studentExam.update({
