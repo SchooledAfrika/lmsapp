@@ -3,7 +3,7 @@ import SchoolAccout from "@/components/SchoolAccount";
 
 const page = () => {
   return (
-    <div className="bg-[#F8F7F4]">
+    <div>
       <SchoolAccout />
     </div>
   );
