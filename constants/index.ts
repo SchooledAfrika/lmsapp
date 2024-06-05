@@ -36,7 +36,7 @@ export const subjects = [
   {
     id: "subject-4",
     icon: "/fmass.png",
-    title: "Further Mathematics",
+    title: "Further Maths",
     tutorNum: "53 Tutors",
     duration: "73+ Hours",
     rating: "⭐ 4.6/5",

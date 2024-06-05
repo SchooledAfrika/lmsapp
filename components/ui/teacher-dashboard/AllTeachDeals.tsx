@@ -12,7 +12,7 @@ const AllTeachDeals = () => {
         <MultipleClassTable/>
 
       </div>
-       <div className='flex md:mb-0 mb-6 py-6 px-3 rounded-md  bg-white flex-3'>
+       <div className='flex md:mb-0 mb-6 py-3 px-3 rounded-md   bg-white flex-3'>
        <div className='w-full'>
         <h3 className='text-slate-600 font-bold'>Class Details</h3>
         <div className='flex justify-between  mt-4'>
