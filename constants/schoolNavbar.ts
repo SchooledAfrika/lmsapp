@@ -118,3 +118,121 @@ export const TeacherNavbar: SchoolNavType[] = [
     path: "finance",
   },
 ];
+export const StudentNavbar: SchoolNavType[] = [
+  {
+    title: "Welcome to Your Dashboard",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "overview",
+  },
+  {
+    title: "Classroom",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "classroom",
+    subDetails: {
+      title: " Single class here",
+      description: " this is for single class path",
+    },
+  },
+  {
+    title: "Teachers",
+    description: "Organize your teachers and review their data",
+    path: "teachers",
+    subDetails: {
+      title: " Single teacher here",
+      description: " this is for single teacher path",
+    },
+  },
+  {
+    title: "Students",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "students",
+    subDetails: {
+      title: " Single student here",
+      description: " this is for single student path",
+    },
+  },
+  {
+    title: "1 on 1 Sections",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "one-on-one-section",
+    subDetails: {
+      title: " Single 1-on-1 section details",
+      description: " this is for single 1-on-1 section path",
+    },
+  },
+  {
+    title: "Calendar",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "calender",
+  },
+  {
+    title: "Test & Resources",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "test-and-resources",
+  },
+  {
+    title: "Settings",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "setting",
+  },
+  {
+    title: "Courses",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "courses",
+  },
+  {
+    title: "Transactions",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "transactions",
+  },
+];
+export const ParentsNavbar: SchoolNavType[] = [
+  {
+    title: "Welcome to Your Dashboard",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "overview",
+  },
+  {
+    title: "Sessions",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "sessions",
+    subDetails: {
+      title: " Single class here",
+      description: " this is for single class path",
+    },
+  },
+  {
+    title: "Teachers",
+    description: "Organize your teachers and review their data",
+    path: "teachers",
+    subDetails: {
+      title: " Single teacher here",
+      description: " this is for single teacher path",
+    },
+  },
+  {
+    title: "Assessments",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "assessment",
+    subDetails: {
+      title: " Single student here",
+      description: " this is for single student path",
+    },
+  },
+
+  {
+    title: "Calendar",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "calender",
+  },
+  {
+    title: "Courses",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "courses",
+  },
+  {
+    title: "Transactions",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    path: "transactions",
+  },
+];

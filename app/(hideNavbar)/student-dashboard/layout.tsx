@@ -21,13 +21,11 @@ export default function RootLayout({
       <CommonDashboardContext>
         <main className="bg-stone-100 flex flex-col sm:flex-row font-header">
           <div className=" hidden sm:block sm:flex-4 md:flex-2 font-semibold  px-6 py-10 bg-white h-screen sticky top-0 overflow-auto scrollbar-hide">
-            <Sidebar dashboard="school" />
+            <Sidebar dashboard="student" />
           </div>
           <div className=" sm:flex-10 md:flex-12 h-full md:px-8 px-4">
-            {/* this component below serves the purpose of the pricing model */}
-            <PricingLayout />
-            <MobileSideBar dashboard="school" />
-            <Navbar dashboard="school" />
+            <MobileSideBar dashboard="student" />
+            <Navbar dashboard="student" />
             <MobileNav />
             {children}
           </div>
