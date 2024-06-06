@@ -15,7 +15,6 @@ import {
 } from "@/components/Sidebars/allSIdebar";
 
 const Sidebar = ({ dashboard }: { dashboard: string }) => {
-  console.log(dashboard);
   const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
   // manipulating the path values
   const path = usePathname().split("/");
