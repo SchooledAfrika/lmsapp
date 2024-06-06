@@ -4,6 +4,8 @@ import {
   SchoolNavType,
   Subtype,
   TeacherNavbar,
+  StudentNavbar,
+  ParentsNavbar,
 } from "@/constants/schoolNavbar";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -20,21 +22,33 @@ const Navbar = ({ dashboard }: { dashboard: string }) => {
         const getOneItem =
           dashboard === "school"
             ? SchoolNavbar.find((item) => item.path === "overview")
-            : TeacherNavbar.find((item) => item.path === "overview");
+            : dashboard === "teacher"
+            ? TeacherNavbar.find((item) => item.path === "overview")
+            : dashboard === "student"
+            ? StudentNavbar.find((item) => item.path === "overview")
+            : ParentsNavbar.find((item) => item.path === "overview");
         return setPresent(getOneItem);
       } else if (path.length === 3) {
         const currentPathString = path[2];
         const getOneItem =
           dashboard === "school"
             ? SchoolNavbar.find((item) => item.path === currentPathString)
-            : TeacherNavbar.find((item) => item.path === currentPathString);
+            : dashboard === "teacher"
+            ? TeacherNavbar.find((item) => item.path === currentPathString)
+            : dashboard === "student"
+            ? StudentNavbar.find((item) => item.path === currentPathString)
+            : ParentsNavbar.find((item) => item.path === currentPathString);
         return setPresent(getOneItem);
       } else {
         const currentPathString = path[2];
         const getOneItem =
           dashboard === "school"
             ? SchoolNavbar.find((item) => item.path === currentPathString)
-            : TeacherNavbar.find((item) => item.path === currentPathString);
+            : dashboard === "teacher"
+            ? TeacherNavbar.find((item) => item.path === currentPathString)
+            : dashboard === "student"
+            ? StudentNavbar.find((item) => item.path === currentPathString)
+            : ParentsNavbar.find((item) => item.path === currentPathString);
         return setPresent(getOneItem?.subDetails);
       }
     };
