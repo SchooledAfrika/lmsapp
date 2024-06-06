@@ -1,3 +1,5 @@
+import { isContext } from "vm";
+
 export const navData = [
   { _id: 101, title: "Find Tutors", href: "/find-tutors" },
   { _id: 102, title: "Classes", href: "/classes" },
@@ -34,7 +36,7 @@ export const subjects = [
   {
     id: "subject-4",
     icon: "/fmass.png",
-    title: "Further Mathematics",
+    title: "Further Maths",
     tutorNum: "53 Tutors",
     duration: "73+ Hours",
     rating: "⭐ 4.6/5",
@@ -247,3 +249,57 @@ export const feedbacks = [
     name: "Promise Bamigboye",
   },
 ];
+
+export const PopularCourses = [
+  {
+    id: "course-1",
+    icon: "/course-1.png",
+    classes: "Model 1",
+    subject: "Introduction to SchooledAfrika",
+    plan: "Basic Plan",
+    pricingFree: "Free",
+
+    
+  },
+  {
+    id: "course-2",
+    icon: "/course-1.png",
+    classes: "Model 1", 
+    subject: "Element of SchooledAfrika",
+    plan: "Premium",
+    pricing: "Locked",
+  },
+  {
+    id: "course-3",
+    icon: "/course-1.png",
+    classes: "Model 1",
+    subject: "Getting Acquainted with live lessons",
+    plan: "Premium",
+    pricing: "Locked",
+  },
+  {
+    id: "course-4",
+    icon: "/course-1.png",
+    classes: "Model 1",
+    subject: "Introduction to SchooledAfrika",
+    plan: "Premium",
+    pricing: "Locked",
+  },
+  {
+    id: "course-5",
+    icon: "/course-1.png",
+    classes: "Model 1",
+    subject: "Introduction to SchooledAfrika",
+    plan: "Premium",
+    pricing: "Locked",
+  },
+  {
+    id: "course-6",
+    icon: "/course-1.png",
+    classes: "Model 1",
+    subject: "Introduction to SchooledAfrika",
+    plan: "Premium",
+    pricing: "Locked",
+  },
+];
+

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Container from "@/components/Container";
 import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -83,7 +82,7 @@ const SchoolPersonalInfo: React.FC = () => {
                 />
               )}
               Accept Schooled Afrika{" "}
-              <Link href={"/"} className="underline text-[#359C71]">
+              <Link href={"/school-terms-and-conditions"} className="underline text-[#359C71]">
                 Terms & Condition
               </Link>
             </div>

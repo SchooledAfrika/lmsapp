@@ -53,7 +53,7 @@ const Footer: React.FC = () => {
           <div>
             <Image src={Logo} alt="logo" className="w-[100px]  mb-4 " />
           </div>
-          <div className=" flex gap-[20px]  xl:gap-[50px] text-[16.5px] space-x-6 md:justify-center   items-center select-none">
+          <div className=" flex gap-[20px]  xl:gap-[50px] text-[14px] space-x-6 md:justify-center   items-center select-none">
             <Link href="/find-tutors">Find Tutors</Link>
             <Link href="/classes">Classes</Link>
             <Link href="/apply-to-teach">Apply to teach </Link>
@@ -65,7 +65,7 @@ const Footer: React.FC = () => {
       <div className="block md:flex items-center justify-between px-[20px]">
         <div className="w-full md:w-[35%]">
           <span className="font-bold">About Schooled Afrika</span>
-          <p className="pt-2 text-[15px]">
+          <p className="pt-2 text-[13px]">
           At Schooled Afrika, we are committed to revolutionizing education by providing
           accessible and convenient online learning solutions. Our platform offers a range
           of features designed to support parents, teachers, and online schools in
@@ -119,12 +119,10 @@ const Footer: React.FC = () => {
           Reserved.
         </span>
         <div className="block md:flex gap-5">
-          <Link href="/">
+          <Link href="/privacy-policy">
             <p>Privacy Policy</p>
           </Link>
-          <Link href="/">
-            <p>Terms & Conditions</p>
-          </Link>
+          
         </div>
       </div>
       </div>
@@ -163,12 +161,10 @@ const Footer: React.FC = () => {
       
        
          <div className="flex flex-col  my-4 min-w-[150px]">
-         <Link href="/">
+         <Link href="/privacy-policy">
             <p className="leading-[28px]">Privacy Policy</p>
           </Link>
-          <Link href="/">
-            <p className="leading-[28px]">Terms & Conditions</p>
-          </Link>
+          
 
          </div>
         

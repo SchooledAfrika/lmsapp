@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import Career from "@/images/careers.png";
 import { RegisterType } from "@/constants/registerType";
-import Footer from "./Footer";
 import { Button } from "./ui/button";
 import Header from "./Header";
 
@@ -119,7 +118,7 @@ const Register = () => {
           </Link>
         </div>
       </div>
-      <Footer />
+     
     </div>
   );
 };
