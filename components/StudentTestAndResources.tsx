@@ -1,74 +1,41 @@
-"use client";
-import React, { useState } from "react";
+import React from "react";
 import Container from "./Container";
-import Link from "next/link";
-import { Button } from "./ui/button";
 import Image from "next/image";
-import TestSubject from "./TestSubject";
-import TestResources from "./TestResources";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import { GoDotFill } from "react-icons/go";
-import { TestUploadResource } from "./TestUploadResource";
+import StudentTestSubject from "./StudentTestSubject";
 
-const TestAndResources = () => {
-  const [showComponent, setShowComponent] = useState(true);
-
-  const handleTestComponent = () => {
-    setShowComponent(true);
-  };
-
-  const handleResourceComponent = () => {
-    setShowComponent(false);
-  };
-
+const StudentTestAndResources = () => {
   return (
     <section>
       <Container>
-        <div className="flex justify-end mb-2">
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button className="bg-secondary text-white text-[14px] p-5 font-bold my-3 mr-0 md:mr-6">
-                <Image
-                  src="/svgs/test-item.svg"
-                  width={20}
-                  height={20}
-                  className="mr-2"
-                  alt="New Item"
-                />
-                New Item
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-40">
-              <div className="grid gap-4 font-subtext">
-                <div className="grid gap-2">
-                  <div className="flex justify-start">
-                    <Link
-                      href={`/teacher-dashboard/test-and-resources/details`}
-                    >
-                      <p className="inline text-[12px] font-semibold">
-                        <GoDotFill className="inline ml-0 text-lightGreen" />
-                        Create New Test
-                      </p>
-                    </Link>
-                  </div>
-                  <hr className="bg-black" />
-                  <TestUploadResource />
-                </div>
-              </div>
-            </PopoverContent>
-          </Popover>
+        <div className="flex overflow-auto my-6 justify-end items-center font-header font-semibold text-[13px]">
+          <div className="flex ">
+            <input
+              type="checkbox"
+              className="accent-lightGreen text-white mr-1"
+            />
+            <p className="mr-3">All Status</p>
+          </div>
+          <div className="flex ">
+            <input
+              type="checkbox"
+              className="accent-lightGreen text-white mr-1"
+            />
+            <p className="mr-3">Newer</p>
+          </div>
+          <div className="flex ">
+            <input
+              type="checkbox"
+              className="accent-lightGreen text-white mr-1"
+            />
+            <p className="mr-3">Older</p>
+          </div>
         </div>
         <div className="block md:flex gap-4">
           <div className="flex-2 bg-[#FFFFFF] rounded-[8px]">
             <p className="font-bold text-[12px] px-5 pt-8 pb-3 text-gray-400">
               Test
             </p>
-            <div
-              onClick={handleTestComponent}
-              className={`cursor-pointer ${
-                showComponent ? "bg-[#359C7133]" : ""
-              }`}
-            >
+            <div className="bg-[#359C7133]">
               <div className="flex items-center px-5 pt-3 pb-2 gap-3 ">
                 <Image
                   src="/svgs/calculate.svg"
@@ -105,12 +72,7 @@ const TestAndResources = () => {
                 <span>25 Minutes</span>
               </div>
             </div>
-            <div
-              onClick={handleResourceComponent}
-              className={`cursor-pointer my-3 ${
-                showComponent ? "" : "bg-orange-100"
-              }`}
-            >
+            <div>
               <div className="flex items-center px-5 pt-3 pb-2 gap-3 ">
                 <Image
                   src="/svgs/book.svg"
@@ -149,7 +111,7 @@ const TestAndResources = () => {
             </div>
           </div>
           <div className="flex-3 bg-[#FFFFFF] h-[70vh] rounded-[8px] p-5">
-            {showComponent ? <TestSubject /> : <TestResources />}
+            <StudentTestSubject />
           </div>
         </div>
       </Container>
@@ -157,4 +119,4 @@ const TestAndResources = () => {
   );
 };
 
-export default TestAndResources;
+export default StudentTestAndResources;

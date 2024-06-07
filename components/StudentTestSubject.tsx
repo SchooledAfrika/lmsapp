@@ -11,7 +11,7 @@ import {
 import Link from "next/link";
 import { Button } from "./ui/button";
 
-const TestSubject = () => {
+const StudentTestSubject = () => {
   return (
     <section>
       <div className="flex items-center px-4 pt-3 pb-2 gap-3 ">
@@ -58,14 +58,23 @@ const TestSubject = () => {
             </p>
             <span className="font-bold text-[14px]">10</span>
           </div>
+          <div>
+            <p className="font-medium pb-4 text-[12px] md:text-[14px]">Score</p>
+            <span className="font-bold text-[14px]">--</span>
+          </div>
         </div>
 
         <Link
-          href={"/teacher-dashboard/test-and-resources/view-details"}
+          href={"/student-dashboard/test-and-resources/view-details"}
           className="ml-4"
         >
           <Button className="bg-secondary text-white text-[12px] py-3 mr-0 md:mr-6">
-            View Test Details
+            Start Test
+          </Button>
+        </Link>
+        <Link href="#" className="ml-4">
+          <Button className="bg-transparent text-[#359C71] border border-[#359C71] text-[12px] py-3 mr-0 md:mr-6">
+            View Result
           </Button>
         </Link>
       </div>
@@ -73,4 +82,4 @@ const TestSubject = () => {
   );
 };
 
-export default TestSubject;
+export default StudentTestSubject;
