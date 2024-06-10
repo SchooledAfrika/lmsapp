@@ -33,4 +33,9 @@ export const StudentSideBar: StudentSideBarType[] = [
   { path: "courses", name: "Courses", icon: PiCirclesFour },
   { path: "calender", name: "Calender", icon: MdOutlineCalendarMonth },
   { path: "transactions", name: "Transactions", icon: LiaMoneyCheckAltSolid },
+  {
+    path: "student-settings",
+    name: "Settings",
+    icon: MdOutlineDisplaySettings,
+  },
 ];
