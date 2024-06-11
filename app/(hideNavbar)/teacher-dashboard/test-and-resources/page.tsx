@@ -1,10 +1,10 @@
 import React from "react";
-import TestAndResources from "@/components/TestAndResources";
+import TeacherTestAndResources from "@/components/TeacherTestAndResources";
 
 const page = () => {
   return (
     <div className="my-[80px] md:my-6">
-      <TestAndResources />
+      <TeacherTestAndResources />
     </div>
   );
 };
