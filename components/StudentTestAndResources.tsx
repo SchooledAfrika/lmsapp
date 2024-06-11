@@ -3,6 +3,7 @@ import Container from "./Container";
 import Image from "next/image";
 import StudentTestSubject from "./StudentTestSubject";
 import StudentCourseDetails from "./StudentCourseDetails";
+import StudentModuleTest from "./StudentModuleTestOne";
 
 const StudentTestAndResources = () => {
   return (
@@ -115,7 +116,6 @@ const StudentTestAndResources = () => {
             <StudentTestSubject />
           </div>
         </div>
-        <StudentCourseDetails />
       </Container>
     </section>
   );

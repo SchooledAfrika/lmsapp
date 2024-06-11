@@ -1,4 +1,4 @@
-export const StudentCourseData = [
+export const StudentCourseVideoData = [
   {
     numbering: 1,
     module: "Module 1",
@@ -28,5 +28,69 @@ export const StudentCourseData = [
     numbering: 6,
     module: "Module 6",
     title: "Technical Drawing & Construction",
+  },
+];
+
+export const StudentCoursesData = [
+  {
+    id: "course-1",
+    icon: "/module-1.png",
+    classes: "Grade 11",
+    title: "Mathematics Waec Prep",
+    time: "125 Minutes",
+    module: "12 Modules",
+    pricing: "$33.00",
+    purchase: "Purchase Course",
+    payment: "Paid",
+  },
+  {
+    id: "course-2",
+    icon: "/module-2.png",
+    classes: "Grade 11",
+    title: "English Neco Prep",
+    time: "125 Minutes",
+    module: "12 Modules",
+    pricing: "$33.00",
+    purchase: "Purchase Course",
+  },
+  {
+    id: "course-2",
+    icon: "/module-2.png",
+    classes: "Grade 11",
+    title: "English Neco Prep",
+    time: "125 Minutes",
+    module: "12 Modules",
+    pricing: "$33.00",
+    purchase: "Purchase Course",
+  },
+  {
+    id: "course-2",
+    icon: "/module-2.png",
+    classes: "Grade 11",
+    title: "English Neco Prep",
+    time: "125 Minutes",
+    module: "12 Modules",
+    pricing: "$33.00",
+    purchase: "Purchase Course",
+  },
+  {
+    id: "course-2",
+    icon: "/module-2.png",
+    classes: "Grade 11",
+    title: "English Neco Prep",
+    time: "125 Minutes",
+    module: "12 Modules",
+    pricing: "$33.00",
+    purchase: "Purchase Course",
+  },
+  {
+    id: "course-2",
+    icon: "/module-2.png",
+    classes: "Grade 11",
+    title: "English Neco Prep",
+    time: "125 Minutes",
+    module: "12 Modules",
+    pricing: "$33.00",
+    purchase: "Purchase Course",
   },
 ];

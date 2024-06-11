@@ -4,7 +4,7 @@ import Container from "./Container";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { StudentCourseData } from "@/constants/studentCourseData";
+import { StudentCourseVideoData } from "@/constants/studentCourseData";
 
 const StudentCourseDetails = () => {
   const [selectedItem, setSelectedItem] = useState(null);
@@ -71,7 +71,7 @@ const StudentCourseDetails = () => {
 
           <div className="flex-4 bg-white rounded-[8px] p-4">
             <p className="text-[16px] py-4 font-bold">Modules</p>
-            {StudentCourseData.map((details, index) => (
+            {StudentCourseVideoData.map((details, index) => (
               <div
                 key={index}
                 onClick={() => handleClick(index)}

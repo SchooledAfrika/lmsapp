@@ -64,11 +64,8 @@ const StudentTestSubject = () => {
           </div>
         </div>
 
-        <Link
-          href={"/student-dashboard/test-and-resources/view-details"}
-          className="ml-4"
-        >
-          <Button className="bg-secondary text-white text-[12px] py-3 mr-0 md:mr-6">
+        <Link href="/student-dashboard/test-and-resources/test">
+          <Button className="ml-4 bg-secondary text-white text-[12px] py-3 mr-0 md:mr-6">
             Start Test
           </Button>
         </Link>

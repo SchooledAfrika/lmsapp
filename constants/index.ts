@@ -108,7 +108,6 @@ export const subjects = [
 ];
 
 export const moreSubjects = [
- 
   {
     id: "more-1",
     icon: "/igbo.png",
@@ -196,7 +195,6 @@ export const Classes = [
   },
 ];
 
-
 export const Applies = [
   {
     id: "apply-1",
@@ -208,7 +206,7 @@ export const Applies = [
     title: "Tutors",
     result: "3,000+",
   },
-  
+
   {
     id: "apply-3",
     title: "Subjects",
@@ -258,13 +256,11 @@ export const PopularCourses = [
     subject: "Introduction to SchooledAfrika",
     plan: "Basic Plan",
     pricingFree: "Free",
-
-    
   },
   {
     id: "course-2",
     icon: "/course-1.png",
-    classes: "Model 1", 
+    classes: "Model 1",
     subject: "Element of SchooledAfrika",
     plan: "Premium",
     pricing: "Locked",
@@ -302,4 +298,3 @@ export const PopularCourses = [
     pricing: "Locked",
   },
 ];
-
