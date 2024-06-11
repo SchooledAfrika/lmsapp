@@ -1,6 +1,3 @@
-import Tick from "@/images/svgs/tick.svg";
-import ColoredTick from "@/images/svgs/colored-tick.svg";
-
 export const RegisterType = [
   {
     Images: "/student-acct.png",
@@ -14,7 +11,7 @@ export const RegisterType = [
     Images: "/teacher-acct.png",
     title: "Teacher Account",
     description: "Create your",
-    link: "/login",
+    link: "/teacher-account",
     linkText: "Teacher Account",
     descriptionEnd:
       "with Schooled Afrika, Teach how you want, when you want and get paid.",

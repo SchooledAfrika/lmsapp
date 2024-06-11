@@ -4,13 +4,13 @@ import Container from "./Container";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import Image from "next/image";
-import TestSubject from "./TestSubject";
+import TeacherTestSubject from "./TeacherTestSubject";
 import TestResources from "./TestResources";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { GoDotFill } from "react-icons/go";
 import { TestUploadResource } from "./TestUploadResource";
 
-const TestAndResources = () => {
+const TeacherTestAndResources = () => {
   const [showComponent, setShowComponent] = useState(true);
 
   const handleTestComponent = () => {
@@ -149,7 +149,7 @@ const TestAndResources = () => {
             </div>
           </div>
           <div className="flex-3 bg-[#FFFFFF] h-[70vh] rounded-[8px] p-5">
-            {showComponent ? <TestSubject /> : <TestResources />}
+            {showComponent ? <TeacherTestSubject /> : <TestResources />}
           </div>
         </div>
       </Container>
@@ -157,4 +157,4 @@ const TestAndResources = () => {
   );
 };
 
-export default TestAndResources;
+export default TeacherTestAndResources;
