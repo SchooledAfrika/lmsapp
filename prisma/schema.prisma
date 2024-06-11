@@ -162,32 +162,34 @@ model Session {
 // student will have many to many relationship with classes
 // since students can have many classes and classes can have many students
 model Classes {
-  id              String     @id @default(auto()) @map("_id") @db.ObjectId
-  subject         Subjects
-  className       String
-  grade           Grade
-  duration        DateTime
-  classStarts     DateTime
-  classEnds       DateTime
-  schedules       ClassDay[]
-  price           Float
-  classBanner     String
-  rating          Float
-  publicClass     Boolean    @default(true)
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  subject          Subjects
+  className        String
+  grade            Grade
+  duration         DateTime
+  classStarts      DateTime
+  classEnds        DateTime
+  schedules        ClassDay[]
+  price            Float
+  classBanner      String
+  rating           Float
+  publicClass      Boolean            @default(true)
   // here, there is one to many relationship between classes and teacher
   // a teacher can have many classes
-  teacher         Teacher    @relation(fields: [teacherId], references: [id])
-  teacherId       String     @db.ObjectId
+  teacher          Teacher            @relation(fields: [teacherId], references: [id])
+  teacherId        String             @db.ObjectId
   // there will be many to many relationship between classes and students
   // classes can have many students
-  studentIDs      String[]   @db.ObjectId
-  students        Student[]  @relation(fields: [studentIDs], references: [id])
-  maxCapacity     Float
-  currentCapacity Float      @default(0)
+  studentIDs       String[]           @db.ObjectId
+  students         Student[]          @relation(fields: [studentIDs], references: [id])
+  maxCapacity      Float
+  currentCapacity  Float              @default(0)
   // this will contain the arrays of the resources the teacher ass
-  resourcesIds    String[]   @default([])
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @default(now())
+  resourcesIds     String[]           @default([])
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+  ClassExams       ClassExams[]
+  StudentClassExam StudentClassExam[]
 
   @@index([teacherId], name: "teachers_class_index")
 }
@@ -400,6 +402,47 @@ model StudentExam {
   updatedAt        DateTime        @default(now())
 
   @@index([appliedSectionId, completed], name: "section_exam_for_students")
+}
+
+// this model is model for classes examms
+// here this exams are not answered yet and its formed immediately the teacher links his exam to the class
+// there will be a one to many relationship betweeen this model and the class medels
+
+model ClassExams {
+  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  class              Classes         @relation(fields: [classesId], references: [id])
+  classesId          String          @db.ObjectId
+  // this array contains the id of student in this class that have aswered this particular exam
+  answeredStudentIds String[]        @db.ObjectId
+  test               ExamQuestions[]
+  duration           String
+  grade              Grade
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @default(now())
+
+  @@index([classesId], name: "class_exam")
+}
+
+model StudentClassExam {
+  id         String          @id @default(auto()) @map("_id") @db.ObjectId
+  completed  Boolean         @default(false)
+  score      Int?
+  percentage String?
+  questions  ExamQuestions[]
+  title      String
+  grade      Grade
+  // the id of the student that have answered there questions
+  studentId  String          @db.ObjectId
+  mainExamId String          @db.ObjectId
+  // this model is formed when a student answers a question from the classroom
+  // there will be a one to many relation between the classroom and this model
+  class      Classes         @relation(fields: [classesId], references: [id])
+  classesId  String          @db.ObjectId
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @default(now())
+
+  @@index([classesId, studentId, mainExamId], name: "studentclassExam_classrooms")
 }
 
 // this is enum for grades
