@@ -10,7 +10,7 @@ const Recents = () => {
   return (
     <div className="my-6 flex  md:flex-row justify-between flex-col  text-[15px] gap-3   md:gap-3 rounded-md">
       <div className="flex md:flex-4 h-full    px-3 bg-white rounded-md py-6  flex-col">
-        <div className="flex pl-3 py-2 justify-between">
+        <div className="flex pl-4 py-2 justify-between">
           <p className="text-[14px] text-slate-500 font-semibold">
             Overall Perfomance
           </p>
