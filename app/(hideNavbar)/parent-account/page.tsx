@@ -1,8 +1,8 @@
-// Parents will be redirected to this route when they choose to register as parents to complete their registration
+import ParentLogin from "@/components/ui/parent-login/ParentLogin";
 import React from "react";
 
 const page = () => {
-  return <div>page</div>;
+  return <ParentLogin />;
 };
 
 export default page;

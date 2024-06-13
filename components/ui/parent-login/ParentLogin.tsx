@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Button } from "../button";
 import Footer from "@/components/Footer";
 
-const TeacherLogin: React.FC = () => {
+const ParentLogin: React.FC = () => {
   return (
     <div className="w-full font-subtext">
       <div className="flex flex-col md:flex-row justify-between items-center px-[1rem] md:px-[10rem] py-[1rem] md:pt-[2rem] md:pb-[5rem] w-full">
@@ -65,7 +65,7 @@ const TeacherLogin: React.FC = () => {
               placeholder="Enter Password"
               className="mb-3 p-4  outline-none rounded-[8px] w-full bg-white"
             />
-            <Link href="/teacher-account/details">
+            <Link href="/parent-account/details">
               <Button className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3">
                 Register
               </Button>
@@ -100,4 +100,4 @@ const TeacherLogin: React.FC = () => {
   );
 };
 
-export default TeacherLogin;
+export default ParentLogin;

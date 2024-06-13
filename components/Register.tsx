@@ -1,27 +1,42 @@
 "use client";
-import { useState } from "react";
+import { useState, FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Career from "@/images/careers.png";
 import { RegisterType } from "@/constants/registerType";
 import { Button } from "./ui/button";
-import Header from "./Header";
 
-const Register = () => {
-  const [selectAccountType, setSelectAccountType] = useState(null);
+interface RegisterProps {
+  selectAccountType:
+    | "School Account"
+    | "Student Account"
+    | "Parent Account"
+    | "Teacher Account"
+    | "";
+}
 
-  const handleSelectedItem = (accountType: any) => {
+const accountTypeToLink: { [key: string]: string } = {
+  "School Account": "/school-account",
+  "Student Account": "/student-account",
+  "Parent Account": "/parent-account",
+  "Teacher Account": "/teacher-account",
+};
+
+const Register: FC = () => {
+  const [selectAccountType, setSelectAccountType] =
+    useState<RegisterProps["selectAccountType"]>("");
+
+  const handleSelectedItem = (
+    accountType: RegisterProps["selectAccountType"]
+  ) => {
     setSelectAccountType(accountType);
   };
 
+  const link = accountTypeToLink[selectAccountType] || "#";
+
   const getButtonBackgroundColor = () => {
-    if (
-      selectAccountType === "School Account" ||
-      selectAccountType === "Student Account" ||
-      selectAccountType === "Parent Account" ||
-      selectAccountType === "Teacher Account"
-    ) {
-      return "#359C71 ";
+    if (selectAccountType in accountTypeToLink) {
+      return "#359C71";
     } else {
       return "#359F61";
     }
@@ -59,7 +74,11 @@ const Register = () => {
             <div
               key={index}
               className="flex items-center bg-white rounded-[8px] px-6 py-2 my-4 gap-8 cursor-pointer"
-              onClick={() => handleSelectedItem(registered.title)}
+              onClick={() =>
+                handleSelectedItem(
+                  registered.title as RegisterProps["selectAccountType"]
+                )
+              }
             >
               <div>
                 <Image
@@ -72,13 +91,12 @@ const Register = () => {
               <div>
                 <p className="font-bold text-[16px]">{registered.title}</p>
                 <span className="text-[13px]">
-                  {" "}
-                  {registered.description}{" "}
+                  {registered.description}
                   {registered.link && (
                     <Link href={registered.link} className="text-[#359C71]">
                       {registered.linkText}
                     </Link>
-                  )}{" "}
+                  )}
                   {registered.descriptionEnd}
                 </span>
               </div>
@@ -101,15 +119,10 @@ const Register = () => {
               </div>
             </div>
           ))}
-          <Link href="/school-account">
+          <Link href={link}>
             <Button
               className={`bg-secondary w-full text-white text-[16px] px-6 py-6 my-6 ${
-                selectAccountType === "School Account" ||
-                selectAccountType === "Student Account" ||
-                selectAccountType === "Parent Account" ||
-                selectAccountType === "Teacher Account"
-                  ? ""
-                  : "opacity-50"
+                selectAccountType in accountTypeToLink ? "" : "opacity-50"
               }`}
               style={{ backgroundColor: getButtonBackgroundColor() }}
             >
@@ -118,7 +131,6 @@ const Register = () => {
           </Link>
         </div>
       </div>
-     
     </div>
   );
 };
