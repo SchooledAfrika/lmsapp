@@ -12,10 +12,11 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { KycVerificationAlert } from "./KycVerificationAlert";
-import { MdVerified } from "react-icons/md";
 
-export function KycSuccess() {
+import { MdVerified } from "react-icons/md";
+import { TeacherRequestAlert } from "./TeacherRequestAlert";
+
+export function TeacherRequestSuccess() {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -46,11 +47,11 @@ export function KycSuccess() {
             Submitted Successfully
           </AlertDialogTitle>
           <AlertDialogDescription className="text-[11.5px] text-black font-semibold">
-            Your Documents have been submitted successfully
+            Your Request has been submitted successfully
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <KycVerificationAlert />
+          <TeacherRequestAlert />
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
