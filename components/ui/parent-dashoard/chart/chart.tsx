@@ -131,6 +131,21 @@ const Chart = () => {
           </div>
           <div className="py-3 flex space-x-3">
             <Image
+              src="/session.png"
+              alt="tutor"
+              width={100}
+              height={100}
+              className="w-[50px] h-[50px] rounded-full"
+            />
+            <div className="flex flex-col space-y-1">
+              <p className="font-bold text-[13px]">Ibrahim Sultan</p>
+              <p className="py-[5px] rounded-md bg-lightGreen text-center text-[11px] text-white">
+                Active
+              </p>
+            </div>
+          </div>
+          <div className="py-3 flex space-x-3">
+            <Image
               src="/teacher-img.png"
               alt="tutor"
               width={100}
