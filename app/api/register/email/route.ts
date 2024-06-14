@@ -11,8 +11,7 @@ import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
   const { email, password } = await request.json();
-  const cookieInstance = cookies();
-  const role = cookieInstance.get("role")?.value;
+  const role = request.headers.get("role");
   const hashPasword = bcrypt.hashSync(password, 12);
 
   // lets check if the user exist accross all our members database first

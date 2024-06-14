@@ -10,16 +10,15 @@ import prisma from "@/prisma/prismaConnect";
 // else we will register them and redirect to the login page
 
 export async function POST(request: Request) {
-  const { email, img, name } = await request.json();
-  const cookieInstance = cookies();
-  const role = cookieInstance.get("role")?.value;
+  const { email, image, name } = await request.json();
+  const role = request.headers.get("role");
 
   // first, we check if the role passed is defined or undefined
   // if it is undefined, that means the user actually want to login
   // TODO: the frontend developer has to clear the role cookies before running the login with google auth
   // then, if there is a role, that means the user actually want to register for the first time
   if (role === undefined) {
-    console.log("ran here");
+    console.log("i was here");
     // lets check if the user exist accross all our members database first
     // if is there, return with an error and a message
     const checkStudents = await prisma.student.findUnique({
@@ -71,7 +70,7 @@ export async function POST(request: Request) {
       const student = await prisma.student.create({
         data: {
           email: email,
-          profilePhoto: img,
+          profilePhoto: image,
           name,
           role: "Student",
         },
@@ -92,7 +91,7 @@ export async function POST(request: Request) {
       const student = await prisma.teacher.create({
         data: {
           email: email,
-          profilePhoto: img,
+          profilePhoto: image,
           role: "Teacher",
           name,
         },
@@ -112,7 +111,7 @@ export async function POST(request: Request) {
       const student = await prisma.parents.create({
         data: {
           email: email,
-          profilePhoto: img,
+          profilePhoto: image,
           name,
           role: "Parents",
         },
@@ -132,7 +131,7 @@ export async function POST(request: Request) {
       const student = await prisma.school.create({
         data: {
           email: email,
-          profilePhoto: img,
+          profilePhoto: image,
           name,
           role: "School",
         },

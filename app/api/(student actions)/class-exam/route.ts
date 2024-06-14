@@ -1,9 +1,9 @@
-// here, the student answers there exam,
+// here, the student answers there class exam,
 // then pushes there id into the array showing that they have finished the exam.
 
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
-import { IexamType, markExams, successFullMessage } from "@/prisma/utils/utils";
+import { markExams, successFullMessage } from "@/prisma/utils/utils";
 
 export async function POST(req: Request) {
   // TODO: remember to remove the studentId to the nextauth id

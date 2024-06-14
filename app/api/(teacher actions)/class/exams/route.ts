@@ -25,18 +25,18 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   // then we will get the exam the teacher passed the id
-  const getTeachrsExam = await prisma.exams.findUnique({
+  const getTeachersExam = await prisma.exams.findUnique({
     where: {
       id: examId,
     },
   });
-  if (!getTeachrsExam)
+  if (!getTeachersExam)
     return new Response(
       JSON.stringify({ message: "this exam does not exist" }),
       { status: 400 }
     );
   // then lets filter the fields we need to be displayed in the classExams model
-  const { createdAt, updatedAt, teacherId, ...others } = getTeachrsExam;
+  const { createdAt, updatedAt, teacherId, ...others } = getTeachersExam;
   try {
     await prisma.classExams.create({
       data: {

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "../globals.css";
+import AuthProvider from "@/providers/AuthProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,7 +15,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="">
-        <main className="bg-stone-100">{children}</main>
+        <AuthProvider>
+          <main className="bg-stone-100">{children}</main>
+        </AuthProvider>
       </body>
     </html>
   );
