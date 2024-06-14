@@ -42,7 +42,7 @@ const StudentInfo: React.FC<StudentInfo> = ({ onClickView }) => {
             </div>
           </div>
 
-          <form className="pl-[0] md:pl-[100px] mt-[40px] md:mt-[0]">
+          <form className="pl-[0] md:pl-[100px] mt-[40px] md:mt-[0] w-full md:w-[50%]">
             <label className="font-bold text-[18px]">
               Personal Information
             </label>

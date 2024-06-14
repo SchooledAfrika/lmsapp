@@ -5,14 +5,7 @@ import React from "react";
 import { Button } from "../button";
 import Footer from "@/components/Footer";
 
-interface TeacherResumeProps {
-  onClickButton: (view: any) => void;
-}
-
-const TeacherResume: React.FC<TeacherResumeProps> = ({ onClickButton }) => {
-  const handlePaymentView = () => {
-    onClickButton("Payment Details");
-  };
+const ParentWardProfileData = () => {
   return (
     <section className="py-[1rem] font-subtext md:pt-[3rem]">
       <Container>
@@ -41,32 +34,55 @@ const TeacherResume: React.FC<TeacherResumeProps> = ({ onClickButton }) => {
               <span className="bg-[#359C71] rounded-full px-[7px] text-white">
                 2
               </span>
-              <p className="text-[#359C71] font-bold">
-                Resume & Qualifications
-              </p>
+              <p className="text-[#359C71] font-bold">Wards Account Access</p>
             </div>
-            <p className="border-l-2 border-[#E9ECEB] h-[40px] md:h-[80px] ml-[10px]"></p>
+            <p className="border-l-2 border-[#359C71] h-[40px] md:h-[80px] ml-[10px]"></p>
             <div className="flex gap-10">
-              <span className="bg-[#E9ECEB] rounded-full px-[7px] text-white">
+              <span className="bg-[#359C71] rounded-full px-[7px] text-white">
                 3
               </span>
-              <p>Payment Details</p>
-            </div>
-            <p className="border-l-2 border-[#E9ECEB] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#E9ECEB] rounded-full px-[7px] text-white">
-                4
-              </span>
-              <p>Payment Details</p>
+              <p className="text-[#359C71] font-bold">Wards Profile Data</p>
             </div>
           </div>
 
           <form className="pl-[0] md:pl-[100px] mt-[40px] md:mt-[0] w-full md:w-[50%]">
-            <label className="font-bold text-[18px]">
-              Resume & Qualifications
-            </label>
+            <label className="font-bold text-[16px]">Profile Data</label>
+            <input
+              type="text"
+              name="text"
+              placeholder="Full Name"
+              className="my-2 p-4 outline-none rounded-[8px] w-full bg-white"
+            />
+            <br />
+            <input
+              type="gender"
+              name="text"
+              placeholder="Gender"
+              className="my-2 p-4 outline-none rounded-[8px] w-full bg-white"
+            />
+            <br />
+            <input
+              type="text"
+              name="text"
+              placeholder="Select Grade(s)"
+              className="my-2 p-4 outline-none rounded-[8px] w-full bg-white"
+            />
+            <br />
+            <input
+              type="text"
+              name="text"
+              placeholder="Any Disability"
+              className="my-2 p-4 outline-none rounded-[8px] w-full bg-white"
+            />
+            <br />
+            <textarea
+              rows={7}
+              cols={40}
+              className=" p-2 w-full mt-2"
+              placeholder="Tell us about your ward"
+            ></textarea>
 
-            <div className="flex items-center bg-[#FFFFFF] py-4 w-full pl-2 my-2 rounded">
+            <div className="flex items-center bg-[#FFFFFF] py-4 pl-2 my-2 rounded-[8px]">
               <Image
                 src="/svgs/upload.svg"
                 width={15}
@@ -76,7 +92,7 @@ const TeacherResume: React.FC<TeacherResumeProps> = ({ onClickButton }) => {
               <div>
                 <label htmlFor="file-upload" className="cursor-pointer ml-2">
                   <span className="bg-transparent py-1 pr-2 text-[12px] font-medium">
-                    Upload Resume
+                    Upload Profile Image
                   </span>
                 </label>
                 <input
@@ -88,15 +104,8 @@ const TeacherResume: React.FC<TeacherResumeProps> = ({ onClickButton }) => {
               </div>
             </div>
 
-            <textarea
-              rows={7}
-              cols={35}
-              className="w-full p-2"
-              placeholder="About Yourself as a tutor"
-            ></textarea>
-
             <Button
-              onClick={handlePaymentView}
+              //   onClick={onClickView}
               className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
             >
               Proceed
@@ -109,4 +118,4 @@ const TeacherResume: React.FC<TeacherResumeProps> = ({ onClickButton }) => {
   );
 };
 
-export default TeacherResume;
+export default ParentWardProfileData;

@@ -43,7 +43,7 @@ const SchoolPersonalInfo: React.FC = () => {
             </div>
           </div>
 
-          <form className="pl-[0] md:pl-[100px] mt-[40px] md:mt-[0]">
+          <form className="pl-[0] md:pl-[100px] mt-[40px] md:mt-[0] w-full md:w-[50%]">
             <label className="font-bold text-[18px]">
               Personal Information
             </label>
@@ -82,7 +82,10 @@ const SchoolPersonalInfo: React.FC = () => {
                 />
               )}
               Accept Schooled Afrika{" "}
-              <Link href={"/school-terms-and-conditions"} className="underline text-[#359C71]">
+              <Link
+                href={"/school-terms-and-conditions"}
+                className="underline text-[#359C71]"
+              >
                 Terms & Condition
               </Link>
             </div>

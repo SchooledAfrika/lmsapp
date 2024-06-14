@@ -1,15 +1,10 @@
 "use client";
 import * as React from "react";
 import Image, { StaticImageData } from "next/image";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { ProgressBar } from "@/components/ProgressBar";
-import { StudentCoursesData } from "@/constants/studentCourseData";
 import Link from "next/link";
+import { ParentCoursesData } from "@/constants/parentsCourse";
 
 interface Props {
   index: number;
@@ -35,7 +30,7 @@ const CourseCard = ({
 }: Props) => {
   return (
     <div className="w-full  hover:-translate-y-2 my-6 transition-transform duration-300 group">
-      <Link href="/student-dashboard/courses/details">
+      <Link href="/parents-dashboard/courses/details">
         <Card className="h-[50vh]">
           <CardHeader>
             <Image
@@ -102,14 +97,14 @@ const CourseCard = ({
   );
 };
 
-const StudentCourses = () => {
+const ParentCourses = () => {
   return (
     <div className="grid mt-8  grid-cols-1 xs:grid-cols-2 md:grid-cols-3 items-center xl:grid-cols-3 gap-2">
-      {StudentCoursesData.map((Course, index) => (
+      {ParentCoursesData.map((Course, index) => (
         <CourseCard index={index} key={Course.id} {...Course} />
       ))}
     </div>
   );
 };
 
-export default StudentCourses;
+export default ParentCourses;
