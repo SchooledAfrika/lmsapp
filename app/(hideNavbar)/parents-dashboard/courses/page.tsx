@@ -1,7 +1,8 @@
+import ParentCourses from "@/components/ParentCourses";
 import React from "react";
 
 const page = () => {
-  return <div>courses</div>;
+  return <ParentCourses />;
 };
 
 export default page;

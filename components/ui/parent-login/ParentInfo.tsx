@@ -5,7 +5,14 @@ import React from "react";
 import { Button } from "../button";
 import Footer from "@/components/Footer";
 
-const ParentInfo = () => {
+interface ParentInfoProps {
+  onClickButton: (view: any) => void;
+}
+
+const ParentInfo: React.FC<ParentInfoProps> = ({ onClickButton }) => {
+  const handleWardAccess = () => {
+    onClickButton("Ward Access");
+  };
   return (
     <section className="py-[1rem] font-subtext md:pt-[3rem]">
       <Container>
@@ -45,7 +52,7 @@ const ParentInfo = () => {
             </div>
           </div>
 
-          <form className="pl-[0] md:pl-[100px] mt-[40px] md:mt-[0]">
+          <form className="pl-[0] md:pl-[100px] mt-[40px] md:mt-[0] w-full md:w-[50%]">
             <label className="font-bold text-[18px]">
               Personal Information
             </label>
@@ -101,7 +108,7 @@ const ParentInfo = () => {
             </div>
 
             <Button
-              //   onClick={onClickView}
+              onClick={handleWardAccess}
               className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
             >
               Proceed

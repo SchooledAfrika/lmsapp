@@ -1,7 +1,8 @@
+import ParentAssessment from "@/components/ParentAssessment";
 import React from "react";
 
 const page = () => {
-  return <div>assessment</div>;
+  return <ParentAssessment />;
 };
 
 export default page;

@@ -65,7 +65,7 @@ const ParentLogin: React.FC = () => {
               placeholder="Enter Password"
               className="mb-3 p-4  outline-none rounded-[8px] w-full bg-white"
             />
-            <Link href="/parent-account/details">
+            <Link href="/parents-account/details">
               <Button className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3">
                 Register
               </Button>
