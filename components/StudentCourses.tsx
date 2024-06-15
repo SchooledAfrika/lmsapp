@@ -8,8 +8,6 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { ProgressBar } from "@/components/ProgressBar";
-import { NoProgressBar } from "@/components/NoProgressBar";
-import { GiPadlock } from "react-icons/gi";
 import { StudentCoursesData } from "@/constants/studentCourseData";
 import Link from "next/link";
 

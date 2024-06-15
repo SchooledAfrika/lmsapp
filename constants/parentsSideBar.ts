@@ -1,5 +1,9 @@
 import { StudentSideBarType } from "./studentSidebar";
-import { MdInsertChartOutlined, MdOutlineCalendarMonth } from "react-icons/md";
+import {
+  MdInsertChartOutlined,
+  MdOutlineCalendarMonth,
+  MdOutlineDisplaySettings,
+} from "react-icons/md";
 import { SiGoogleclassroom } from "react-icons/si";
 import {
   LiaChalkboardTeacherSolid,
@@ -20,4 +24,9 @@ export const ParentSideBar: StudentSideBarType[] = [
   { path: "courses", name: "Courses", icon: PiCirclesFour },
   { path: "calender", name: "Calender", icon: MdOutlineCalendarMonth },
   { path: "transactions", name: "Transactions", icon: LiaMoneyCheckAltSolid },
+  {
+    path: "parent-settings",
+    name: "Settings",
+    icon: MdOutlineDisplaySettings,
+  },
 ];

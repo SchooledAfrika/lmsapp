@@ -65,11 +65,11 @@ const TeacherPaymentDetails: React.FC<TeacherPaymentProps> = ({
               <span className="bg-[#E9ECEB] rounded-full px-[7px] text-white">
                 4
               </span>
-              <p className="text-[#E9ECEB] font-bold">Payment Details</p>
+              <p>Payment Details</p>
             </div>
           </div>
 
-          <form className="flex flex-col pl-[0] md:pl-[100px] mt-[40px] md:mt-[0]">
+          <form className="flex flex-col pl-[0] md:pl-[100px] mt-[40px] md:mt-[0] w-full md:w-[50%]">
             <label className="font-bold text-[16px] pb-2">
               Subject & Language
             </label>
@@ -77,30 +77,30 @@ const TeacherPaymentDetails: React.FC<TeacherPaymentProps> = ({
               type="text"
               name="text"
               placeholder="Language I Speak"
-              className="p-4 outline-none w-full md:w-[60%] rounded-[8px] bg-white"
+              className="p-4 outline-none w-full rounded-[8px] bg-white"
             />
             <br />
             <input
               type="text"
               name="text"
               placeholder="Select Subject"
-              className="p-4 outline-none w-full md:w-[60%] rounded-[8px] bg-white"
+              className="p-4 outline-none w-full rounded-[8px] bg-white"
             />
             <br />
             <input
               type="text"
               name="text"
               placeholder="Select Grade(s)"
-              className="p-4 outline-none w-full md:w-[60%] rounded-[8px] bg-white"
+              className="p-4 outline-none w-full rounded-[8px] bg-white"
             />
 
             <label className="font-bold text-[16px] pt-3">Pricing</label>
-            <span className="text-[14px] w-[50%] font-medium py-2">
+            <span className="text-[14px] font-medium py-2">
               Please note that the minimum duration for a session is 45 minutes
               and the maximum duration is 2 hours. Your price range should
               account for that.
             </span>
-            <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[60%] bg-white">
+            <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] bg-white">
               <input
                 type="text"
                 name="text"
@@ -117,7 +117,7 @@ const TeacherPaymentDetails: React.FC<TeacherPaymentProps> = ({
                 <span className="font-bold text-[16px]">USD</span>
               </div>
             </div>
-            <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[60%] bg-white">
+            <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] bg-white">
               <input
                 type="text"
                 name="text"
@@ -137,7 +137,7 @@ const TeacherPaymentDetails: React.FC<TeacherPaymentProps> = ({
 
             <div>
               <label className="font-bold text-[16px]">Preferences</label>
-              <div className="grid grid-cols-2 gap-x-2 w-full md:w-[60%]">
+              <div className="grid grid-cols-2 gap-x-2 w-full">
                 {preferences.map((preference, index) => (
                   <label
                     key={index}
@@ -157,7 +157,7 @@ const TeacherPaymentDetails: React.FC<TeacherPaymentProps> = ({
 
             <Button
               onClick={handlePaymentView}
-              className="bg-secondary w-full md:w-[60%] text-white text-[16px] px-6 py-7 my-3"
+              className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
             >
               Proceed
             </Button>

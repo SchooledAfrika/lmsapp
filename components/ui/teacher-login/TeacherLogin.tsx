@@ -31,7 +31,7 @@ const TeacherLogin: React.FC = () => {
             Have an account ?
             <Link href="/register">
               <span className="font-bold text-black underline pl-2 text-[14px]">
-                Login
+                Register
               </span>
             </Link>
           </span>
