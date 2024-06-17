@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import ParentInfo from "./ui/parent-login/ParentInfo";
-import ParentWardAccess from "./ui/parent-login/ParentWardAccess";
-import ParentWardProfileData from "./ui/parent-login/ParentWardProfileData";
+import ParentInfo from "./ui/continue/ParentInfo";
+import ParentWardAccess from "./ui/continue/ParentWardAccess";
+import ParentWardProfileData from "./ui/continue/ParentWardProfileData";
 
 const ParentAccount = () => {
   const [showComponent, setShowComponent] = useState("Personal Info");

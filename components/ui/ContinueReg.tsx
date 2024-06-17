@@ -1,40 +1,49 @@
 "use client";
 
-import React from "react";
 import Image from "next/image";
-import Footer from "./Footer";
 import Link from "next/link";
-import { Button } from "./ui/button";
+import { Button } from "./button";
+import Footer from "@/components/Footer";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/data-access/authentication";
 
-// creating a schema for zod
-const loginSchema = z.object({
-  email: z.string().email({ message: "provide a valid email address" }),
-  password: z
-    .string()
-    .min(8, { message: "password should be at least 8 characters" }),
-});
+// creating our zod schema for registration using credential means
+const CredentialReg = z
+  .object({
+    email: z.string().email({ message: "enter a valid email address" }),
+    password: z
+      .string()
+      .min(6, { message: "password must be at least 6 characters" }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    path: ["confirmPassword"],
+    message: "password do not match",
+  });
 
-const Login: React.FC = () => {
-  const { handleLogin } = useAuth();
-  // our login type
-  type Ilogin = z.infer<typeof loginSchema>;
-  // our hook for functions
+const ContinueReg: React.FC = () => {
+  const router = useRouter();
+  const { handleCredentialReg, handleLogin } = useAuth();
+  //   creating instance of the hook form
+  // lets first get the credentialReg type that we need
+  type ICredentials = z.infer<typeof CredentialReg>;
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Ilogin>({ resolver: zodResolver(loginSchema) });
-  // handle login with credentials
-  const onSubmit = (data: Ilogin) => {
-    handleLogin("credentials", data.email, data.password);
+  } = useForm<ICredentials>({ resolver: zodResolver(CredentialReg) });
+  //   here we handle form submission
+  const onSubmit = (data: ICredentials) => {
+    const { email, password } = data;
+    handleCredentialReg(email, password);
   };
+
   return (
     <div className="w-full font-subtext">
-      <div className="flex flex-col md:flex-row justify-between items-center px-[1rem] md:px-[10rem] py-[1rem] md:py-[5rem] w-full">
+      <div className="flex flex-col md:flex-row justify-between items-center px-[1rem] md:px-[10rem] py-[1rem] md:pt-[2rem] md:pb-[5rem] w-full">
         <div className="sm:w-full md:w-[45%]">
           <Link href="/">
             <Image
@@ -56,10 +65,10 @@ const Login: React.FC = () => {
             elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis...
           </p>
           <span className="text-gray-500 text-[12px]">
-            New User?
+            Have an account ?
             <Link href="/register">
               <span className="font-bold text-black underline pl-2 text-[14px]">
-                Register
+                Login
               </span>
             </Link>
           </span>
@@ -77,20 +86,23 @@ const Login: React.FC = () => {
               />
             </Link>
           </div>
-          <p className="font-bold mb-2">Provide Details</p>
           <form
             onSubmit={handleSubmit(onSubmit)}
             className=" w-full flex flex-col gap-2"
           >
+            <label className="font-bold">Provide Details</label>
+
             <div>
               <input
                 {...register("email")}
                 name="email"
                 placeholder="Enter Email Address"
-                className=" p-4  outline-none rounded-[8px] w-full bg-white"
+                className={`mt-3 p-4  outline-none ${
+                  errors.email && "border-red-600 border"
+                }  rounded-[8px] w-full bg-white`}
               />
               {errors.email && (
-                <small className=" text-red-600">{errors.email.message}</small>
+                <span className="text-red-500">{errors.email.message}</span>
               )}
             </div>
             <div>
@@ -98,20 +110,36 @@ const Login: React.FC = () => {
                 {...register("password")}
                 type="password"
                 name="password"
-                placeholder="Enter Password"
-                className=" p-4  outline-none rounded-[8px] w-full bg-white"
+                placeholder="enter Password"
+                className={`mt-3 p-4  outline-none ${
+                  errors.password && "border-red-600 border"
+                }  rounded-[8px] w-full bg-white`}
               />
               {errors.password && (
-                <small className=" text-red-600">
-                  {errors.password.message}
-                </small>
+                <span className="text-red-500">{errors.password.message}</span>
+              )}
+            </div>
+            <div>
+              <input
+                {...register("confirmPassword")}
+                type="password"
+                name="confirmPassword"
+                placeholder="confirm Password"
+                className={`mt-3 p-4  outline-none ${
+                  errors.confirmPassword && "border-red-600 border"
+                }  rounded-[8px] w-full bg-white`}
+              />
+              {errors.confirmPassword && (
+                <span className="text-red-500">
+                  {errors.confirmPassword.message}
+                </span>
               )}
             </div>
             <Button
               type="submit"
               className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
             >
-              Login
+              Register
             </Button>
           </form>
           <div className="flex flex-col justify-center">
@@ -146,4 +174,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default ContinueReg;

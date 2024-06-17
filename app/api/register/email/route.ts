@@ -11,7 +11,7 @@ import bcrypt from "bcryptjs";
 
 export async function POST(request: Request) {
   const { email, password } = await request.json();
-  const role = request.headers.get("role");
+  const role = cookies().get("role")?.value;
   const hashPasword = bcrypt.hashSync(password, 12);
 
   // lets check if the user exist accross all our members database first
@@ -45,7 +45,7 @@ export async function POST(request: Request) {
   }
   //   here we register the user based on the role passed from the cookies to the backend
   //   making use of conditions based on the users role to register them
-  if (role == "student") {
+  if (role == "Student") {
     // register student
     const student = await prisma.student.create({
       data: {
@@ -65,7 +65,7 @@ export async function POST(request: Request) {
     });
   }
   //   here, we register them as teacher if the role says teachers
-  if (role == "teacher") {
+  if (role == "Teacher") {
     // register student
     const student = await prisma.teacher.create({
       data: {
@@ -84,7 +84,7 @@ export async function POST(request: Request) {
       statusText: "teacher registered successfully",
     });
   }
-  if (role == "parents") {
+  if (role == "Parents") {
     // register student
     const student = await prisma.parents.create({
       data: {
@@ -103,7 +103,7 @@ export async function POST(request: Request) {
       statusText: "guardian or parent registered successfully",
     });
   }
-  if (role == "school") {
+  if (role == "School") {
     // register student
     const student = await prisma.school.create({
       data: {
