@@ -20,7 +20,7 @@ function AddClassroom() {
           Add Classroom
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] w-[380px] font-subtext">
+      <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold">
             Create Classroom

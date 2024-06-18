@@ -13,6 +13,7 @@ import {
 
 import { FaQuoteLeft } from "react-icons/fa";
 import { MdPlayArrow } from "react-icons/md";
+import { FaQuoteRight } from "react-icons/fa";
 
 
 interface Props {
@@ -66,7 +67,7 @@ const Apply = () => {
           </div>
         </div>
       </div>
-      <div className="pt-20 pb-6 text-center">
+      <div className="pt-10 pb-6 text-center">
         <h2 className="text-xl md:text-2xl font-header text-lightGreen font-bold">
           {" "}
           <span className="hidden  md:inline-flex w-20 md:w-60 mb-2 py-[.5px]  lgl:w-72 h-[.5px] bg-lightGreen mr-6"></span>
@@ -202,11 +203,22 @@ const Apply = () => {
                 <FaQuoteLeft />
               </div>
               <p>
-              Bukola Aleriwa Idowu is a seasoned teacher who believes that the possibilities and
-              advantages of technology can help teachers, school and students learn, grow and earn. 
+              I believe that every teacher has the potential to be a catalyst for change and a champion for their students' success. I also believe that technology can be a powerful tool for transforming education and improving teachers' livelihoods.
               </p>
-              <p className="text-lightGreen text-lg font-semibold my-3">Mrs Bukola</p>
+              <p className="my-3">My ideology is built on three core pillars:</p>
+              <ol className="list-decimal ml-5 text-[14.5px] font-semibold mt-3">
+                <li>Empowering Educators: I believe in providing teachers with the training, resources, and support they need to thrive in the digital age.</li>
+                <li>Enhancing Education: I believe in harnessing the power of technology to make learning more engaging, accessible, and effective for all students.</li>
+                <li>Elevating Earnings: I believe in providing opportunities for teachers to earn a sustainable income and improve their economic well-being.</li>
+              </ol>
+              <p className="mt-3">I envision a future where every teacher is equipped to succeed, every student has access to quality education, and the entire education ecosystem is transformed for the better.</p>
+
+              <div className="flex my-3 justify-end text-lightGreen items-center">
+                <FaQuoteRight />
+              </div>
+              <p className="text-lightGreen text-lg font-semibold my-3">Mrs Bukola Aleriwa Idowu</p>
               <p>Founder, SchooledAfrika</p>
+             
             </div>
           </div>
 
@@ -214,7 +226,7 @@ const Apply = () => {
             <div className="absolute ">
               <Image
                 className=" w-[240px]  ml-6"
-                src={"/happy-woman.png"}
+                src={"/bukola.png"}
                 alt="heroboy"
                 width={100}
                 height={100}
@@ -224,7 +236,7 @@ const Apply = () => {
         </div>
       </section>
 
-      <div className="pt-20 pb-6 mt-12 text-center">
+      <div className="pt-10 pb-6 mt-12 text-center">
         <h2 className="text-xl md:text-2xl font-header text-lightGreen font-bold">
           {" "}
           <span className="hidden  md:inline-flex w-20 md:w-60 mb-2 py-[.5px]  lgl:w-72 h-[.5px] bg-lightGreen mr-6"></span>

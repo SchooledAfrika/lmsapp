@@ -15,7 +15,7 @@ const ClassroomType = [
   {
     id: "1",
     icon: "/maths.png",
-    subject: "Mathematics Class",
+    subject: "Mathematics",
     name: "Daisy",
     Grade: "Grade 12",
     TeacherInitial: ["0Y", "OM", "JP"],
@@ -26,7 +26,7 @@ const ClassroomType = [
   {
     id: "2",
     icon: "/govt.png",
-    subject: "Government Class",
+    subject: "Government",
     name: "Alpha",
     Grade: "Grade 10",
     assign: "Assign",
@@ -41,8 +41,8 @@ export default function Tables() {
       <TableHeader>
         <TableRow>
           <TableHead className="text-[12px]">Subject</TableHead>
-          <TableHead className="md:w-[100px] text-[12px]">Name</TableHead>
-          <TableHead className="text-[12px]">Grade</TableHead>
+          <TableHead className=" text-[12px]">Name</TableHead>
+          <TableHead className="text-[12px] w-[150px]">Grade</TableHead>
           <TableHead className="text-[12px]">Teacher</TableHead>
           <TableHead className="text-[12px]">Students</TableHead>
           <TableHead className="text-right text-[12px]">Options</TableHead>
@@ -51,7 +51,7 @@ export default function Tables() {
       <TableBody>
         {ClassroomType.map((Class) => (
           <TableRow key={Class.id} className="">
-            <TableCell className="font-bold flex md:w-full w-[200px] text-[13px] items-center mr-3">
+            <TableCell className="font-bold flex md:w-full w-[150px] text-[13px] items-center mr-3">
               <Image
                 src={Class.icon}
                 alt="icon"
@@ -62,19 +62,19 @@ export default function Tables() {
               {Class.subject}
             </TableCell>
             <TableCell className="text-[13px]  font-semibold">{Class.name}</TableCell>
-            <TableCell className="text-[13px]  font-semibold">{Class.Grade}</TableCell>
+            <TableCell className="text-[13px] w-[150px]   font-semibold">{Class.Grade}</TableCell>
             <TableCell
               className={`${
                 Class.TeacherInitial
-                  ? ""
-                  : " border-lightGreen  cursor-pointer text-[11px]  font-bold text-lightGreen rounded-xl"
+                  ? "font-bold"
+                  : " border-lightGreen   cursor-pointer text-[11px]  font-bold text-lightGreen rounded-xl"
               }`}
             >
               {Class.TeacherInitial || <AssignDialog/>}
             </TableCell>
 
             <TableCell className="text-[13px]  font-semibold">{Class.students}</TableCell>
-            <TableCell className="flex justify-end items-center text-[14px]  text-lightGreen cursor-pointer">
+            <TableCell className="  text-[16px] float-right pr-3  text-lightGreen cursor-pointer">
              <OptionsDialog/>
             </TableCell>
           </TableRow>

@@ -25,7 +25,7 @@ const AllTutors = () => {
           </div>
           <div className="md:flex  hidden font-header text-[14px] font-semibold md:mx-5 p-2 ">
             <h3>Online </h3>
-            <div className="w-[13px] h-[13px] mt-1 rounded-full ml-3 bg-lightGreen"></div>
+            <div className="w-[10px] h-[10px] mt-1 rounded-full ml-3 bg-lightGreen"></div>
           </div>
         </div>
 
@@ -90,8 +90,6 @@ const AllTutors = () => {
 
           <div className="flex md:flex-col   items-end md:mx-1  flex-row ">
             <BookSession />
-
-            
 
             <Button
               asChild

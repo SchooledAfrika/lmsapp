@@ -72,12 +72,12 @@ const SessionCard = ({ icon, date, teacherIcon, name, subject }: Props) => {
 
       {/* Mobile screens */}
 
-      <div className="w-full md:hidden border-2 border-lightGreen py-6 px-3 mt-6  overflow-hidden      font-header rounded-lg card flex flex-col justify-center gap-6 hover:-translate-y-2 transition-transform duration-300 group">
+      <div className="w-full md:hidden border-2  py-6 px-3 mt-6  overflow-hidden      font-header rounded-lg card flex flex-col justify-center gap-6 hover:-translate-y-2 transition-transform duration-300 group">
         <div className="flex flex-col justify-between    ">
           <div className="flex space-x-3 mb-2 ">
             <div className="py-3 flex flex-col">
-              <div className="flex space-x-16 mb-2">
-                <p className="font-bold inline text-[20px]">
+              <div className="flex space-x-24  mb-2">
+                <p className="font-bold inline text-[15px]">
                   <Image
                     src={icon}
                     alt="course"
@@ -92,7 +92,7 @@ const SessionCard = ({ icon, date, teacherIcon, name, subject }: Props) => {
                   <BsThreeDots className="text-[25px]  text-lightGreen" />
                 </Link>
               </div>
-              <p className="text-[14px] font-semibold">{date}</p>
+              <p className="text-[13px] font-semibold">{date}</p>
             </div>
           </div>
 

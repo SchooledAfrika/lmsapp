@@ -13,6 +13,7 @@ const config = {
       lg: "1200px",
       xl: "1700px",
     },
+
     maxWidth: {
       container: "1440px",
       contentContainer: "1140px",
@@ -94,6 +95,7 @@ const config = {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },
+
       flex: {
         "3": "3 3 0%",
         "12": "12 12 0%",

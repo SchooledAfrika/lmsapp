@@ -23,7 +23,7 @@ export function AssignDialog() {
           Assign
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[500px] w-[380px] font-subtext">
+      <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold">
             Assign Teacher

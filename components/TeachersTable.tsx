@@ -58,7 +58,7 @@ export default function TeachersTable() {
       <TableBody>
         {TeachersType.map((Teacher) => (
           <TableRow key={Teacher.id} className="">
-            <TableCell className="font-bold text-[13px] w-[200px]  flex  mr-1">
+            <TableCell className="font-bold text-[13px] mt-6 md:mt-0 w-[200px]  flex  mr-1">
               <Image
                 src={Teacher.icon}
                 alt="icon"
@@ -84,21 +84,21 @@ export default function TeachersTable() {
             </TableCell>
             <TableCell className="">
               <div className="flex flex-col">
-                <p className="inline mb-2 text-[12px] font-semibold">
+                <p className="inline mb-2 text-[12px] font-medium">
                   <FaEnvelope className="inline mr-1 " />
                   {Teacher.mail}
                 </p>
-                <p className="inline text-[12px] font-semibold">
+                <p className="inline text-[12px] font-medium">
                   <FaPhoneAlt className="inline mr-1" />
                   {Teacher.phone}
                 </p>
               </div>
             </TableCell>
-            <TableCell className="text-[12px]  font-semibold">{Teacher.subject}</TableCell>
+            <TableCell className="text-[12px]  font-medium">{Teacher.subject}</TableCell>
 
-            <TableCell className="text-[12px]  font-semibold">{Teacher.Grade}</TableCell>
-            <TableCell className="text-[12px]  font-semibold">{Teacher.Added}</TableCell>
-            <TableCell className="flex justify-center  text-[14px] items-center  text-lightGreen cursor-pointer">
+            <TableCell className="text-[12px]  font-medium">{Teacher.Grade}</TableCell>
+            <TableCell className="text-[12px]  font-medium">{Teacher.Added}</TableCell>
+            <TableCell className="float-right  text-[16px]   text-lightGreen cursor-pointer">
              <TeacherOptions/>
             </TableCell>
           </TableRow>

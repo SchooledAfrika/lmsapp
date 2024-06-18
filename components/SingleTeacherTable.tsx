@@ -49,7 +49,7 @@ import { FaEllipsisH } from "react-icons/fa";
         <TableHeader>
             <p className="px-3 py-2 font-bold text-base">Tests & Resources</p>
             
-          <TableRow>
+          <TableRow className="text-[13px]">
 
             <TableHead>Title</TableHead>
             <TableHead className="">Author</TableHead>
@@ -62,7 +62,7 @@ import { FaEllipsisH } from "react-icons/fa";
         <TableBody>
           {SingleTeacherType.map((Teacher) => (
             <TableRow key={Teacher.id} className="">
-              <TableCell className="font-semibold text-[14px] flex  mr-1">
+              <TableCell className="font-semibold text-[12px] flex  mr-1">
                 <Image
                   src={Teacher.icon}
                   alt="icon"
@@ -80,10 +80,10 @@ import { FaEllipsisH } from "react-icons/fa";
                 </div>
               </TableCell>
              
-              <TableCell className="">{Teacher.author}</TableCell>
-              <TableCell className="">{Teacher.grade}</TableCell>
-              <TableCell className="">{Teacher.timeUploaded}</TableCell>
-              <TableCell className="">{Teacher.date}</TableCell>
+              <TableCell className="text-[12px] font-semibold">{Teacher.author}</TableCell>
+              <TableCell className="text-[12px] font-semibold">{Teacher.grade}</TableCell>
+              <TableCell className="text-[12px] font-semibold">{Teacher.timeUploaded}</TableCell>
+              <TableCell className="text-[12px] font-semibold">{Teacher.date}</TableCell>
               
             </TableRow>
           ))}

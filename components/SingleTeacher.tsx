@@ -19,7 +19,7 @@ const SingleTeacher = () => {
            
         </div>
       
-      <div className="grid font-subtext grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-3 my-6">
+      <div className="grid font-subtext grid-cols-1 md:grid-cols-3 sm:grid-cols-2 gap-3 mt-6">
         <div className=" flex flex-col space-y-4">
         <div className=" bg-white flex pl-3 pr-4 py-6 rounded-md  space-x-3 pb-2">
             <Image src="/tutors.jpg" alt="" width={100} height={100} className="rounded-md w-[120px] h-[140px]"/>

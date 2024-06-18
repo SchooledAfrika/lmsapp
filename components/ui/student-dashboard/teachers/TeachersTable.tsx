@@ -41,7 +41,7 @@ import {
         <TableHeader>
           <TableRow>
             <TableHead className="text-[12px]">Name</TableHead>
-            <TableHead className="text-[12px]">Class Name</TableHead>
+            <TableHead className="text-[12px]">Class</TableHead>
             <TableHead className="text-[12px]">Subject</TableHead>
             <TableHead className="text-[12px]">Grade</TableHead>
             <TableHead className="text-right text-[12px]">Options</TableHead>
@@ -78,7 +78,7 @@ import {
               <TableCell className="text-[12px]  font-semibold">{Teacher.subject}</TableCell>
   
               <TableCell className="text-[12px]  font-semibold">{Teacher.Grade}</TableCell>
-              <TableCell className="flex justify-center  text-[14px] items-center  text-lightGreen cursor-pointer">
+              <TableCell className="float-right  text-[16px] items-center  text-lightGreen cursor-pointer">
                <TeacherOptions/>
               </TableCell>
             </TableRow>

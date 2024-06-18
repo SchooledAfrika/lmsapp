@@ -8,11 +8,11 @@ export const RegisterType = [
     coloredTick: "/svgs/colored-tick.svg",
   },
   {
-    Images: "/teacher-acct.png",
+    Images: "/teach.png",
     title: "Teacher Account",
-    description: "Create your",
+    description: "Create your ",
     link: "/teacher-account",
-    linkText: "Teacher Account",
+    linkText: "Teacher Account ",
     descriptionEnd:
       "with Schooled Afrika, Teach how you want, when you want and get paid.",
     tickIcon: "/svgs/tick.svg",
@@ -21,9 +21,9 @@ export const RegisterType = [
   {
     Images: "/school-acct.png",
     title: "School Account",
-    description: "Create your",
+    description: "Create your ",
     link: "/login",
-    linkText: "School Account",
+    linkText: "School Account ",
     descriptionEnd:
       "with Schooled Afrika and have total control over the activities in your school.",
     tickIcon: "/svgs/tick.svg",

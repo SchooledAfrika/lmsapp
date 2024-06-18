@@ -18,12 +18,12 @@ const UnderCard = () => {
            alt="teacher"
            width={200}
            height={200}
-           className="rounded-md  mt-3 w-96 object-top h-52 object-cover "
+           className="rounded-md   mt-3 w-96 object-top h-52 object-cover "
         
         /> 
          <Button
             asChild
-            className=" bg-dimOrange hover:bg-dimYellow absolute bottom-4 right-4 rounded-md text-white text-[13px] mt-3  ml-3 md:w-32 w-full mx-auto   py-2 text-center lg:block"
+            className=" bg-dimOrange hover:bg-dimYellow absolute bottom-4 md:right-4 md:left-4 left-4 rounded-md text-white text-[13px] mt-3   ml-3 md:w-32 w-[90%] md:mx-0 mx-auto    py-2 text-center lg:block"
           >
             <Link href="/" className="inline"><BsBroadcast className="inline mr-1" />Join Session</Link>
           </Button>
