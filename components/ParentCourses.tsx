@@ -29,9 +29,9 @@ const CourseCard = ({
   purchase,
 }: Props) => {
   return (
-    <div className="w-full  hover:-translate-y-2 my-6 transition-transform duration-300 group">
+    <div className="w-full hover:-translate-y-2 my-6 transition-transform duration-300 group">
       <Link href="/parents-dashboard/courses/details">
-        <Card className="h-[50vh]">
+        <Card className="h-[55vh]">
           <CardHeader>
             <Image
               className=" rounded-lg w-full"

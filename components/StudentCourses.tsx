@@ -1,12 +1,7 @@
 "use client";
 import * as React from "react";
 import Image, { StaticImageData } from "next/image";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader } from "@/components/ui/card";
 import { ProgressBar } from "@/components/ProgressBar";
 import { StudentCoursesData } from "@/constants/studentCourseData";
 import Link from "next/link";
@@ -36,7 +31,7 @@ const CourseCard = ({
   return (
     <div className="w-full  hover:-translate-y-2 my-6 transition-transform duration-300 group">
       <Link href="/student-dashboard/courses/details">
-        <Card className="h-[50vh]">
+        <Card className="h-[55vh]">
           <CardHeader>
             <Image
               className=" rounded-lg w-full"
