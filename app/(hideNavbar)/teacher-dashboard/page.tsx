@@ -5,7 +5,7 @@ import React from "react";
 import Transactions from "@/components/ui/teacher-dashboard/Transactions"
 
 const page = () => {
-  return <div className="mt-[80px]  md:mt-6">
+  return <div className="mt-[100px]  md:mt-6">
      <Card/>
      <Chart/>
      <Transactions/>

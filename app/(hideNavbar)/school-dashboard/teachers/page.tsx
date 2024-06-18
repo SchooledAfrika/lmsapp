@@ -5,7 +5,7 @@ import AddTeacher from "@/components/AddTeacher";
 const page = () => {
   return (
     <div>
-      <div className="flex overflow-auto mt-6 justify-end items-center font-header font-semibold text-[13px]">
+      <div className="flex overflow-auto md:mt-6 mt-[100px] justify-end items-center font-header font-semibold text-[13px]">
         <div className="flex ">
           <input
             type="checkbox"

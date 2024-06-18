@@ -39,7 +39,7 @@ import { ClassOptions } from "../ClassOptions";
         <TableHeader>
           <TableRow>
             <TableHead className="text-[12px]">Subject</TableHead>
-            <TableHead className="text-[12px]">Class Name</TableHead>
+            <TableHead className="text-[12px]">Class</TableHead>
             <TableHead className="text-[12px]">Grade</TableHead>
             <TableHead className="text-right text-[12px]">Options</TableHead>
           </TableRow>
@@ -61,7 +61,7 @@ import { ClassOptions } from "../ClassOptions";
               <TableCell className="text-[12px]  font-semibold">{Class.Grade}</TableCell>
              
   
-              <TableCell className="flex justify-end items-center  pr-3 text-[14px]  text-lightGreen cursor-pointer">
+              <TableCell className="float-right  pr-3 text-[16px]  text-lightGreen cursor-pointer">
                 <ClassOptions/>
               
               </TableCell>

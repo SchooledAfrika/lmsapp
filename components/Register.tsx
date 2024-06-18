@@ -73,7 +73,7 @@ const Register: FC = () => {
           {RegisterType.map((registered, index) => (
             <div
               key={index}
-              className="flex items-center bg-white rounded-[8px] px-6 py-2 my-4 gap-8 cursor-pointer"
+              className="flex items-center bg-white rounded-[8px] px-4 py-3 my-4 gap-8 cursor-pointer"
               onClick={() =>
                 handleSelectedItem(
                   registered.title as RegisterProps["selectAccountType"]
@@ -83,9 +83,10 @@ const Register: FC = () => {
               <div>
                 <Image
                   src={registered.Images}
-                  width={30}
-                  height={30}
+                  width={100}
+                  height={100}
                   alt="School Account"
+                  className="w-[60px]"
                 />
               </div>
               <div>
