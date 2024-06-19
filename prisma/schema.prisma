@@ -45,9 +45,10 @@ model Teacher {
   SchoolClassTeacher   SchoolClassTeacher[]
   VacancyTeacher       VacancyTeacher[]
   OneOnOneSection      OneOnOneSection?
+  Exams                Exams[]
+  CompletedProfile     Boolean              @default(false)
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @default(now())
-  Exams                Exams[]
 }
 
 // creating the student model
@@ -68,9 +69,10 @@ model Student {
   role               Role
   SchoolStudent      SchoolStudent[]
   SchoolClassStudent SchoolClassStudent[]
+  AppliedSection     AppliedSection[]
+  CompletedProfile   Boolean              @default(false)
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @default(now())
-  AppliedSection     AppliedSection[]
 }
 
 // creating the school model
@@ -89,20 +91,22 @@ model School {
   Vacancy          Vacancy[]
   role             Role
   SchoolClass      SchoolClass[]
+  CompletedProfile Boolean         @default(false)
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @default(now())
 }
 
 // creating the model for parents
 model Parents {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  name         String?
-  email        String   @unique
-  password     String?
-  profilePhoto String?
-  role         Role
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  email            String   @unique
+  password         String?
+  profilePhoto     String?
+  role             Role
+  CompletedProfile Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now())
 }
 
 // here we created the model where teachers can upload article

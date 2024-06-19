@@ -1,5 +1,7 @@
 // here we will handle everything about updating the users section;
 // we are interested in returning some informations like roles
+// this route exist because of our nextauth session, so that we can be able to update our sessions
+// then add more parameters to the session
 import prisma from "@/prisma/prismaConnect";
 
 export async function POST(req: Request) {
@@ -16,6 +18,7 @@ export async function POST(req: Request) {
       name: true,
       role: true,
       profilePhoto: true,
+      CompletedProfile: true,
     },
   });
   if (checkStudents)
@@ -29,6 +32,7 @@ export async function POST(req: Request) {
       name: true,
       role: true,
       profilePhoto: true,
+      CompletedProfile: true,
     },
   });
   if (checkTeachers)
@@ -42,6 +46,7 @@ export async function POST(req: Request) {
       name: true,
       role: true,
       profilePhoto: true,
+      CompletedProfile: true,
     },
   });
   if (checkSchools)
@@ -55,6 +60,7 @@ export async function POST(req: Request) {
       name: true,
       role: true,
       profilePhoto: true,
+      CompletedProfile: true,
     },
   });
   if (checKParents)

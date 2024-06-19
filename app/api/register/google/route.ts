@@ -22,6 +22,13 @@ export async function POST(request: Request) {
     // if is there, return with an error and a message
     const checkStudents = await prisma.student.findUnique({
       where: { email: email },
+      select: {
+        id: true,
+        email: true,
+        profilePhoto: true,
+        role: true,
+        CompletedProfile: true,
+      },
     });
     // return the student immediately if it exists
     if (checkStudents) {
@@ -32,6 +39,13 @@ export async function POST(request: Request) {
     }
     const checkTeachers = await prisma.teacher.findUnique({
       where: { email: email },
+      select: {
+        id: true,
+        email: true,
+        profilePhoto: true,
+        role: true,
+        CompletedProfile: true,
+      },
     });
     // return the teacher immediately if it exists
     if (checkTeachers) {
@@ -42,6 +56,13 @@ export async function POST(request: Request) {
     }
     const checkSchools = await prisma.school.findUnique({
       where: { email: email },
+      select: {
+        id: true,
+        email: true,
+        profilePhoto: true,
+        role: true,
+        CompletedProfile: true,
+      },
     });
     // return the school immediately if it exists
     if (checkSchools) {
@@ -52,6 +73,13 @@ export async function POST(request: Request) {
     }
     const checkParents = await prisma.parents.findUnique({
       where: { email: email },
+      select: {
+        id: true,
+        email: true,
+        profilePhoto: true,
+        role: true,
+        CompletedProfile: true,
+      },
     });
     // return the parents immediately if it exists
     if (checkParents) {
@@ -60,6 +88,9 @@ export async function POST(request: Request) {
         statusText: "success",
       });
     }
+    return new Response(JSON.stringify({ message: "go to register page" }), {
+      status: 404,
+    });
   } else {
     //   here we register the user based on the role passed from the cookies to the backend
     //   making use of conditions based on the users role to register them
@@ -73,6 +104,7 @@ export async function POST(request: Request) {
           email: true,
           profilePhoto: true,
           role: true,
+          CompletedProfile: true,
         },
       });
       if (checkStudents) {
@@ -91,6 +123,7 @@ export async function POST(request: Request) {
             email: true,
             profilePhoto: true,
             role: true,
+            CompletedProfile: true,
           },
         });
         // return info of the student register
@@ -112,6 +145,7 @@ export async function POST(request: Request) {
           email: true,
           profilePhoto: true,
           role: true,
+          CompletedProfile: true,
         },
       });
       if (checkTeacher) {
@@ -128,6 +162,9 @@ export async function POST(request: Request) {
           select: {
             id: true,
             email: true,
+            profilePhoto: true,
+            role: true,
+            CompletedProfile: true,
           },
         });
         // return info of the student register
@@ -146,6 +183,7 @@ export async function POST(request: Request) {
           email: true,
           profilePhoto: true,
           role: true,
+          CompletedProfile: true,
         },
       });
       if (checkParents) {
@@ -162,6 +200,9 @@ export async function POST(request: Request) {
           select: {
             id: true,
             email: true,
+            profilePhoto: true,
+            role: true,
+            CompletedProfile: true,
           },
         });
         // return info of the student register
@@ -180,6 +221,7 @@ export async function POST(request: Request) {
           email: true,
           profilePhoto: true,
           role: true,
+          CompletedProfile: true,
         },
       });
       if (checkSchool) {
@@ -196,6 +238,9 @@ export async function POST(request: Request) {
           select: {
             id: true,
             email: true,
+            profilePhoto: true,
+            role: true,
+            CompletedProfile: true,
           },
         });
         // return info of the student register

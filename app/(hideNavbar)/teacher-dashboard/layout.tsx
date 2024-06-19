@@ -3,13 +3,23 @@ import MobileNav from "@/components/ui/school-dashboard/navbar/MobileNav";
 import Navbar from "@/components/ui/school-dashboard/navbar/navbar";
 import MobileSideBar from "@/components/ui/school-dashboard/sidebar/MobileSideBar";
 import Sidebar from "@/components/ui/school-dashboard/sidebar/sidebar";
+import { authOptions } from "@/lib/nextAuth";
 import CommonDashboardContext from "@/providers/Statecontext";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // here, we get the session
+  // redirect if the role is not teacher
+  // redirect if the completedprofile is false
+  const session = await getServerSession(authOptions);
+  if (session?.user.role !== "Teacher") return redirect("/");
+  if (!session.user.CompletedProfile)
+    return redirect("/teacher-account/details");
   return (
     <>
       <CommonDashboardContext>
