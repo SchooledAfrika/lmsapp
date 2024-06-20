@@ -1,16 +1,19 @@
 import React from "react";
+import { IparentSub } from "./ParentInfo";
 
-const ParentWardAccess = () => {
+const ParentWardAccess: React.FC<IparentSub> = ({ register, errors }) => {
   return (
     <div className=" flex flex-col w-[55%]">
       <label className="font-bold text-[16px]">Pre-existing Account</label>
       <input
+        {...register("wardId")}
         autoFocus
         type="text"
-        name="text"
+        name="wardId"
         placeholder="Enter Ward Access ID"
         className="my-2 px-4 py-5 outline-none rounded-[8px] w-full bg-white"
       />
+
       <span className="text-[14px] font-medium">
         Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
         ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis
@@ -23,7 +26,7 @@ const ParentWardAccess = () => {
         <label className="font-bold text-[16px]">New Account</label>
         <input
           type="text"
-          name="text"
+          name="wardEmail"
           placeholder="Wards Email Address"
           className="mt-4 mb-2 p-4 outline-none rounded-[8px] w-full bg-white"
         />
@@ -36,8 +39,8 @@ const ParentWardAccess = () => {
         />
         <br />
         <input
-          type="Cpassword"
-          name="password"
+          type="password"
+          name="Confirmpassword"
           placeholder="Confirm Password"
           className="my-2 p-4 outline-none rounded-[8px] w-full bg-white"
         />

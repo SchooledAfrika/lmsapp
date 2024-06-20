@@ -17,7 +17,7 @@ const ProgressLine = ({
   return (
     <div className="flex flex-col ml-[0] md:ml-[40px] mb-[50px]">
       {formArrays.map((item, index) => (
-        <div className=" flex flex-col">
+        <div key={index} className=" flex flex-col">
           <div
             onClick={() => handleUpdateForm(index + 1)}
             className=" flex gap-3 items-center cursor-pointer"

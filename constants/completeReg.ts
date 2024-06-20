@@ -1,3 +1,7 @@
+"use client";
+
+import { z } from "zod";
+
 export const StudentMoreInfo: string[] = [
   "Personal Information",
   "Profile Data",
@@ -17,3 +21,7 @@ export const ParentsMoreInfo: string[] = [
   "Wards Account Access",
   "Ward Profile Data",
 ];
+
+// the zod types for completing profile information
+//
+// below is the zod schema for parents that continues with their registration
