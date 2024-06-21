@@ -41,18 +41,23 @@ const ParentInfo: React.FC<IparentSub> = ({ register, errors, control }) => {
         )}
       </div>
       <div>
-        <Select {...register("gender")}>
-          <SelectTrigger className="w-full py-[27px] focus:outline-none">
-            <SelectValue placeholder="Select a gender" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              <SelectLabel>Gender</SelectLabel>
-              <SelectItem value="Male">Male</SelectItem>
-              <SelectItem value="Female">Female</SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <Controller
+          control={control}
+          name="gender"
+          render={({ field }) => (
+            <Select onValueChange={field.onChange}>
+              <SelectTrigger className=" py-[27px]">
+                <SelectValue
+                  placeholder={`${field.value ? field.value : "enter gender"}`}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Male">Male</SelectItem>
+                <SelectItem value="Female">Female</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        />
         {errors.gender && (
           <small className=" text-red-600">{errors.gender.message}</small>
         )}
@@ -106,7 +111,9 @@ const ParentInfo: React.FC<IparentSub> = ({ register, errors, control }) => {
           </div>
         </div>
         {errors.profilePhoto && (
-          <small className=" text-red-600">{errors.profilePhoto.message}</small>
+          <small className=" text-red-600">
+            {String(errors.profilePhoto.message)}
+          </small>
         )}
       </div>
     </div>

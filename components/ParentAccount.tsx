@@ -10,39 +10,10 @@ import Footer from "./Footer";
 import ProgressLine from "./ui/PrograssLine";
 import { ParentsMoreInfo } from "@/constants/completeReg";
 import { Button } from "./ui/button";
-import { useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FILE } from "dns";
-export const parentSchema = z
-  .object({
-    name: z.string().min(3, { message: "enter your name" }),
-    gender: z.enum(["Male", "Female"], {
-      message: "you can only enter male or female as gender",
-    }),
-    phoneNo: z.string().min(5, { message: "enter your phone number" }),
-    address: z
-      .string()
-      .min(5, { message: "enter valid parmanent address please" }),
-    profilePhoto: z.string({ message: "enter pix" }),
-    wardId: z.string().min(4, { message: "enter a valid id" }),
-    password: z
-      .string()
-      .min(8, { message: "password must be at least 8 characters" }),
-    confirmPassword: z.string(),
-    wardName: z.string().min(4, { message: "enter a valid name" }),
-    wardGender: z.enum(["Male", "Female"], {
-      message: "you can only enter male or female as gender",
-    }),
-    grade: z.string({ message: "enter grade" }),
-    disable: z.boolean({ message: "select the field above" }),
-    details: z.string({ message: "fill the field above" }),
-    childImg: z.string({ message: "enter pix" }),
-  })
-  .refine((item) => item.password === item.confirmPassword, {
-    path: ["confirmPassword"],
-    message: "password does not match",
-  });
+import { parentSchema } from "@/constants/completeReg";
 
 // exporting the parentSchema type above
 export type Iparents = z.infer<typeof parentSchema>;
@@ -54,10 +25,23 @@ const ParentAccount = () => {
     setValue,
     handleSubmit,
     control,
+    trigger,
     formState: { errors },
   } = useForm<Iparents>({ resolver: zodResolver(parentSchema) });
-  const runSubmit = () => {
-    setcurrentPage((page) => page + 1);
+  const runSubmit: SubmitHandler<Iparents> = async (data) => {};
+
+  type fieldName = keyof Iparents;
+  // function to validate form on each proceed clicked
+  const handleNextPage = async () => {
+    const fields = ParentsMoreInfo[currentPage - 1].field as fieldName[];
+    const isValid = await trigger(fields, { shouldFocus: true });
+    if (!isValid) return;
+    if (currentPage === 3) {
+      console.log("entered");
+      await handleSubmit(runSubmit)();
+    } else {
+      setcurrentPage((prev) => prev + 1);
+    }
   };
 
   return (
@@ -86,14 +70,27 @@ const ParentAccount = () => {
           <form onSubmit={handleSubmit(runSubmit)} className=" flex-1">
             {/* conditionaly rendering each form */}
             {currentPage === 1 ? (
-              <ParentInfo register={register} errors={errors} control={control} />
+              <ParentInfo
+                register={register}
+                errors={errors}
+                control={control}
+              />
             ) : currentPage === 2 ? (
-              <ParentWardAccess register={register} errors={errors} />
+              <ParentWardAccess
+                register={register}
+                errors={errors}
+                control={control}
+              />
             ) : (
-              <ParentWardProfileData register={register} errors={errors} />
+              <ParentWardProfileData
+                register={register}
+                errors={errors}
+                control={control}
+              />
             )}
             <Button
-              type="submit"
+              onClick={handleNextPage}
+              type="button"
               className="bg-secondary w-[55%] text-white text-[16px] px-6 py-7 my-3"
             >
               {currentPage < 3 ? "Proceed" : "Submit"}

@@ -1,8 +1,9 @@
 "use client";
 import React, { useState } from "react";
+import { IprogressType } from "@/constants/completeReg";
 
 interface IformArrays {
-  formArrays: string[];
+  formArrays: IprogressType[];
   currentPage: number;
   setcurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -36,7 +37,7 @@ const ProgressLine = ({
                 index + 1 <= currentPage ? "text-[#359C71]" : " text-black"
               }`}
             >
-              {item}
+              {item.name}
             </p>
           </div>
           {index + 1 < formArrays.length && (
