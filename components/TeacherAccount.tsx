@@ -47,7 +47,7 @@ const TeacherAccount = () => {
       setcurrentPage((prev) => prev + 1);
     }
   };
-
+  //
   return (
     <section className="py-[1rem] font-subtext md:pt-[3rem]">
       <div className=" max-w-[1150px] mx-auto md:px-16 pt-8">
