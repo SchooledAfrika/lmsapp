@@ -7,15 +7,29 @@ export interface IprogressType {
   field: string[];
 }
 
-export const StudentMoreInfo: string[] = [
-  "Personal Information",
-  "Profile Data",
+// progress info for students
+export const StudentMoreInfo: IprogressType[] = [
+  {
+    name: "Personal Information",
+    field: ["name", "gender", "phoneNo", "address", "profilePhoto"],
+  },
+  { name: "Profile Data", field: ["grade", "details"] },
 ];
-export const TeacherMoreInfo: string[] = [
-  "Personal Information",
-  "Resume & Qualification",
-  "Subject & preference",
-  "Payments Details",
+// progress info for teachers
+export const TeacherMoreInfo: IprogressType[] = [
+  {
+    name: "Personal Information",
+    field: ["name", "gender", "phoneNo", "address", "profilePhoto"],
+  },
+  { name: "Resume & Qualification", field: ["resume", "details"] },
+  {
+    name: "Subject & preference",
+    field: ["language", "subject", "grade", "homeWorkPrice", "sessionPrice"],
+  },
+  {
+    name: "Payments Details",
+    field: ["bankName", "accountName", "accountNo", "terms"],
+  },
 ];
 export const SchoolMoreInfo: string[] = [
   "School Information",
@@ -98,4 +112,78 @@ export const parentSchema = z.object({
       message: `Max file size is 5MB.`,
     }),
   wardEmail: z.string().optional(),
+});
+
+// below is the zod schema for students
+//
+export const studentSchema = z.object({
+  name: z
+    .string({ message: "name is required" })
+    .min(3, { message: "name is required" }),
+  gender: z.enum(["Male", "Female"], { message: "please select gender" }),
+  phoneNo: z
+    .string({ message: "phone number is required" })
+    .min(5, { message: "enter your phone number" }),
+  address: z
+    .string({ message: "address is required" })
+    .min(5, { message: "enter a valid address" }),
+  profilePhoto: z
+    .any()
+    // To not allow empty files
+    .refine((files) => files?.length >= 1, { message: "Image is required." })
+    // To not allow files other than images
+    .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
+      message: ".jpg, .jpeg, .png and .webp files are accepted.",
+    })
+    // To not allow files larger than 5MB
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+      message: `Max file size is 5MB.`,
+    }),
+  grade: z.string({ message: "grade is required" }),
+  details: z
+    .string()
+    .min(20, { message: "describe your self with a minimum of 20 characters" }),
+});
+
+// this is zod schema for teachers completing their profile informations
+//
+export const teacherSchema = z.object({
+  name: z.string().min(3, { message: "enter your name" }),
+  gender: z.enum(["Male", "Female"], { message: "enter your gender" }),
+  phoneNo: z.string().min(5, { message: "enter your phone number" }),
+  address: z.string().min(10, { message: "enter a valid house address" }),
+  profilePhoto: z
+    .any()
+    // To not allow empty files
+    .refine((files) => files?.length >= 1, { message: "Image is required." })
+    // To not allow files other than images
+    .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
+      message: ".jpg, .jpeg, .png and .webp files are accepted.",
+    })
+    // To not allow files larger than 5MB
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+      message: `Max file size is 5MB.`,
+    }),
+  resume: z
+    .any()
+    // To not allow empty files
+    .refine((files) => files?.length >= 1, { message: "Image is required." })
+    // To not allow files other than images
+    .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
+      message: ".jpg, .jpeg, .png and .webp files are accepted.",
+    })
+    // To not allow files larger than 5MB
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+      message: `Max file size is 5MB.`,
+    }),
+  details: z.string().min(10, { message: "description is needed" }),
+  language: z.string().min(3, { message: "enter your prefered language" }),
+  subject: z.string({ message: "enter your prefered subject" }),
+  grade: z.string({ message: "select your grade" }),
+  sessionPrice: z.string().min(1, { message: "add your session price" }),
+  homeWorkPrice: z.string().min(1, { message: "add your homework price" }),
+  bankName: z.string({ message: "enter your bank name" }),
+  accountNo: z.string().min(9, { message: "enter a valid account number" }),
+  accountName: z.string().min(5, { message: "enter valid bank name" }),
+  preference: z.array(z.string(), { message: "please select a preference" }),
 });

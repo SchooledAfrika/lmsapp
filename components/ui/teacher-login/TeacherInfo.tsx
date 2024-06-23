@@ -1,131 +1,133 @@
-import Container from "@/components/Container";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
-import { Button } from "../button";
-import Footer from "@/components/Footer";
+import {
+  UseFormClearErrors,
+  UseFormRegister,
+  FieldErrors,
+  Control,
+  Controller,
+  UseFormWatch,
+  UseFormSetValue,
+} from "react-hook-form";
+import { Iteacher } from "@/components/TeacherAccount";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-interface TeacherInfoProps {
-  onClickButton: (view: any) => void;
+export interface ITeacherSub {
+  register: UseFormRegister<Iteacher>;
+  errors: FieldErrors<Iteacher>;
+  control?: Control<Iteacher>;
+  clearErrors: UseFormClearErrors<Iteacher>;
+  watch: UseFormWatch<Iteacher>;
+  setValue?: UseFormSetValue<Iteacher>;
 }
 
-const TeacherInfo: React.FC<TeacherInfoProps> = ({ onClickButton }) => {
-  const handleResumeView = () => {
-    onClickButton("Resume");
-  };
-
+const TeacherInfo: React.FC<ITeacherSub> = ({
+  register,
+  errors,
+  control,
+  watch,
+  clearErrors,
+}) => {
+  // here we watch for each field change and initial errors
+  watch("name");
+  watch("gender");
+  watch("address");
+  watch("profilePhoto");
+  watch("address");
   return (
-    <section className="py-[1rem] font-subtext md:pt-[3rem]">
-      <Container>
-        <Link href="/">
-          <Image
-            src={"/logo.png"}
-            alt="logo"
-            width={100}
-            height={100}
-            className="w-[100px] ml-10 "
-          />
-        </Link>
-        <p className="font-bold text-[18px] pt-[40px] pb-[60px] pl-[0] md:pl-[40px]">
-          Complete Account Creation
-        </p>
-        <div className="flex flex-col md:flex-row ml-[0] md:ml-[40px] mb-[50px]">
-          <div>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] rounded-[50%] px-[7px] text-white">
-                1
-              </span>
-              <p className="text-[#359C71] font-bold">Personal Information</p>
-            </div>
-            <p className="border-l-2 border-[#E9ECEB] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#E9ECEB] rounded-full px-[7px] text-white">
-                2
-              </span>
-              <p>Resume & Qualifications</p>
-            </div>
-            <p className="border-l-2 border-[#E9ECEB] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#E9ECEB] rounded-full px-[7px] text-white">
-                3
-              </span>
-              <p>Payment Details</p>
-            </div>
-            <p className="border-l-2 border-[#E9ECEB] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#E9ECEB] rounded-full px-[7px] text-white">
-                4
-              </span>
-              <p>Payment Details</p>
-            </div>
-          </div>
-
-          <form className="pl-[0] md:pl-[100px] mt-[40px] md:mt-[0] w-full md:w-[50%]">
-            <label className="font-bold text-[18px]">
-              Personal Information
-            </label>
-            <input
-              type="text"
-              name="text"
-              placeholder="Full Name"
-              className="my-2 p-4 outline-none rounded-[8px] w-full bg-white"
-            />
-            <br />
-            <input
-              type="gender"
-              name="text"
-              placeholder="Gender"
-              className="my-2 p-4 outline-none rounded-[8px] w-full bg-white"
-            />
-            <br />
-            <input
-              type="text"
-              name="text"
-              placeholder="Phone Number"
-              className="my-2 p-4 outline-none rounded-[8px] w-full bg-white"
-            />
-            <br />
-            <input
-              type="text"
-              name="text"
-              placeholder="Permanent House Address"
-              className="my-2 p-4 outline-none rounded-[8px] w-full bg-white"
-            />
-            <br />
-
-            <div className="flex items-center bg-[#FFFFFF] py-4 pl-2 my-2 rounded-[8px]">
-              <Image
-                src="/svgs/upload.svg"
-                width={15}
-                height={15}
-                alt="UplaodImage"
+    <div className="flex flex-col w-[55%] gap-2">
+      <label className="font-bold text-[18px]">Personal Information</label>
+      <input
+        {...register("name")}
+        type="text"
+        name="name"
+        placeholder="Full Name"
+        className=" p-4 outline-none rounded-[8px] w-full bg-white"
+        onChange={() => clearErrors("name")}
+      />
+      {errors.name && (
+        <small className=" text-red-600">{errors.name.message}</small>
+      )}
+      <Controller
+        control={control}
+        name="gender"
+        render={({ field }) => (
+          <Select
+            onValueChange={(value) => {
+              field.onChange(value);
+              clearErrors("gender");
+            }}
+          >
+            <SelectTrigger className=" py-[27px]">
+              <SelectValue
+                placeholder={`${field.value ? field.value : "enter gender"}`}
               />
-              <div>
-                <label htmlFor="file-upload" className="cursor-pointer ml-2">
-                  <span className="bg-transparent py-1 pr-2 text-[12px] font-medium">
-                    Upload Profile Image
-                  </span>
-                </label>
-                <input
-                  id="file-upload"
-                  type="file"
-                  name="upload"
-                  className="hidden"
-                />
-              </div>
-            </div>
-
-            <Button
-              onClick={handleResumeView}
-              className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
-            >
-              Proceed
-            </Button>
-          </form>
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="Male">Male</SelectItem>
+              <SelectItem value="Female">Female</SelectItem>
+            </SelectContent>
+          </Select>
+        )}
+      />
+      {errors.gender && (
+        <small className=" text-red-600">{errors.gender.message}</small>
+      )}
+      <input
+        {...register("phoneNo")}
+        type="text"
+        name="phoneNo"
+        placeholder="Phone Number"
+        className=" p-4 outline-none rounded-[8px] w-full bg-white"
+        onChange={() => clearErrors("phoneNo")}
+      />
+      {errors.phoneNo && (
+        <small className=" text-red-600">{errors.phoneNo.message}</small>
+      )}
+      <input
+        {...register("address")}
+        type="text"
+        name="address"
+        placeholder="Permanent House Address"
+        className=" p-4 outline-none rounded-[8px] w-full bg-white"
+        onChange={() => clearErrors("address")}
+      />
+      {errors.address && (
+        <small className=" text-red-600">{errors.address.message}</small>
+      )}
+      <div
+        className={`flex items-center ${
+          errors.profilePhoto && " border border-red-600"
+        } bg-[#FFFFFF] py-4 pl-2 my-2 rounded-[8px]`}
+      >
+        <Image
+          src="/svgs/upload.svg"
+          width={15}
+          height={15}
+          alt="UplaodImage"
+        />
+        <div>
+          <label htmlFor="file-upload" className="cursor-pointer ml-2">
+            <span className="bg-transparent py-1 pr-2 text-[12px] font-medium">
+              Upload Profile Image
+            </span>
+          </label>
+          <input
+            {...register("profilePhoto")}
+            id="file-upload"
+            type="file"
+            name="profilePhoto"
+            className="hidden"
+          />
         </div>
-        <Footer />
-      </Container>
-    </section>
+      </div>
+    </div>
   );
 };
 
