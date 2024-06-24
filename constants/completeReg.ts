@@ -31,9 +31,12 @@ export const TeacherMoreInfo: IprogressType[] = [
     field: ["bankName", "accountName", "accountNo", "terms"],
   },
 ];
-export const SchoolMoreInfo: string[] = [
-  "School Information",
-  "Personal Information",
+export const SchoolMoreInfo: IprogressType[] = [
+  { name: "School Information", field: ["schName", "schAddress", "banner"] },
+  {
+    name: "Personal Information",
+    field: ["ownerName", "phoneNo", "homeAddress"],
+  },
 ];
 // the progress data for parent completing their profile
 export const ParentsMoreInfo: IprogressType[] = [
@@ -186,4 +189,26 @@ export const teacherSchema = z.object({
   accountNo: z.string().min(9, { message: "enter a valid account number" }),
   accountName: z.string().min(5, { message: "enter valid bank name" }),
   preference: z.array(z.string(), { message: "please select a preference" }),
+});
+
+// below is the schema for completing the school account registration
+//
+export const schoolSchema = z.object({
+  schName: z.string().min(2, { message: "enter a valid school name" }),
+  schAddress: z.string().min(3, { message: "enter a valid school address" }),
+  banner: z
+    .any()
+    // To not allow empty files
+    .refine((files) => files?.length >= 1, { message: "Image is required." })
+    // To not allow files other than images
+    .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
+      message: ".jpg, .jpeg, .png and .webp files are accepted.",
+    })
+    // To not allow files larger than 5MB
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+      message: `Max file size is 5MB.`,
+    }),
+  ownerName: z.string().min(3, { message: "enter a valid name" }),
+  phoneNo: z.string().min(5, { message: "enter a valid phone number" }),
+  homeAddress: z.string().min(5, { message: "enter a valid home address" }),
 });

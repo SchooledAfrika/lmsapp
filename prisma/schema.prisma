@@ -58,6 +58,11 @@ model Student {
   email              String               @unique
   password           String?
   profilePhoto       String?
+  phoneNo            String?
+  gender             Gender?
+  address            String?
+  grade              Grade?
+  details            String?
   // creating the many to many relationship between student and teacher
   // becasue the student can have many teachers
   teacherIDs         String[]             @db.ObjectId
@@ -78,9 +83,13 @@ model Student {
 // creating the school model
 model School {
   id               String          @id @default(auto()) @map("_id") @db.ObjectId
-  name             String?
+  schname          String?
   email            String          @unique
-  schoolbanner     String?
+  banner           String?
+  schAddress       String?
+  ownerName        String?
+  phoneNo          String?
+  homeAddress      String?
   schoolLogo       String?
   briefDescription String?
   password         String?
@@ -501,6 +510,11 @@ enum Role {
   Parents
   School
   Admin
+}
+
+enum Gender {
+  Male
+  Female
 }
 
 // this is for vacancy status when a teacher applied
