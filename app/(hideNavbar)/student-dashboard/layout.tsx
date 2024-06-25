@@ -23,7 +23,6 @@ export default async function RootLayout({
   // redirect if the role is not student
   // redirect if the completedprofile is false
   const session = await getServerSession(authOptions);
-  console.log(session?.user);
   if (session?.user.role !== "Student") return redirect("/");
   if (!session.user.CompletedProfile)
     return redirect("/student-account/details");

@@ -46,7 +46,7 @@ import { StudentOptions } from "./StudentOptions";
         <TableBody>
           {StudentsType.map((Student) => (
             <TableRow key={Student.id} className="">
-              <TableCell className="font-semibold text-[14px]  flex  mr-1">
+              <TableCell className="font-semibold w-[200px] text-[14px]  flex  mr-1">
                 <Image
                   src={Student.icon}
                   alt="icon"
@@ -73,7 +73,7 @@ import { StudentOptions } from "./StudentOptions";
              
               <TableCell className="text-[12.5px] font-semibold">{Student.classrooms}</TableCell>
   
-              <TableCell className="flex justify-end text-[14px]  text-lightGreen cursor-pointer">
+              <TableCell className="float-right text-[16px]  text-lightGreen cursor-pointer">
              <StudentOptions/>
             </TableCell>
             </TableRow>

@@ -47,7 +47,7 @@ export default function TeachersTable() {
       <TableBody>
         {TeachersType.map((Teacher) => (
           <TableRow key={Teacher.id} className="">
-            <TableCell className="font-bold text-[13px] w-[200px]  flex  mr-1">
+            <TableCell className="font-bold text-[13px] w-[250px]  flex  mr-1">
               <Image
                 src={Teacher.icon}
                 alt="icon"
@@ -56,7 +56,7 @@ export default function TeachersTable() {
                 className="w-[60px] h-[60px] rounded-md mr-1"
               />{" "}
               <div className="flex ml-1 flex-col">
-                <div>{Teacher.name}</div>
+                <p>{Teacher.name}</p>
                 <div className="flex  mt-2 justify-between">
                   <p className="text-[11px] px-[20px] py-[5px] text-center rounded-md mr-3 bg-lightGreen text-white">
                     {Teacher.active}

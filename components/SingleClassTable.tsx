@@ -41,12 +41,12 @@ import { FaEllipsisH } from "react-icons/fa";
   
   export default function SingleClassTable() {
     return (
-      <Table className="bg-white overflow-x-auto    rounded-md my-12">
+      <Table className="bg-white overflow-x-auto    rounded-md mt-6 mb-12">
         
         <TableHeader>
             <p className="px-3 py-2 font-bold text-base">Students</p>
             
-          <TableRow>
+          <TableRow className="text-[13px]">
 
             <TableHead>Name</TableHead>
             <TableHead className="">Start Date</TableHead>
@@ -57,7 +57,7 @@ import { FaEllipsisH } from "react-icons/fa";
         <TableBody>
           {SingleclassType.map((Class) => (
             <TableRow key={Class.id} className="">
-              <TableCell className="font-semibold w-[250px] text-[14px] flex  mr-1">
+              <TableCell className="font-semibold w-[250px] text-[12px] flex  mr-1">
                 <Image
                   src={Class.icon}
                   alt="icon"
@@ -82,9 +82,9 @@ import { FaEllipsisH } from "react-icons/fa";
                 </div>
               </TableCell>
              
-              <TableCell className="">{Class.start}</TableCell>
-              <TableCell className="">{Class.sessionsAttended}</TableCell>
-              <TableCell className="flex justify-end text-[14px]   text-lightGreen cursor-pointer"><FaEllipsisH className="ml-3"/></TableCell>
+              <TableCell className="text-[12px] font-semibold">{Class.start}</TableCell>
+              <TableCell className="text-[12px] font-semibold">{Class.sessionsAttended}</TableCell>
+              <TableCell className="float-right text-[16px]   text-lightGreen cursor-pointer"><FaEllipsisH className="ml-3"/></TableCell>
               
             </TableRow>
           ))}

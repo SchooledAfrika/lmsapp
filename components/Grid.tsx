@@ -17,8 +17,8 @@ import {
        <div className="flex overflow-x-auto">
          <Table className="bg-white overflow-x-auto    rounded-lg mt-12">
         <TableHeader>
-          <TableRow>
-            <TableHead className="w-[100px]"></TableHead>
+          <TableRow className="text-[13px]">
+            <TableHead className="w-[100px]">Timing</TableHead>
             <TableHead className="">Monday</TableHead>
             <TableHead>Tuesday</TableHead>
             <TableHead>Wednesday</TableHead>
@@ -31,7 +31,7 @@ import {
         <TableBody>
          
             <TableRow className="text-[12px]">
-              <TableCell className="w-[100px] bg-lightGreen text-white">
+              <TableCell className="w-[100px] py-2 px-2 bg-lightGreen text-white">
                
                8-10AM
               </TableCell>

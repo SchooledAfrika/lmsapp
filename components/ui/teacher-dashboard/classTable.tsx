@@ -52,7 +52,7 @@ import { MultipleClass } from "./MultipleClass";
         <TableHeader>
           <TableRow>
             <TableHead className="text-[12px]">Subject</TableHead>
-            <TableHead className="md:w-[100px] text-[12px]">Class Name</TableHead>
+            <TableHead className="md:w-[100px] text-[12px]">Class</TableHead>
             <TableHead className="text-[12px]">Grade</TableHead>
             <TableHead className="text-[12px]">Teacher</TableHead>
             <TableHead className="text-[12px]">Students</TableHead>
@@ -90,7 +90,7 @@ import { MultipleClass } from "./MultipleClass";
               </TableCell>
   
               <TableCell className="text-[13px]  font-semibold">{Class.Students}</TableCell>
-              <TableCell className="flex justify-end items-center text-[14px]  text-lightGreen cursor-pointer"> { Class.Teacher ? <IndividualClass/> : <MultipleClass/>}
+              <TableCell className="float-right text-[16px]  text-lightGreen cursor-pointer"> { Class.Teacher ? <IndividualClass/> : <MultipleClass/>}
               
               </TableCell>
             </TableRow>

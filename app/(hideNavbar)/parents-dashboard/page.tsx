@@ -5,7 +5,7 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div className='mt-[80px]  md:mt-6'>
+    <div className='mt-[100px]  md:mt-6'>
       <Card/>
       <Chart/>
       <Overall/>

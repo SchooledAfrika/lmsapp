@@ -54,7 +54,7 @@ const TransactionType = [
 export default function TransactionTable() {
   return (
     <Table className="bg-white overflow-x-auto    rounded-md my-4">
-      <TableCaption className="px-3  py-3 rounded-md bg-white">
+      <TableCaption className="px-3  py-2 rounded-md bg-white">
         <div className="flex font-semibold  justify-between">
           <p>Recent Transactions</p>
           <Link
@@ -76,8 +76,8 @@ export default function TransactionTable() {
       </TableHeader>
       <TableBody>
         {TransactionType.map((Transaction) => (
-          <TableRow key={Transaction.id} className="">
-            <TableCell className="font-semibold w-[200px] text-[13px] flex  mr-1">
+          <TableRow key={Transaction.id} className="py-2">
+            <TableCell className="font-semibold w-[200px] text-[13px] py-2 flex  mr-1">
               <Image
                 src={Transaction.icon}
                 alt="icon"

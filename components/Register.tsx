@@ -87,9 +87,10 @@ const Register: FC = () => {
               <div>
                 <Image
                   src={registered.Images}
-                  width={30}
-                  height={30}
+                  width={100}
+                  height={100}
                   alt="School Account"
+                  className="w-[60px]"
                 />
               </div>
               <div>
