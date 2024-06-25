@@ -12,10 +12,15 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { StudentMoreInfo, studentSchema } from "@/constants/completeReg";
 import { z } from "zod";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export type Istudent = z.infer<typeof studentSchema>;
 
 const StudentAccount = () => {
+  const { data: session, update } = useSession();
+  console.log(session?.user);
+  const router = useRouter();
   const [currentPage, setcurrentPage] = useState<number>(1);
   const {
     register,
@@ -29,7 +34,23 @@ const StudentAccount = () => {
     resolver: zodResolver(studentSchema),
   });
 
-  const runSubmit: SubmitHandler<Istudent> = async (data) => {};
+  const runSubmit: SubmitHandler<Istudent> = async (data) => {
+    // handle file submission to the backend server
+    const response = await fetch("/api/continue-student-reg", {
+      method: "POST",
+      body: JSON.stringify({
+        ...data,
+        profilePhoto: "the student photo",
+      }),
+    });
+    if (response.ok) {
+      update({ CompletedProfile: true });
+      router.push("/student-dashboard");
+      router.refresh();
+    } else {
+      alert("something went wrong");
+    }
+  };
 
   type fieldName = keyof Istudent;
   // function to validate form on each proceed clicked

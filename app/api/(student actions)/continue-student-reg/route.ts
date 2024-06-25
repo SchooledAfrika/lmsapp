@@ -15,12 +15,12 @@ export async function POST(req: Request) {
   try {
     await prisma.student.update({
       where: { id: userId },
-      data: { ...infos },
+      data: { CompletedProfile: true, ...infos },
     });
     return new Response(JSON.stringify({ message: "success" }), {
       status: 200,
     });
   } catch (error) {
-    serverError();
+    return serverError();
   }
 }

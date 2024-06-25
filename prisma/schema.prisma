@@ -29,14 +29,27 @@ model Teacher {
   nationalIdFront      String? // front of the national id card the teacher submited
   nationalIdBack       String? // back of the national id card the teacher submited
   profilePhoto         String? // for setting profile picture
-  briefDescription     String? // here the teacher submit brief description about them self not more than 300 words
+  detail               String? // here the teacher submit brief description about them self not more than 300 words
   TeachersArticle      TeachersArticle[]
   rating               Float?
   TeachersSubject      TeachersSubject[]
-  phoneNumber          String?
+  phoneNo              String?
   Session              Session[]
   pricing              Int?
   role                 Role
+  gender               Gender?
+  address              String?
+  resume               String?
+  language             String?
+  // remember to change this subject later to arrays of subjects
+  subject              String?
+  grade                String?
+  sessionPrice         String?
+  homeWorkPrice        String?
+  bankName             String?
+  accountNo            String?
+  accountName          String?
+  preference           String[]
   // creating the many to many relationship between student and teacher
   studentIDs           String[]             @db.ObjectId
   students             Student[]            @relation(fields: [studentIDs], references: [id])
@@ -63,6 +76,7 @@ model Student {
   address            String?
   grade              Grade?
   details            String?
+  disable            Boolean?
   // creating the many to many relationship between student and teacher
   // becasue the student can have many teachers
   teacherIDs         String[]             @db.ObjectId
@@ -83,7 +97,7 @@ model Student {
 // creating the school model
 model School {
   id               String          @id @default(auto()) @map("_id") @db.ObjectId
-  schname          String?
+  name             String?
   email            String          @unique
   banner           String?
   schAddress       String?
@@ -113,6 +127,10 @@ model Parents {
   password         String?
   profilePhoto     String?
   role             Role
+  gender           Gender?
+  wards            String[] @db.ObjectId
+  phoneNo          String?
+  address          String?
   CompletedProfile Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @default(now())

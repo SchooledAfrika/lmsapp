@@ -14,12 +14,16 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { parentSchema } from "@/constants/completeReg";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 // exporting the parentSchema type above
 export type Iparents = z.infer<typeof parentSchema>;
 
 const ParentAccount = () => {
   const [currentPage, setcurrentPage] = useState<number>(1);
+  const router = useRouter();
+  const { update, data: session } = useSession();
   const {
     register,
     setValue,
@@ -28,7 +32,24 @@ const ParentAccount = () => {
     trigger,
     formState: { errors },
   } = useForm<Iparents>({ resolver: zodResolver(parentSchema) });
-  const runSubmit: SubmitHandler<Iparents> = async (data) => {};
+  const runSubmit: SubmitHandler<Iparents> = async (data) => {
+    // handle file submission to the backend server
+    const response = await fetch("/api/continue-parent-reg", {
+      method: "POST",
+      body: JSON.stringify({
+        ...data,
+        profilePhoto: "the progile photo",
+        childImg: "child image",
+      }),
+    });
+    if (response.ok) {
+      await update({ CompletedProfile: true });
+      router.push("/parents-dashboard");
+      router.refresh();
+    } else {
+      alert("something went wrong");
+    }
+  };
 
   type fieldName = keyof Iparents;
   // function to validate form on each proceed clicked

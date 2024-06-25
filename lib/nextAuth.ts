@@ -79,5 +79,11 @@ export const authOptions: NextAuthOptions = {
       session.user.CompletedProfile = result.CompletedProfile;
       return session;
     },
+    async jwt({ token, session, trigger }) {
+      if (trigger === "update" && session?.CompletedProfile) {
+        token.CompletedProfile = session.CompletedProfile;
+      }
+      return token;
+    },
   },
 };

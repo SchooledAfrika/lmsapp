@@ -1,22 +1,20 @@
-// this is to handle completing the school registration process
-
-import { notAuthenticated, serverError } from "@/prisma/utils/error";
+// here we handle the teacher completing their profile information
 import prisma from "@/prisma/prismaConnect";
+import { serverError } from "@/prisma/utils/error";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/nextAuth";
 
 export async function POST(req: Request) {
   const infos = await req.json();
-  //   lets check if the user is authenticated already
+  // checking if the user is logged in befor passing through the remaining part
   const session = await getServerSession(authOptions);
   const userId = session?.user.id;
-  if (!userId) return notAuthenticated();
   try {
-    await prisma.school.update({
+    await prisma.teacher.update({
       where: { id: userId },
       data: { CompletedProfile: true, ...infos },
     });
-    return new Response(JSON.stringify({ message: "success" }), {
+    return new Response(JSON.stringify({ message: "Successfully updated" }), {
       status: 200,
     });
   } catch (error) {
