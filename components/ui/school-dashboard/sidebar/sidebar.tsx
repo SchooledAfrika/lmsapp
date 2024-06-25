@@ -2,8 +2,8 @@
 import React, { useContext } from "react";
 import { SchoolSideBar, SchoolSideBarType } from "@/constants/schoolSideBar";
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { redirect, usePathname } from "next/navigation";
 import { FaPowerOff } from "react-icons/fa";
 import { CommonDashboardContext } from "@/providers/Statecontext";
 import { TeacherSideBar } from "@/constants/teacherSidebar";
@@ -13,9 +13,17 @@ import {
   StudentSideBarComponent,
   TeacherSideBarComponent,
 } from "@/components/Sidebars/allSIdebar";
+import { useAuth } from "@/data-access/authentication";
+import { signOut } from "next-auth/react";
 
 const Sidebar = ({ dashboard }: { dashboard: string }) => {
   const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
+  const router = useRouter();
+  // function to signout users
+  const signOutUser = async () => {
+    const logOutData = await signOut({ redirect: false, callbackUrl: "/" });
+    router.push(logOutData.url);
+  };
   // manipulating the path values
   const path = usePathname().split("/");
   let findpath: string;
@@ -64,7 +72,10 @@ const Sidebar = ({ dashboard }: { dashboard: string }) => {
           <p className=" text-[10px] font-bold">Augustine david</p>
           <p className=" text-[10px] text-[tomato]">Basic plan</p>
         </div>
-        <div className=" text-white mb-6 flex gap-1 items-center text-[12px] cursor-pointer">
+        <div
+          onClick={signOutUser}
+          className=" text-white mb-6 flex gap-1 items-center text-[12px] cursor-pointer"
+        >
           <p>logout</p>
           <FaPowerOff />
         </div>

@@ -1,171 +1,230 @@
-import Container from "@/components/Container";
 import Image from "next/image";
-import Link from "next/link";
-import React from "react";
-import { Button } from "../button";
-import Footer from "@/components/Footer";
-
-interface TeacherPaymentProps {
-  onClickButton: (view: any) => void;
-}
-
-const TeacherPaymentDetails: React.FC<TeacherPaymentProps> = ({
-  onClickButton,
+import React, { useState } from "react";
+import { ITeacherSub } from "./TeacherInfo";
+import { Controller } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { subjects } from "@/constants/index";
+const TeacherPaymentDetails: React.FC<ITeacherSub> = ({
+  register,
+  errors,
+  control,
+  watch,
+  clearErrors,
+  setValue,
 }) => {
-  const handlePaymentView = () => {
-    onClickButton("Final Payment Details");
-  };
+  const [allPreference, setPreference] = useState<string[]>([]);
+  // the preference array
   const preferences = [
     "HomeWork Support",
     "1 on 1 Sessions",
     "Open to Jobs",
     "Group Sessions",
   ];
+  // the language array
+  const teacherLang: string[] = [
+    "English",
+    "French",
+    "Igbo",
+    "Yoruba",
+    "Hausa",
+    "Spanish",
+  ];
+  // this function below handle preference selection
+  const handlePreference = (item: string) => {
+    // checking if the preference is already in the array
+    // if there remove, else add it
+    let arrayInstance = [...allPreference];
+    const checkPreference = arrayInstance.find((value) => value === item);
+    if (checkPreference) {
+      const removedPrefrence = arrayInstance.filter((value) => value !== item);
+      arrayInstance = [...removedPrefrence];
+      setPreference(removedPrefrence);
+    } else {
+      arrayInstance.push(item);
+      setPreference(arrayInstance);
+    }
+    setValue!("preference", arrayInstance);
+  };
+  watch("subject");
+  watch("grade");
+  watch("language");
+  watch("homeWorkPrice");
+  watch("sessionPrice");
+  watch("preference");
   return (
-    <section className="py-[1rem] font-subtext md:pt-[3rem]">
-      <Container>
-        <Link href="/">
-          <Image
-            src={"/logo.png"}
-            alt="logo"
-            width={100}
-            height={100}
-            className="w-[100px] ml-10 "
-          />
-        </Link>
-        <p className="font-bold text-[18px] pt-[40px] pb-[60px] pl-[0] md:pl-[40px]">
-          Complete Account Creation
-        </p>
-        <div className="flex flex-col md:flex-row ml-[0] md:ml-[40px] mb-[50px]">
-          <div>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] rounded-[50%] px-[7px] text-white">
-                1
-              </span>
-              <p className="text-[#359C71] font-bold">Personal Information</p>
-            </div>
-            <p className="border-l-2 border-[#359C71] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] rounded-full px-[7px] text-white">
-                2
-              </span>
-              <p className="text-[#359C71] font-bold">
-                Resume & Qualifications
-              </p>
-            </div>
-            <p className="border-l-2 border-[#359C71] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] rounded-full px-[7px] text-white">
-                3
-              </span>
-              <p className="text-[#359C71] font-bold">Payment Details</p>
-            </div>
-            <p className="border-l-2 border-[#E9ECEB] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#E9ECEB] rounded-full px-[7px] text-white">
-                4
-              </span>
-              <p>Payment Details</p>
-            </div>
-          </div>
-
-          <form className="flex flex-col pl-[0] md:pl-[100px] mt-[40px] md:mt-[0] w-full md:w-[50%]">
-            <label className="font-bold text-[16px] pb-2">
-              Subject & Language
-            </label>
-            <input
-              type="text"
-              name="text"
-              placeholder="Language I Speak"
-              className="p-4 outline-none w-full rounded-[8px] bg-white"
-            />
-            <br />
-            <input
-              type="text"
-              name="text"
-              placeholder="Select Subject"
-              className="p-4 outline-none w-full rounded-[8px] bg-white"
-            />
-            <br />
-            <input
-              type="text"
-              name="text"
-              placeholder="Select Grade(s)"
-              className="p-4 outline-none w-full rounded-[8px] bg-white"
-            />
-
-            <label className="font-bold text-[16px] pt-3">Pricing</label>
-            <span className="text-[14px] font-medium py-2">
-              Please note that the minimum duration for a session is 45 minutes
-              and the maximum duration is 2 hours. Your price range should
-              account for that.
-            </span>
-            <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] bg-white">
-              <input
-                type="text"
-                name="text"
-                placeholder="Session Price Range"
-                className="outline-none w-full pr-4"
+    <div className="flex flex-col w-[55%] gap-2">
+      <label className="font-bold text-[16px] pb-2">Subject & Language</label>
+      <Controller
+        control={control}
+        name="language"
+        render={({ field }) => (
+          <Select
+            onValueChange={(value) => {
+              field.onChange(value);
+              clearErrors("language");
+            }}
+          >
+            <SelectTrigger className=" py-[27px]">
+              <SelectValue
+                placeholder={`${
+                  field.value ? field.value : "Language I speak"
+                }`}
               />
-              <div className="flex items-center gap-1">
-                <Image
-                  src="/svgs/usaLogo.svg"
-                  width={18}
-                  height={18}
-                  alt="Lock"
-                />
-                <span className="font-bold text-[16px]">USD</span>
-              </div>
-            </div>
-            <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] bg-white">
-              <input
-                type="text"
-                name="text"
-                placeholder="Homework Support Price Range"
-                className="outline-none w-full pr-4"
+            </SelectTrigger>
+            <SelectContent>
+              {teacherLang.map((value, index) => (
+                <SelectItem key={index} value={value}>
+                  {value}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+      />
+      {errors.language && (
+        <small className=" text-red-600">{errors.language.message}</small>
+      )}
+      <Controller
+        control={control}
+        name="subject"
+        render={({ field }) => (
+          <Select
+            onValueChange={(value) => {
+              field.onChange(value);
+              clearErrors("subject");
+            }}
+          >
+            <SelectTrigger className=" py-[27px]">
+              <SelectValue
+                placeholder={`${
+                  field.value ? field.value : "Language I speak"
+                }`}
               />
-              <div className="flex items-center gap-1">
-                <Image
-                  src="/svgs/usaLogo.svg"
-                  width={18}
-                  height={18}
-                  alt="Lock"
-                />
-                <span className="font-bold text-[16px]">USD</span>
-              </div>
-            </div>
-
-            <div>
-              <label className="font-bold text-[16px]">Preferences</label>
-              <div className="grid grid-cols-2 gap-x-2 w-full">
-                {preferences.map((preference, index) => (
-                  <label
-                    key={index}
-                    className="flex justify-between items-center gap-2 my-2 px-4 py-3 outline-none rounded-[8px] bg-white cursor-pointer"
-                  >
-                    {preference}
-                    <input
-                      type="checkbox"
-                      name="preferences"
-                      value={preference}
-                      className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-green-600 checked:border-transparent focus:outline-none"
-                    />
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            <Button
-              onClick={handlePaymentView}
-              className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
-            >
-              Proceed
-            </Button>
-          </form>
+            </SelectTrigger>
+            <SelectContent>
+              {subjects.map((value, index) => (
+                <SelectItem key={index} value={value.title}>
+                  <div className=" flex gap-2">
+                    <Image src={value.icon} alt="icon" width={20} height={20} />
+                    {value.title}
+                  </div>
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
+      />
+      {errors.subject && (
+        <small className=" text-red-600">{errors.subject.message}</small>
+      )}
+      <Controller
+        control={control}
+        name="grade"
+        render={({ field }) => (
+          <Select
+            onValueChange={(value) => {
+              field.onChange(value);
+              clearErrors("grade");
+            }}
+          >
+            <SelectTrigger className="w-full  py-[27px] focus:outline-none">
+              <SelectValue
+                placeholder={`${
+                  field.value ? field.value : "Select grade you will teach"
+                }`}
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectGroup>
+                <SelectItem value="Grade1">Grade1</SelectItem>
+                <SelectItem value="Grade2">Grade2</SelectItem>
+                <SelectItem value="Grade3">Grade3</SelectItem>
+                <SelectItem value="Grade4">Grade4</SelectItem>
+                <SelectItem value="Grade5">Grade5</SelectItem>
+                <SelectItem value="Grade6">Grade6</SelectItem>
+                <SelectItem value="Grade7">Grade7</SelectItem>
+                <SelectItem value="Grade8">Grade8</SelectItem>
+                <SelectItem value="Grade9">Grade9</SelectItem>
+                <SelectItem value="Grade10">Grade10</SelectItem>
+                <SelectItem value="Grade11">Grade11</SelectItem>
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+        )}
+      />
+      {errors.grade && (
+        <small className=" text-red-600">{errors.grade.message}</small>
+      )}
+      <label className="font-bold text-[16px] pt-3">Pricing</label>
+      <span className="text-[14px] font-medium py-2">
+        Please note that the minimum duration for a session is 45 minutes and
+        the maximum duration is 2 hours. Your price range should account for
+        that.
+      </span>
+      <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] bg-white">
+        <input
+          {...register("sessionPrice")}
+          type="number"
+          name="sessionPrice"
+          placeholder="Session Price Range"
+          className="outline-none w-full pr-4"
+        />
+        <div className="flex items-center gap-1">
+          <Image src="/svgs/usaLogo.svg" width={18} height={18} alt="Lock" />
+          <span className="font-bold text-[16px]">USD</span>
         </div>
-        <Footer />
-      </Container>
-    </section>
+      </div>
+      {errors.sessionPrice && (
+        <small className=" text-red-600">{errors.sessionPrice.message}</small>
+      )}
+      <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] bg-white">
+        <input
+          {...register("homeWorkPrice")}
+          type="number"
+          name="homeWorkPrice"
+          placeholder="Homework Support Price Range"
+          className="outline-none w-full pr-4"
+        />
+        <div className="flex items-center gap-1">
+          <Image src="/svgs/usaLogo.svg" width={18} height={18} alt="Lock" />
+          <span className="font-bold text-[16px]">USD</span>
+        </div>
+      </div>
+      {errors.homeWorkPrice && (
+        <small className=" text-red-600">{errors.homeWorkPrice.message}</small>
+      )}
+      <div>
+        <label className="font-bold text-[16px]">Preferences</label>
+        <div className="grid grid-cols-2 gap-x-2 w-full">
+          {preferences.map((preference, index) => (
+            <label
+              onClick={() => handlePreference(preference)}
+              key={index}
+              className="flex justify-between items-center gap-2 my-2 px-4 py-3 outline-none rounded-[8px] bg-white cursor-pointer"
+            >
+              {preference}
+              <input
+                type="checkbox"
+                name="preferences"
+                checked={allPreference.includes(preference)}
+                value={preference}
+                className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-green-600 checked:border-transparent focus:outline-none"
+              />
+            </label>
+          ))}
+        </div>
+        {errors.preference && (
+          <small className=" text-red-600">{errors.preference.message}</small>
+        )}
+      </div>
+    </div>
   );
 };
 

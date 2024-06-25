@@ -29,14 +29,27 @@ model Teacher {
   nationalIdFront      String? // front of the national id card the teacher submited
   nationalIdBack       String? // back of the national id card the teacher submited
   profilePhoto         String? // for setting profile picture
-  briefDescription     String? // here the teacher submit brief description about them self not more than 300 words
+  detail               String? // here the teacher submit brief description about them self not more than 300 words
   TeachersArticle      TeachersArticle[]
   rating               Float?
   TeachersSubject      TeachersSubject[]
-  phoneNumber          String?
+  phoneNo              String?
   Session              Session[]
   pricing              Int?
   role                 Role
+  gender               Gender?
+  address              String?
+  resume               String?
+  language             String?
+  // remember to change this subject later to arrays of subjects
+  subject              String?
+  grade                String?
+  sessionPrice         String?
+  homeWorkPrice        String?
+  bankName             String?
+  accountNo            String?
+  accountName          String?
+  preference           String[]
   // creating the many to many relationship between student and teacher
   studentIDs           String[]             @db.ObjectId
   students             Student[]            @relation(fields: [studentIDs], references: [id])
@@ -45,9 +58,10 @@ model Teacher {
   SchoolClassTeacher   SchoolClassTeacher[]
   VacancyTeacher       VacancyTeacher[]
   OneOnOneSection      OneOnOneSection?
+  Exams                Exams[]
+  CompletedProfile     Boolean              @default(false)
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @default(now())
-  Exams                Exams[]
 }
 
 // creating the student model
@@ -57,6 +71,12 @@ model Student {
   email              String               @unique
   password           String?
   profilePhoto       String?
+  phoneNo            String?
+  gender             Gender?
+  address            String?
+  grade              Grade?
+  details            String?
+  disable            Boolean?
   // creating the many to many relationship between student and teacher
   // becasue the student can have many teachers
   teacherIDs         String[]             @db.ObjectId
@@ -68,9 +88,10 @@ model Student {
   role               Role
   SchoolStudent      SchoolStudent[]
   SchoolClassStudent SchoolClassStudent[]
+  AppliedSection     AppliedSection[]
+  CompletedProfile   Boolean              @default(false)
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @default(now())
-  AppliedSection     AppliedSection[]
 }
 
 // creating the school model
@@ -78,7 +99,11 @@ model School {
   id               String          @id @default(auto()) @map("_id") @db.ObjectId
   name             String?
   email            String          @unique
-  schoolbanner     String?
+  banner           String?
+  schAddress       String?
+  ownerName        String?
+  phoneNo          String?
+  homeAddress      String?
   schoolLogo       String?
   briefDescription String?
   password         String?
@@ -89,20 +114,26 @@ model School {
   Vacancy          Vacancy[]
   role             Role
   SchoolClass      SchoolClass[]
+  CompletedProfile Boolean         @default(false)
   createdAt        DateTime        @default(now())
   updatedAt        DateTime        @default(now())
 }
 
 // creating the model for parents
 model Parents {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  name         String?
-  email        String   @unique
-  password     String?
-  profilePhoto String?
-  role         Role
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  email            String   @unique
+  password         String?
+  profilePhoto     String?
+  role             Role
+  gender           Gender?
+  wards            String[] @db.ObjectId
+  phoneNo          String?
+  address          String?
+  CompletedProfile Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @default(now())
 }
 
 // here we created the model where teachers can upload article
@@ -162,32 +193,34 @@ model Session {
 // student will have many to many relationship with classes
 // since students can have many classes and classes can have many students
 model Classes {
-  id              String     @id @default(auto()) @map("_id") @db.ObjectId
-  subject         Subjects
-  className       String
-  grade           Grade
-  duration        DateTime
-  classStarts     DateTime
-  classEnds       DateTime
-  schedules       ClassDay[]
-  price           Float
-  classBanner     String
-  rating          Float
-  publicClass     Boolean    @default(true)
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  subject          Subjects
+  className        String
+  grade            Grade
+  duration         DateTime
+  classStarts      DateTime
+  classEnds        DateTime
+  schedules        ClassDay[]
+  price            Float
+  classBanner      String
+  rating           Float
+  publicClass      Boolean            @default(true)
   // here, there is one to many relationship between classes and teacher
   // a teacher can have many classes
-  teacher         Teacher    @relation(fields: [teacherId], references: [id])
-  teacherId       String     @db.ObjectId
+  teacher          Teacher            @relation(fields: [teacherId], references: [id])
+  teacherId        String             @db.ObjectId
   // there will be many to many relationship between classes and students
   // classes can have many students
-  studentIDs      String[]   @db.ObjectId
-  students        Student[]  @relation(fields: [studentIDs], references: [id])
-  maxCapacity     Float
-  currentCapacity Float      @default(0)
+  studentIDs       String[]           @db.ObjectId
+  students         Student[]          @relation(fields: [studentIDs], references: [id])
+  maxCapacity      Float
+  currentCapacity  Float              @default(0)
   // this will contain the arrays of the resources the teacher ass
-  resourcesIds    String[]   @default([])
-  createdAt       DateTime   @default(now())
-  updatedAt       DateTime   @default(now())
+  resourcesIds     String[]           @default([])
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+  ClassExams       ClassExams[]
+  StudentClassExam StudentClassExam[]
 
   @@index([teacherId], name: "teachers_class_index")
 }
@@ -402,6 +435,47 @@ model StudentExam {
   @@index([appliedSectionId, completed], name: "section_exam_for_students")
 }
 
+// this model is model for classes examms
+// here this exams are not answered yet and its formed immediately the teacher links his exam to the class
+// there will be a one to many relationship betweeen this model and the class medels
+
+model ClassExams {
+  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  class              Classes         @relation(fields: [classesId], references: [id])
+  classesId          String          @db.ObjectId
+  // this array contains the id of student in this class that have aswered this particular exam
+  answeredStudentIds String[]        @db.ObjectId
+  test               ExamQuestions[]
+  duration           String
+  grade              Grade
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @default(now())
+
+  @@index([classesId], name: "class_exam")
+}
+
+model StudentClassExam {
+  id         String          @id @default(auto()) @map("_id") @db.ObjectId
+  completed  Boolean         @default(false)
+  score      Int?
+  percentage String?
+  questions  ExamQuestions[]
+  title      String
+  grade      Grade
+  // the id of the student that have answered there questions
+  studentId  String          @db.ObjectId
+  mainExamId String          @db.ObjectId
+  // this model is formed when a student answers a question from the classroom
+  // there will be a one to many relation between the classroom and this model
+  class      Classes         @relation(fields: [classesId], references: [id])
+  classesId  String          @db.ObjectId
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @default(now())
+
+  @@index([classesId, studentId, mainExamId], name: "studentclassExam_classrooms")
+}
+
 // this is enum for grades
 // TODO: check how many grade system we have
 enum Grade {
@@ -454,6 +528,11 @@ enum Role {
   Parents
   School
   Admin
+}
+
+enum Gender {
+  Male
+  Female
 }
 
 // this is for vacancy status when a teacher applied

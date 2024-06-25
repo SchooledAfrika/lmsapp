@@ -10,20 +10,25 @@ import prisma from "@/prisma/prismaConnect";
 // else we will register them and redirect to the login page
 
 export async function POST(request: Request) {
-  const { email, img, name } = await request.json();
-  const cookieInstance = cookies();
-  const role = cookieInstance.get("role")?.value;
+  const { email, image, name } = await request.json();
+  const role = request.headers.get("role");
 
   // first, we check if the role passed is defined or undefined
   // if it is undefined, that means the user actually want to login
   // TODO: the frontend developer has to clear the role cookies before running the login with google auth
   // then, if there is a role, that means the user actually want to register for the first time
   if (role === undefined) {
-    console.log("ran here");
     // lets check if the user exist accross all our members database first
     // if is there, return with an error and a message
     const checkStudents = await prisma.student.findUnique({
       where: { email: email },
+      select: {
+        id: true,
+        email: true,
+        profilePhoto: true,
+        role: true,
+        CompletedProfile: true,
+      },
     });
     // return the student immediately if it exists
     if (checkStudents) {
@@ -34,6 +39,13 @@ export async function POST(request: Request) {
     }
     const checkTeachers = await prisma.teacher.findUnique({
       where: { email: email },
+      select: {
+        id: true,
+        email: true,
+        profilePhoto: true,
+        role: true,
+        CompletedProfile: true,
+      },
     });
     // return the teacher immediately if it exists
     if (checkTeachers) {
@@ -44,6 +56,13 @@ export async function POST(request: Request) {
     }
     const checkSchools = await prisma.school.findUnique({
       where: { email: email },
+      select: {
+        id: true,
+        email: true,
+        profilePhoto: true,
+        role: true,
+        CompletedProfile: true,
+      },
     });
     // return the school immediately if it exists
     if (checkSchools) {
@@ -54,6 +73,13 @@ export async function POST(request: Request) {
     }
     const checkParents = await prisma.parents.findUnique({
       where: { email: email },
+      select: {
+        id: true,
+        email: true,
+        profilePhoto: true,
+        role: true,
+        CompletedProfile: true,
+      },
     });
     // return the parents immediately if it exists
     if (checkParents) {
@@ -62,90 +88,167 @@ export async function POST(request: Request) {
         statusText: "success",
       });
     }
+    return new Response(JSON.stringify({ message: "go to register page" }), {
+      status: 404,
+    });
   } else {
     //   here we register the user based on the role passed from the cookies to the backend
     //   making use of conditions based on the users role to register them
-
+    //
+    // here we handle checking if the user want to re-register with google account mistakenly
     if (role == "student") {
-      // register student
-      const student = await prisma.student.create({
-        data: {
-          email: email,
-          profilePhoto: img,
-          name,
-          role: "Student",
-        },
+      const checkStudents = await prisma.student.findUnique({
+        where: { email: email },
         select: {
           id: true,
           email: true,
+          profilePhoto: true,
+          role: true,
+          CompletedProfile: true,
         },
       });
-      // return info of the student register
-      return new Response(JSON.stringify(student), {
-        status: 200,
-        statusText: "student registered successfully",
-      });
+      if (checkStudents) {
+        return new Response(JSON.stringify(checkStudents), { status: 200 });
+      } else {
+        // register student
+        const student = await prisma.student.create({
+          data: {
+            email: email,
+            profilePhoto: image,
+            name,
+            role: "Student",
+          },
+          select: {
+            id: true,
+            email: true,
+            profilePhoto: true,
+            role: true,
+            CompletedProfile: true,
+          },
+        });
+        // return info of the student register
+        return new Response(JSON.stringify(student), {
+          status: 200,
+          statusText: "student registered successfully",
+        });
+      }
     }
+
     //   here, we register them as teacher if the role says teachers
+    //
+    // here we check if the teacher mistakenly want to re-register
     if (role == "teacher") {
-      // register student
-      const student = await prisma.teacher.create({
-        data: {
-          email: email,
-          profilePhoto: img,
-          role: "Teacher",
-          name,
-        },
+      const checkTeacher = await prisma.teacher.findUnique({
+        where: { email: email },
         select: {
           id: true,
           email: true,
+          profilePhoto: true,
+          role: true,
+          CompletedProfile: true,
         },
       });
-      // return info of the student register
-      return new Response(JSON.stringify(student), {
-        status: 200,
-        statusText: "student registered successfully",
-      });
+      if (checkTeacher) {
+        return new Response(JSON.stringify(checkTeacher), { status: 200 });
+      } else {
+        // register student
+        const teacher = await prisma.teacher.create({
+          data: {
+            email: email,
+            profilePhoto: image,
+            role: "Teacher",
+            name,
+          },
+          select: {
+            id: true,
+            email: true,
+            profilePhoto: true,
+            role: true,
+            CompletedProfile: true,
+          },
+        });
+        // return info of the student register
+        return new Response(JSON.stringify(teacher), {
+          status: 200,
+          statusText: "student registered successfully",
+        });
+      }
     }
+    // here we also check if the parent also want to mistakenly re-register
     if (role == "parents") {
-      // register student
-      const student = await prisma.parents.create({
-        data: {
-          email: email,
-          profilePhoto: img,
-          name,
-          role: "Parents",
-        },
+      const checkParents = await prisma.parents.findUnique({
+        where: { email: email },
         select: {
           id: true,
           email: true,
+          profilePhoto: true,
+          role: true,
+          CompletedProfile: true,
         },
       });
-      // return info of the student register
-      return new Response(JSON.stringify(student), {
-        status: 200,
-        statusText: "student registered successfully",
-      });
+      if (checkParents) {
+        return new Response(JSON.stringify(checkParents), { status: 200 });
+      } else {
+        // register student
+        const parents = await prisma.parents.create({
+          data: {
+            email: email,
+            profilePhoto: image,
+            name,
+            role: "Parents",
+          },
+          select: {
+            id: true,
+            email: true,
+            profilePhoto: true,
+            role: true,
+            CompletedProfile: true,
+          },
+        });
+        // return info of the student register
+        return new Response(JSON.stringify(parents), {
+          status: 200,
+          statusText: "student registered successfully",
+        });
+      }
     }
+    // check is school also mistakenly want to re-register using google account
     if (role == "school") {
-      // register student
-      const student = await prisma.school.create({
-        data: {
-          email: email,
-          profilePhoto: img,
-          name,
-          role: "School",
-        },
+      const checkSchool = await prisma.school.findUnique({
+        where: { email: email },
         select: {
           id: true,
           email: true,
+          profilePhoto: true,
+          role: true,
+          CompletedProfile: true,
         },
       });
-      // return info of the student register
-      return new Response(JSON.stringify(student), {
-        status: 200,
-        statusText: "student registered successfully",
-      });
+      if (checkSchool) {
+        return new Response(JSON.stringify(checkSchool), { status: 200 });
+      } else {
+        // register student
+        const school = await prisma.school.create({
+          data: {
+            email: email,
+            profilePhoto: image,
+            name,
+            role: "School",
+          },
+          select: {
+            id: true,
+            email: true,
+            profilePhoto: true,
+            role: true,
+            CompletedProfile: true,
+          },
+        });
+        // return info of the student register
+        return new Response(JSON.stringify(school), {
+          status: 200,
+          statusText: "student registered successfully",
+        });
+      }
     }
   }
 }

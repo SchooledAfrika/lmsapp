@@ -1,7 +1,27 @@
-export const RegisterType = [
+export enum registerType {
+  Student = "Student",
+  Teacher = "Teacher",
+  School = "School",
+  Parents = "Parents",
+}
+// types for the register
+interface Iregister {
+  Images: string;
+  title: string;
+  role: registerType;
+  description: string;
+  tickIcon: string;
+  coloredTick: string;
+  link?: string;
+  linkText?: string;
+  descriptionEnd?: string;
+}
+
+export const RegisterType: Iregister[] = [
   {
     Images: "/student-acct.png",
     title: "Student Account",
+    role: registerType.Student,
     description:
       "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis",
     tickIcon: "/svgs/tick.svg",
@@ -10,7 +30,8 @@ export const RegisterType = [
   {
     Images: "/teach.png",
     title: "Teacher Account",
-    description: "Create your ",
+    role: registerType.Teacher,
+    description: "Create your",
     link: "/teacher-account",
     linkText: "Teacher Account ",
     descriptionEnd:
@@ -21,7 +42,8 @@ export const RegisterType = [
   {
     Images: "/school-acct.png",
     title: "School Account",
-    description: "Create your ",
+    role: registerType.School,
+    description: "Create your",
     link: "/login",
     linkText: "School Account ",
     descriptionEnd:
@@ -32,6 +54,7 @@ export const RegisterType = [
   {
     Images: "/parent-acct.png",
     title: "Parent Account",
+    role: registerType.Parents,
     description:
       "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis",
     tickIcon: "/svgs/tick.svg",

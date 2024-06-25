@@ -5,17 +5,27 @@ import MobileNav from "@/components/ui/school-dashboard/navbar/MobileNav";
 import MobileSideBar from "@/components/ui/school-dashboard/sidebar/MobileSideBar";
 import CommonDashboardContext from "@/providers/Statecontext";
 import PricingLayout from "@/components/ui/Pricing-layout";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/nextAuth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "School",
   description: "School dashboard",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // here, we get the session
+  // redirect if the role is not student
+  // redirect if the completedprofile is false
+  const session = await getServerSession(authOptions);
+  if (session?.user.role !== "Student") return redirect("/");
+  if (!session.user.CompletedProfile)
+    return redirect("/student-account/details");
   return (
     <>
       <CommonDashboardContext>

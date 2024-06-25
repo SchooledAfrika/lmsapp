@@ -6,7 +6,6 @@ import { motion } from "framer-motion";
 import Imageshow2 from "./Imageshow2";
 import Imageshow3 from "./ImageShow3";
 
-
 const HeroRight = () => {
   // this state watches the image that is in the slide
   const [img, setimg] = useState<number>(1);

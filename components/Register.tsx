@@ -5,14 +5,14 @@ import Link from "next/link";
 import Career from "@/images/careers.png";
 import { RegisterType } from "@/constants/registerType";
 import { Button } from "./ui/button";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
-interface RegisterProps {
-  selectAccountType:
-    | "School Account"
-    | "Student Account"
-    | "Parent Account"
-    | "Teacher Account"
-    | "";
+export enum registerType {
+  Student = "Student",
+  Teacher = "Teacher",
+  School = "School",
+  Parents = "Parents",
 }
 
 const accountTypeToLink: { [key: string]: string } = {
@@ -23,23 +23,31 @@ const accountTypeToLink: { [key: string]: string } = {
 };
 
 const Register: FC = () => {
-  const [selectAccountType, setSelectAccountType] =
-    useState<RegisterProps["selectAccountType"]>("");
+  const [selectAccountType, setSelectAccountType] = useState<
+    registerType | undefined
+  >(undefined);
+  const router = useRouter();
 
-  const handleSelectedItem = (
-    accountType: RegisterProps["selectAccountType"]
-  ) => {
+  const handleSelectedItem = (accountType: registerType) => {
     setSelectAccountType(accountType);
   };
 
-  const link = accountTypeToLink[selectAccountType] || "#";
-
   const getButtonBackgroundColor = () => {
-    if (selectAccountType in accountTypeToLink) {
+    if (selectAccountType !== undefined) {
       return "#359C71";
     } else {
       return "#359F61";
     }
+  };
+
+  const handleContinue = () => {
+    if (selectAccountType === undefined) {
+      return alert("please select your role");
+    }
+    // set cookies for a role
+    Cookies.set("role", selectAccountType);
+    // then direct the user to the path to complete the registration process
+    router.push("/continue-reg");
   };
 
   return (
@@ -73,12 +81,8 @@ const Register: FC = () => {
           {RegisterType.map((registered, index) => (
             <div
               key={index}
-              className="flex items-center bg-white rounded-[8px] px-4 py-3 my-4 gap-8 cursor-pointer"
-              onClick={() =>
-                handleSelectedItem(
-                  registered.title as RegisterProps["selectAccountType"]
-                )
-              }
+              className="flex items-center bg-white rounded-[8px] px-6 py-2 my-4 gap-8 cursor-pointer"
+              onClick={() => handleSelectedItem(registered.role)}
             >
               <div>
                 <Image
@@ -102,7 +106,7 @@ const Register: FC = () => {
                 </span>
               </div>
               <div>
-                {selectAccountType === registered.title ? (
+                {selectAccountType === registered.role ? (
                   <Image
                     src={registered.coloredTick}
                     width={30}
@@ -120,16 +124,15 @@ const Register: FC = () => {
               </div>
             </div>
           ))}
-          <Link href={link}>
-            <Button
-              className={`bg-secondary w-full text-white text-[16px] px-6 py-6 my-6 ${
-                selectAccountType in accountTypeToLink ? "" : "opacity-50"
-              }`}
-              style={{ backgroundColor: getButtonBackgroundColor() }}
-            >
-              Continue
-            </Button>
-          </Link>
+          <Button
+            onClick={handleContinue}
+            className={`bg-secondary w-full text-white text-[16px] px-6 py-6 my-6 ${
+              selectAccountType !== undefined ? "" : "opacity-50"
+            }`}
+            style={{ backgroundColor: getButtonBackgroundColor() }}
+          >
+            Continue
+          </Button>
         </div>
       </div>
     </div>
