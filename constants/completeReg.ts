@@ -194,7 +194,7 @@ export const teacherSchema = z.object({
 // below is the schema for completing the school account registration
 //
 export const schoolSchema = z.object({
-  schName: z.string().min(2, { message: "enter a valid school name" }),
+  name: z.string().min(2, { message: "enter a valid school name" }),
   schAddress: z.string().min(3, { message: "enter a valid school address" }),
   banner: z
     .any()

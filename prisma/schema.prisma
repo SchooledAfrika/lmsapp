@@ -50,6 +50,7 @@ model Teacher {
   accountNo            String?
   accountName          String?
   preference           String[]
+  details              String?
   // creating the many to many relationship between student and teacher
   studentIDs           String[]             @db.ObjectId
   students             Student[]            @relation(fields: [studentIDs], references: [id])
