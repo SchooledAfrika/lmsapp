@@ -32,15 +32,15 @@ const SchoolInfo: React.FC<ISchoolSub> = ({
     <div className="flex flex-col w-[55%] gap-2">
       <label className="font-bold text-[18px]">School Information</label>
       <input
-        {...register("schName")}
+        {...register("name")}
         type="email"
-        name="schName"
+        name="name"
         placeholder="School or Institute Name"
         className=" p-4 outline-none rounded-[8px] w-full bg-white"
-        onChange={() => clearErrors("schName")}
+        onChange={() => clearErrors("name")}
       />
-      {errors.schName && (
-        <small className=" text-red-600">{errors.schName.message}</small>
+      {errors.name && (
+        <small className=" text-red-600">{errors.name.message}</small>
       )}
       <input
         {...register("schAddress")}

@@ -14,9 +14,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { teacherSchema, TeacherMoreInfo } from "@/constants/completeReg";
 import { z } from "zod";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export type Iteacher = z.infer<typeof teacherSchema>;
 const TeacherAccount = () => {
+  const router = useRouter();
+  const { update } = useSession();
   const [currentPage, setcurrentPage] = useState<number>(1);
   const {
     register,
@@ -32,7 +36,21 @@ const TeacherAccount = () => {
   });
 
   const runSubmit: SubmitHandler<Iteacher> = async (data) => {
-    console.log(data);
+    const response = await fetch("/api/continue-teacher-reg", {
+      method: "POST",
+      body: JSON.stringify({
+        ...data,
+        profilePhoto: "the student photo",
+        resume: "resume pix goes here",
+      }),
+    });
+    if (response.ok) {
+      update({ CompletedProfile: true });
+      router.push("/teacher-dashboard");
+      router.refresh();
+    } else {
+      alert("something went wrong");
+    }
   };
 
   type fieldName = keyof Iteacher;

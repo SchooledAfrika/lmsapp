@@ -1,6 +1,6 @@
 // here we handle the teacher completing their profile information
 import prisma from "@/prisma/prismaConnect";
-import { serverError } from "@/prisma/utils/error";
+import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/nextAuth";
 
@@ -9,6 +9,7 @@ export async function POST(req: Request) {
   // checking if the user is logged in befor passing through the remaining part
   const session = await getServerSession(authOptions);
   const userId = session?.user.id;
+  if (!userId) return notAuthenticated();
   try {
     await prisma.teacher.update({
       where: { id: userId },

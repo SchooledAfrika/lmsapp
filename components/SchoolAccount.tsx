@@ -12,10 +12,14 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Container from "./Container";
 import Footer from "./Footer";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 export type Ischool = z.infer<typeof schoolSchema>;
 
 const SchoolAccout: React.FC = () => {
+  const router = useRouter();
+  const { update } = useSession();
   const [currentPage, setcurrentPage] = useState<number>(1);
   const {
     register,
@@ -29,7 +33,22 @@ const SchoolAccout: React.FC = () => {
     resolver: zodResolver(schoolSchema),
   });
 
-  const runSubmit: SubmitHandler<Ischool> = async (data) => {};
+  const runSubmit: SubmitHandler<Ischool> = async (data) => {
+    const response = await fetch("/api/continue-sch-reg", {
+      method: "POST",
+      body: JSON.stringify({
+        ...data,
+        banner: "the student banner here",
+      }),
+    });
+    if (response.ok) {
+      update({ CompletedProfile: true });
+      router.push("/school-dashboard");
+      router.refresh();
+    } else {
+      alert("something went wrong");
+    }
+  };
 
   type fieldName = keyof Ischool;
   // function to validate form on each proceed clicked
