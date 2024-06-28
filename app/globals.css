@@ -80,7 +80,7 @@
 @layer components {
   .card {
     @apply bg-white text-black
-       w-72 min-h-[10rem]
+       w-80  min-h-[10rem]
       
        shadow-lg rounded-md;
   }

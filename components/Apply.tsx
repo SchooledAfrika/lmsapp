@@ -222,7 +222,7 @@ const Apply = () => {
             </div>
           </div>
 
-          <div className="hidden  pb-8 md:flex items-end justify-center md:w-[320px]  w-1/3    aspect-square bg-[tomato] rounded-full absolute md:left-3 md:top-6 top-72  left-52 lg:translate-x-1/2">
+          <div className="hidden  pb-8 md:flex items-end justify-center md:w-[340px]  w-1/3    aspect-square bg-[tomato] overflow-y-auto rounded-full absolute md:left-3 md:top-6 top-72  left-52 lg:translate-x-1/2">
             <div className="absolute ">
               <Image
                 className=" w-[240px]  ml-6"
@@ -245,7 +245,7 @@ const Apply = () => {
         </h2>
       </div>
 
-  <Accordion type="single" className="md:w-5/6 w-5/6 mx-auto mb-8"  collapsible>
+  <Accordion type="single" className="md:w-5/6 w-full mx-auto mb-8"  collapsible>
   <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-1">
   
   <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> How Much Can I Make From SchooledAfrika?</AccordionTrigger>

@@ -1,34 +1,39 @@
 import { Button } from "@/components/ui/button";
+import { ISessionSub } from "./Duration";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import Image from "next/image";
 import { MdVerified } from "react-icons/md";
 
-interface PaymentProps {
-  onClickPaymentInfo: () => void;
-}
 
-const Payment: React.FC<PaymentProps> = ({ onClickPaymentInfo }) => {
+
+const Payment: React.FC<ISessionSub> = ({ 
+  register,
+  errors,
+  control,
+  
+  
+ }) => {
   return (
     <ScrollArea className="h-[500px] w-full ">
       <div className="">
         <div className="flex justify-between">
-          <h3 className="text-xl font-bold">Book Session</h3>
-          <h3 className="text-base font-medium">Back</h3>
+          <h3 className="text-xl ml-3 font-bold">Book Session</h3>
+         
         </div>
 
-        <div className="flex  mx-auto mt-6 mb-8 max-w-[360px] flex-col gap-3">
-          <p className="text-lightGreen text-center text-[15px] ml-8 font-semibold">
+        <div className="flex   mt-6 mb-8 flex-col gap-3">
+          <p className="text-lightGreen  text-[15px] ml-3 font-semibold">
             Payment
           </p>
-          <p className="text-[14px] text-center ml-8 font-semibold">
+          <p className="text-[14px]  ml-3 font-semibold">
             Select a payment method.
           </p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-3">
           <div className="space-y-4 md:mb-0 mb-8">
             {/* first child */}
-            <div className="border md:ml-6 px-4 bg-white justify-between md:pl-4 md:pr-6 flex py-3  rounded-md ">
+            <div className="border md:ml-3 px-4 bg-white justify-between md:pl-4 md:pr-6 flex py-3  rounded-md ">
               <div className="flex space-x-6">
                 <Image
                   src="/paystack.png"
@@ -46,10 +51,10 @@ const Payment: React.FC<PaymentProps> = ({ onClickPaymentInfo }) => {
                 </div>
               </div>
 
-              <input className="w-4 ml-4 accent-lightGreen" type="checkbox" />
+              <input  {...register("paystack")} className="w-4 ml-4 accent-lightGreen" type="checkbox" />
             </div>
             {/* second child */}
-            <div className="border px-4  md:ml-6 bg-white  justify-between md:pl-4 md:pr-6 flex py-3  rounded-md ">
+            <div className="border px-4  md:ml-3 bg-white  justify-between md:pl-4 md:pr-6 flex py-3  rounded-md ">
               <div className="flex space-x-6">
                 <Image
                   src="/flutterwave.png"
@@ -60,17 +65,17 @@ const Payment: React.FC<PaymentProps> = ({ onClickPaymentInfo }) => {
                 />
                 <div className="flex space-y-1 flex-col">
                   <p className="text-[13px] font-semibold">Flutterwave</p>
-                  <p className="text-[11px]">
+                  <p className="text-[11px] w-full">
                     Effortless Payments with Flutterwave: Simplify Your Online
                     Transactions
                   </p>
                 </div>
               </div>
 
-              <input className="w-4 ml-4 accent-lightGreen" type="checkbox" />
+              <input  {...register("flutterwave")} className="w-4 ml-4 accent-lightGreen" type="checkbox" />
             </div>
             {/* Third child */}
-            <div className="border md:ml-6 px-4 bg-white justify-between md:pl-4 md:pr-6 flex py-3  rounded-md ">
+            <div className="border md:ml-3 px-4 bg-white justify-between md:pl-4 md:pr-6 flex py-3  rounded-md ">
               <div className="flex space-x-6">
                 <Image
                   src="/remitta.png"
@@ -88,10 +93,10 @@ const Payment: React.FC<PaymentProps> = ({ onClickPaymentInfo }) => {
                 </div>
               </div>
 
-              <input className="w-4 ml-4 accent-lightGreen" type="checkbox" />
+              <input  {...register("remita")} className="w-4 ml-4 accent-lightGreen" type="checkbox" />
             </div>
           </div>
-          <div className="bg-white rounded-md  mb-12 pt-3 pb-6 px-6">
+          <div className="bg-white rounded-md ml-3  mb-12 pt-3 pb-6 px-6">
             <h3 className="font-semibold pb-3 text-[14px]">Summary</h3>
             <div className="flex text-[12.5px] justify-between">
               <div className="flex flex-col space-y-4">
@@ -132,13 +137,7 @@ const Payment: React.FC<PaymentProps> = ({ onClickPaymentInfo }) => {
           </div>
         </div>
 
-        <Button
-          type="submit"
-          onClick={onClickPaymentInfo}
-          className="px-4 py-3 mb-4 flex justify-end float-right bg-lightGreen hover:bg-green-700"
-        >
-          Confirm Payment
-        </Button>
+       
       </div>
     </ScrollArea>
   );
