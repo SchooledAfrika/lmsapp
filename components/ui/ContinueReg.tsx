@@ -9,6 +9,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/data-access/authentication";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // creating our zod schema for registration using credential means
 const CredentialReg = z
@@ -26,7 +28,7 @@ const CredentialReg = z
 
 const ContinueReg: React.FC = () => {
   const router = useRouter();
-  const { handleCredentialReg, handleLogin } = useAuth();
+  const { handleCredentialReg, handleLogin, loading } = useAuth();
   //   creating instance of the hook form
   // lets first get the credentialReg type that we need
   type ICredentials = z.infer<typeof CredentialReg>;
@@ -137,9 +139,10 @@ const ContinueReg: React.FC = () => {
             </div>
             <Button
               type="submit"
+              disabled={loading}
               className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
             >
-              Register
+              {loading ? "Registering..." : "Register"}
             </Button>
           </form>
           <div className="flex flex-col justify-center">
@@ -170,6 +173,7 @@ const ContinueReg: React.FC = () => {
         </div>
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 };

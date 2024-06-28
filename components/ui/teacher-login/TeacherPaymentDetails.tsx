@@ -59,7 +59,7 @@ const TeacherPaymentDetails: React.FC<ITeacherSub> = ({
   watch("sessionPrice");
   watch("preference");
   return (
-    <div className="flex flex-col w-[55%] gap-2">
+    <div className="flex flex-col w-full md:w-[55%] gap-2">
       <label className="font-bold text-[16px] pb-2">Subject & Language</label>
       <Controller
         control={control}

@@ -29,7 +29,7 @@ const SchoolInfo: React.FC<ISchoolSub> = ({
   clearErrors,
 }) => {
   return (
-    <div className="flex flex-col w-[55%] gap-2">
+    <div className="flex flex-col w-full md:w-[55%] gap-2">
       <label className="font-bold text-[18px]">School Information</label>
       <input
         {...register("name")}

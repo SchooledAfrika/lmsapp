@@ -22,9 +22,6 @@ export const authOptions: NextAuthOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentails, req) {
-        // here we get the role of the user that want to register
-        // then use the role as a header while making a request
-        const cookieInstance = cookies();
         const response = await fetch(`${process.env.NEXTAUTH_URL}/api/login`, {
           method: "POST",
           body: JSON.stringify({
@@ -35,11 +32,13 @@ export const authOptions: NextAuthOptions = {
             "content-type": "application/json",
           },
         });
+        console.log(response);
         const result = await response.json();
         if (response.ok) {
           return result;
         }
-        return null;
+
+        throw new Error("wrong login credentials");
       },
     }),
   ],

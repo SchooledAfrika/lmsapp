@@ -12,7 +12,7 @@ const TeacherResume: React.FC<ITeacherSub> = ({
   watch("resume");
   watch("details");
   return (
-    <div className="flex flex-col w-[55%] gap-2">
+    <div className="flex flex-col w-full md:w-[55%] gap-2">
       <label className="font-bold text-[18px]">Resume & Qualifications</label>
       <div
         className={`flex items-center ${
