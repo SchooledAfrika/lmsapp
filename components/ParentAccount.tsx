@@ -38,7 +38,7 @@ const ParentAccount = () => {
       method: "POST",
       body: JSON.stringify({
         ...data,
-        profilePhoto: "the progile photo",
+        profilePhoto: "the profile photo",
         childImg: "child image",
       }),
     });

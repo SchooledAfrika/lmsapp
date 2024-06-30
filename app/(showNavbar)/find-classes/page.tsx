@@ -11,7 +11,6 @@ const page = () => {
       </h2>
       <Search />
       <PopularClasses />
-      <PopularClasses />
       <PageNav />
     </div>
   );
