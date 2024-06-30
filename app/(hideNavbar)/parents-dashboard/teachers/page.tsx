@@ -9,13 +9,13 @@ import { LiaChalkboardTeacherSolid } from "react-icons/lia";
 const page = () => {
   return (
     <div>
-      <div className="flex w-full overflow-x-auto md:mt-6 mt-[100px] md:justify-end justify-between mx-3 items-center font-header font-semibold text-[13px]">
+      <div className="flex w-full overflow-x-auto md:mt-6 mt-[100px] md:justify-end justify-between  items-center font-header font-semibold text-[13px]">
         <div className="flex ">
           <input
             type="checkbox"
             className="accent-lightGreen text-white mr-1"
           />
-          <p className="mr-3">All <span className="md:block hidden">Status</span> </p>
+          <p className="mr-3">All <span className="md:inline hidden">Status</span> </p>
         </div>
         <div className="flex ">
           <input

@@ -1,4 +1,13 @@
 import Image from "next/image";
+import { ISessionSub } from "./Duration";
+import { Controller } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -8,11 +17,11 @@ import { CiCirclePlus } from "react-icons/ci";
 import { FaMinus, FaPlus } from "react-icons/fa6";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-interface SessionProps {
-  onClickSessionInfo: () => void;
-}
-
-const SessionDetails: React.FC<SessionProps> = ({ onClickSessionInfo }) => {
+const SessionDetails: React.FC<ISessionSub> = ({
+  register,
+  errors,
+  control,
+}) => {
   const [count, setCount] = useState(0);
 
   const increment = () => {
@@ -26,47 +35,97 @@ const SessionDetails: React.FC<SessionProps> = ({ onClickSessionInfo }) => {
     <ScrollArea className="h-[500px] w-full ">
       <div className="">
         <div className="flex justify-between">
-          <h3 className="text-xl font-bold">Book Session</h3>
-          <h3 className="text-base font-medium">Back</h3>
+          <h3 className="text-xl ml-6 font-bold">Book Session</h3>
         </div>
-
-        <div className="flex  mx-auto mt-6 mb-8 max-w-[360px] flex-col gap-3">
+        <div className="flex  mx-auto mt-8 mb-6 flex-col gap-3">
           <p className="text-lightGreen text-[15px] ml-8 font-semibold">
-            Session Details
+            Select Session Type
           </p>
           <p className="text-[14px] ml-8 font-semibold">
-            You can perform as may sessions as per <br />
-            your convenience.
+            Choose a session that satisfies your need.
           </p>
-          <div className="border ml-8  justify-between px-3 flex py-4  rounded-md ">
-            <div className="flex space-x-4">
-              <BsClipboard2PlusFill className="text-2xl" />
-              <div className="flex space-y-2 flex-col">
-                <p className="text-[13px]">Session Type</p>
-                <p className="font-semibold">1 on 1 Session</p>
+        </div>
+
+        <div className="space-y-4 md:mb-0 mb-8 my-2">
+          {/* first child */}
+          <div className="border md:ml-6 px-4 bg-white justify-between md:pl-4 md:pr-6 flex py-3  rounded-md ">
+            <div className="flex space-x-6">
+              <Image
+                src="/book-1.png"
+                alt="paystack"
+                width={100}
+                height={100}
+                className="w-[35px] h-[35px]"
+              />
+              <div className="flex space-y-1 flex-col">
+                <p className="text-[13px] font-semibold">Session Type</p>
+                <p className="text-[11px]">1 on 1 Sessions</p>
               </div>
             </div>
 
-            <input className="w-4 accent-lightGreen" type="checkbox" />
+            <input
+              {...register("privateSession")}
+              className="w-4 ml-4 accent-lightGreen"
+              type="checkbox"
+            />
           </div>
-          <div className="border ml-8  justify-between px-3 flex py-4  rounded-md ">
-            <div className="flex space-x-4">
-              <BsClipboard2PlusFill className="text-2xl" />
-
-              <div className="flex space-y-2 flex-col">
-                <p className="text-[13px]">Session Type</p>
-                <p className="font-semibold">Homework Support</p>
+          {/* second child */}
+          <div className="border px-4  md:ml-6 bg-white  justify-between md:pl-4 md:pr-6 flex py-3  rounded-md ">
+            <div className="flex space-x-6">
+              <Image
+                src="/book-2.png"
+                alt="flutterwave"
+                width={100}
+                height={100}
+                className="w-[40px] h-[40px]"
+              />
+              <div className="flex space-y-1 flex-col">
+                <p className="text-[13px] font-semibold">Session Type</p>
+                <p className="text-[11px]">Homework Support</p>
               </div>
             </div>
 
-            <input className="w-4 accent-lightGreen" type="checkbox" />
+            <input
+              {...register("homeworkSupport")}
+              className="w-4 ml-4 accent-lightGreen"
+              type="checkbox"
+            />
           </div>
-          <div className="border ml-8  justify-between px-3 flex py-4  rounded-md ">
+          {/* Third child */}
+          <div className="border md:ml-6 px-4 bg-white justify-between md:pl-4 md:pr-6 flex py-3  rounded-md ">
+            <div className="flex space-x-6">
+              <Image
+                src="/book-3.png"
+                alt="remitta"
+                width={100}
+                height={100}
+                className="w-[35px] h-[35px]"
+              />
+              <div className="flex space-y-1 flex-col">
+                <p className="text-[13px] font-semibold">Session Type</p>
+                <p className="text-[11px]">Group Sessions</p>
+              </div>
+            </div>
+
+            <input
+              {...register("groupSessions")}
+              className="w-4 ml-4 accent-lightGreen"
+              type="checkbox"
+            />
+          </div>
+          <div className="border ml-6  justify-between px-3 flex py-3  rounded-md ">
             <FaMinus onClick={decrement} className="text-2xl" />
 
             <div className="flex  space-y-2 flex-col">
               <p className="text-[13px]">Number of Sessions</p>
-              <p className="font-semibold mx-auto">{count}</p>
+              <p className="font-semibold mx-auto">
+                <input
+                  {...register("sessionNumber")}
+                  type="hidden"
+                 
+                  className="bg-stone-100 text-center"
+                /> {count}
+              </p>
             </div>
 
             <FaPlus onClick={increment} className="text-xl" />
@@ -75,14 +134,6 @@ const SessionDetails: React.FC<SessionProps> = ({ onClickSessionInfo }) => {
             $10.00
           </p>
         </div>
-
-        <Button
-          type="submit"
-          onClick={onClickSessionInfo}
-          className="px-8 py-3 mb-8 flex justify-end float-right bg-lightGreen hover:bg-green-700"
-        >
-          Proceed
-        </Button>
       </div>
     </ScrollArea>
   );
