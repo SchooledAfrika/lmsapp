@@ -51,7 +51,7 @@ export const useAuth = () => {
   ) => {
     if (loginType === "google") {
       signIn("google");
-    } else if (loginType === "credentials") {
+    } else {
       setloading(true);
       const result = await signIn("credentials", {
         email,

@@ -47,23 +47,33 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // below is the signin callback function
     async signIn({ user, account }) {
+      console.log("entered");
       if (account?.provider === "google") {
+        console.log("entered again");
         // get the cookies from the frontend
         // then set it as the header to be used in backend communication
         const cookieInstance = cookies();
         const role = cookieInstance.get("role")?.value;
-        await fetch(`${process.env.NEXTAUTH_URL}/api/register/google`, {
-          method: "POST",
-          body: JSON.stringify(user),
-          headers: { "Content-Type": "application/json", role: role! },
-        });
+        console.log(role);
+        const vals = await fetch(
+          `${process.env.NEXTAUTH_URL}/api/register/google`,
+          {
+            method: "POST",
+            body: JSON.stringify(user),
+            headers: { "Content-Type": "application/json", role: role! },
+          }
+        );
+        console.log("consoling vals now");
+        console.log(await vals.json());
         return true;
       }
       return true;
     },
     // below is the session callback, which will help to populate some other important fields
     // into the already existing session
-    async session({ session }) {
+    async session({ session, user }) {
+      console.log(session);
+      console.log(user);
       // here we fetch data that we will use to update the users session data
       // based on the users email.
       const response = await fetch(

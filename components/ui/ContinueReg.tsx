@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/data-access/authentication";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { signIn } from "next-auth/react";
 
 // creating our zod schema for registration using credential means
 const CredentialReg = z
