@@ -3,16 +3,25 @@
 // they can also be able to delete the resources they added
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // first, lets create a new resources
 export async function POST(req: Request) {
-  // TODO: change the teacherId below to nextauthId
-  const { teacherId, ...others } = await req.json();
+  const teacherId = await serverSessionId();
+  const role = await serverSessionRole();
+  const payload = await req.json();
   if (!teacherId) return notAuthenticated();
+  if (role !== "Teacher")
+    return new Response(
+      JSON.stringify({
+        message: "only teachers are allowed to create resources",
+      }),
+      { status: 400 }
+    );
   try {
     // create the resources to the database here
     await prisma.teachersArticle.create({
-      data: { teacherId, ...others },
+      data: { teacherId, ...payload },
     });
     return new Response(
       JSON.stringify({ message: "article uploaded successfully" })
@@ -24,13 +33,16 @@ export async function POST(req: Request) {
 
 // teacher can be able to delete their articles
 export async function DELETE(req: Request) {
-  // TODO: change teacherId to nextauth id
-  const { teacherId, id } = await req.json();
+  const teacherId = await serverSessionId();
+  const { id } = await req.json();
   if (!teacherId) return notAuthenticated();
   // lets get the article and check if is the owner that is about to delete it
   const article = await prisma.teachersArticle.findUnique({
     where: {
       id,
+    },
+    select: {
+      teacherId: true,
     },
   });
   if (article?.teacherId !== teacherId) {

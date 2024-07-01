@@ -1,0 +1,95 @@
+================================================================================================================
+end points about classes i.e creating class, deleting classes, getting all the classes, geting a single class
+================================================================================================================
+====> teacher creates class room
+route: /api/class
+method:POST
+payload: {
+    "subject": string,
+    "className":string,
+    "grade":string enum eg: Grade1, Grade2 and so on,
+    "duration":string,
+    "classStarts": string,
+    "classEnds":string,
+    "schedules":array of days eg:[Monday, Sunday],
+    "price":number,
+    "classBanner":string,
+    "publicClass":boolean,
+    "maxCapacity":number
+}
+comment: create an extra input for capacity in the frontend
+
+====> delete or remove class
+route: /api/class
+method: DELETE
+paylood:{
+    id:string
+}
+comment: the id above means the class id you want to delete
+
+====> get all the class
+route: /api/class
+method: GET
+comment: once this route it hit, all class created by the teacher that is logged in will be returned
+
+====> get only a single class
+route: /api/class/specific/:id
+method: GET
+comment: this is a dynamic route, the :id here is the classId
+
+
+================================================================================================================
+endpoint for test and resources i.e teacher creating resources and test
+================================================================================================================
+
+=====>create a resources
+route: /api/manage-resources
+method: POST
+payload: {
+    "subject":string,
+    "title":string,
+    "sourceLink":string,
+}
+comment: extra input should be created for subject and title
+
+=====>delete a resources
+route: /api/manage-resources
+method: DELETE
+payload:{
+    id:string
+}
+comment: the id in the payload is the resources you want to delete
+
+=====> get only one particular resources
+route: /api/manage-resources/:id
+method: GET
+comment: this is a dynamic route, the :id is the id of the resources you want to get
+
+=====> create a test
+route:/api/exam-by-teachers
+method: POST
+payload:{
+    "title":string,
+    "duration": string,
+    "grade":string enum eg: Grade1, Grade2 and so on,
+    "test": [{"question":string, "answer":string, "options":[string, string, string, string]},]
+    }
+comment: the test in the payload contains an array of object which represent each question, then the options is the array of obtions for student to pick
+
+=====> delete a test
+route: /api/exam-by-teachers
+method:DELETE
+payload:{
+    id:string
+}
+comment: the id of the exam you want to delete
+
+=====> get all the test a teacher student
+route: /api/exam-by-teachers
+method:GET
+comment: this route with the method gets all the exam by the teacher
+
+=====> get only one test
+route: /api/exam-by-teachers/:id
+method:GET
+comment: this get only a particular exam the :id is the id of the exam you wish to get

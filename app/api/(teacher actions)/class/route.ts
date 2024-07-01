@@ -4,14 +4,22 @@
 // then in the applied-class route, the student will be able to be added to the class after making their payments
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // here, teachers can create a class
 export async function POST(req: Request) {
-  // TODO: remember to change the id here to the nextauth id
-  const { teacherId, duration, classStarts, classEnds, ...others } =
-    await req.json();
+  // get informarion about the person that is logged in and there role
+  const teacherId = await serverSessionId();
+  const userRole = await serverSessionRole();
+  const { duration, classStarts, classEnds, ...others } = await req.json();
   if (!teacherId) {
     return notAuthenticated();
+  }
+  if (userRole !== "Teacher") {
+    return new Response(
+      JSON.stringify({ message: "only teachers are allowed to create class" }),
+      { status: 400 }
+    );
   }
   try {
     await prisma.classes.create({
@@ -34,8 +42,8 @@ export async function POST(req: Request) {
 
 // here, teachers can delete their class
 export async function DELETE(req: Request) {
-  // TODO: change the id to the next auth id
-  const { id, teacherId } = await req.json();
+  const teacherId = await serverSessionId();
+  const { id } = await req.json();
   if (!teacherId) {
     return notAuthenticated();
   }
@@ -70,8 +78,7 @@ export async function DELETE(req: Request) {
 
 // here a teacher can get all the class that he or she created
 export async function GET(req: Request) {
-  // TODO:remember to change this static teacherId to nextauth id
-  const teacherId = "1234567";
+  const teacherId = await serverSessionId();
   try {
     const allClass = await prisma.classes.findMany({ where: { teacherId } });
     return new Response(JSON.stringify(allClass), { status: 200 });
