@@ -3,11 +3,12 @@
 // this route is just about creating this exam and get this exams for students
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated } from "@/prisma/utils/error";
+import { serverSessionId } from "@/prisma/utils/utils";
 
 // post request to add an exam for a one on one session
 export async function POST(req: Request) {
-  // TODO:change the teacherId from below to nextauth id
-  const { examId, teacherId, appliedSectionId } = await req.json();
+  const teacherId = await serverSessionId();
+  const { examId, appliedSectionId } = await req.json();
   if (!teacherId) return notAuthenticated();
   //   then lets get the exam we want to add in the session
   const exam = await prisma.exams.findUnique({ where: { id: examId } });
@@ -33,7 +34,8 @@ export async function POST(req: Request) {
       },
     });
     return new Response(
-      JSON.stringify({ message: "exam successfully created" })
+      JSON.stringify({ message: "exam successfully created" }),
+      { status: 200 }
     );
   } catch (error) {
     throw new Error(JSON.stringify({ message: "something went wrong" }));
