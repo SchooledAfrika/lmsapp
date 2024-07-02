@@ -217,6 +217,7 @@ model Classes {
   classBanner      String
   rating           Float
   publicClass      Boolean            @default(true)
+  classTime        String?
   // here, there is one to many relationship between classes and teacher
   // a teacher can have many classes
   teacher          Teacher            @relation(fields: [teacherId], references: [id])

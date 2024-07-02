@@ -5,17 +5,18 @@ end points about classes i.e creating class, deleting classes, getting all the c
 route: /api/class
 method:POST
 payload: {
-    "subject": string,
-    "className":string,
-    "grade":string enum eg: Grade1, Grade2 and so on,
-    "duration":string,
-    "classStarts": string,
-    "classEnds":string,
-    "schedules":array of days eg:[Monday, Sunday],
-    "price":number,
-    "classBanner":string,
-    "publicClass":boolean,
-    "maxCapacity":number
+    subject: string,
+    className:string,
+    grade:string enum eg: Grade1, Grade2 and so on,
+    duration:string,
+    classStarts: string,
+    classEnds:string,
+    schedules:array of days eg:[Monday, Sunday],
+    price:number,
+    classBanner:string,
+    publicClass:boolean,
+    maxCapacity:number,
+    classTime:String
 }
 comment: create an extra input for capacity in the frontend, and also time for class 
 correction: add time for class in schema
@@ -47,9 +48,9 @@ endpoint for test and resources i.e teacher creating resources and test
 route: /api/manage-resources
 method: POST
 payload: {
-    "subject":string,
-    "title":string,
-    "sourceLink":string,
+    subject:string,
+    title:string,
+    sourceLink:string,
 }
 comment: extra input should be created for subject and title
 
@@ -70,10 +71,10 @@ comment: this is a dynamic route, the :id is the id of the resources you want to
 route:/api/exam-by-teachers
 method: POST
 payload:{
-    "title":string,
-    "duration": string,
-    "grade":string enum eg: Grade1, Grade2 and so on,
-    "test": [{"question":string, "answer":string, "options":[string, string, string, string]},]
+    title:string,
+    duration: string,
+    grade:string enum eg: Grade1, Grade2 and so on,
+    test: [{"question":string, "answer":string, "options":[string, string, string, string]},]
     }
 comment: the test in the payload contains an array of object which represent each question, then the options is the array of obtions for student to pick
 
