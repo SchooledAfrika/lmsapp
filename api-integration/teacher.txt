@@ -17,7 +17,8 @@ payload: {
     "publicClass":boolean,
     "maxCapacity":number
 }
-comment: create an extra input for capacity in the frontend
+comment: create an extra input for capacity in the frontend, and also time for class 
+correction: add time for class in schema
 
 ====> delete or remove class
 route: /api/class
@@ -114,7 +115,7 @@ commnet: the edit session profile should be changed to create session profile, t
 =====> get all  session students
 route: api/one-on-one-section
 method:GET
-comment: this return the one on one profile, together with an extra field apploedSession which is an arrray of student that have applied for one on one session with the teacher
+comment: this return the one on one profile, together with an extra field appliedSession which is an arrray of student that have applied for one on one session with the teacher
 
 =====> update session profile
 route: api/one-on-one-section
