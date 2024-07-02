@@ -93,3 +93,61 @@ comment: this route with the method gets all the exam by the teacher
 route: /api/exam-by-teachers/:id
 method:GET
 comment: this get only a particular exam the :id is the id of the exam you wish to get
+
+================================================================================================================
+endpoint for one on one sections
+================================================================================================================
+
+=====> create section profile (under one on one page)
+route: api/one-on-one-section
+method:POST
+payload:{
+    aboutTutor:string,
+    subjects: array of strings, which are in capital letters, eg:["CHEMISTRY", "ENGLISH"],
+    grade:array of string which the first latter is uppercase["Grade1", "Grade2"],
+    preference: array of string enum which should be camel case eg:["homeWorkSupport", "oneOnOneSection", "groupWork","openToJobs"],
+    minPrice: number,
+    maxPrice: number
+}
+commnet: the edit session profile should be changed to create session profile, then using conditional statement, we can add edit session profile only when you have created session profile before
+
+=====> get all  session students
+route: api/one-on-one-section
+method:GET
+comment: this return the one on one profile, together with an extra field apploedSession which is an arrray of student that have applied for one on one session with the teacher
+
+=====> update session profile
+route: api/one-on-one-section
+method: UPDATE
+payload:{
+    //it can receive any payload format like the create session profile above
+}
+
+=====> get details of a particular session
+route: api/one-on-one-section/session/:id
+method: GET
+comment: this gets the basic informations needed, from there you can get more information from the neccessay ids
+
+=====> set one on one section exam
+route:/api/exam-for-students
+method: POST
+payload:{
+     appliedSectionId:string,
+    examId:string,
+}
+comment: there will be a dialog box in which the teacher can get list of the exams he set already and add it to the one on one session
+the appliedSectionId is the one on one session id for a particular student and examId is the id of the selected exam
+
+================================================================================================================
+endpoint for teachers to submit kyc
+================================================================================================================
+
+=====> submit kyc by teachers
+route:/api/kyc
+method: POST
+payload:{
+    docType:string,
+    docImg:string,
+    verifiedImg:string
+}
+comment: teachers will use this endpoint to create or submit their kyc, at submission the kyc will be pendind waiting for approval or rejection from the admin

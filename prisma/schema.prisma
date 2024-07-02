@@ -63,6 +63,17 @@ model Teacher {
   CompletedProfile     Boolean              @default(false)
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @default(now())
+  kyc                  Kyc?
+}
+
+model Kyc {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  docType     String
+  docImg      String
+  verifiedImg String
+  status      KycStatus @default(PENDING)
+  teacher     Teacher   @relation(fields: [teacherId], references: [id])
+  teacherId   String    @unique @db.ObjectId
 }
 
 // creating the student model
@@ -491,6 +502,12 @@ enum Grade {
 enum ContractStatus {
   PENDING
   ACTIVE
+  REJECTED
+}
+
+enum KycStatus {
+  PENDING
+  APPROVED
   REJECTED
 }
 
