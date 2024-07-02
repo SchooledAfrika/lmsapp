@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React from "react";
+import React, { useState } from "react";
 import {
   UseFormClearErrors,
   UseFormRegister,
@@ -7,6 +7,7 @@ import {
   Control,
   Controller,
   UseFormWatch,
+  UseFormSetValue,
 } from "react-hook-form";
 import { Istudent } from "@/components/StudentAccount";
 import {
@@ -16,12 +17,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ImCross } from "react-icons/im";
 export interface IStudentSub {
   register: UseFormRegister<Istudent>;
   errors: FieldErrors<Istudent>;
   control?: Control<Istudent>;
   clearErrors: UseFormClearErrors<Istudent>;
   watch: UseFormWatch<Istudent>;
+  setValue: UseFormSetValue<Istudent>;
+  profilePhoto?: string | undefined;
+  setPhoto?: React.Dispatch<React.SetStateAction<string | undefined>>;
 }
 
 const StudentInfo: React.FC<IStudentSub> = ({
@@ -30,11 +35,33 @@ const StudentInfo: React.FC<IStudentSub> = ({
   control,
   watch,
   clearErrors,
+  setValue,
+  setPhoto,
+  profilePhoto,
 }) => {
   watch("name");
   watch("gender");
   watch("phoneNo");
   watch("address");
+  watch("profilePhoto");
+  // the function to generate a url for the picture
+  const handleShowPix = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    setValue("profilePhoto", e.target.files);
+    const blob = new Blob([file]);
+    const localUrl = URL.createObjectURL(blob);
+    if (setPhoto) {
+      setPhoto(localUrl);
+    }
+    clearErrors("profilePhoto");
+  };
+  // function to remove the image selected already
+  const handleRemove = () => {
+    if (setPhoto) {
+      setPhoto(undefined);
+    }
+  };
   return (
     <div className="flex flex-col w-full md:w-[55%] gap-2">
       <label className="font-bold text-[18px]">Personal Information</label>
@@ -96,32 +123,51 @@ const StudentInfo: React.FC<IStudentSub> = ({
       {errors.address && (
         <small className="text-red-600">{errors.address.message}</small>
       )}
-      <div
-        className={`flex items-center ${
-          errors.profilePhoto && " border border-red-600"
-        } bg-[#FFFFFF] py-4 pl-2 my-2 rounded-[8px]`}
-      >
-        <Image
-          src="/svgs/upload.svg"
-          width={15}
-          height={15}
-          alt="UplaodImage"
-        />
-        <div>
-          <label htmlFor="file-upload" className="cursor-pointer ml-2">
-            <span className="bg-transparent py-1 pr-2 text-[12px] font-medium">
-              Upload Profile Image
-            </span>
-          </label>
-          <input
-            {...register("profilePhoto")}
-            id="file-upload"
-            type="file"
-            name="profilePhoto"
-            className="hidden"
+
+      {profilePhoto === undefined ? (
+        <div
+          className={`flex items-center ${
+            errors.profilePhoto && " border border-red-600"
+          } bg-[#FFFFFF] py-4 pl-2 my-2 rounded-[8px]`}
+        >
+          <Image
+            src="/svgs/upload.svg"
+            width={15}
+            height={15}
+            alt="UplaodImage"
           />
+          <div>
+            <label htmlFor="file-upload" className="cursor-pointer ml-2">
+              <span className="bg-transparent py-1 pr-2 text-[12px] font-medium">
+                Upload Profile Image
+              </span>
+            </label>
+            <input
+              id="file-upload"
+              type="file"
+              name="profilePhoto"
+              className="hidden"
+              onChange={handleShowPix}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className=" w-full h-[200px] relative">
+          <Image
+            className=" w-full h-full object-cover"
+            src={profilePhoto}
+            alt="profileImg"
+            width={200}
+            height={200}
+          />
+          <div
+            onClick={handleRemove}
+            className=" cursor-pointer absolute top-0 right-0 w-[40px] h-[40px] bg-red-600 text-white  flex items-center justify-center"
+          >
+            <ImCross />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -23,6 +23,7 @@ const StudentAccount = () => {
   const [loading, setloading] = useState<boolean>(false);
   const router = useRouter();
   const [currentPage, setcurrentPage] = useState<number>(1);
+  const [profilePhoto, setPhoto] = useState<string | undefined>(undefined);
   const { toast } = useToast();
   const {
     register,
@@ -31,6 +32,7 @@ const StudentAccount = () => {
     control,
     watch,
     clearErrors,
+    setValue,
     formState: { errors },
   } = useForm<Istudent>({
     resolver: zodResolver(studentSchema),
@@ -114,6 +116,9 @@ const StudentAccount = () => {
                 control={control}
                 watch={watch}
                 clearErrors={clearErrors}
+                setValue={setValue}
+                profilePhoto={profilePhoto}
+                setPhoto={setPhoto}
               />
             ) : (
               <StudentProfileData
@@ -122,6 +127,7 @@ const StudentAccount = () => {
                 control={control}
                 watch={watch}
                 clearErrors={clearErrors}
+                setValue={setValue}
               />
             )}
             <Button
