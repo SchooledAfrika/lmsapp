@@ -3,7 +3,10 @@ import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import { serverSessionId } from "@/prisma/utils/utils";
 
-export async function GET({ params }: { params: { id: string } }) {
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
   const userId = await serverSessionId();
   if (!userId) return notAuthenticated();
   try {
