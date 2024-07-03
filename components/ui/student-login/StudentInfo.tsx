@@ -61,6 +61,9 @@ const StudentInfo: React.FC<IStudentSub> = ({
     if (setPhoto) {
       setPhoto(undefined);
     }
+    if (setValue) {
+      setValue("profilePhoto", "");
+    }
   };
   return (
     <div className="flex flex-col w-full md:w-[55%] gap-2">

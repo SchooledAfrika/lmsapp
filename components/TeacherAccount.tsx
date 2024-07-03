@@ -25,6 +25,9 @@ const TeacherAccount = () => {
   const [currentPage, setcurrentPage] = useState<number>(1);
   const [loading, setloading] = useState<boolean>(false);
   const { toast } = useToast();
+  const [profilePhoto, setPhoto] = useState<string | undefined>(undefined);
+  const [resume, setResume] = useState<string | undefined>(undefined);
+  // react hook form registration below
   const {
     register,
     handleSubmit,
@@ -115,6 +118,9 @@ const TeacherAccount = () => {
                 control={control}
                 watch={watch}
                 clearErrors={clearErrors}
+                profilePhoto={profilePhoto}
+                setPhoto={setPhoto}
+                setValue={setValue}
               />
             ) : currentPage === 2 ? (
               <TeacherResume
@@ -123,6 +129,9 @@ const TeacherAccount = () => {
                 control={control}
                 watch={watch}
                 clearErrors={clearErrors}
+                resume={resume}
+                setResume={setResume}
+                setValue={setValue}
               />
             ) : currentPage === 3 ? (
               <TeacherPaymentDetails
