@@ -13,7 +13,7 @@ export const BookSessionInfo: IprogressType[] = [
     name: "Language & Duration",
     field: ["language", "duration"] as const,
   },
-  { name: "Session Details", field: ["privateSession", "homeworkSupport", "groupSessions", "sessionNumber"] as const, },
+  { name: "Session Details", field: ["privateSession", "homeworkSupport", "groupSessions"] as const, },
   { name: "Scheduling", field: ["classStarts", "classEnds"] as const, },
   { name: "Payment", field: ["paystack", "flutterwave", "remita"] as const, }
 ];
@@ -39,8 +39,6 @@ export const sessionbookingSchema = z.object({
   privateSession: z.boolean({ message: "please select session number" }),
   homeworkSupport: z.boolean({ message: "please select session number" }),
   groupSessions: z.boolean({ message: "please select session number" }),
-  
-  sessionNumber: z.number({ message: "please select session number" }),
   classStarts: z.date({ message: "selection is required" }),
   classEnds: z.date({ message: "selection is required" }),
   paystack: z.boolean({ message: "selection is required" }),

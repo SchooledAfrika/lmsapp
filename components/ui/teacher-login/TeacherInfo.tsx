@@ -110,7 +110,7 @@ const TeacherInfo: React.FC<ITeacherSub> = ({
           src="/svgs/upload.svg"
           width={15}
           height={15}
-          alt="UplaodImage"
+          alt="UploadImage"
         />
         <div>
           <label htmlFor="file-upload" className="cursor-pointer ml-2">

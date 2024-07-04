@@ -1,6 +1,7 @@
 import React from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ITeacherSub } from "./TeacherInfo";
+import Link from "next/link";
 
 const TeacherFinalPaymentDetails: React.FC<ITeacherSub> = ({
   register,
@@ -52,7 +53,13 @@ const TeacherFinalPaymentDetails: React.FC<ITeacherSub> = ({
           className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         >
           Accept School Afrika{" "}
-          <span className=" text-green-600">terms and condition</span>
+          <Link
+          href={"/teacher-terms-and-conditions"}
+          className="underline text-[#359C71]"
+        >
+          Terms & Condition
+        </Link>
+          {/* <span className=" text-green-600">terms and condition</span> */}
         </label>
       </div>
     </div>
