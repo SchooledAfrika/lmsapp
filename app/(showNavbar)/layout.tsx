@@ -3,6 +3,7 @@ import "../globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import AuthProvider from "@/providers/AuthProvider";
+import QueryProvider from "@/providers/QueryProvider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -18,11 +19,13 @@ export default function RootLayout({
     <html lang="en">
       <body className="">
         <AuthProvider>
+          <QueryProvider>
           <main className="bg-stone-100">
             <Header />
             {children}
             <Footer />
           </main>
+          </QueryProvider>
         </AuthProvider>
       </body>
     </html>
