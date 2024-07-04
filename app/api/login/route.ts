@@ -66,13 +66,14 @@ export async function POST(request: Request) {
       passwordcheck,
       fetchStudent?.password!
     );
-    console.log(comparePassword);
+
     if (!comparePassword) {
       return new Response(JSON.stringify({ message: "Error in credentials" }), {
         status: 401,
         statusText: "Invalid password",
       });
     }
+
     return new Response(JSON.stringify(others), {
       status: 200,
       statusText: "success",
@@ -81,7 +82,7 @@ export async function POST(request: Request) {
   if (fetchTeacher && fetchTeacher.password !== null) {
     const { password, ...others } = fetchTeacher;
     // lets compare the password and know if it match
-    const comparePassword = bcrypt.compare(
+    const comparePassword = await bcrypt.compare(
       passwordcheck,
       fetchTeacher?.password!
     );
@@ -99,7 +100,7 @@ export async function POST(request: Request) {
   if (fetchSchool && fetchSchool.password !== null) {
     const { password, ...others } = fetchSchool;
     // lets compare the password and know if it match
-    const comparePassword = bcrypt.compare(
+    const comparePassword = await bcrypt.compare(
       passwordcheck,
       fetchSchool?.password!
     );
@@ -117,7 +118,7 @@ export async function POST(request: Request) {
   if (fetchParent && fetchParent.password !== null) {
     const { password, ...others } = fetchParent;
     // lets compare the password and know if it match
-    const comparePassword = bcrypt.compare(
+    const comparePassword = await bcrypt.compare(
       passwordcheck,
       fetchParent?.password!
     );

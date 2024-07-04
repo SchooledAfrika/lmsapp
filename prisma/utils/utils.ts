@@ -1,3 +1,6 @@
+import { authOptions } from "@/lib/nextAuth";
+import { getServerSession } from "next-auth/next";
+
 export interface IexamType {
   question: String;
   answer: String;
@@ -24,4 +27,16 @@ export const markExams = (answeredTest: IexamType[]): ExamType => {
   const percentage = getPercent.toFixed(2).toString().concat("%");
   // returning the number of question got and also the percentage gotten in the exam
   return { correctAnswer, percentage };
+};
+
+// here we get users information or roles
+export const serverSessionId = async (): Promise<string | undefined> => {
+  const session = await getServerSession(authOptions);
+  const id = session?.user.id;
+  return id;
+};
+export const serverSessionRole = async (): Promise<string | undefined> => {
+  const session = await getServerSession(authOptions);
+  const role = session?.user.role;
+  return role;
 };

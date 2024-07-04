@@ -27,7 +27,7 @@ const ParentWardProfileData: React.FC<IparentSub> = ({
   control,
 }) => {
   return (
-    <div className=" flex flex-col w-[55%] gap-2">
+    <div className=" flex flex-col w-full md:w-[55%] gap-2">
       <label className="font-bold text-[16px]">Profile Data</label>
       <div>
         <input

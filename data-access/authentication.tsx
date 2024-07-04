@@ -1,11 +1,15 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
+import { useToast } from "@/components/ui/use-toast";
+import { toast } from "react-toastify";
 
 // handle the registration of user
 export const useAuth = () => {
   const router = useRouter();
   const { data, status } = useSession();
+  const [loading, setloading] = useState<boolean>(false);
+  const { toast: mytoast } = useToast();
   // useeffect to watch when authentication changes
   useEffect(() => {
     if (data?.user === undefined) return;
@@ -25,6 +29,7 @@ export const useAuth = () => {
   }, [status, data]);
   //   this function handles registration of users using the credentials provider
   const handleCredentialReg = async (email: string, password: string) => {
+    setloading(true);
     const response = await fetch("/api/register/email", {
       method: "POST",
       body: JSON.stringify({ email, password }),
@@ -32,24 +37,38 @@ export const useAuth = () => {
     });
     const result = await response.json();
     if (response.ok) {
-      return router.push("/login");
+      return router.push("/login?newAccount=true");
     }
-    alert(result.message);
+    setloading(false);
+    toast.error(result.message);
   };
 
   //   this function handles the register/login of users with the google provider
-  const handleLogin = (
+  const handleLogin = async (
     loginType: string,
     email?: string,
     password?: string
   ) => {
     if (loginType === "google") {
       signIn("google");
-    } else if (loginType === "credentials") {
-      signIn("credentials", { email, password });
+    } else {
+      setloading(true);
+      const result = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
+      if (result?.error) {
+        setloading(false);
+        mytoast({
+          variant: "destructive",
+          title: "Login failed",
+          description: `${result.error} check your email and password`,
+        });
+      }
     }
   };
 
   // all function hook returns
-  return { handleCredentialReg, handleLogin };
+  return { handleCredentialReg, handleLogin, loading };
 };

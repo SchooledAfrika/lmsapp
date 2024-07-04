@@ -36,7 +36,7 @@ const StudentInfo: React.FC<IStudentSub> = ({
   watch("phoneNo");
   watch("address");
   return (
-    <div className="flex flex-col w-[55%] gap-2">
+    <div className="flex flex-col w-full md:w-[55%] gap-2">
       <label className="font-bold text-[18px]">Personal Information</label>
       <input
         {...register("name")}

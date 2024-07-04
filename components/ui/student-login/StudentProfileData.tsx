@@ -20,7 +20,7 @@ const StudentProfileData: React.FC<IStudentSub> = ({
   watch("grade");
   watch("details");
   return (
-    <div className="flex flex-col w-[55%] gap-2">
+    <div className="flex flex-col w-full md:w-[55%] gap-2">
       <label className="font-bold text-[18px]">Profile Data</label>
       <div className="flex flex-col gap-2">
         <Controller

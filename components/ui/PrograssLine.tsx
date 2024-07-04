@@ -16,9 +16,9 @@ const ProgressLine = ({
     setcurrentPage(goTOpage);
   };
   return (
-    <div className="flex flex-col ml-[0] md:ml-[40px] mb-[50px]">
+    <div className="flex sm:flex-col ml-[0] md:ml-[40px] mb-[50px]">
       {formArrays.map((item, index) => (
-        <div key={index} className=" flex flex-col">
+        <div key={index} className=" flex sm:flex-col">
           <div
             onClick={() => handleUpdateForm(index + 1)}
             className=" flex gap-3 items-center cursor-pointer"
@@ -33,7 +33,7 @@ const ProgressLine = ({
               {index + 1}
             </div>
             <p
-              className={` text-sm ${
+              className={` text-sm hidden sm:flex ${
                 index + 1 <= currentPage ? "text-[#359C71]" : " text-black"
               }`}
             >
@@ -42,9 +42,9 @@ const ProgressLine = ({
           </div>
           {index + 1 < formArrays.length && (
             <div
-              className={` w-1 h-[40px] md:h-[80px] border ${
+              className={` w-[80px] h-1 sm:w-1 -[40px] sm:h-[80px] border max-sm:mt-3 ${
                 currentPage > index + 1 ? " bg-[#359C71]" : "bg-[#E9ECEB]"
-              } ml-3 transform -translate-x-1/2`}
+              } sm:ml-3 transform sm:-translate-x-1/2 max-sm:-translate-y-1/2`}
             ></div>
           )}
         </div>

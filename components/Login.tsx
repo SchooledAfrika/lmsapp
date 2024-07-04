@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Footer from "./Footer";
 import Link from "next/link";
@@ -9,7 +9,10 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useAuth } from "@/data-access/authentication";
-
+import { useSearchParams } from "next/navigation";
+import { useToast } from "./ui/use-toast";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 // creating a schema for zod
 const loginSchema = z.object({
   email: z.string().email({ message: "provide a valid email address" }),
@@ -19,7 +22,14 @@ const loginSchema = z.object({
 });
 
 const Login: React.FC = () => {
-  const { handleLogin } = useAuth();
+  const { handleLogin, loading } = useAuth();
+  const params = useSearchParams();
+  const newUser = Boolean(params.get("newAccount"));
+  useEffect(() => {
+    if (newUser === true) {
+      toast.success("account creation successful!!!");
+    }
+  }, []);
   // our login type
   type Ilogin = z.infer<typeof loginSchema>;
   // our hook for functions
@@ -109,9 +119,10 @@ const Login: React.FC = () => {
             </div>
             <Button
               type="submit"
-              className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
+              disabled={loading}
+              className={` bg-secondary hover:bg-secondary w-full text-white text-[16px] px-6 py-7 my-3`}
             >
-              Login
+              {loading ? "logging in..." : "login"}
             </Button>
           </form>
           <div className="flex flex-col justify-center">
@@ -142,6 +153,7 @@ const Login: React.FC = () => {
         </div>
       </div>
       <Footer />
+      <ToastContainer />
     </div>
   );
 };

@@ -16,12 +16,15 @@ import { teacherSchema, TeacherMoreInfo } from "@/constants/completeReg";
 import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
+import { useToast } from "./ui/use-toast";
 
 export type Iteacher = z.infer<typeof teacherSchema>;
 const TeacherAccount = () => {
   const router = useRouter();
   const { update } = useSession();
   const [currentPage, setcurrentPage] = useState<number>(1);
+  const [loading, setloading] = useState<boolean>(false);
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
@@ -36,6 +39,7 @@ const TeacherAccount = () => {
   });
 
   const runSubmit: SubmitHandler<Iteacher> = async (data) => {
+    setloading(true);
     const response = await fetch("/api/continue-teacher-reg", {
       method: "POST",
       body: JSON.stringify({
@@ -49,7 +53,13 @@ const TeacherAccount = () => {
       router.push("/teacher-dashboard");
       router.refresh();
     } else {
-      alert("something went wrong");
+      setloading(false);
+      const message = await response.json();
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: `${message.message}`,
+      });
     }
   };
 
@@ -65,9 +75,16 @@ const TeacherAccount = () => {
       setcurrentPage((prev) => prev + 1);
     }
   };
+  // function to display submiting
+  const submittingState = (): string => {
+    if (loading === false) {
+      return "Submit";
+    }
+    return "Waiting for approval...";
+  };
   //
   return (
-    <section className="py-[1rem] font-subtext md:pt-[3rem]">
+    <section className="py-[1rem] px-3 font-subtext md:pt-[3rem]">
       <div className=" max-w-[1150px] mx-auto md:px-16 pt-8">
         <Link href="/">
           <Image
@@ -83,7 +100,7 @@ const TeacherAccount = () => {
         </p>
         {/* the div holding both the form progress and the form */}
         {/* the form contains each form based on the state number above */}
-        <div className=" flex flex-col md:flex-row gap-16">
+        <div className=" flex flex-col sm:flex-row  sm:gap-16">
           <ProgressLine
             formArrays={TeacherMoreInfo}
             currentPage={currentPage}
@@ -128,9 +145,9 @@ const TeacherAccount = () => {
             <Button
               onClick={handleNextPage}
               type="button"
-              className="bg-secondary w-[55%] text-white text-[16px] px-6 py-7 my-3"
+              className="bg-secondary w-full md:w-[55%] text-white text-[16px] px-6 py-7 my-3"
             >
-              {currentPage < 4 ? "Proceed" : "Submit"}
+              {currentPage < 4 ? "Proceed" : submittingState()}
             </Button>
           </form>
         </div>

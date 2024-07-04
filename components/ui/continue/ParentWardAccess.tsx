@@ -3,7 +3,7 @@ import { IparentSub } from "./ParentInfo";
 
 const ParentWardAccess: React.FC<IparentSub> = ({ register, errors }) => {
   return (
-    <div className=" flex flex-col w-[55%] gap-2">
+    <div className=" flex flex-col w-full md:w-[55%] gap-2">
       <label className="font-bold text-[16px]">Pre-existing Account</label>
       <div>
         <input

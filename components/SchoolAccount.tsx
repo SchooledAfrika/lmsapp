@@ -14,6 +14,7 @@ import Container from "./Container";
 import Footer from "./Footer";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { useToast } from "./ui/use-toast";
 
 export type Ischool = z.infer<typeof schoolSchema>;
 
@@ -21,6 +22,8 @@ const SchoolAccout: React.FC = () => {
   const router = useRouter();
   const { update } = useSession();
   const [currentPage, setcurrentPage] = useState<number>(1);
+  const [loading, setloading] = useState<boolean>(false);
+  const { toast } = useToast();
   const {
     register,
     handleSubmit,
@@ -34,6 +37,7 @@ const SchoolAccout: React.FC = () => {
   });
 
   const runSubmit: SubmitHandler<Ischool> = async (data) => {
+    setloading(true);
     const response = await fetch("/api/continue-sch-reg", {
       method: "POST",
       body: JSON.stringify({
@@ -46,7 +50,13 @@ const SchoolAccout: React.FC = () => {
       router.push("/school-dashboard");
       router.refresh();
     } else {
-      alert("something went wrong");
+      setloading(false);
+      const message = await response.json();
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: `${message.message}`,
+      });
     }
   };
 
@@ -62,9 +72,16 @@ const SchoolAccout: React.FC = () => {
       setcurrentPage((prev) => prev + 1);
     }
   };
+  // function to display submiting
+  const submittingState = (): string => {
+    if (loading === false) {
+      return "Submit";
+    }
+    return "Waiting for approval...";
+  };
 
   return (
-    <section className="py-[1rem] font-subtext md:pt-[3rem]">
+    <section className="py-[1rem] px-3 font-subtext md:pt-[3rem]">
       <div className=" max-w-[1150px] mx-auto md:px-16 pt-8">
         <Link href="/">
           <Image
@@ -80,7 +97,7 @@ const SchoolAccout: React.FC = () => {
         </p>
         {/* the div holding both the form progress and the form */}
         {/* the form contains each form based on the state number above */}
-        <div className=" flex flex-col md:flex-row gap-16">
+        <div className=" flex flex-col sm:flex-row flex-1  sm:gap-16">
           <ProgressLine
             formArrays={SchoolMoreInfo}
             currentPage={currentPage}
@@ -108,9 +125,9 @@ const SchoolAccout: React.FC = () => {
             <Button
               onClick={handleNextPage}
               type="button"
-              className="bg-secondary w-[55%] text-white text-[16px] px-6 py-7 my-3"
+              className="bg-secondary w-full md:w-[55%] text-white text-[16px] px-6 py-7 my-3"
             >
-              {currentPage < 2 ? "Proceed" : "Submit"}
+              {currentPage < 2 ? "Proceed" : submittingState()}
             </Button>
           </form>
         </div>

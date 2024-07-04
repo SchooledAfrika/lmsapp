@@ -3,17 +3,26 @@
 // then students can apply to this one on on section via the appliedSection
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated } from "@/prisma/utils/error";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // here we first make a post request
 // there for creating the new one to one section
 export async function POST(req: Request) {
-  // rememmber to change this and replace it with the nextauth id
-  const { teacherId, ...others } = await req.json();
+  const teacherId = await serverSessionId();
+  const role = await serverSessionRole();
+  const payload = await req.json();
   if (!teacherId) return notAuthenticated();
+  if (role !== "Teacher")
+    return new Response(
+      JSON.stringify({
+        message: "oops, only teachers can perform this action",
+      }),
+      { status: 401 }
+    );
   // now, lets proceed and create the section
   try {
     await prisma.oneOnOneSection.create({
-      data: { teacherId: teacherId, ...others },
+      data: { teacherId: teacherId, ...payload },
     });
     return new Response(
       JSON.stringify({ message: "section created successfully" }),
@@ -27,12 +36,12 @@ export async function POST(req: Request) {
 // here, we get our section
 // while getting our section, we also include the applied sections
 export async function GET(req: Request) {
-  // remember to change this static id to the id in the nextauth
-  const id = "663940ca5cecf4479bcefe78";
+  const teacherId = await serverSessionId();
+
   try {
     const allSections = await prisma.oneOnOneSection.findUnique({
       where: {
-        teacherId: id,
+        teacherId,
       },
       include: {
         AppliedSection: true,
@@ -47,8 +56,8 @@ export async function GET(req: Request) {
 
 // here, we provide the route for updating the section
 export async function PUT(req: Request) {
-  // TODO: change this id to nextauth id
-  const { teacherId, ...others } = await req.json();
+  const teacherId = await serverSessionId();
+  const payload = await req.json();
   if (!teacherId) {
     return new Response(JSON.stringify({ message: "you are not logged in" }));
   }
@@ -56,7 +65,7 @@ export async function PUT(req: Request) {
   try {
     await prisma.oneOnOneSection.update({
       where: { teacherId },
-      data: { ...others },
+      data: { ...payload },
     });
     return new Response(JSON.stringify({ message: "updated successfully" }), {
       status: 200,

@@ -5,17 +5,24 @@
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import { successFullMessage } from "@/prisma/utils/utils";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // create a post request to create an exam
 export async function POST(req: Request) {
-  // TODO: remember to change the teacherID here to the nextauth id
-  const { teacherId, ...others } = await req.json();
+  const teacherId = await serverSessionId();
+  const role = await serverSessionRole();
+  const payload = await req.json();
   // check if the teacher is login
   if (!teacherId) return notAuthenticated();
+  if (role !== "Teacher")
+    return new Response(
+      JSON.stringify({ message: "only teachers can create exams" }),
+      { status: 400 }
+    );
   //   now we create the exam and store it
   try {
     await prisma.exams.create({
-      data: { teacherId, ...others },
+      data: { teacherId, ...payload },
     });
     return successFullMessage("exam created successfully");
   } catch (error) {
@@ -25,10 +32,10 @@ export async function POST(req: Request) {
 }
 
 // here, we make get request for all our exams
+// get all the exams that was created by the teacher
 // returning based on the teacherId
 export async function GET(req: Request) {
-  // TODO: change the teacherId below to the nextauth id
-  const teacherId = "663940ca5cecf4479bcefe78";
+  const teacherId = await serverSessionId();
   if (!teacherId) return notAuthenticated();
   try {
     const allExams = await prisma.exams.findMany({
@@ -43,8 +50,8 @@ export async function GET(req: Request) {
 // delete a particular exam,
 // here teacher can delete the exam that they actually created
 export async function DELETE(req: Request) {
-  // TODO: change the teacherId here to nextauth id
-  const { id, teacherId } = await req.json();
+  const teacherId = await serverSessionId();
+  const id = await req.json();
   if (!teacherId) return notAuthenticated();
   //   lets now get the exam then  compare the teacherId in it
   // if it does not match we should return an error
