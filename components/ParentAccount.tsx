@@ -17,6 +17,7 @@ import { parentSchema } from "@/constants/completeReg";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "./ui/use-toast";
+import { useCloudinary } from "@/data-access/cloudinary";
 
 // exporting the parentSchema type above
 export type Iparents = z.infer<typeof parentSchema>;
@@ -29,6 +30,7 @@ const ParentAccount = () => {
   const router = useRouter();
   const { toast } = useToast();
   const { update, data: session } = useSession();
+  const { imageUpload } = useCloudinary();
   // react hook form registration below
   const {
     register,
@@ -41,13 +43,18 @@ const ParentAccount = () => {
   } = useForm<Iparents>({ resolver: zodResolver(parentSchema) });
   const runSubmit: SubmitHandler<Iparents> = async (data) => {
     setloading(true);
+    // below here, we handle image upload to the cloudinary
+    const profileBlob = new Blob([data.profilePhoto[0]]);
+    const childBlob = new Blob([data.childImg[0]]);
+    const cloudProfilePhoto = await imageUpload(profileBlob);
+    const cloudChildPhoto = await imageUpload(childBlob);
     // handle file submission to the backend server
     const response = await fetch("/api/continue-parent-reg", {
       method: "POST",
       body: JSON.stringify({
         ...data,
-        profilePhoto: "the profile photo",
-        childImg: "child image",
+        profilePhoto: cloudProfilePhoto,
+        childImg: cloudChildPhoto,
       }),
     });
     if (response.ok) {

@@ -45,14 +45,13 @@ const StudentAccount = () => {
     setloading(true);
     const profileItem = data.profilePhoto[0];
     const profileBlob = new Blob([profileItem]);
-    const myImage = await imageUpload(profileBlob);
-    console.log(myImage);
+    const photo = await imageUpload(profileBlob);
     // handle file submission to the backend server
     const response = await fetch("/api/continue-student-reg", {
       method: "POST",
       body: JSON.stringify({
         ...data,
-        profilePhoto: "the student photo",
+        profilePhoto: photo,
       }),
     });
     if (response.ok) {

@@ -17,6 +17,7 @@ import { z } from "zod";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useToast } from "./ui/use-toast";
+import { useCloudinary } from "@/data-access/cloudinary";
 
 export type Iteacher = z.infer<typeof teacherSchema>;
 const TeacherAccount = () => {
@@ -27,6 +28,7 @@ const TeacherAccount = () => {
   const { toast } = useToast();
   const [profilePhoto, setPhoto] = useState<string | undefined>(undefined);
   const [resume, setResume] = useState<string | undefined>(undefined);
+  const { imageUpload } = useCloudinary();
   // react hook form registration below
   const {
     register,
@@ -43,12 +45,18 @@ const TeacherAccount = () => {
 
   const runSubmit: SubmitHandler<Iteacher> = async (data) => {
     setloading(true);
+    // here, we handle creating blob and image uploads to cloudinary
+    const profileBlob = new Blob([data.profilePhoto[0]]);
+    const resumeBlob = new Blob([data.resume[0]]);
+    const cloudProfile = await imageUpload(profileBlob);
+    const cloudResume = await imageUpload(resumeBlob);
+
     const response = await fetch("/api/continue-teacher-reg", {
       method: "POST",
       body: JSON.stringify({
         ...data,
-        profilePhoto: "the student photo",
-        resume: "resume pix goes here",
+        profilePhoto: cloudProfile,
+        resume: cloudResume,
       }),
     });
     if (response.ok) {
