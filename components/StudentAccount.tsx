@@ -15,6 +15,7 @@ import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "./ui/use-toast";
+import { useCloudinary } from "@/data-access/cloudinary";
 
 export type Istudent = z.infer<typeof studentSchema>;
 
@@ -25,6 +26,8 @@ const StudentAccount = () => {
   const [currentPage, setcurrentPage] = useState<number>(1);
   const [profilePhoto, setPhoto] = useState<string | undefined>(undefined);
   const { toast } = useToast();
+  const { imageUpload } = useCloudinary();
+  // handling things about react-hook-form
   const {
     register,
     handleSubmit,
@@ -40,6 +43,10 @@ const StudentAccount = () => {
 
   const runSubmit: SubmitHandler<Istudent> = async (data) => {
     setloading(true);
+    const profileItem = data.profilePhoto[0];
+    const profileBlob = new Blob([profileItem]);
+    const myImage = await imageUpload(profileBlob);
+    console.log(myImage);
     // handle file submission to the backend server
     const response = await fetch("/api/continue-student-reg", {
       method: "POST",

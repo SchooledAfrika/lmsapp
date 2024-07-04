@@ -18,6 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ImCross } from "react-icons/im";
+import PreviewItem from "../PreviewItem";
 export interface IStudentSub {
   register: UseFormRegister<Istudent>;
   errors: FieldErrors<Istudent>;
@@ -155,21 +156,7 @@ const StudentInfo: React.FC<IStudentSub> = ({
           </div>
         </div>
       ) : (
-        <div className=" w-full h-[200px] relative">
-          <Image
-            className=" w-full h-full object-cover"
-            src={profilePhoto}
-            alt="profileImg"
-            width={200}
-            height={200}
-          />
-          <div
-            onClick={handleRemove}
-            className=" cursor-pointer absolute top-0 right-0 w-[40px] h-[40px] bg-red-600 text-white  flex items-center justify-center"
-          >
-            <ImCross />
-          </div>
-        </div>
+        <PreviewItem imageItem={profilePhoto} handleRemove={handleRemove} />
       )}
     </div>
   );

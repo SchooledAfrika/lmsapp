@@ -24,6 +24,8 @@ const SchoolAccout: React.FC = () => {
   const [currentPage, setcurrentPage] = useState<number>(1);
   const [loading, setloading] = useState<boolean>(false);
   const { toast } = useToast();
+  const [bannerPix, setBannerPix] = useState<string | undefined>(undefined);
+  // handling react hook form below
   const {
     register,
     handleSubmit,
@@ -31,6 +33,7 @@ const SchoolAccout: React.FC = () => {
     control,
     watch,
     clearErrors,
+    setValue,
     formState: { errors },
   } = useForm<Ischool>({
     resolver: zodResolver(schoolSchema),
@@ -112,6 +115,9 @@ const SchoolAccout: React.FC = () => {
                 control={control}
                 watch={watch}
                 clearErrors={clearErrors}
+                bannerPix={bannerPix}
+                setBannerPix={setBannerPix}
+                setValue={setValue}
               />
             ) : (
               <SchoolPersonalInfo
@@ -120,6 +126,7 @@ const SchoolAccout: React.FC = () => {
                 control={control}
                 watch={watch}
                 clearErrors={clearErrors}
+                setValue={setValue}
               />
             )}
             <Button

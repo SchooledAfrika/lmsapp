@@ -24,15 +24,19 @@ export type Iparents = z.infer<typeof parentSchema>;
 const ParentAccount = () => {
   const [currentPage, setcurrentPage] = useState<number>(1);
   const [loading, setloading] = useState<boolean>(false);
+  const [profilePhoto, setPhoto] = useState<string | undefined>(undefined);
+  const [childImg, setChildImg] = useState<string | undefined>(undefined);
   const router = useRouter();
   const { toast } = useToast();
   const { update, data: session } = useSession();
+  // react hook form registration below
   const {
     register,
     setValue,
     handleSubmit,
     control,
     trigger,
+    watch,
     formState: { errors },
   } = useForm<Iparents>({ resolver: zodResolver(parentSchema) });
   const runSubmit: SubmitHandler<Iparents> = async (data) => {
@@ -112,18 +116,28 @@ const ParentAccount = () => {
                 register={register}
                 errors={errors}
                 control={control}
+                profilePhoto={profilePhoto}
+                setPhoto={setPhoto}
+                setValue={setValue}
+                watch={watch}
               />
             ) : currentPage === 2 ? (
               <ParentWardAccess
                 register={register}
                 errors={errors}
                 control={control}
+                watch={watch}
+                setValue={setValue}
               />
             ) : (
               <ParentWardProfileData
                 register={register}
                 errors={errors}
                 control={control}
+                childImg={childImg}
+                setChildImg={setChildImg}
+                watch={watch}
+                setValue={setValue}
               />
             )}
             <Button
