@@ -1,20 +1,8 @@
 import Image from "next/image";
 import { ISessionSub } from "./Duration";
-import { Controller } from "react-hook-form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
-import { BsClipboard2PlusFill } from "react-icons/bs";
-import { CiCirclePlus } from "react-icons/ci";
-import { FaMinus, FaPlus } from "react-icons/fa6";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 const SessionDetails: React.FC<ISessionSub> = ({
@@ -22,15 +10,7 @@ const SessionDetails: React.FC<ISessionSub> = ({
   errors,
   control,
 }) => {
-  const [count, setCount] = useState(0);
-
-  const increment = () => {
-    setCount((prevCount) => (prevCount += 1));
-  };
-
-  const decrement = () => {
-    setCount((prevCount) => (prevCount -= 1));
-  };
+  
   return (
     <ScrollArea className="h-[500px] w-full ">
       <div className="">
@@ -52,7 +32,7 @@ const SessionDetails: React.FC<ISessionSub> = ({
             <div className="flex space-x-6">
               <Image
                 src="/book-1.png"
-                alt="paystack"
+                alt="privateSession"
                 width={100}
                 height={100}
                 className="w-[35px] h-[35px]"
@@ -113,24 +93,8 @@ const SessionDetails: React.FC<ISessionSub> = ({
               type="checkbox"
             />
           </div>
-          <div className="border ml-6  justify-between px-3 flex py-3  rounded-md ">
-            <FaMinus onClick={decrement} className="text-2xl" />
-
-            <div className="flex  space-y-2 flex-col">
-              <p className="text-[13px]">Number of Sessions</p>
-              <p className="font-semibold mx-auto">
-                <input
-                  {...register("sessionNumber")}
-                  type="hidden"
-                 
-                  className="bg-stone-100 text-center"
-                /> {count}
-              </p>
-            </div>
-
-            <FaPlus onClick={increment} className="text-xl" />
-          </div>{" "}
-          <p className="text-center font-semibold text-2xl text-lightGreen">
+          
+          <p className="text-center font-semibold text-2xl  text-lightGreen">
             $10.00
           </p>
         </div>

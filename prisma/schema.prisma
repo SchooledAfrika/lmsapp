@@ -209,7 +209,7 @@ model Classes {
   subject          Subjects
   className        String
   grade            Grade
-  duration         DateTime
+  duration         String
   classStarts      DateTime
   classEnds        DateTime
   schedules        ClassDay[]
