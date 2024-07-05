@@ -106,7 +106,7 @@ const TeacherAccount = () => {
             currentPage={currentPage}
             setcurrentPage={setcurrentPage}
           />
-          <form onSubmit={handleSubmit(runSubmit)} className=" flex-1">
+          <form onSubmit={handleSubmit(runSubmit)} className="flex-1">
             {/* conditionaly rendering each form */}
             {currentPage === 1 ? (
               <TeacherInfo
