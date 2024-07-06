@@ -13,6 +13,8 @@ export async function POST(req: Request) {
   const userRole = await serverSessionRole();
 
   const { duration, classStarts, classEnds, ...others } = await req.json();
+  console.log(others);
+  console.log(classStarts, classEnds);
   if (!teacherId) {
     return notAuthenticated();
   }
@@ -37,6 +39,7 @@ export async function POST(req: Request) {
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     throw new Error(JSON.stringify({ message: "something went wrong" }));
   }
 }

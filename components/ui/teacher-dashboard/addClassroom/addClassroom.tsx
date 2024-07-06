@@ -1,51 +1,35 @@
 "use client";
 import React, { useState } from "react";
-import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
-import {
-  SubmitHandler,
-  useForm,
-  UseFormClearErrors,
-  UseFormRegister,
-  FieldErrors,
-  Control,
-  Controller,
-  UseFormWatch,
-} from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
-import { addingClassroomSchema } from "@/constants/addClassroom";
-
+import {
+  addingClassroomSchema,
+  Schedules,
+  Subject,
+} from "@/constants/addClassroom";
 export type IaddingClassroom = z.infer<typeof addingClassroomSchema>;
-
 import {
   Dialog,
   DialogContent,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { SiGoogleclassroom } from "react-icons/si";
-import { Checkbox } from "@/components/ui/checkbox";
-
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
 import { FaHourglassStart, FaHourglassEnd } from "react-icons/fa";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -55,29 +39,25 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Image from "next/image";
-import { id } from "date-fns/locale";
-import { setDefaultResultOrder } from "dns/promises";
+import PreviewItem from "../../PreviewItem";
+import { useCloudinary } from "@/data-access/cloudinary";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { CaseUpper } from "lucide-react";
 
-export interface IAddClassSub {
-  register: UseFormRegister<IaddingClassroom>;
-  errors: FieldErrors<IaddingClassroom>;
-  control?: Control<IaddingClassroom>;
-  clearErrors: UseFormClearErrors<IaddingClassroom>;
-  watch: UseFormWatch<IaddingClassroom>;
-}
-
-const AddClassroom: React.FC<IAddClassSub> = () => {
-  const router = useRouter();
-  const { update } = useSession();
+const AddClassroom = () => {
   const [loading, setloading] = useState<boolean>(false);
-
+  const [banner, setBanner] = useState<string | undefined>(undefined);
+  const [schedules, setSchedules] = useState<string[]>([]);
+  const { imageUpload } = useCloudinary();
+  // react hook form instance below here
   const {
     register,
     handleSubmit,
-    trigger,
     control,
     clearErrors,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<IaddingClassroom>({
     resolver: zodResolver(addingClassroomSchema),
@@ -85,96 +65,50 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
 
   //   instance of client
   const queryClient = useQueryClient();
-
-  // Queries
-  const query = useQuery({ queryKey: ["add"] });
-  //   creating a post using mutation
+  //   creating a post using mutation to the backend
   const mutation = useMutation({
     mutationKey: ["post"],
-    mutationFn: async () => {
+    mutationFn: async (data: IaddingClassroom) => {
+      console.log(data);
       const result = await fetch("/api/class", {
         method: "POST",
         body: JSON.stringify({
-          className,
-          subject,
-          grade,
-          duration,
-          schedules,
-          classTime,
-          price,
-          publicClass,
-          maxCapacity,
-          classStarts,
-          classEnds,
+          ...data,
+          price: Number(data.price),
+          maxCapacity: Number(data.maxCapacity),
         }),
       });
-     
 
       return result;
     },
     onSuccess: async (result) => {
-      console.log(result);
       queryClient.invalidateQueries({ queryKey: ["add"] });
-      //   manage error states
-      if (!result.ok) {
-        const erroMessage = await result.json();
-        setmessage({ show: true, item: erroMessage.message });
+      if (result.ok) {
+        const body = await result.json();
+        setloading(false);
+        reset();
+        return toast.success(body.message);
+      } else {
+        setloading(false);
+        return toast.error("error creating class");
       }
-      setTimeout(() => {
-        setmessage({ show: false, item: "" });
-      }, 3000);
     },
   });
-
+  // here we validate the datas in our form submission
+  // only if there is data, before the mutation function is called
   const runSubmit: SubmitHandler<IaddingClassroom> = async (data) => {
-    mutation.mutate();
-    console.log(data);
+    setloading(true);
+    // converting the selected image to a blob and uploading to cloudinary
+    // using the useCloudinary custom hook;
+    const bannerBlob = new Blob([data.classBanner[0]]);
+    const bannerUrl = await imageUpload(bannerBlob);
+    data.classBanner = bannerUrl;
+    mutation.mutate(data);
   };
-
-  // function to display submiting
-  const submittingState = (): string => {
-    if (loading === false) {
-      return "Submit";
-    }
-    return "Waiting for approval...";
-  };
-  const [className, setClassName] = useState<string>();
-  const [subject, setSubject] = useState<string>();
-  const [grade, setGrade] = useState<string>();
-  const [duration, setDuration] = useState<string>();
-  const [schedules, setSchedules] = useState<string[]>([]);
-  const [classTime, setClassTime] = useState<string>();
-  const [price, setPrice] = useState<number>();
-  const [classBanner, setClassBanner] = useState<string>();
-  const [publicClass, setPublicClass] = useState<boolean>(false);
-  const [maxCapacity, setMaxCapacity] = useState<number>();
-  const [classStarts, setClassStarts] = React.useState<Date>();
-  const [classEnds, setClassEnds] = React.useState<Date>();
-  const [newMessage, setmessage] = useState<{ show: boolean; item: string }>({
-    show: false,
-    item: "",
-  });
-
-  // the schedules array
-  const Schedules = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
 
   //this function below handle schedule selection
   const handleSchedule = (item: string) => {
-    if (schedules.includes(item)) {
-      setSchedules(schedules.filter((item) => item !== item));
-    } else {
-      setSchedules([...schedules, item]);
-    }
-
-    // checking if the preference is already in the array
+    // checking if the scheduled day is already in the array
     // if there is remove, else add it
     let arrayInstance = [...schedules];
     const checkSchedule = arrayInstance.find((value) => value === item);
@@ -182,12 +116,30 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
       const removedSchedule = arrayInstance.filter((value) => value !== item);
       arrayInstance = [...removedSchedule];
       setSchedules(removedSchedule);
-      console.log(schedules);
+      setValue("schedules", arrayInstance);
+      clearErrors("schedules");
     } else {
       arrayInstance.push(item);
       setSchedules(arrayInstance);
-      console.log(schedules);
+      setValue("schedules", arrayInstance);
+      clearErrors("schedules");
     }
+  };
+  // handles remove image that is already present
+  // if the user decides to remove it
+  const handleRemove = () => {
+    setBanner(undefined);
+    setValue("classBanner", "");
+  };
+  // the function to generate a url for the picture
+  const handleShowPix = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    setValue("classBanner", e.target.files);
+    const blob = new Blob([file]);
+    const localUrl = URL.createObjectURL(blob);
+    setBanner(localUrl);
+    clearErrors("classBanner");
   };
 
   return (
@@ -207,14 +159,17 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
             </DialogTitle>
           </DialogHeader>
 
-          <div className="grid gap-4 font-header py-4">
-            <form onSubmit={handleSubmit(runSubmit)} className=" flex-1">
-              <div className="grid grid-cols-4 items-center gap-4">
+          <div className="w-[96%] mt-2">
+            <form
+              onSubmit={handleSubmit(runSubmit)}
+              className=" flex flex-col gap-2 w-full px-2"
+            >
+              <div className=" flex flex-col">
                 <Input
                   id="name"
-                  type=""
+                  type="text"
                   {...register("className")}
-                  value={className}
+                  name="className"
                   onChange={() => clearErrors("className")}
                   placeholder="Class Name"
                   className="col-span-6 w-full"
@@ -225,14 +180,34 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                   </small>
                 )}
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <Input
-                  id="subject"
-                  value={subject}
-                  {...register("subject")}
-                  onChange={() => clearErrors("subject")}
-                  placeholder="Class Subject"
-                  className="col-span-6 w-full"
+              <div className="flex flex-col">
+                <Controller
+                  control={control}
+                  name="subject"
+                  render={({ field }) => (
+                    <Select
+                      onValueChange={(value) => {
+                        field.onChange(value);
+                        clearErrors("subject");
+                      }}
+                    >
+                      <SelectTrigger className=" w-full py-6">
+                        <SelectValue placeholder="Subject" />
+                      </SelectTrigger>
+
+                      <SelectContent className=" font-subtext font-medium">
+                        <ScrollArea className="h-[500px] w-full ">
+                          <SelectGroup>
+                            {Subject.map((item, index) => (
+                              <SelectItem key={index} value={item}>
+                                {item}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </ScrollArea>
+                      </SelectContent>
+                    </Select>
+                  )}
                 />
                 {errors.subject && (
                   <small className="text-red-600">
@@ -240,7 +215,7 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                   </small>
                 )}
               </div>
-              <div className="grid grid-cols-4  items-center gap-4 w-full">
+              <div className="flex flex-col ">
                 <Controller
                   control={control}
                   name="grade"
@@ -251,7 +226,7 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                         clearErrors("grade");
                       }}
                     >
-                      <SelectTrigger className="md:w-[450px] w-[330px] p-4">
+                      <SelectTrigger className=" w-full py-6">
                         <SelectValue placeholder="Grade" />
                       </SelectTrigger>
 
@@ -280,18 +255,18 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                   <small className="text-red-600">{errors.grade.message}</small>
                 )}
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
+              <div className="flex flex-col">
                 <Controller
                   control={control}
-                  name="grade"
+                  name="duration"
                   render={({ field }) => (
                     <Select
                       onValueChange={(value) => {
                         field.onChange(value);
-                        clearErrors("grade");
+                        clearErrors("duration");
                       }}
                     >
-                      <SelectTrigger className="md:w-[450px] w-[330px] p-4">
+                      <SelectTrigger className="w-full py-6">
                         <SelectValue placeholder="Duration" />
                       </SelectTrigger>
 
@@ -316,7 +291,7 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                   </small>
                 )}
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
+              <div className="flex flex-col">
                 <Controller
                   control={control}
                   name="classStarts"
@@ -326,7 +301,7 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "md:w-[450px] w-[330px] p-4 justify-start text-left font-normal",
+                            "w-full p-4 justify-start text-left font-normal",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -356,7 +331,7 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                   </small>
                 )}
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
+              <div className="flex flex-col">
                 <Controller
                   control={control}
                   name="classEnds"
@@ -366,7 +341,7 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                         <Button
                           variant={"outline"}
                           className={cn(
-                            "md:w-[450px] w-[330px] p-4 justify-start text-left font-normal",
+                            "w-full p-4 justify-start text-left font-normal",
                             !field.value && "text-muted-foreground"
                           )}
                         >
@@ -399,14 +374,14 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
 
               <div>
                 <label className="font-bold text-[16px]">Class Schedule</label>
-                <div className="grid grid-cols-3 gap-x-1 w-full">
+                <div className="grid grid-cols-3 gap-2 w-3/4 border p-3 ">
                   {Schedules.map((schedule, index) => (
-                    <label
+                    <div
                       onClick={() => handleSchedule(schedule)}
                       key={index}
-                      className="flex justify-between items-center gap-2 my-2 px-4 py-3 outline-none rounded-[8px] bg-white cursor-pointer"
+                      className=" flex justify-between items-center cursor-pointer hover:text-green-500"
                     >
-                      {schedule}
+                      <p className=" text-[14px]">{schedule.toLowerCase()}</p>
                       <input
                         type="checkbox"
                         name="schedules"
@@ -414,7 +389,7 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                         value={schedule}
                         className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-green-600 checked:border-transparent focus:outline-none"
                       />
-                    </label>
+                    </div>
                   ))}
                 </div>
                 {errors.schedules && (
@@ -424,7 +399,7 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                 )}
               </div>
 
-              <div className="grid grid-cols-4  items-center gap-4 w-full">
+              <div className="flex flex-col">
                 <Controller
                   control={control}
                   name="classTime"
@@ -435,20 +410,20 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                         clearErrors("classTime");
                       }}
                     >
-                      <SelectTrigger className="md:w-[450px] w-[330px] p-4">
+                      <SelectTrigger className=" w-full py-6">
                         <SelectValue placeholder="Class Timing" />
                       </SelectTrigger>
 
                       <SelectContent className=" font-subtext font-medium">
                         <ScrollArea className="h-[250px] w-full ">
                           <SelectGroup>
-                            <SelectItem value="first">8AM-10AM</SelectItem>
-                            <SelectItem value="second">10AM-12PM</SelectItem>
-                            <SelectItem value="third">12PM-2PM</SelectItem>
-                            <SelectItem value="fourth">2PM-4PM</SelectItem>
-                            <SelectItem value="fifth">4PM-6PM</SelectItem>
-                            <SelectItem value="sixth">6PM-8PM</SelectItem>
-                            <SelectItem value="seventh">8PM-10PM</SelectItem>
+                            <SelectItem value="8AM-10AM">8AM-10AM</SelectItem>
+                            <SelectItem value="10AM-12PM">10AM-12PM</SelectItem>
+                            <SelectItem value="12PM-2PM">12PM-2PM</SelectItem>
+                            <SelectItem value="2PM-4PM">2PM-4PM</SelectItem>
+                            <SelectItem value="4PM-6PM">4PM-6PM</SelectItem>
+                            <SelectItem value="6PM-8PM">6PM-8PM</SelectItem>
+                            <SelectItem value="8PM-10PM">8PM-10PM</SelectItem>
                           </SelectGroup>
                         </ScrollArea>
                       </SelectContent>
@@ -462,35 +437,37 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                 )}
               </div>
 
-              <div className=" w-full rounded-md h-[60px] font-header border bg-white flex items-center text-black justify-between px-2 ">
-                <input
-                  value={price}
-                  {...register("price")}
-                  onChange={() => clearErrors("price")}
-                  placeholder="Price"
-                  className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
-                />
+              <div>
+                <div className=" w-full rounded-md h-[60px] font-header border bg-white flex items-center text-black justify-between px-2 ">
+                  <input
+                    {...register("price")}
+                    name="price"
+                    placeholder="Price"
+                    type="number"
+                    className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
+                  />
+
+                  <div className=" w-[50px] cursor-pointer font-bold aspect-square rounded-full flex items-center justify-center">
+                    <Image
+                      src="/usflag.png"
+                      alt="usflag"
+                      width={100}
+                      height={100}
+                      className="w-[40px] h-[40px] rounded-full"
+                    />
+                  </div>
+                </div>
                 {errors.price && (
                   <small className="text-red-600">{errors.price.message}</small>
                 )}
-                <div className=" w-[50px] cursor-pointer font-bold aspect-square rounded-full flex items-center justify-center">
-                  <Image
-                    src="/usflag.png"
-                    alt="usflag"
-                    width={100}
-                    height={100}
-                    className="w-[40px] h-[40px] rounded-full"
-                  />
-                </div>
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
+              <div className="flex flex-col">
                 <Input
                   id="maxCapacity"
                   {...register("maxCapacity")}
-                  value={maxCapacity}
-                  onChange={() => clearErrors("maxCapacity")}
+                  name="maxCapacity"
                   placeholder="Maximum Capacity"
-                  className="col-span-6 w-full"
+                  className=""
                 />
 
                 {errors.maxCapacity && (
@@ -499,26 +476,32 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
                   </small>
                 )}
               </div>
-              <div className="grid grid-cols-4 items-center gap-4">
-                <input
-                  type="text"
-                  {...register("classBanner")}
-                  name="classBanner"
-                  placeholder="Upload Image"
-                  className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
-                />
-                {errors.classBanner && (
-                  <small className="text-red-600">
-                    {errors.classBanner.message}
-                  </small>
-                )}
-              </div>
+              {banner === undefined ? (
+                <div className="flex flex-col">
+                  <input
+                    type="file"
+                    multiple={false}
+                    accept="image/*"
+                    onChange={handleShowPix}
+                    name="classBanner"
+                    placeholder="class banner"
+                    className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
+                  />
+                  {errors.classBanner && (
+                    <small className="text-red-600">
+                      {String(errors.classBanner.message)}
+                    </small>
+                  )}
+                </div>
+              ) : (
+                <PreviewItem handleRemove={handleRemove} imageItem={banner} />
+              )}
 
               <div className="flex font-subtext flex-col">
                 <div className="flex items-center space-x-2">
                   <input
                     {...register("publicClass")}
-                    onClick={() => setPublicClass(true)}
+                    name="publicClass"
                     className="w-4 h-4 px-2 accent-lightGreen"
                     type="checkbox"
                   />
@@ -536,13 +519,15 @@ const AddClassroom: React.FC<IAddClassSub> = () => {
               <Button
                 type="submit"
                 className="w-full py-6 bg-lightGreen hover:bg-green-700"
+                disabled={loading}
               >
-                Add Classroom
+                {loading ? "creating class..." : "Add Classroom"}
               </Button>
             </form>
           </div>
         </ScrollArea>
       </DialogContent>
+      <ToastContainer />
     </Dialog>
   );
 };
