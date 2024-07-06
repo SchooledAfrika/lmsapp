@@ -209,13 +209,13 @@ model Classes {
   subject          Subjects
   className        String
   grade            Grade
-  duration         DateTime
+  duration         String
   classStarts      DateTime
   classEnds        DateTime
   schedules        ClassDay[]
   price            Float
   classBanner      String
-  rating           Float
+  rating           Float?
   publicClass      Boolean            @default(true)
   classTime        String?
   // here, there is one to many relationship between classes and teacher

@@ -15,6 +15,7 @@ import { z } from "zod";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "./ui/use-toast";
+import { useCloudinary } from "@/data-access/cloudinary";
 
 export type Istudent = z.infer<typeof studentSchema>;
 
@@ -23,7 +24,10 @@ const StudentAccount = () => {
   const [loading, setloading] = useState<boolean>(false);
   const router = useRouter();
   const [currentPage, setcurrentPage] = useState<number>(1);
+  const [profilePhoto, setPhoto] = useState<string | undefined>(undefined);
   const { toast } = useToast();
+  const { imageUpload } = useCloudinary();
+  // handling things about react-hook-form
   const {
     register,
     handleSubmit,
@@ -31,6 +35,7 @@ const StudentAccount = () => {
     control,
     watch,
     clearErrors,
+    setValue,
     formState: { errors },
   } = useForm<Istudent>({
     resolver: zodResolver(studentSchema),
@@ -38,12 +43,15 @@ const StudentAccount = () => {
 
   const runSubmit: SubmitHandler<Istudent> = async (data) => {
     setloading(true);
+    const profileItem = data.profilePhoto[0];
+    const profileBlob = new Blob([profileItem]);
+    const photo = await imageUpload(profileBlob);
     // handle file submission to the backend server
     const response = await fetch("/api/continue-student-reg", {
       method: "POST",
       body: JSON.stringify({
         ...data,
-        profilePhoto: "the student photo",
+        profilePhoto: photo,
       }),
     });
     if (response.ok) {
@@ -114,6 +122,9 @@ const StudentAccount = () => {
                 control={control}
                 watch={watch}
                 clearErrors={clearErrors}
+                setValue={setValue}
+                profilePhoto={profilePhoto}
+                setPhoto={setPhoto}
               />
             ) : (
               <StudentProfileData
@@ -122,6 +133,7 @@ const StudentAccount = () => {
                 control={control}
                 watch={watch}
                 clearErrors={clearErrors}
+                setValue={setValue}
               />
             )}
             <Button

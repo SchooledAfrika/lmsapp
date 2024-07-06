@@ -11,7 +11,10 @@ export async function POST(req: Request) {
   // get informarion about the person that is logged in and there role
   const teacherId = await serverSessionId();
   const userRole = await serverSessionRole();
+
   const { duration, classStarts, classEnds, ...others } = await req.json();
+  console.log(others);
+  console.log(classStarts, classEnds);
   if (!teacherId) {
     return notAuthenticated();
   }
@@ -25,7 +28,7 @@ export async function POST(req: Request) {
     await prisma.classes.create({
       data: {
         teacherId,
-        duration: new Date(duration),
+        duration: duration,
         classStarts: new Date(classStarts),
         classEnds: new Date(classEnds),
         ...others,
@@ -36,6 +39,7 @@ export async function POST(req: Request) {
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     throw new Error(JSON.stringify({ message: "something went wrong" }));
   }
 }
