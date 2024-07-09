@@ -3,8 +3,32 @@ import Container from "./Container";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import {
+  UseFormClearErrors,
+  UseFormRegister,
+  FieldErrors,
+  Control,
+  Controller,
+  UseFormWatch,
+} from "react-hook-form";
+import { IteacherOneOnOne } from "./TeacherOneOnOne";
 
-const TeacherPrice = () => {
+export interface TeacherPriceProps {
+  register: UseFormRegister<IteacherOneOnOne>;
+  errors: FieldErrors<IteacherOneOnOne>;
+  watch: UseFormWatch<IteacherOneOnOne>;
+  control?: Control<IteacherOneOnOne>;
+  clearErrors: UseFormClearErrors<IteacherOneOnOne>;
+}
+
+const TeacherPrice: React.FC<TeacherPriceProps> = ({
+  errors,
+  watch,
+  register,
+  control,
+  clearErrors,
+}) => {
+  watch("pricing");
   return (
     <section>
       <Container>
@@ -18,30 +42,6 @@ const TeacherPrice = () => {
           </Link>
         </div>
         <div className="flex flex-col md:flex-row mb-[50px]">
-          <div>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] px-[7px] rounded-full text-white">
-                1
-              </span>
-              <p className="text-[#359C71] font-bold">Profile Data</p>
-            </div>
-            <p className="border-l-2 border-[#359C71] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] rounded-full px-[7px] text-white">
-                2
-              </span>
-              <p className="text-[#359C71] font-bold">
-                Subject and Preferences
-              </p>
-            </div>
-            <p className="border-l-2 border-[#359C71] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] rounded-full px-[7px] text-white">
-                3
-              </span>
-              <p className="text-[#359C71] font-bold">Pricing Details</p>
-            </div>
-          </div>
           <div>
             <div className="flex flex-col pl-[0] md:pl-[100px] mt-[40px] md:mt-[0]">
               <p className="font-bold text-[18px]">
@@ -69,6 +69,9 @@ const TeacherPrice = () => {
                   <span className="font-bold text-[16px]">USD</span>
                 </div>
               </div>
+              {errors.pricing && (
+                <small className="text-red-600">{errors.pricing.message}</small>
+              )}
               <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[60%] bg-white">
                 <input
                   type="text"
@@ -86,9 +89,9 @@ const TeacherPrice = () => {
                   <span className="font-bold text-[16px]">USD</span>
                 </div>
               </div>
-              <Button className="bg-secondary w-[60%] text-white text-[16px] px-6 py-7 my-3">
-                Proceed
-              </Button>
+              {errors.pricing && (
+                <small className="text-red-600">{errors.pricing.message}</small>
+              )}
             </div>
           </div>
         </div>

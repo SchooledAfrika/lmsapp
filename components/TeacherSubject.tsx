@@ -3,12 +3,31 @@ import { Button } from "./ui/button";
 import Container from "./Container";
 import Link from "next/link";
 import Image from "next/image";
+import { IteacherOneOnOne } from "./TeacherOneOnOne";
+import {
+  UseFormClearErrors,
+  UseFormRegister,
+  FieldErrors,
+  Control,
+  Controller,
+  UseFormWatch,
+} from "react-hook-form";
 
-interface TeacherPrice {
-  onClickTeacherDetails: (view: string) => void;
+export interface TeacherSubjectProps {
+  register: UseFormRegister<IteacherOneOnOne>;
+  errors: FieldErrors<IteacherOneOnOne>;
+  watch: UseFormWatch<IteacherOneOnOne>;
+  control?: Control<IteacherOneOnOne>;
+  clearErrors: UseFormClearErrors<IteacherOneOnOne>;
 }
 
-const TeacherSubject: React.FC<TeacherPrice> = ({ onClickTeacherDetails }) => {
+const TeacherSubject: React.FC<TeacherSubjectProps> = ({
+  errors,
+  watch,
+  control,
+  register,
+  clearErrors,
+}) => {
   const [inputFields, setInputFields] = useState<string[]>([""]);
   const preferences = [
     "HomeWork Support",
@@ -24,45 +43,14 @@ const TeacherSubject: React.FC<TeacherPrice> = ({ onClickTeacherDetails }) => {
     setInputFields([...inputFields, ""]);
   };
 
-  const handlePriceView = () => {
-    onClickTeacherDetails("price");
-  };
+  watch("subject");
+  watch("grade");
+  watch("preferences");
 
   return (
     <section className="my-[80px] md:my-6">
       <Container>
-        <div className="flex justify-between items-center mb-5">
-          <span className="font-bold">Details</span>
-          <Link href="/school-dashboard/job-listing" className="cursor-pointer">
-            <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />
-          </Link>
-        </div>
         <div className="flex flex-col md:flex-row mb-[50px]">
-          <div>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] px-[7px] rounded-full text-white">
-                1
-              </span>
-              <p className="text-[#359C71] font-bold">Profile Data</p>
-            </div>
-            <p className="border-l-2 border-[#359C71] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] rounded-full px-[7px] text-white">
-                2
-              </span>
-              <p className="text-[#359C71] font-bold">
-                Subject and Preferences
-              </p>
-            </div>
-            <p className="border-l-2 border-[#E9ECEB] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#E9ECEB] rounded-full px-[7px] text-white">
-                3
-              </span>
-              <p>Pricing Details</p>
-            </div>
-          </div>
-
           <div>
             <form className="flex flex-col pl-[0] md:pl-[100px] mt-[40px] md:mt-[0]">
               <label className="font-bold text-[16px]">Session Details</label>
@@ -86,6 +74,11 @@ const TeacherSubject: React.FC<TeacherPrice> = ({ onClickTeacherDetails }) => {
                     />
                   </div>
                 ))}
+                {errors.subject && (
+                  <small className="text-red-600">
+                    {errors.subject.message}
+                  </small>
+                )}
               </div>
               <button
                 onClick={handleAddInput}
@@ -108,6 +101,9 @@ const TeacherSubject: React.FC<TeacherPrice> = ({ onClickTeacherDetails }) => {
                   alt="Lock"
                 />
               </div>
+              {errors.grade && (
+                <small className="text-red-600">{errors.grade.message}</small>
+              )}
               <div>
                 <label className="font-bold text-[16px]">Preferences</label>
                 <div className="grid grid-cols-2 gap-x-2 w-full">
@@ -125,14 +121,13 @@ const TeacherSubject: React.FC<TeacherPrice> = ({ onClickTeacherDetails }) => {
                       />
                     </label>
                   ))}
+                  {errors.preferences && (
+                    <small className="text-red-600">
+                      {errors.preferences.message}
+                    </small>
+                  )}
                 </div>
               </div>
-              <Button
-                onClick={handlePriceView}
-                className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
-              >
-                Proceed
-              </Button>
             </form>
           </div>
         </div>

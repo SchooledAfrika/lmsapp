@@ -61,6 +61,8 @@ export const ParentsMoreInfo: IprogressType[] = [
   },
 ];
 
+// the progress data for teachers one on one section
+
 // the zod types for completing profile information
 //
 // below is the zod schema for parents that continues with their registration
