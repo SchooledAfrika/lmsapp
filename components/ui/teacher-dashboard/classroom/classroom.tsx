@@ -9,7 +9,7 @@ const Classroom = () => {
     <div className=" ">
       
       
-        <ClassTable/>
+        <ClassTable dataId=""/>
 
       <DashboardPagination />
     </div>
