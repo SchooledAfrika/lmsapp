@@ -8,24 +8,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  UseFormRegister,
-  FieldErrors,
-  Control,
-  Controller,
-} from "react-hook-form";
-import { Iparents } from "@/components/ParentAccount";
-export interface IparentSub {
-  register: UseFormRegister<Iparents>;
-  errors: FieldErrors<Iparents>;
-  control?: Control<Iparents>;
-}
+import { Controller } from "react-hook-form";
+import { IparentSub } from "./ParentInfo";
+import { ImCross } from "react-icons/im";
+import PreviewItem from "../PreviewItem";
 
 const ParentWardProfileData: React.FC<IparentSub> = ({
   register,
   errors,
   control,
+  childImg,
+  setChildImg,
+  setValue,
+  watch,
 }) => {
+  watch("childImg");
+  // the function to generate a url for the picture
+  const handleShowPix = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    setValue("childImg", e.target.files);
+    const file = e.target.files[0];
+    const blob = new Blob([file]);
+    const localUrl = URL.createObjectURL(blob);
+    if (setChildImg) {
+      setChildImg(localUrl);
+    }
+  };
+  // function to remove the image selected already
+  const handleRemove = () => {
+    if (setChildImg) {
+      setChildImg(undefined);
+    }
+    if (setValue) {
+      setValue("profilePhoto", "");
+    }
+  };
   return (
     <div className=" flex flex-col w-full md:w-[55%] gap-2">
       <label className="font-bold text-[16px]">Profile Data</label>
@@ -139,33 +156,38 @@ const ParentWardProfileData: React.FC<IparentSub> = ({
         <small className=" text-red-600">{errors.details.message}</small>
       )}
 
-      <div
-        className={`flex items-center ${
-          errors.childImg && " border border-red-600"
-        } bg-[#FFFFFF] py-4 pl-2 my-2 rounded-[8px]`}
-      >
-        <Image
-          src="/svgs/upload.svg"
-          width={15}
-          height={15}
-          alt="UplaodImage"
-        />
-        <div>
-          <label htmlFor="file-upload" className="cursor-pointer ml-2">
-            <span className="bg-transparent py-1 pr-2 text-[12px] font-medium">
-              Upload Profile Image
-            </span>
-          </label>
-          <input
-            {...register("childImg")}
-            id="file-upload"
-            type="file"
-            name="childImg"
-            accept="image/*"
-            className="hidden"
+      {childImg === undefined ? (
+        <div
+          className={`flex items-center ${
+            errors.childImg && " border border-red-600"
+          } bg-[#FFFFFF] py-4 pl-2 my-2 rounded-[8px]`}
+        >
+          <Image
+            src="/svgs/upload.svg"
+            width={15}
+            height={15}
+            alt="UplaodImage"
           />
+          <div>
+            <label htmlFor="file-upload" className="cursor-pointer ml-2">
+              <span className="bg-transparent py-1 pr-2 text-[12px] font-medium">
+                Upload Profile Image
+              </span>
+            </label>
+            <input
+              onChange={handleShowPix}
+              id="file-upload"
+              type="file"
+              name="childImg"
+              accept="image/*"
+              className="hidden"
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <PreviewItem imageItem={childImg} handleRemove={handleRemove} />
+      )}
+      {errors.childImg && <small>{String(errors.childImg.message)}</small>}
     </div>
   );
 };

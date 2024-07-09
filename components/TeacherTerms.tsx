@@ -196,9 +196,7 @@ const TeacherTerms = () => {
           and agree to be bound by them.
         </p>
       </div>
-      <button className="px-3 py-2 font-bold text-[13px] my-3 bg-lightGreen text-white rounded-md" type="button" onClick={() => router.back()}>
-      Continue
-    </button>
+     
 
      
      

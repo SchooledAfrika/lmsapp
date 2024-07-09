@@ -35,9 +35,7 @@ const StudentProfileData: React.FC<IStudentSub> = ({
             >
               <SelectTrigger className="w-full  py-[27px] focus:outline-none">
                 <SelectValue
-                  placeholder={`${
-                    field.value ? field.value : "Select ward grade"
-                  }`}
+                  placeholder={`${field.value ? field.value : "Select grade"}`}
                 />
               </SelectTrigger>
               <SelectContent>

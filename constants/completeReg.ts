@@ -73,6 +73,7 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/png",
   "image/webp",
 ];
+const ACCEPT_DOC_TYPES = ["application/pdf"];
 export const parentSchema = z.object({
   name: z.string().min(3, { message: "enter your name" }),
   gender: z.enum(["Male", "Female"], {
@@ -172,10 +173,10 @@ export const teacherSchema = z.object({
   resume: z
     .any()
     // To not allow empty files
-    .refine((files) => files?.length >= 1, { message: "Image is required." })
+    .refine((files) => files?.length >= 1, { message: "resume is required" })
     // To not allow files other than images
-    .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-      message: ".jpg, .jpeg, .png and .webp files are accepted.",
+    .refine((files) => ACCEPT_DOC_TYPES.includes(files?.[0]?.type), {
+      message: "only pdf, doc and docx files are allowed",
     })
     // To not allow files larger than 5MB
     .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {

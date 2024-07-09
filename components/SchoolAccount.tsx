@@ -15,6 +15,7 @@ import Footer from "./Footer";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useToast } from "./ui/use-toast";
+import { useCloudinary } from "@/data-access/cloudinary";
 
 export type Ischool = z.infer<typeof schoolSchema>;
 
@@ -24,6 +25,9 @@ const SchoolAccout: React.FC = () => {
   const [currentPage, setcurrentPage] = useState<number>(1);
   const [loading, setloading] = useState<boolean>(false);
   const { toast } = useToast();
+  const [bannerPix, setBannerPix] = useState<string | undefined>(undefined);
+  const { imageUpload } = useCloudinary();
+  // handling react hook form below
   const {
     register,
     handleSubmit,
@@ -31,6 +35,7 @@ const SchoolAccout: React.FC = () => {
     control,
     watch,
     clearErrors,
+    setValue,
     formState: { errors },
   } = useForm<Ischool>({
     resolver: zodResolver(schoolSchema),
@@ -38,11 +43,14 @@ const SchoolAccout: React.FC = () => {
 
   const runSubmit: SubmitHandler<Ischool> = async (data) => {
     setloading(true);
+    // converting the image into blob and uploading to cloudinary
+    const blob = new Blob([data.banner[0]]);
+    const banner = await imageUpload(blob);
     const response = await fetch("/api/continue-sch-reg", {
       method: "POST",
       body: JSON.stringify({
         ...data,
-        banner: "the student banner here",
+        banner,
       }),
     });
     if (response.ok) {
@@ -112,6 +120,9 @@ const SchoolAccout: React.FC = () => {
                 control={control}
                 watch={watch}
                 clearErrors={clearErrors}
+                bannerPix={bannerPix}
+                setBannerPix={setBannerPix}
+                setValue={setValue}
               />
             ) : (
               <SchoolPersonalInfo
@@ -120,6 +131,7 @@ const SchoolAccout: React.FC = () => {
                 control={control}
                 watch={watch}
                 clearErrors={clearErrors}
+                setValue={setValue}
               />
             )}
             <Button

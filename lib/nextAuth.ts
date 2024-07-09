@@ -32,7 +32,7 @@ export const authOptions: NextAuthOptions = {
             "content-type": "application/json",
           },
         });
-        console.log(response);
+
         const result = await response.json();
         if (response.ok) {
           return result;
@@ -47,14 +47,11 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // below is the signin callback function
     async signIn({ user, account }) {
-      console.log("entered");
       if (account?.provider === "google") {
-        console.log("entered again");
         // get the cookies from the frontend
         // then set it as the header to be used in backend communication
         const cookieInstance = cookies();
         const role = cookieInstance.get("role")?.value;
-        console.log(role);
         const vals = await fetch(
           `${process.env.NEXTAUTH_URL}/api/register/google`,
           {
@@ -72,8 +69,6 @@ export const authOptions: NextAuthOptions = {
     // below is the session callback, which will help to populate some other important fields
     // into the already existing session
     async session({ session, user }) {
-      console.log(session);
-      console.log(user);
       // here we fetch data that we will use to update the users session data
       // based on the users email.
       const response = await fetch(
