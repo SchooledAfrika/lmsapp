@@ -6,6 +6,8 @@ import Link from "next/link";
 import Menu from "@/images/menu.svg";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
+import { useSession } from "next-auth/react";
+import ShowProfile from "./ShowProfile";
 
 const navLinks = [
   { name: "Find Tutors", href: "/find-tutors" },
@@ -22,6 +24,7 @@ const Header = () => {
     setMenu(!menu);
   };
   const pathname = usePathname();
+  const { status, data } = useSession();
 
   return (
     <div className=" bg-white h-[75px] sticky md:top-0 font-subtext border-b-2 font-semibold    md:shadow-none z-50 ">
@@ -60,21 +63,25 @@ const Header = () => {
             })}
           </div>
 
-          <div className="flex items-center leading-[20px] mr-8 gap-4">
-            <Button
-              asChild
-              className="hidden bg-secondary  rounded-[10px] items-center hover:bg-green-600 text-white   text-[13px] px-6 py-[11px] lg:block"
-            >
-              <Link href="/login">Login</Link>
-            </Button>
+          {status === "unauthenticated" ? (
+            <div className="flex items-center leading-[20px] mr-8 gap-4">
+              <Button
+                asChild
+                className="hidden bg-secondary  rounded-[10px] items-center hover:bg-green-600 text-white   text-[13px] px-6 py-[11px] lg:block"
+              >
+                <Link href="/login">Login</Link>
+              </Button>
 
-            <Button
-              asChild
-              className="hidden rounded-[10px]  bg-dimOrange hover:bg-orange-600 text-white  text-[13px] px-6 py-[11px] lg:block"
-            >
-              <Link href="/register">Register</Link>
-            </Button>
-          </div>
+              <Button
+                asChild
+                className="hidden rounded-[10px]  bg-dimOrange hover:bg-orange-600 text-white  text-[13px] px-6 py-[11px] lg:block"
+              >
+                <Link href="/register">Register</Link>
+              </Button>
+            </div>
+          ) : (
+            <ShowProfile />
+          )}
         </div>
       </div>
       {/* MOBILE */}
@@ -122,21 +129,25 @@ const Header = () => {
                 <Link href="/contact">Contact Us</Link>
               </div>
 
-              <div className="flex flex-col  items-center mr-2 gap-6">
-                <Button
-                  asChild
-                  className=" bg-secondary w-full items-center hover:bg-green-600 text-white   text-[16.5px] px-6 py-2 lg:block"
-                >
-                  <Link href="/register">Register</Link>
-                </Button>
+              {status === "unauthenticated" ? (
+                <div className="flex flex-col  items-center mr-2 gap-6">
+                  <Button
+                    asChild
+                    className=" bg-secondary w-full items-center hover:bg-green-600 text-white   text-[16.5px] px-6 py-2 lg:block"
+                  >
+                    <Link href="/register">Register</Link>
+                  </Button>
 
-                <Button
-                  asChild
-                  className=" bg-dimOrange w-full hover:bg-orange-600 text-white  text-[16.5px] px-6 py-2 lg:block"
-                >
-                  <Link href="/login">Login</Link>
-                </Button>
-              </div>
+                  <Button
+                    asChild
+                    className=" bg-dimOrange w-full hover:bg-orange-600 text-white  text-[16.5px] px-6 py-2 lg:block"
+                  >
+                    <Link href="/login">Login</Link>
+                  </Button>
+                </div>
+              ) : (
+                <ShowProfile />
+              )}
             </div>
           </div>
         ) : (

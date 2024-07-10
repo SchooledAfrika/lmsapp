@@ -1,19 +1,15 @@
 "use client";
 import React, { useContext } from "react";
-import { SchoolSideBar, SchoolSideBarType } from "@/constants/schoolSideBar";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import { redirect, usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { FaPowerOff } from "react-icons/fa";
 import { CommonDashboardContext } from "@/providers/Statecontext";
-import { TeacherSideBar } from "@/constants/teacherSidebar";
 import {
   ParentSideBarComponent,
   SchoolSideBarComponent,
   StudentSideBarComponent,
   TeacherSideBarComponent,
 } from "@/components/Sidebars/allSIdebar";
-import { useAuth } from "@/data-access/authentication";
 import { signOut } from "next-auth/react";
 
 const Sidebar = ({ dashboard }: { dashboard: string }) => {
@@ -38,11 +34,12 @@ const Sidebar = ({ dashboard }: { dashboard: string }) => {
       {/* the school logo */}
       <div className=" w-full flex items-center justify-center">
         <Image
-          className=" w-[95px]"
+          className=" w-[95px] cursor-pointer"
           src="/logo.png"
           alt="logo"
           width={200}
           height={200}
+          onClick={() => router.push("/")}
         />
       </div>
       {/* the side bar menu */}
