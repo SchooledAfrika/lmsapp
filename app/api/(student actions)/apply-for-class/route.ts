@@ -44,3 +44,23 @@ export async function POST(req: Request) {
     return serverError();
   }
 }
+
+// here we should be able to get all the classes
+// get only about 20 classes at a time
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const page = url.searchParams.get("page");
+  // get the lower border for slice
+  const Start = Number(page) - 1;
+  const skipAmt = Start * 20;
+  const takeAmt = 20;
+  try {
+    const allClass = await prisma.classes.findMany({
+      skip: skipAmt,
+      take: takeAmt,
+    });
+    return new Response(JSON.stringify(allClass), { status: 200 });
+  } catch (error) {
+    return serverError();
+  }
+}
