@@ -43,7 +43,25 @@ export const oneOnOneSectionSchema = z.object({
   aboutTeacher: z.string().min(3, { message: "please enter your bio" }),
   language: z.string({ message: "please enter language" }),
   subject: z.string({ message: "please enter subject" }),
-  grade: z.string({ message: "please enter grade" }),
+  grade: z.enum(
+    [
+      "Grade1",
+      "Grade2",
+      "Grade3",
+      "Grade4",
+      "Grade5",
+      "Grade6",
+      "Grade7",
+      "Grade8",
+      "Grade9",
+      "Grade10",
+      "Grade11",
+      "Grade12",
+    ],
+    {
+      message: "you can only enter Grade1 format",
+    }
+  ),
   preferences: z.array(z.string(), { message: "please enter preferences" }),
   pricing: z.string({ message: "please enter price" }),
 });

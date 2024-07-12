@@ -26,6 +26,7 @@ const TeacherProfileData: React.FC<IteacherOneOnOneSub> = ({
   control,
   clearErrors,
 }) => {
+  watch("teacherImg");
   watch("aboutTeacher");
   return (
     <section>
@@ -56,9 +57,10 @@ const TeacherProfileData: React.FC<IteacherOneOnOneSub> = ({
                     </span>
                   </label>
                   <input
-                    id="file-upload"
                     type="file"
-                    name="upload"
+                    {...register("teacherImg")}
+                    name="teacherImg"
+                    id="file-upload"
                     className="hidden"
                   />
                 </div>
@@ -67,6 +69,7 @@ const TeacherProfileData: React.FC<IteacherOneOnOneSub> = ({
           </div>
           <textarea
             rows={6}
+            {...register("aboutTeacher")}
             className="p-4 outline-none w-full rounded-[10px]"
             placeholder="About Yourself as a tutor"
           ></textarea>
