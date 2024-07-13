@@ -58,9 +58,17 @@ export async function GET(req: Request) {
     const allClass = await prisma.classes.findMany({
       skip: skipAmt,
       take: takeAmt,
+      include: {
+        teacher: {
+          select: {
+            name: true,
+          },
+        },
+      },
     });
     return new Response(JSON.stringify(allClass), { status: 200 });
   } catch (error) {
+    console.log(error);
     return serverError();
   }
 }
