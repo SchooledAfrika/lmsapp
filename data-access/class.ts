@@ -6,9 +6,9 @@ import { toast } from "react-toastify";
 export const useClasses = () => {
   const [showpayments, setshowpayment] = useState<boolean>(false);
   const [payMethods, setPayMethod] = useState<string[]>([
-    "paypal",
-    "flutterwave",
-    "remitta",
+    "Paystack",
+    "Flutter wave",
+    "Remitta",
   ]);
   const { status } = useSession();
   // creating a substring
