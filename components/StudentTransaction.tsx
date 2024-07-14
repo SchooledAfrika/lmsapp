@@ -157,8 +157,7 @@ const StudentTransaction = () => {
           <div className="space-y-2 pt-2 font-header">
             <h3 className="font-bold">Need Help ?</h3>
             <p className="text-[13px]">
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-              commodo.
+            Send us a message, we are one click away!
             </p>
             <Button
               asChild
