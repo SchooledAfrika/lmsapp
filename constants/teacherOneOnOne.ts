@@ -7,11 +7,18 @@ export interface oneOnOneSection {
   field: string[];
 }
 
+export const Preferences = [
+  "HomeWork Support",
+  "1 on 1 Sessions",
+  "Open to Jobs",
+  "Group Sessions",
+];
+
 export const TeacherOneOnOneSection: oneOnOneSection[] = [
   { name: "Profile Data", field: ["teacherImg", "aboutTeacher"] },
   {
     name: "Subject and Preferences",
-    field: ["language", "subject", "grade", "preferences"],
+    field: ["subject", "grade", "preferences"],
   },
   {
     name: "Pricing Details",
@@ -41,7 +48,7 @@ export const oneOnOneSectionSchema = z.object({
       message: `Max file size is 5MB.`,
     }),
   aboutTeacher: z.string().min(3, { message: "please enter your bio" }),
-  language: z.string({ message: "please enter language" }),
+  // language: z.string({ message: "please enter language" }),
   subject: z.string({ message: "please enter subject" }),
   grade: z.enum(
     [
@@ -63,5 +70,5 @@ export const oneOnOneSectionSchema = z.object({
     }
   ),
   preferences: z.array(z.string(), { message: "please enter preferences" }),
-  pricing: z.string({ message: "please enter price" }),
+  pricing: z.number({ message: "please enter price" }),
 });

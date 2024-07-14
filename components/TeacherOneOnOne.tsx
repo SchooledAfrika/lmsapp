@@ -97,14 +97,16 @@ export const TeacherOneOnOne: React.FC = () => {
               clearErrors={clearErrors}
             />
           )}
-          <Button
-            onClick={handleNextPage}
-            type="button"
-            // disabled={loading}
-            className="bg-secondary w-[60%] md:w-full text-white text-[16px] py-7 my-3"
-          >
-            {currentPage < 3 ? "Proceed" : "Submit"}
-          </Button>
+          <div className="flex justify-center w-full">
+            <Button
+              onClick={handleNextPage}
+              type="button"
+              // disabled={loading}
+              className="bg-secondary w-[93%] text-white text-[16px] py-7 my-3"
+            >
+              {currentPage < 3 ? "Proceed" : "Submit"}
+            </Button>
+          </div>
         </form>
       </div>
     </div>

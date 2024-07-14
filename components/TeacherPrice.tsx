@@ -2,26 +2,9 @@ import React from "react";
 import Container from "./Container";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "./ui/button";
-import {
-  UseFormClearErrors,
-  UseFormRegister,
-  FieldErrors,
-  Control,
-  Controller,
-  UseFormWatch,
-} from "react-hook-form";
-import { IteacherOneOnOne } from "./TeacherOneOnOne";
+import { IteacherOneOnOneSub } from "./TeacherProfileData";
 
-export interface TeacherPriceProps {
-  register: UseFormRegister<IteacherOneOnOne>;
-  errors: FieldErrors<IteacherOneOnOne>;
-  watch: UseFormWatch<IteacherOneOnOne>;
-  control?: Control<IteacherOneOnOne>;
-  clearErrors: UseFormClearErrors<IteacherOneOnOne>;
-}
-
-const TeacherPrice: React.FC<TeacherPriceProps> = ({
+const TeacherPrice: React.FC<IteacherOneOnOneSub> = ({
   errors,
   watch,
   register,
@@ -54,8 +37,9 @@ const TeacherPrice: React.FC<TeacherPriceProps> = ({
               </span>
               <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[60%] bg-white">
                 <input
-                  type="text"
-                  name="text"
+                  type="number"
+                  {...register("pricing")}
+                  name="pricing"
                   placeholder="$10 - $15"
                   className="outline-none w-full pr-4"
                 />
@@ -74,8 +58,9 @@ const TeacherPrice: React.FC<TeacherPriceProps> = ({
               )}
               <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[60%] bg-white">
                 <input
-                  type="text"
-                  name="text"
+                  type="number"
+                  {...register("pricing")}
+                  name="pricing"
                   placeholder="$8 - $12"
                   className="outline-none w-full pr-4"
                 />
