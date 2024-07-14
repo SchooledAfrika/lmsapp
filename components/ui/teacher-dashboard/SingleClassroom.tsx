@@ -1,18 +1,47 @@
-import Image from "next/image";
+"use client";
 import React from "react";
+
+import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { FiEdit } from "react-icons/fi";
 import { SiGoogleclassroom } from "react-icons/si";
 import { Button } from "@/components/ui/button"
 import Link from "next/link";
 import { BsBroadcast } from "react-icons/bs";
 import SingleClassTable from "./SingleClassTable";
-
-
+import { useParams } from "next/navigation";
 
 
 const SingleClassroom = () => {
-  return (
-    <div className="font-header md:mt-12 mt-24">
+  const { id } = useParams();
+  console.log(id)
+  
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["add"],
+    queryFn: async () => {
+      const response = await fetch(`/api/class/specific/${id}`);
+      const result = await response.json();
+      return result;
+     
+     
+      
+    },
+   
+  });
+  //   if is loading
+  if (isLoading) {
+    return <div className=" flex-1">loading...</div>;
+  }
+  // if is error
+  if (isError) {
+    return <div className=" flex-1">{error.message}</div>;
+  }
+ return (
+   
+  <div>
+     {data && (
+       
+    <div key={data.id} className="font-header md:mt-12 mt-24">
         <div className="flex justify-between">
             <p className="font-bold text-lg">Details</p>
             <Link href="/teacher-dashboard/classroom" className="cursor-pointer"> 
@@ -22,7 +51,10 @@ const SingleClassroom = () => {
            
         </div>
       
+          
       <div className="grid font-subtext md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3 mt-6 mb-2">
+     
+     
         <div className="bg-white py-6 rounded-md">
           <div className="flex justify-between px-6 py-2  pb-1">
             <p className="text-slate-500 text-[14px] mb-3 font-semibold">Overview</p>
@@ -34,14 +66,16 @@ const SingleClassroom = () => {
            
             <div className="">
             <p className="inline text-[13px] font-bold"><SiGoogleclassroom className="inline w-[15px] h-[15px] mr-1"/>Brilliant Stars College</p> <br/>
-            <p className="inline text-[13px] font-semibold"><SiGoogleclassroom className="inline w-[15px] mr-1 h-[15px]"/>Alpha</p>
-            <p className="mt-3 text-[12.5px]">Grade 12</p>
+            <p className="inline text-[13px] font-semibold"><SiGoogleclassroom className="inline w-[15px] mr-1 h-[15px]"/> {data.className}</p>
+            <p className="mt-3 text-[12.5px]">
+             {data.grade}
+            </p>
             </div>
            
           </div>
           <div className="flex px-6 flex-col justify-between">
-            <p className="text-[13px] font-semibold">Duration : 45 Minutes</p>
-            <p className="text-[13px] my-3 font-semibold">Date Created : April 10th, 2024.</p>
+            <p className="text-[13px] font-semibold">Duration : {data.duration} </p>
+            <p className="text-[13px] my-3 font-semibold">Date Created : {data.classStarts}</p>
 
             <Button
             asChild
@@ -94,9 +128,22 @@ const SingleClassroom = () => {
            <p className="text-[20px] font-semibold text-lightGreen my-3">209112</p>
            <Button variant="outline" className="w-full font-bold border-lightGreen text-lightGreen hover:text-lightGreen">Invite Student</Button>
         </div>
+
       </div>
-      <SingleClassTable/>
+    
+      <SingleClassTable dataId={data.id}/>
+
+   
+
+        </div>
+        
+   
+     
+    )}
+    
     </div>
+    
+    
   );
 };
 

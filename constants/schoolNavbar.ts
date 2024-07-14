@@ -62,12 +62,12 @@ export const SchoolNavbar: SchoolNavType[] = [
 export const TeacherNavbar: SchoolNavType[] = [
   {
     title: "Welcome to Your Dashboard",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Your classroom in one click.",
     path: "overview",
   },
   {
     title: "Classroom",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Organize your classes easily with one click.",
     path: "classroom",
     subDetails: {
       title: " Single class here",
@@ -76,7 +76,7 @@ export const TeacherNavbar: SchoolNavType[] = [
   },
   {
     title: "Students",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Manage your students and their activities more easily.",
     path: "students",
     subDetails: {
       title: " Single student here",
@@ -85,7 +85,7 @@ export const TeacherNavbar: SchoolNavType[] = [
   },
   {
     title: "1 on 1 Sections",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "An Overview of all the sections you have for easy access and management",
     path: "one-on-one-section",
     subDetails: {
       title: " Single 1-on-1 section details",
@@ -94,39 +94,39 @@ export const TeacherNavbar: SchoolNavType[] = [
   },
   {
     title: "Calendar",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Keep a tab on your classes",
     path: "calender",
   },
   {
     title: "Test & Resources",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Create tests and assessments in less than 5 minute.",
     path: "test-and-resources",
   },
   {
     title: "Settings",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Edit your settings, set it all up.",
     path: "setting",
   },
   {
     title: "Courses",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Skill up with our courses.",
     path: "courses",
   },
   {
     title: "Finances",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Monitor your earnings according to your performance",
     path: "finance",
   },
 ];
 export const StudentNavbar: SchoolNavType[] = [
   {
     title: "Welcome to Your Dashboard",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "All you need for a better digital learning. You are one click away from your academic success dream.",
     path: "overview",
   },
   {
     title: "Classroom",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Overview of all your classes.",
     path: "classroom",
     subDetails: {
       title: " Single class here",
@@ -135,7 +135,7 @@ export const StudentNavbar: SchoolNavType[] = [
   },
   {
     title: "Teachers",
-    description: "Organize your teachers and review their data",
+    description: "Know your teachers and review their data",
     path: "teachers",
     subDetails: {
       title: " Single teacher here",
@@ -153,7 +153,7 @@ export const StudentNavbar: SchoolNavType[] = [
   },
   {
     title: "1 on 1 Sections",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Get into class you're enrolled in.",
     path: "one-on-one-section",
     subDetails: {
       title: " Single 1-on-1 section details",
@@ -162,39 +162,39 @@ export const StudentNavbar: SchoolNavType[] = [
   },
   {
     title: "Calendar",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Know your schedule.",
     path: "calender",
   },
   {
     title: "Test & Resources",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Your Test and Worksheet.",
     path: "test-and-resources",
   },
   {
     title: "Settings",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Edit your settings",
     path: "setting",
   },
   {
     title: "Courses",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Take a video lesson Now!.",
     path: "courses",
   },
   {
     title: "Transactions",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Your financial record.",
     path: "transactions",
   },
 ];
 export const ParentsNavbar: SchoolNavType[] = [
   {
     title: "Welcome to Your Dashboard",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Let's discover and shape the next generation of lifelong learners together in our digital world.",
     path: "overview",
   },
   {
     title: "Sessions",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "See the classes your ward is enrolled in",
     path: "sessions",
     subDetails: {
       title: " Single class here",
@@ -203,7 +203,7 @@ export const ParentsNavbar: SchoolNavType[] = [
   },
   {
     title: "Teachers",
-    description: "Organize your teachers and review their data",
+    description: "Hire the right Teacher for your kid.",
     path: "teachers",
     subDetails: {
       title: " Single teacher here",
@@ -227,7 +227,7 @@ export const ParentsNavbar: SchoolNavType[] = [
   },
   {
     title: "Courses",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "free videos + knowledge equals SMART STUDENTS.",
     path: "courses",
   },
   {

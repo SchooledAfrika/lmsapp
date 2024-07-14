@@ -20,9 +20,9 @@ const TakePicture: React.FC<IKycSub> = ({
           Complete Your KYC Verification
         </h3>
         <p className="md:w-[450px] text-[13.5px] py-2">
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-          commodo ligula eget dolor. Lorem ipsum dolor sit amet, consectetuer
-          adipiscing elit.
+       
+        We want to be sure it's you.
+        Upload or take a recent picture.
         </p>
 
         <br />
@@ -35,8 +35,7 @@ const TakePicture: React.FC<IKycSub> = ({
           </div>
           <input
             type="file"
-            {...register("takePicture")}
-            name="takePicture"
+            name="verifiedImg"
             placeholder="Upload Document"
             className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
           />

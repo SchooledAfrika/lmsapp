@@ -10,13 +10,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-
-import { GoDotFill } from "react-icons/go";
-
 import Image from "next/image";
-import Link from "next/link";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Trash2 } from "lucide-react";
 
 
 interface Idelete {
@@ -41,12 +38,18 @@ const RemoveClass: React.FC<Idelete> = ({ dataId }) => {
         
       });
       return result;
-      console.log(id);
+      console.log(dataId);
     },
 
-    onSuccess: async () => {
+    onSuccess: async (result) => {
       queryClient.invalidateQueries({ queryKey: ["add"] });
-      setloading(false);
+      if (result.ok) {
+        setloading(false);
+        return toast.success("Class Successfully Deleted");
+      } else {
+        setloading(false);
+        return toast.error("error creating class");
+      }
       
      
      
@@ -61,6 +64,7 @@ const RemoveClass: React.FC<Idelete> = ({ dataId }) => {
   const handleDelete = () => {
     setloading(true);
     mutate(dataId);
+    console.log(dataId);
    
   };
 
@@ -68,8 +72,8 @@ const RemoveClass: React.FC<Idelete> = ({ dataId }) => {
     <Dialog>
       <DialogTrigger asChild>
         <p className="inline text-[14px] cursor-pointer  font-semibold">
-          <GoDotFill className="inline ml-0 text-lightGreen " />
-          Remove
+          <Trash2 className="inline w-4 h-4 mr-2 ml-0 text-lightGreen " />
+             Remove
         </p>
       </DialogTrigger>
       <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
