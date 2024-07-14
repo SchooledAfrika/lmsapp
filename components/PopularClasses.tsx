@@ -11,6 +11,10 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { paymentMethods } from "@/constants/pricing/school";
 import { GrFormCheckmark } from "react-icons/gr";
+import { PaystackButton } from "react-paystack";
+import { useSession } from "next-auth/react";
+import { toast } from "react-toastify";
+import { closePaymentModal, FlutterWaveButton } from "flutterwave-react-v3";
 
 interface Iteacher {
   name: string;
@@ -114,6 +118,7 @@ const PopularClassesCard = ({ item }: { item: Iclass }) => {
 const Checkout: React.FC<Iclass & { enroll: () => void }> = ({
   enroll,
   id,
+  price,
 }) => {
   // this state manages the payment method the user has selected
   const [selected, setSelected] = useState<string | undefined>(undefined);
@@ -124,7 +129,7 @@ const Checkout: React.FC<Iclass & { enroll: () => void }> = ({
   return (
     <div
       onClick={enroll}
-      className=" fixed px-3 py-2 flex items-center justify-center w-full h-screen top-0 left-0 bottom-0 z-[99999999] bg-[rgba(0,0,0,0.1)] backdrop-blur-sm"
+      className=" fixed px-3 py-2 flex items-center justify-center w-full h-screen top-0 left-0 bottom-0 z-[999] bg-[rgba(0,0,0,0.1)] backdrop-blur-sm"
     >
       <div
         onClick={(e) => e.stopPropagation()}
@@ -181,11 +186,11 @@ const Checkout: React.FC<Iclass & { enroll: () => void }> = ({
           ) : (
             <div>
               {selected === "Paystack" ? (
-                <PayStackBtn id={id} />
+                <PayStackBtn id={id} price={price} enroll={enroll} />
               ) : selected === "Flutter Wave" ? (
-                <FlutterWaveBtn id={id} />
+                <FlutterWaveBtn id={id} price={price} enroll={enroll} />
               ) : (
-                <RemittaBtn id={id} />
+                <RemittaBtn id={id} price={price} />
               )}
             </div>
           )}
@@ -196,15 +201,88 @@ const Checkout: React.FC<Iclass & { enroll: () => void }> = ({
 };
 
 // component to make payment with paystack method
-const PayStackBtn: React.FC<{ id: string }> = ({ id }) => {
-  return <div> paystack</div>;
+const PayStackBtn: React.FC<{
+  id: string;
+  price: number;
+  enroll: () => void;
+}> = ({ id, price, enroll }) => {
+  const { data } = useSession();
+  const componentProps = {
+    reference: new Date().getTime().toString(),
+    email: data?.user.email as string,
+    amount: price * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACKPUBKEY!,
+    text: "Pay with paystack",
+    onSuccess: (reference: any) => {
+      toast.success("payment successful, navigate to class in your dashboard");
+      setTimeout(() => {
+        enroll();
+      }, 5500);
+    },
+    metadata: {
+      custom_fields: [
+        {
+          display_name: data?.user.id as string,
+          variable_name: id,
+          value: price,
+        },
+      ],
+    },
+  };
+  return (
+    <PaystackButton
+      {...componentProps}
+      className="w-full py-3 flex items-center justify-center bg-green-600 cursor-pointer rounded-sm font-bold text-white"
+    />
+  );
 };
 // component to make payment with flutterwave method
-const FlutterWaveBtn: React.FC<{ id: string }> = ({ id }) => {
-  return <div>flutter wave</div>;
+const FlutterWaveBtn: React.FC<{
+  id: string;
+  price: number;
+  enroll: () => void;
+}> = ({ id, price, enroll }) => {
+  const { data } = useSession();
+  const config = {
+    public_key: process.env.NEXT_PUBLIC_FLUTTERPUBKEY!,
+    tx_ref: Date.now().toString(),
+    amount: price,
+    currency: "NGN",
+    payment_options: "card",
+    customer: {
+      email: data?.user.email as string,
+      phone_number: `${data?.user.id}-${id}`,
+      name: data?.user.name as string,
+    },
+    customizations: {
+      title: "school afrika",
+      description: "payment for class enrollment",
+      logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
+    },
+  };
+  const fwConfig = {
+    ...config,
+    text: "Pay with flutterwave",
+    callback: () => {
+      closePaymentModal(); // this will close the modal programmatically
+      toast.success("payment successful, navigate to class in your dashboard");
+      setTimeout(() => {
+        enroll();
+      }, 5500);
+    },
+    onClose: () => {},
+  };
+  return (
+    <div>
+      <FlutterWaveButton
+        className="w-full py-3 flex items-center justify-center bg-green-600 cursor-pointer rounded-sm font-bold text-white"
+        {...fwConfig}
+      />
+    </div>
+  );
 };
 // component to make payment with remitta method
-const RemittaBtn: React.FC<{ id: string }> = ({ id }) => {
+const RemittaBtn: React.FC<{ id: string; price: number }> = ({ id }) => {
   return <div>remitta </div>;
 };
 
