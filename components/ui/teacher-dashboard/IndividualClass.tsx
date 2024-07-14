@@ -1,9 +1,8 @@
+
+
+
 "use client";
-import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
-
-import { Button } from "@/components/ui/button";
+ import React, { useState } from "react";
 import {
   Popover,
   PopoverContent,
@@ -11,14 +10,13 @@ import {
 } from "@/components/ui/popover";
 
 
-
+import { Button } from "@/components/ui/button"
 import { FaEllipsisH } from "react-icons/fa";
-
-
-import Image from "next/image"
 import Link from "next/link"
 import { GoDotFill } from "react-icons/go";
 import RemoveClass from "./RemoveClass";
+import { FaTableList } from "react-icons/fa6";
+import { ListCollapse } from "lucide-react";
 
 interface Idelete {
   dataId: string
@@ -27,17 +25,19 @@ interface Idelete {
 
 const IndividualClass: React.FC<Idelete> = ({dataId}) => {
   return (
-    <Popover>
-    <PopoverTrigger asChild>
-      <FaEllipsisH className="ml-3" />
+    <Popover >
+    <PopoverTrigger asChild >
+    <Button className="border-none" variant="outline">
+      <FaEllipsisH className="ml-3 " />
+      </Button>
     </PopoverTrigger>
     <PopoverContent className="w-40">
       <div className="grid gap-4 font-subtext">
         <div className="grid gap-2">
           <div className="flex justify-start">
-            <Link href={`/teacher-dashboard/classroom/individual-session/test`}>
+            <Link href={`/teacher-dashboard/classroom/individual-session/${dataId}`}>
               <p className="inline text-[14px]  font-semibold">
-                <GoDotFill className="inline ml-0 text-lightGreen" />
+                <ListCollapse className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
                 Details
               </p>
             </Link>
@@ -46,6 +46,7 @@ const IndividualClass: React.FC<Idelete> = ({dataId}) => {
           <div className="flex justify-start">
             <RemoveClass dataId={dataId}/>
           </div>
+          <hr className="bg-black" />
         </div>
       </div>
     </PopoverContent>

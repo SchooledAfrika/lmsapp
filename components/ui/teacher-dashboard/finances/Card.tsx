@@ -61,8 +61,8 @@ const Card = () => {
                 </h3>
 
                 <p className=" text-[11.5px] my-3 font-medium">
-                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                  Aenean commodo ligula eget dolor.
+                Your earnings will be sent to the account details provided. Please,confirm your account details
+                before proceeding.
                 </p>
 
                 {!verified ? <WithdrawDialog /> : <NotVerified />}
@@ -137,7 +137,7 @@ const Card = () => {
 
             <div className="space-y-2 font-header">
                 <h3 className="font-bold">Need Help ?</h3>
-                <p className="text-[13px]">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo.</p>
+                <p className="text-[13px]">Send us a message, we are one click away!</p>
                 <Button asChild variant="outline"  className="border font-bold border-lightGreen text-lightGreen hover:text-lightGreen"> 
                     <Link href="/"> <MdOutlineContactSupport className="mr-2 text-[18px]"/> Contact Support</Link>
                 </Button>

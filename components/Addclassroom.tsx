@@ -5,14 +5,17 @@ import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import {
-  addingClassroomSchema,
+  addingClassroomSchoolSchema,
   Schedules,
   Subject,
-} from "@/constants/addClassroom";
-export type IaddingClassroom = z.infer<typeof addingClassroomSchema>;
+} from "@/constants/addClassroomSchool";
+export type IaddingClassroomSchool = z.infer<typeof addingClassroomSchoolSchema>;
+
+
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -39,17 +42,13 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Image from "next/image";
-import PreviewItem from "../../PreviewItem";
-import { useCloudinary } from "@/data-access/cloudinary";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CaseUpper } from "lucide-react";
+
 
 const AddClassroom = () => {
   const [loading, setloading] = useState<boolean>(false);
-  const [banner, setBanner] = useState<string | undefined>(undefined);
   const [schedules, setSchedules] = useState<string[]>([]);
-  const { imageUpload } = useCloudinary();
   // react hook form instance below here
   const {
     register,
@@ -59,22 +58,21 @@ const AddClassroom = () => {
     setValue,
     reset,
     formState: { errors },
-  } = useForm<IaddingClassroom>({
-    resolver: zodResolver(addingClassroomSchema),
+  } = useForm<IaddingClassroomSchool>({
+    resolver: zodResolver(addingClassroomSchoolSchema),
   });
 
   //   instance of client
   const queryClient = useQueryClient();
   //   creating a post using mutation to the backend
   const mutation = useMutation({
-    mutationKey: ["post"],
-    mutationFn: async (data: IaddingClassroom) => {
-      // console.log(data);
-      const result = await fetch("/api/class", {
+    mutationKey: ["postSchool"],
+    mutationFn: async (data: IaddingClassroomSchool) => {
+      console.log(data);
+      const result = await fetch("", {
         method: "POST",
         body: JSON.stringify({
           ...data,
-          price: Number(data.price),
           maxCapacity: Number(data.maxCapacity),
         }),
       });
@@ -82,7 +80,7 @@ const AddClassroom = () => {
       return result;
     },
     onSuccess: async (result) => {
-      queryClient.invalidateQueries({ queryKey: ["add"] });
+      queryClient.invalidateQueries({ queryKey: ["addSchool"] });
       if (result.ok) {
         const body = await result.json();
         setloading(false);
@@ -96,13 +94,8 @@ const AddClassroom = () => {
   });
   // here we validate the datas in our form submission
   // only if there is data, before the mutation function is called
-  const runSubmit: SubmitHandler<IaddingClassroom> = async (data) => {
+  const runSubmit: SubmitHandler<IaddingClassroomSchool> = async (data) => {
     setloading(true);
-    // converting the selected image to a blob and uploading to cloudinary
-    // using the useCloudinary custom hook;
-    const bannerBlob = new Blob([data.classBanner[0]]);
-    const bannerUrl = await imageUpload(bannerBlob);
-    data.classBanner = bannerUrl;
     mutation.mutate(data);
   };
 
@@ -125,41 +118,25 @@ const AddClassroom = () => {
       clearErrors("schedules");
     }
   };
-  // handles remove image that is already present
-  // if the user decides to remove it
-  const handleRemove = () => {
-    setBanner(undefined);
-    setValue("classBanner", "");
-  };
-  // the function to generate a url for the picture
-  const handleShowPix = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const file = e.target.files[0];
-    setValue("classBanner", e.target.files);
-    const blob = new Blob([file]);
-    const localUrl = URL.createObjectURL(blob);
-    setBanner(localUrl);
-    clearErrors("classBanner");
-  };
+ 
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-lightGreen mt-3 bg-none border-none rounded-lg hover:bg-green-700  text-white text-[13px] font-semibold  px-3    py-2 text-start lg:block">
-          <SiGoogleclassroom className="sm:inline-block text-[18px] hidden mr-1" />
-          Create Classroom
+        <Button className="bg-lightGreen mt-3 bg-none border-none rounded-lg hover:bg-green-700  text-white text-[14px] font-semibold  px-3 sm:w-36   py-2 text-start lg:block">
+          <SiGoogleclassroom className="sm:inline-block hidden mr-1" />
+          Add Classroom
         </Button>
       </DialogTrigger>
+      <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
+      <ScrollArea className="h-[500px] w-full ">
+        <DialogHeader>
+          <DialogTitle className="text-3xl font-bold">
+            Create Classroom
+          </DialogTitle>
+        </DialogHeader>
 
-      <DialogContent className="sm:w-[500px]  w-[380px] font-subtext">
-        <ScrollArea className="h-[500px] w-full ">
-          <DialogHeader>
-            <DialogTitle className="text-3xl font-bold">
-              Create Classroom
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="w-[96%] mt-2">
+        <div className="w-[96%] mt-2">
             <form
               onSubmit={handleSubmit(runSubmit)}
               className=" flex flex-col gap-2 w-full px-2"
@@ -180,6 +157,7 @@ const AddClassroom = () => {
                   </small>
                 )}
               </div>
+             
               <div className="flex flex-col">
                 <Controller
                   control={control}
@@ -437,30 +415,7 @@ const AddClassroom = () => {
                 )}
               </div>
 
-              <div>
-                <div className=" w-full rounded-md h-[60px] font-header border bg-white flex items-center text-black justify-between px-2 ">
-                  <input
-                    {...register("price")}
-                    name="price"
-                    placeholder="Price"
-                    type="number"
-                    className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
-                  />
-
-                  <div className=" w-[50px] cursor-pointer font-bold aspect-square rounded-full flex items-center justify-center">
-                    <Image
-                      src="/usflag.png"
-                      alt="usflag"
-                      width={100}
-                      height={100}
-                      className="w-[40px] h-[40px] rounded-full"
-                    />
-                  </div>
-                </div>
-                {errors.price && (
-                  <small className="text-red-600">{errors.price.message}</small>
-                )}
-              </div>
+             
               <div className="flex flex-col">
                 <Input
                   id="maxCapacity"
@@ -476,42 +431,8 @@ const AddClassroom = () => {
                   </small>
                 )}
               </div>
-              {banner === undefined ? (
-                <div className="flex flex-col">
-                  <input
-                    type="file"
-                    multiple={false}
-                    accept="image/*"
-                    onChange={handleShowPix}
-                    name="classBanner"
-                    placeholder="class banner"
-                    className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
-                  />
-                  
-                </div>
-              ) : (
-                <PreviewItem handleRemove={handleRemove} imageItem={banner} />
-              )}
-
-              <div className="flex font-subtext flex-col">
-                <div className="flex items-center space-x-2">
-                  <input
-                    {...register("publicClass")}
-                    name="publicClass"
-                    className="w-4 h-4 px-2 accent-lightGreen"
-                    type="checkbox"
-                  />
-                  <label
-                    htmlFor="terms"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Public class
-                  </label>
-                </div>
-                <p className="text-[12px] my-3">
-                  Your class is visible and open to all on the platform
-                </p>
-              </div>
+              
+              
               <Button
                 type="submit"
                 className="w-full py-6 bg-lightGreen hover:bg-green-700"
@@ -521,11 +442,12 @@ const AddClassroom = () => {
               </Button>
             </form>
           </div>
-        </ScrollArea>
+          </ScrollArea>
+       
+        
       </DialogContent>
-      <ToastContainer />
     </Dialog>
   );
-};
+}
 
 export default AddClassroom;

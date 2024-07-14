@@ -11,9 +11,9 @@ export interface IprogressType {
 export const KycInfo: IprogressType[] = [
   {
     name: "Document Upload",
-    field: ["documentType", "documentUpload"] as const,
+    field: ["docType", "docImg"] as const,
   },
-  { name: "Take Picture", field: ["takePicture"] as const, },
+  { name: "Take Picture", field: ["verifiedImg"] as const, },
  
 ];
 
@@ -33,10 +33,8 @@ const ACCEPTED_IMAGE_TYPES = [
 // below is the zod schema for booking of session with teachers
 //
 export const kycSchema = z.object({
-  documentType:z.enum(["pdf", "docx", "txt"], {
-    message: "you can only enter pdf, docx, or txt files",
-  }),
-  documentUpload: z
+  docType: z.string().min(3, { message: "field is required" }),
+  docImg: z
   .any()
   // To not allow empty files
   .refine((files) => files?.length >= 1, { message: "Image is required." })
@@ -48,7 +46,7 @@ export const kycSchema = z.object({
   .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
     message: `Max file size is 5MB.`,
   }),
-  takePicture: z
+  verifiedImg: z
   .any()
   // To not allow empty files
   .refine((files) => files?.length >= 1, { message: "Image is required." })
