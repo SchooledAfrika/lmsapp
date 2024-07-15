@@ -15,6 +15,7 @@ import { PaystackButton } from "react-paystack";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { closePaymentModal, FlutterWaveButton } from "flutterwave-react-v3";
+import { GetClassLoader } from "./loaders/skeleton";
 
 interface Iteacher {
   name: string;
@@ -312,7 +313,11 @@ const PopularClasses = () => {
   });
   // checking if it is loading
   if (status === "pending") {
-    return <div className="">loading skeleton appears here</div>;
+    return (
+      <Container>
+        <GetClassLoader />
+      </Container>
+    );
   }
   // checking for errors
   if (status === "error") {
