@@ -223,9 +223,9 @@ const PayStackBtn: React.FC<{
     metadata: {
       custom_fields: [
         {
-          display_name: data?.user.id as string,
-          variable_name: id,
-          value: price,
+          display_name: data?.user.id as string, //students id
+          variable_name: id, //class id
+          value: `${price}-class`, //for the price and class specified payment
         },
       ],
     },
