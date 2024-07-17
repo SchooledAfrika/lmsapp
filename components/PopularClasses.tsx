@@ -2,7 +2,7 @@
 import { Classes } from "@/constants/index";
 import Image from "next/image";
 import Container from "./Container";
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
 import { FaStar } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
@@ -33,6 +33,7 @@ interface Iclass {
   className: string;
   grade: string;
   id: string;
+  studentIDs?: string[];
 }
 
 const PopularClassesCard = ({ item }: { item: Iclass }) => {
@@ -43,6 +44,7 @@ const PopularClassesCard = ({ item }: { item: Iclass }) => {
     showpayments,
     enroll,
   } = useClasses();
+  const { data } = useSession();
 
   return (
     <>
@@ -64,12 +66,18 @@ const PopularClassesCard = ({ item }: { item: Iclass }) => {
             </div>
           </div>
 
-          <button
-            onClick={enroll}
-            className=" bg-dimOrange absolute -translate-y-1/2 left-3 rounded-md text-white text-[12px] font-bold px-4   py-2 text-center lg:block"
-          >
-            Enrol Now
-          </button>
+          {item.studentIDs?.includes(data?.user.id as string) ? (
+            <button className=" bg-green-600 absolute -translate-y-1/2 left-3 rounded-md text-white text-[12px] font-bold px-4   py-2 text-center lg:block">
+              Enrolled
+            </button>
+          ) : (
+            <button
+              onClick={enroll}
+              className=" bg-dimOrange absolute -translate-y-1/2 left-3 rounded-md text-white text-[12px] font-bold px-4   py-2 text-center lg:block"
+            >
+              Enrol Now
+            </button>
+          )}
         </div>
         <p className="text-right mr-6 font-bold text-lightGreen">
           &#36;{item.price.toFixed(2)}
@@ -208,6 +216,7 @@ const PayStackBtn: React.FC<{
   enroll: () => void;
 }> = ({ id, price, enroll }) => {
   const { data } = useSession();
+  const queryClient = useQueryClient();
   const componentProps = {
     reference: new Date().getTime().toString(),
     email: data?.user.email as string,
@@ -215,6 +224,7 @@ const PayStackBtn: React.FC<{
     publicKey: process.env.NEXT_PUBLIC_PAYSTACKPUBKEY!,
     text: "Pay with paystack",
     onSuccess: (reference: any) => {
+      queryClient.invalidateQueries({ queryKey: ["infiniteclass"] });
       toast.success("payment successful, navigate to class in your dashboard");
       setTimeout(() => {
         enroll();
@@ -303,7 +313,7 @@ const PopularClasses = () => {
     isFetchingNextPage,
     hasNextPage,
   } = useInfiniteQuery({
-    queryKey: ["infinite"],
+    queryKey: ["infiniteclass"],
     queryFn: getItems,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPage) => {

@@ -25,6 +25,7 @@ export async function GET(req: Request) {
         },
       },
     });
+    console.log(allClass);
     return new Response(JSON.stringify(allClass), { status: 200 });
   } catch (error) {
     console.log(error);
