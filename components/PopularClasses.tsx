@@ -224,9 +224,9 @@ const PayStackBtn: React.FC<{
     publicKey: process.env.NEXT_PUBLIC_PAYSTACKPUBKEY!,
     text: "Pay with paystack",
     onSuccess: (reference: any) => {
-      queryClient.invalidateQueries({ queryKey: ["infiniteclass"] });
       toast.success("payment successful, navigate to class in your dashboard");
       setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["infiniteclass"] });
         enroll();
       }, 5500);
     },
@@ -254,6 +254,7 @@ const FlutterWaveBtn: React.FC<{
   enroll: () => void;
 }> = ({ id, price, enroll }) => {
   const { data } = useSession();
+  const queryClient = useQueryClient();
   const config = {
     public_key: process.env.NEXT_PUBLIC_FLUTTERPUBKEY!,
     tx_ref: Date.now().toString(),
@@ -262,13 +263,20 @@ const FlutterWaveBtn: React.FC<{
     payment_options: "card",
     customer: {
       email: data?.user.email as string,
-      phone_number: `${data?.user.id}-${id}`,
-      name: data?.user.name as string,
+      phone_number: data?.user.id as string, //id of the student or user that want to make payment,
+      name: `${id}-class`, // field for id of the class and the payment type
     },
     customizations: {
       title: "school afrika",
       description: "payment for class enrollment",
       logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
+    },
+    onSuccess: () => {
+      toast.success("payment successful, navigate to class in your dashboard");
+      setTimeout(() => {
+        queryClient.invalidateQueries({ queryKey: ["infiniteclass"] });
+        enroll();
+      }, 5500);
     },
   };
   const fwConfig = {
