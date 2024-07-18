@@ -60,9 +60,4 @@ export const paymentMethods: Ipay[] = [
     desc: "Effortlessly pay with flutterwave, simplify your online transaction",
     image: "/flutterwave.png",
   },
-  {
-    title: "Remitta",
-    desc: "Effortlessly pay with Remitta, simplify your online transaction",
-    image: "/remitta.png",
-  },
 ];

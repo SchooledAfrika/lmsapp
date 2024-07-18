@@ -147,6 +147,9 @@ const Checkout: React.FC<Iclass & { enroll: () => void }> = ({
       >
         <p className=" font-bold text-green-700">Payment</p>
         <p className=" text-[12px] font-bold mt-2">Select payment method</p>
+        <div className=" w-[100px] aspect-square rounded-full border-2 border-green-700 flex items-center justify-center mt-4 mb-3">
+          <p className=" font-bold text-green-700 ">{price}</p>
+        </div>
         {/* div showing the payment methods */}
         <div className=" mt-3 w-full flex flex-col gap-2">
           {paymentMethods.map((payment, index) => (
@@ -197,15 +200,13 @@ const Checkout: React.FC<Iclass & { enroll: () => void }> = ({
             <div>
               {selected === "Paystack" ? (
                 <PayStackBtn id={id} price={price} enroll={enroll} />
-              ) : selected === "Flutter Wave" ? (
+              ) : (
                 <FlutterWaveBtn
                   id={id}
                   price={price}
                   studentIDs={studentIDs}
                   enroll={enroll}
                 />
-              ) : (
-                <RemittaBtn id={id} price={price} />
               )}
             </div>
           )}
@@ -307,10 +308,6 @@ const FlutterWaveBtn: React.FC<{
       />
     </div>
   );
-};
-// component to make payment with remitta method
-const RemittaBtn: React.FC<{ id: string; price: number }> = ({ id }) => {
-  return <div>remitta </div>;
 };
 
 const PopularClasses = () => {
