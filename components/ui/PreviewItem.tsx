@@ -9,7 +9,7 @@ interface Ipreview {
 
 const PreviewItem: React.FC<Ipreview> = ({ imageItem, handleRemove }) => {
   return (
-    <div className=" w-full h-[200px] relative">
+    <div className=" w-[450px] h-[200px] relative">
       <Image
         className=" w-full h-full object-cover"
         src={imageItem}

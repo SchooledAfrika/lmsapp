@@ -1,3 +1,7 @@
+"use client";
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -15,6 +19,37 @@ import { GoDotFill } from "react-icons/go";
 import Image from "next/image"
 import Link from "next/link"
 export function RemoveClass() {
+  const queryClient = useQueryClient();
+
+  const mutation = useMutation({
+    mutationKey: ["post"],
+    mutationFn: async  (id) => {
+      console.log(id);
+      const result = await fetch("/api/class", {
+        method: "DELETE",
+        headers: {
+          'Content-Type': 'application/json',
+          // Add any headers as needed
+        },
+        
+      });
+
+      return result;
+    },
+    onSuccess: async (id) => {
+      queryClient.invalidateQueries({ queryKey: ["add"] });
+      
+    },
+  });
+
+  const handleDelete = (id: any) => {
+    mutation.mutate(id);
+  };
+
+  
+
+ 
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -44,7 +79,7 @@ export function RemoveClass() {
         </div>
         <DialogFooter className="">
          
-             <Button type="submit" className="w-full py-8 text-lg bg-lightGreen hover:bg-green-700">Confirm</Button>
+             <Button  type="submit" className="w-full py-8 text-lg bg-lightGreen hover:bg-green-700">Confirm</Button>
          
        
          

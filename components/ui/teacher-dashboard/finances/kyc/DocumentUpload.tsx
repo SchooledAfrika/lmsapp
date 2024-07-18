@@ -7,12 +7,15 @@ import {
   Control,
   Controller,
   UseFormWatch,
+  UseFormSetValue
+ 
 } from "react-hook-form";
+
 import Link from "next/link";
 import Container from "@/components/Container";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-
+import PreviewItem from "@/components/ui/PreviewItem";
 import {
   Select,
   SelectContent,
@@ -32,6 +35,7 @@ export interface IKycSub {
   control?: Control<Ikyc>;
   clearErrors: UseFormClearErrors<Ikyc>;
   watch: UseFormWatch<Ikyc>;
+  setValue: UseFormSetValue<Ikyc>;
 }
 
 const DocumentUpload: React.FC<IKycSub> = ({
@@ -40,9 +44,26 @@ const DocumentUpload: React.FC<IKycSub> = ({
   control,
   watch,
   clearErrors,
+  setValue,
 }) => {
-  watch("documentType");
-  watch("documentUpload");
+  const [docImg, setDocImg] = useState<string | undefined>(undefined);
+  
+  // handles remove image that is already present
+  // if the user decides to remove it
+  const handleRemove = () => {
+    setDocImg(undefined);
+    setValue("docImg", "");
+  };
+  // the function to generate a url for the picture
+  const handleShowPix = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    setValue("docImg", e.target.files);
+    const blob = new Blob([file]);
+    const localUrl = URL.createObjectURL(blob);
+    setDocImg(localUrl);
+    clearErrors("docImg");
+  };
   return (
     <section className="py-[1rem] font-header md:pt-[3rem]">
       <Container>
@@ -51,19 +72,19 @@ const DocumentUpload: React.FC<IKycSub> = ({
         </h3>
 
         <p className="md:w-[450px] text-[13.5px] py-2">
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-          commodo ligula eget dolor. Lorem ipsum dolor sit amet, consectetuer
-          adipiscing elit.
+       
+        Provide a valid means of identification.
+
         </p>
 
         <Controller
           control={control}
-          name="documentType"
+          name="docType"
           render={({ field }) => (
             <Select
               onValueChange={(value) => {
                 field.onChange(value);
-                clearErrors("documentType");
+                clearErrors("docType");
               }}
             >
               <SelectTrigger className="md:w-[450px] my-2 h-[60px] w-[330px] p-4">
@@ -72,29 +93,41 @@ const DocumentUpload: React.FC<IKycSub> = ({
 
               <SelectContent className=" font-subtext font-medium">
                 <SelectGroup>
-                  <SelectItem value="pdf">pdf</SelectItem>
-                  <SelectItem value="docx">docx</SelectItem>
-                  <SelectItem value="txt">txt</SelectItem>
+                  <SelectItem value="NIN">NIN</SelectItem>
+                  <SelectItem value="dLicence">Driver's License</SelectItem>
+                  <SelectItem value="vCard">Voter's Card</SelectItem>
+                  <SelectItem value="intPassport">International Passport</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
           )}
         />
-        {errors.documentType && (
-          <small className="text-red-600">{errors.documentType.message}</small>
+        {errors.docType && (
+          <small className="text-red-600">{errors.docType.message}</small>
         )}
         <br />
+        {docImg === undefined ? (
         <div
           className={`flex items-center md:w-[450px] h-[60px] w-[330px] bg-[#FFFFFF] py-4 pl-2 my-2 rounded-[8px]`}
         >
           <input
             type="file"
-            {...register("documentUpload")}
-            name="documentUpload"
+            multiple={false}
+            accept="image/*"
+            onChange={handleShowPix}
+            name="docImg"
             placeholder="Upload Document"
             className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
           />
+           {errors.docImg && (
+                    <small className="text-red-600">
+                      {String(errors.docImg.message)}
+                    </small>
+                  )}
         </div>
+         ) : (
+          <PreviewItem  handleRemove={handleRemove} imageItem={docImg} />
+        )}
       </Container>
     </section>
   );

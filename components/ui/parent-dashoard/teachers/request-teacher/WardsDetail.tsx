@@ -46,9 +46,8 @@ const WardsDetail: React.FC<IRequestTeacherSub> = ({
       <Container>
         <h3 className="font-bold text-[16px]">Request a Special Teacher</h3>
         <p className="md:w-[450px] text-[13.5px] py-2">
-          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-          commodo ligula eget dolor. Lorem ipsum dolor sit amet, consectetuer
-          adipiscing elit.
+        Have special need for your child?
+        Request for a teacher that suits your needs.
         </p>
         <div className="bg-white flex md:w-[450px] my-2 rounded-md  w-full p-4 flex-col">
           <div className="flex space-x-3">

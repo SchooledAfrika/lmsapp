@@ -9,7 +9,7 @@ import {
  
   
   import Image from "next/image";
-import { IndividualClass } from "./IndividualClass";
+
 
 
   
