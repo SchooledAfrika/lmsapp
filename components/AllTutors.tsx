@@ -177,13 +177,13 @@ const AllTutors = () => {
             Group sessions
           </Button>
         </div>
-        <div className=" flex-row ">
+        <div className="flex  ">
           <BookSession />
 
           <Button
             asChild
             variant="outline"
-            className=" bg-white rounded-lg border-lightGreen hover:bg-lightGreen text-lightGreen hover:text-white text-sm md:mt-3 mt-6 px-3 w-32 mr-2  md:py-2 text-center lg:block"
+            className=" bg-white rounded-lg border-lightGreen hover:bg-lightGreen text-lightGreen hover:text-white text-sm md:mt-3 mt-6 px-3 w-28 mr-2  md:py-2 text-center lg:block"
           >
             <Link href="/register">Contact</Link>
           </Button>
