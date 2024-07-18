@@ -26,5 +26,5 @@ export async function POST(req: Request) {
   if (paymentFor == "class ") {
     await payForClass(classId, studentId);
   }
-  return new Response(JSON.stringify({ m: "k" }), { status: 200 });
+  return new Response(JSON.stringify({ m: "successful" }), { status: 200 });
 }

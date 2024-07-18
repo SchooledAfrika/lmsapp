@@ -128,6 +128,7 @@ const Checkout: React.FC<Iclass & { enroll: () => void }> = ({
   enroll,
   id,
   price,
+  studentIDs,
 }) => {
   // this state manages the payment method the user has selected
   const [selected, setSelected] = useState<string | undefined>(undefined);
@@ -197,7 +198,12 @@ const Checkout: React.FC<Iclass & { enroll: () => void }> = ({
               {selected === "Paystack" ? (
                 <PayStackBtn id={id} price={price} enroll={enroll} />
               ) : selected === "Flutter Wave" ? (
-                <FlutterWaveBtn id={id} price={price} enroll={enroll} />
+                <FlutterWaveBtn
+                  id={id}
+                  price={price}
+                  studentIDs={studentIDs}
+                  enroll={enroll}
+                />
               ) : (
                 <RemittaBtn id={id} price={price} />
               )}
@@ -251,8 +257,9 @@ const PayStackBtn: React.FC<{
 const FlutterWaveBtn: React.FC<{
   id: string;
   price: number;
+  studentIDs: string[] | undefined;
   enroll: () => void;
-}> = ({ id, price, enroll }) => {
+}> = ({ id, price, studentIDs, enroll }) => {
   const { data } = useSession();
   const queryClient = useQueryClient();
   const config = {
@@ -273,6 +280,7 @@ const FlutterWaveBtn: React.FC<{
     },
     onSuccess: () => {
       toast.success("payment successful, navigate to class in your dashboard");
+      studentIDs?.push(data?.user.id!);
       setTimeout(() => {
         queryClient.invalidateQueries({ queryKey: ["infiniteclass"] });
         enroll();
