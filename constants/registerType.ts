@@ -23,7 +23,11 @@ export const RegisterType: Iregister[] = [
     title: "Student Account",
     role: registerType.Student,
     description:
-      "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis",
+      "Create your ",
+      link: "/student-account",
+      linkText: "Student Account ",
+      descriptionEnd:
+      "with Schooled Afrika and access all you need for a better digital learning. You are one click away from your academic success dream. ",
     tickIcon: "/svgs/tick.svg",
     coloredTick: "/svgs/colored-tick.svg",
   },
@@ -31,7 +35,7 @@ export const RegisterType: Iregister[] = [
     Images: "/teach.png",
     title: "Teacher Account",
     role: registerType.Teacher,
-    description: "Create your",
+    description: "Create your ",
     link: "/teacher-account",
     linkText: "Teacher Account ",
     descriptionEnd:
@@ -43,8 +47,8 @@ export const RegisterType: Iregister[] = [
     Images: "/school-acct.png",
     title: "School Account",
     role: registerType.School,
-    description: "Create your",
-    link: "/login",
+    description: "Create your ",
+    link: "/school-account",
     linkText: "School Account ",
     descriptionEnd:
       "with Schooled Afrika and have total control over the activities in your school.",
@@ -53,10 +57,13 @@ export const RegisterType: Iregister[] = [
   },
   {
     Images: "/parent-acct.png",
-    title: "Parent Account",
+    title: "Parent Account ",
     role: registerType.Parents,
-    description:
-      "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis",
+    description: "Create your ",
+    link: "/parent-account",
+    linkText: "Parent Account ",
+    descriptionEnd:
+      "with Schooled Afrika. Join us on a journey of exploration and discovery as we shape the next generation of lifelong learners.",
     tickIcon: "/svgs/tick.svg",
     coloredTick: "/svgs/colored-tick.svg",
   },

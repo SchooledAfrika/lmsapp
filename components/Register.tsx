@@ -56,12 +56,13 @@ const Register: FC = () => {
         <div className="sm:w-full md:w-[45%]">
           <p className="pb-2 font-bold text-orange-400">Get Started</p>
           <span className="font-bold text-[20px] md:text-[26px]">
-            Lorem ipsum dolor sit amet, consec tetuer adipiscing elit.
+          Join in shaping the future of Education.
+
           </span>
           <p className="text-gray-500 py-6 text-[13px]">
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-            commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-            penatibus et magnis dis parturient montes, nascetur ridiculus mus.
+          At Schooled Afrika, we're dedicated to empowering learners, educators, and institutions with the
+          tools they need to thrive in the digital age. Join us in shaping the future of education, one click at
+          a time.
           </p>
           <Image src={Career} alt="career" className="hidden sm:block" />
         </div>
@@ -87,10 +88,10 @@ const Register: FC = () => {
               <div>
                 <Image
                   src={registered.Images}
-                  width={100}
-                  height={100}
+                  width={200}
+                  height={200}
                   alt="School Account"
-                  className="w-[60px]"
+                  className="w-[70px]"
                 />
               </div>
               <div>
