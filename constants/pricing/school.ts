@@ -42,3 +42,22 @@ export const monthlyPlans: eachPrice[] = [
     ],
   },
 ];
+
+// exporting an array that contains the payment methods for the class part
+interface Ipay {
+  desc: string;
+  image: string;
+  title: string;
+}
+export const paymentMethods: Ipay[] = [
+  {
+    title: "Paystack",
+    desc: "Effortlessly pay with paystack, simplify your online transaction",
+    image: "/paystack.png",
+  },
+  {
+    title: "Flutter Wave",
+    desc: "Effortlessly pay with flutterwave, simplify your online transaction",
+    image: "/flutterwave.png",
+  },
+];
