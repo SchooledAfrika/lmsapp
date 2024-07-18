@@ -3,45 +3,28 @@
 // TODO: remember to check or add the auth header for the keys given by this webhooks payment platform
 import prisma from "@/prisma/prismaConnect";
 import { serverError } from "@/prisma/utils/error";
+import { payForClass } from "@/prisma/utils/payment";
 
 // add student to the class after making payment
 export async function POST(req: Request) {
-  // TODO: remember to manipulate the payload coming from the webhooks payment platform and remove this body here
-  // authenticate using our authorization token from the payment platform
-  const { studentId, classId } = await req.json();
-  //   lets get the class first so that we can be able to push the new id
-  const theclass = await prisma.classes.findUnique({
-    where: { id: classId },
-    select: { studentIDs: true },
-  });
-  theclass?.studentIDs.push(studentId);
-  // here we get the student information, so that we can push the class id to it
-  const theStudent = await prisma.student.findUnique({
-    where: { id: studentId },
-    select: { classIDs: true },
-  });
-  theStudent?.classIDs.push(classId);
-  try {
-    // push the student id to the class
-    await prisma.classes.update({
-      where: { id: classId },
-      data: { studentIDs: theclass?.studentIDs },
+  // here we get the signature we provided in our flutterwave account
+  const signature = req.headers.get("verif-hash");
+  if (signature !== process.env.FLUTTER_WAVE_HASH) {
+    return new Response(JSON.stringify({ message: "illegal parameter" }), {
+      status: 501,
     });
-    // then we go ahead to also modify the student profile
-    // by adding the classid to the array of classes student attend to
-    await prisma.student.update({
-      where: {
-        id: studentId,
-      },
-      data: { classIDs: theStudent?.classIDs },
-    });
-    return new Response(
-      JSON.stringify({
-        message: "payment successful and student added in class",
-      }),
-      { status: 200 }
-    );
-  } catch (error) {
-    return serverError();
   }
+  // we get the whole body and verify if the webhook is actually coming from the flutterwave
+  // then check the payment type
+  const body = await req.json();
+  const data = body.data;
+  const studentId = data.customer.phone_number;
+  const classArray = data.customer.name.split("-");
+  const classId = classArray[0];
+  const paymentFor = classArray[1];
+  // check for the payment type and run it accordingly
+  if (paymentFor == "class ") {
+    await payForClass(classId, studentId);
+  }
+  return new Response(JSON.stringify({ m: "k" }), { status: 200 });
 }
