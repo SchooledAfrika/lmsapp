@@ -358,6 +358,7 @@ const PopularClasses = () => {
             ))}
         </div>
       </div>
+
       <ToastContainer />
     </Container>
   );
