@@ -235,7 +235,9 @@ const PayStackBtn: React.FC<{
     onSuccess: (reference: any) => {
       toast.success("payment successful, navigate to class in your dashboard");
       setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["infiniteclass"] });
+        queryClient.invalidateQueries({
+          queryKey: ["infiniteclass", "home-class"],
+        });
         enroll();
       }, 5500);
     },
@@ -285,7 +287,9 @@ const FlutterWaveBtn: React.FC<{
       toast.success("payment successful, navigate to class in your dashboard");
       studentIDs?.push(data?.user.id!);
       setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["infiniteclass"] });
+        queryClient.invalidateQueries({
+          queryKey: ["infiniteclass", "home-class"],
+        });
         enroll();
       }, 5500);
     },
