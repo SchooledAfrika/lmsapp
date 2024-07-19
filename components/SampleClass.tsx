@@ -5,6 +5,8 @@ import Container from "./Container";
 import { useQuery } from "@tanstack/react-query";
 import { PopularClassesCard, Iclass } from "./PopularClasses";
 import Link from "next/link";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const SampleClass = () => {
   const { data, isLoading } = useQuery({
@@ -39,6 +41,7 @@ const SampleClass = () => {
             More classes
           </Link>
         </div>
+        <ToastContainer />
       </Container>
     </div>
   );
