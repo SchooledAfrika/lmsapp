@@ -2,11 +2,13 @@
 // creating a post request which schools use to add students
 // and an update request which students can use to accept the offer or admission from school
 import prisma from "@/prisma/prismaConnect";
+import { notAuthenticated } from "@/prisma/utils/error";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 export async function POST(req: Request) {
-  // TODO: change the schoolId here to use the nextauth id
-  const { schoolId, studentId } = await req.json();
-
+  const { studentId } = await req.json();
+  const schoolId = await serverSessionId();
+  if (!schoolId) return notAuthenticated();
   // return an error if this studentId does not exist
   if (!studentId) {
     return new Response(JSON.stringify({ message: "studentId is needed" }), {
@@ -99,8 +101,8 @@ export async function PUT(req: Request) {
 // only school that created students has the power to delete student
 // students don't have the power to delete them selfs
 export async function DELETE(req: Request) {
-  // TODO: remember to change the schoolId from the body and make use of nextauth id for school
-  const { schoolId, offerId } = await req.json();
+  const { offerId } = await req.json();
+  const schoolId = await serverSessionId();
   if (!offerId) {
     return new Response(JSON.stringify({ message: "all input is needed" }), {
       status: 404,
@@ -133,6 +135,26 @@ export async function DELETE(req: Request) {
       JSON.stringify({ message: "student offer deleted successfully" }),
       { status: 200 }
     );
+  } catch (error) {
+    throw new Error(JSON.stringify({ message: "something went wrong" }));
+  }
+}
+
+// this route returns all the student created by the school
+export async function GET(req: Request) {
+  const schoolId = await serverSessionId();
+  if (!schoolId) return notAuthenticated();
+  // proceed to fetch all the students that belong to the school
+  try {
+    const allSchoolStudents = await prisma.schoolStudent.findMany({
+      where: {
+        schoolId,
+      },
+    });
+    return new Response(JSON.stringify(allSchoolStudents), {
+      status: 200,
+      statusText: "success",
+    });
   } catch (error) {
     throw new Error(JSON.stringify({ message: "something went wrong" }));
   }

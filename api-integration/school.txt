@@ -1,0 +1,123 @@
+
+new endpoints
+================================================================================================================
+endpoint for school to create class
+================================================================================================================
+
+=====>create class by schools
+route:/api/class-action
+method:POST
+payload:{
+    grade: String; eg:Grade1 and so on,
+    name:String,
+    subject:String, //this should be in uppercase eg: ENGLISH, MATHEMATICS
+    time:String
+}
+comment: make sure in the grade field that you pass grades correctly, backend is expecting enum of grade in form of Grade1 or Grade2 and so on
+
+=====> get class created by school or class that belongs to a partiicular school
+route:/api/class-action
+method:GET
+comment: this returns all the information you needed from the created class, for the arrays containing information about teacher are in the field:SchoolClassTeacher, while those that contains information about the studetent:SchoolClassStudent
+
+=====>delete a particular class
+route:/api/class-action
+method:DELETE
+payload:{
+    classId:string
+}
+comment: classId meaning the id of the class you want to delete
+
+================================================================================================================
+endpoint to make announcement in the school class
+================================================================================================================
+
+====> create announcement
+route:/api/school-class-announce
+method:POST
+payload:{
+    title:String,
+    desc:string,
+    SchoolClassId:string
+}
+comment: in the dropdown list in each class, you can add another item maybe call it announcement, then the dialog box create two input one for title while the other textbox will be for description
+while submiting the announcement at the backend, remember that SchoolClassId in the payload is the id of the class.
+
+=====> delete an announcement
+route:/api/school-class-announce
+method:DELETE
+payload:{
+    announceId:string
+}
+comment: announceId is the id of the announcement you wish to delete
+
+=====> get all announcement for a particular class.
+route:/api/school-class-announce?classId=id
+method:GET
+comment: this returns all the announcement made under that particular class.
+NB: the url should have a query parameter with classId=the id of the class you want to get all the announcement made under it.
+
+================================================================================================================
+endpoint to manage teacher in school or offer teacher to join school
+================================================================================================================
+
+====> add a teacher to school
+route:/api/add-teacher-by-school
+method:POST
+payload:{
+    teacherId:string
+}
+comment: this is for adding the teacher in a school, teacherId is the provided id of the teacher
+
+====> delete ateacher from school
+route:/api/add-teacher-by-school
+method:DELETE
+payload:{
+    offerId:string
+}
+comment:offerId is the id of the contract that hold the teacher in the school, that is the id of the mapped schoolTeachers
+
+====> get all the schoolTeacher
+route:/api/add-teacher-by-school
+method: GET
+comment: this returns all the contract between the teacher and school, inside what it returns you will see teacherId, you can then fetch information specifically about the teacherid to display their individual personal information
+NB: the route below helps to get a basic information about a single teacher for the school to display
+
+=====>get some basic information about a teacher
+route:/api/add-teacher-by-school/:id
+method:GET
+comment: id is the id of the teacher you want to fetch its information
+
+
+================================================================================================================
+endpoint to manage student in school or offer student to join school
+================================================================================================================
+
+====> add a student to school
+route:/api/add-student-by-school
+method:POST
+payload:{
+    studentId:string
+}
+comment: this is for add a student by their id to the school
+
+====> delete a student from school
+route:/api/add-student-by-school
+method:DELETE
+payload:{
+    offerId:string
+}
+comment:offerId is the id of the contract that hold the student in the school, that is the id of the mapped schoolStudent
+
+====> get all the schoolStudent
+route:/api/add-student-by-school
+method: GET
+comment: this returns all the contract between the student and school, inside what it returns you will see studentId, you can then fetch information specifically about the studentid to display their individual personal information
+NB: the route below helps to get a basic information about a single teacher for the school to display
+
+=====>get some basic information about a student
+route:/api/add-student-by-school/:id
+method:GET
+comment: id is the id of the student you want to fetch its information
+
+

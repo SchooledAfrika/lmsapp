@@ -37,9 +37,12 @@ comment: once this route it hit, all class created by the teacher that is logged
 ====> get only a single class
 route: /api/class/specific/:id
 method: GET
-comment: this is a dynamic route, the :id here is the classId
+comment: this is a dynamic route, the :id here is the classId, once you get a single class, there is field called studentIDS(this is an array containing id of the student), you can use parallel query to get each student from this id
 
-
+====> get a single student
+route: /api/about-student/:id
+method: GET
+comment: console the information you retured from this route, and use them appropriately where needed
 ================================================================================================================
 endpoint for test and resources i.e teacher creating resources and test
 ================================================================================================================
@@ -153,3 +156,4 @@ payload:{
     verifiedImg:string
 }
 comment: teachers will use this endpoint to create or submit their kyc, at submission the kyc will be pendind waiting for approval or rejection from the admin
+
