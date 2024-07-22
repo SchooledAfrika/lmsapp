@@ -2,17 +2,24 @@
 // using our post request
 // then later we can modify the or update the class when we want to add students or teachers to the platform
 import prisma from "@/prisma/prismaConnect";
+import { notAuthenticated, serverError } from "@/prisma/utils/error";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // lets create class
 export async function POST(req: Request) {
-  // TODO: REMEMBER TO CHANGE THE SCHOOLID FROM THIS BODY AND USE NEXTAUTH ID
-  const { schoolId, ...others } = await req.json();
+  const others = await req.json();
+  const schoolId = await serverSessionId();
+  const role = await serverSessionRole();
+  if (!schoolId) return notAuthenticated();
+  if (role !== "School")
+    return new Response(
+      JSON.stringify({ message: "only schools can create this class" })
+    );
   if (!others) {
     return new Response(JSON.stringify({ message: "inputs needed" }), {
       status: 400,
     });
   }
-
   // proceed to create
   try {
     await prisma.schoolClass.create({
@@ -33,8 +40,8 @@ export async function POST(req: Request) {
 // here, lets update the class
 // this is done when the school management want to update the class information
 export async function PUT(req: Request) {
-  // TODO: CHANGE THE SCHOOLID present here to nextauth id
-  const { schoolId, classId, ...others } = await req.json();
+  const { classId, ...others } = await req.json();
+  const schoolId = await serverSessionId();
   if (!classId) {
     return new Response(
       JSON.stringify({ message: "class id is missing here" }),
@@ -86,7 +93,8 @@ export async function PUT(req: Request) {
 // this is so that the students or teacher will not be seeing this classes
 export async function DELETE(req: Request) {
   // TODO: REPLACE THE SCHOOLID WITH THE ID FROM NEXTAUTH
-  const { schoolId, classId } = await req.json();
+  const { classId } = await req.json();
+  const schoolId = await serverSessionId();
   if (!classId) {
     return new Response(JSON.stringify({ message: "classId is required" }), {
       status: 404,
@@ -141,8 +149,8 @@ export async function DELETE(req: Request) {
 
 // this is for getting all the classes that belongs to a particular school,
 export async function GET() {
-  // TODO: remember to remove this hard coded school id below and use the nextauth id
-  const schoolId = "663940fb5cecf4479bcefe7a";
+  const schoolId = await serverSessionId();
+  if (!schoolId) return notAuthenticated();
   try {
     const gottenClasses = await prisma.schoolClass.findMany({
       where: {
@@ -151,10 +159,11 @@ export async function GET() {
       include: {
         SchoolClassStudent: true,
         SchoolClassTeacher: true,
+        AnnouncementBySchoolClass: true,
       },
     });
     return new Response(JSON.stringify(gottenClasses), { status: 200 });
   } catch (error) {
-    throw new Error(JSON.stringify({ message: "something went wrong" }));
+    return serverError();
   }
 }

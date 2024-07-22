@@ -2,15 +2,23 @@
 // using the teachers id
 
 import prisma from "@/prisma/prismaConnect";
+import { notAuthenticated } from "@/prisma/utils/error";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // post request to add new teachers
 export async function POST(req: Request) {
-  console.log("entered1");
-  // TODO: replace this school id here, and make use of next auth provided id,
-  // we can then pass only the teachers id through the body
-  const { teacherId, schoolId } = await req.json();
-  // return an error if both the id is not present
-  if (!teacherId || !schoolId) {
+  const { teacherId } = await req.json();
+  const schoolId = await serverSessionId();
+  const role = await serverSessionRole();
+  if (role !== "School")
+    return new Response(
+      JSON.stringify({
+        message: "you have to register as school to perform this action",
+      }),
+      { status: 400 }
+    );
+  if (!schoolId) return notAuthenticated();
+  if (!teacherId) {
     return new Response(JSON.stringify({ message: "teachers id required" }), {
       status: 404,
       statusText: "teacher id is required",
@@ -27,7 +35,7 @@ export async function POST(req: Request) {
       id: true,
     },
   });
-  console.log(checkTeacherExistence);
+
   if (checkTeacherExistence) {
     return new Response(JSON.stringify({ message: "Teacher already exists" }), {
       status: 404,
@@ -35,7 +43,6 @@ export async function POST(req: Request) {
   }
   // lets proceed to creating the schoolTeacher for this particular teacher
   try {
-    console.log("entered");
     await prisma.schoolTeacher.create({
       data: {
         schoolId: schoolId,
@@ -103,8 +110,9 @@ export async function PUT(req: Request) {
 // here, we should be able to delete teachers offers
 // is only the school that created this offer can delete it
 export async function DELETE(req: Request) {
-  // TODO: remember to change the schoolId from the body and make use of nextauth id for school
-  const { schoolId, offerId } = await req.json();
+  const { offerId } = await req.json();
+  const schoolId = await serverSessionId();
+  if (!schoolId) return notAuthenticated();
   if (!offerId) {
     return new Response(JSON.stringify({ message: "all input is needed" }), {
       status: 404,
@@ -137,6 +145,25 @@ export async function DELETE(req: Request) {
       JSON.stringify({ message: "teacher offer deleted successfully" }),
       { status: 200 }
     );
+  } catch (error) {
+    throw new Error(JSON.stringify({ message: "something went wrong" }));
+  }
+}
+
+export async function GET(req: Request) {
+  const schoolId = await serverSessionId();
+  if (!schoolId) return notAuthenticated();
+  // proceed to fetch all the students that belong to the school
+  try {
+    const allSchoolStudents = await prisma.schoolTeacher.findMany({
+      where: {
+        schoolId,
+      },
+    });
+    return new Response(JSON.stringify(allSchoolStudents), {
+      status: 200,
+      statusText: "success",
+    });
   } catch (error) {
     throw new Error(JSON.stringify({ message: "something went wrong" }));
   }

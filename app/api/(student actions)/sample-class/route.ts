@@ -7,16 +7,10 @@ import { serverError } from "@/prisma/utils/error";
 // here we should be able to get all the classes
 // get only about 20 classes at a time
 export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const page = url.searchParams.get("page");
-  // get the lower border for slice
-  const Start = Number(page) - 1;
-  const skipAmt = Start * 3;
-  const takeAmt = 3;
   try {
     const allClass = await prisma.classes.findMany({
-      skip: skipAmt,
-      take: takeAmt,
+      skip: 0,
+      take: 9,
       include: {
         teacher: {
           select: {

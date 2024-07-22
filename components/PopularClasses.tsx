@@ -3,7 +3,7 @@ import { Classes } from "@/constants/index";
 import Image from "next/image";
 import Container from "./Container";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaStar } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
 import { useClasses } from "@/data-access/class";
@@ -16,12 +16,14 @@ import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
 import { closePaymentModal, FlutterWaveButton } from "flutterwave-react-v3";
 import { GetClassLoader } from "./loaders/skeleton";
+import { CircularProgress } from "@mui/material";
+import { useInView } from "react-intersection-observer";
 
 interface Iteacher {
   name: string;
 }
 
-interface Iclass {
+export interface Iclass {
   classBanner: string;
   teacherId: string;
   schedules: string[];
@@ -36,7 +38,7 @@ interface Iclass {
   studentIDs?: string[];
 }
 
-const PopularClassesCard = ({ item }: { item: Iclass }) => {
+export const PopularClassesCard = ({ item }: { item: Iclass }) => {
   const {
     makeSubString,
     capitalizeString,
@@ -48,7 +50,7 @@ const PopularClassesCard = ({ item }: { item: Iclass }) => {
 
   return (
     <>
-      <div className="w-full     font-subtext rounded-lg card flex flex-col justify-center gap-3 hover:-translate-y-2 transition-transform duration-300 group">
+      <div className="w-full overflow-hidden     font-subtext rounded-lg card flex flex-col justify-center gap-3 hover:-translate-y-2 transition-transform duration-300 group">
         <div className="relative text-white w-full h-[200px]">
           <Image
             className="w-full h-full object-cover"
@@ -233,7 +235,9 @@ const PayStackBtn: React.FC<{
     onSuccess: (reference: any) => {
       toast.success("payment successful, navigate to class in your dashboard");
       setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["infiniteclass"] });
+        queryClient.invalidateQueries({
+          queryKey: ["infiniteclass", "home-class"],
+        });
         enroll();
       }, 5500);
     },
@@ -283,7 +287,9 @@ const FlutterWaveBtn: React.FC<{
       toast.success("payment successful, navigate to class in your dashboard");
       studentIDs?.push(data?.user.id!);
       setTimeout(() => {
-        queryClient.invalidateQueries({ queryKey: ["infiniteclass"] });
+        queryClient.invalidateQueries({
+          queryKey: ["infiniteclass", "home-class"],
+        });
         enroll();
       }, 5500);
     },
@@ -311,6 +317,8 @@ const FlutterWaveBtn: React.FC<{
 };
 
 const PopularClasses = () => {
+  // creating our useref for watching the button when displayed
+  const { ref, inView } = useInView();
   // function that is called at each step to get the classes based on parameter
   const getItems = async ({ pageParam }: { pageParam: number }) => {
     const response = await fetch(`/api/apply-for-class?page=${pageParam}`);
@@ -334,6 +342,11 @@ const PopularClasses = () => {
       return nextPage;
     },
   });
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView]);
   // checking if it is loading
   if (status === "pending") {
     return (
@@ -357,6 +370,17 @@ const PopularClasses = () => {
               <PopularClassesCard key={index} item={item} />
             ))}
         </div>
+      </div>
+      <div className=" w-full flex items-center justify-center">
+        {hasNextPage && (
+          <div
+            ref={ref}
+            className=" px-4 py-2 rounded-md border bg-white w-fit flex items-center gap-2"
+          >
+            <CircularProgress color="success" />
+            <p className=" text-green-800 font-bold">loading...</p>
+          </div>
+        )}
       </div>
       <ToastContainer />
     </Container>
