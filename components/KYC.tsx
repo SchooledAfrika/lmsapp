@@ -69,7 +69,7 @@ const KYC = () => {
         
       } else {
         setloading(false);
-        return toast.error("error creating class");
+        return toast.error("error uploading kyc");
       }
      
     },
@@ -99,6 +99,14 @@ const KYC = () => {
     } else {
       setcurrentPage((prev) => prev + 1);
     }
+  };
+
+  // function to display submiting
+  const submittingState = (): string => {
+    if (loading === false) {
+      return "Submit";
+    }
+    return "Waiting for approval...";
   };
 
 
@@ -152,7 +160,7 @@ const KYC = () => {
             disabled={loading}
             className="bg-secondary md:w-[450px]  h-[60px] w-[330px] hover:bg-green-800 text-white text-[16px] ml-4  py-7 my-2"
           >
-            {currentPage < 2 ? "Proceed" : "Submit"}
+            {currentPage < 2 ? "Proceed" : submittingState()}
           </Button>
         </form>
       </div>
