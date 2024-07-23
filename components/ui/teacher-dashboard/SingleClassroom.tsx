@@ -16,7 +16,7 @@ interface studentProps {
   studentIds: string[];
 }
 
-const SingleClassroom = ({studentIds}: studentProps) => {
+const SingleClassroom = () => {
   const { id } = useParams();
   console.log(id);
 
@@ -86,17 +86,17 @@ const SingleClassroom = ({studentIds}: studentProps) => {
                   <br />
                   <p className="inline text-[13px] font-semibold">
                     <SiGoogleclassroom className="inline w-[15px] mr-1 h-[15px]" />{" "}
-                    {data.className}
+                    {data?.className}
                   </p>
-                  <p className="mt-3 text-[12.5px]">{data.grade}</p>
+                  <p className="mt-3 text-[12.5px]">{data?.grade}</p>
                 </div>
               </div>
               <div className="flex px-6 flex-col justify-between">
                 <p className="text-[13px] font-semibold">
-                  Duration : {data.duration}{" "}
+                  Duration : {data?.duration}{" "}
                 </p>
                 <p className="text-[13px] my-3 font-semibold">
-                  Date Created : {data.classStarts}
+                  Date Created : {data?.classStarts}
                 </p>
 
                 <Button
@@ -184,8 +184,7 @@ const SingleClassroom = ({studentIds}: studentProps) => {
             </div>
           </div>
 
-          <SingleClassTable dataId={data.id} studentIds={data.studentIDs}  />
-         
+          <SingleClassTable dataId={data.id} studentIds={data.studentIDs} />
         </div>
       )}
     </div>
