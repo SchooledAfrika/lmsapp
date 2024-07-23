@@ -57,6 +57,7 @@
     "react-intersection-observer": "^9.13.0",
     "react-paystack": "^5.0.0",
     "react-toastify": "^10.0.5",
+    "react-webcam": "^7.2.0",
     "recharts": "^2.12.6",
     "scheduler": "^0.23.2",
     "sharp": "^0.33.4",
