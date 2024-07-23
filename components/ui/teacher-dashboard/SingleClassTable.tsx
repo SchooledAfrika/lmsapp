@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueries } from "@tanstack/react-query";
 
 import {
   Table,
@@ -17,14 +17,15 @@ import { useParams } from "next/navigation";
 // import IndividualClass from "./IndividualClass";
 // import SingleClassroom from "./SingleClassroom";
 import { TableSkeleton } from "@/components/TableSkeleton";
+import Image from "next/image";
 
 interface ISingular {
   dataId: string;
+  studentIds: string[];
 }
 
-const SingleClassTable: React.FC<ISingular> = ({ dataId }) => {
+const SingleClassTable: React.FC<ISingular> = ({ studentIds, dataId }) => {
   const { id } = useParams();
-  console.log(id);
 
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["add"],
@@ -34,7 +35,25 @@ const SingleClassTable: React.FC<ISingular> = ({ dataId }) => {
       return result;
     },
   });
-  //   if is loading
+
+  // getting individual student IDs using parallel query with usequeries
+
+  const queries = useQueries({
+    queries: studentIds.map((id: any) => {
+      return {
+        queryKey: ["student", id],
+        queryFn: async () => {
+          const response = await fetch(`/api/class/specific/${dataId}`);
+          const result = await response.json();
+          return result;
+        },
+      };
+    }),
+  });
+
+  console.log(queries);
+
+  //if is loading
   if (isLoading) {
     return (
       <div className=" flex-1">
@@ -43,9 +62,13 @@ const SingleClassTable: React.FC<ISingular> = ({ dataId }) => {
       </div>
     );
   }
-  // if is error
+  //if is error
   if (isError) {
-    return <div className=" flex-1">{error.message}</div>;
+    return (
+      <div className=" flex-1">
+        <p className="my-2 font-semibold">{error.message}</p>
+      </div>
+    );
   }
 
   return (
@@ -57,44 +80,27 @@ const SingleClassTable: React.FC<ISingular> = ({ dataId }) => {
           <TableHead>Name</TableHead>
           <TableHead className="">Start Date</TableHead>
           <TableHead className="">Sessions Attended</TableHead>
-          <TableHead className="text-right">Options</TableHead>
+          {/* <TableHead className="text-right">Options</TableHead> */}
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data && (
-          <TableRow key={data.id} className="">
-            <TableCell className="font-semibold w-[250px] text-[14px] flex  mr-1">
-              {/* <Image
-                  src={Class.icon}
-                  alt="icon"
-                  width={100}
-                  height={100}
-                  className="w-[50px] h-[50px] rounded-md mr-1"
-                />{" "} */}
-              <div className="flex ml-1 flex-col">
-                <div className="text-[13px] font-bold">
-                  {data.className}
-                  {console.log(data.className)}
-                </div>
-                <div className="flex  mt-1 justify-between">
-                  <p className="text-[11px] px-[10px] py-[2px] rounded-md mr-3 bg-lightGreen text-white">
-                    Active
-                  </p>
-                </div>
-              </div>
+        {queries.map((student: any) => (
+          <TableRow key={student.id} className="">
+            <TableCell className="font-bold text-[13px] mr-3">
+              <Image
+                src={student.profilePhoto}
+                alt="icon"
+                width={100}
+                height={100}
+                className="w-[40px] h-[40px] mr-1"
+              />
+              {student.name}
             </TableCell>
-
-            <TableCell className="text-[12px] font-semibold">
-              {data.classStarts}
-              {console.log(data.classStarts)}
+            <TableCell className="text-[12px]  font-semibold">
+              {student.createdAt}
             </TableCell>
-            <TableCell className="text-[12px] font-semibold">
-              {data.maxCapacity}
-              {console.log(data.maxCapacity)}
-            </TableCell>
-           
           </TableRow>
-        )}
+        ))}
       </TableBody>
     </Table>
   );
