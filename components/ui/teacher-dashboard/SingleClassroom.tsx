@@ -12,7 +12,11 @@ import SingleClassTable from "./SingleClassTable";
 import { useParams } from "next/navigation";
 import { TableSkeleton } from "@/components/TableSkeleton";
 
-const SingleClassroom = () => {
+interface studentProps {
+  studentIds: string[];
+}
+
+const SingleClassroom = ({studentIds}: studentProps) => {
   const { id } = useParams();
   console.log(id);
 
@@ -180,7 +184,8 @@ const SingleClassroom = () => {
             </div>
           </div>
 
-          <SingleClassTable dataId={data.id} />
+          <SingleClassTable dataId={data.id} studentIds={data.studentIDs}  />
+         
         </div>
       )}
     </div>
