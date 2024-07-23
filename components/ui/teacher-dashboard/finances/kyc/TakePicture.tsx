@@ -6,24 +6,31 @@ import Image from "next/image";
 import Container from "@/components/Container";
 import Link from "next/link";
 import { IKycSub } from "./DocumentUpload";
+import { FaCheck } from "react-icons/fa";
+import { AiOutlineClose } from "react-icons/ai";
 
-const TakePicture: React.FC<IKycSub> = ({
-  register,
-  errors,
-  control,
-  clearErrors,
-  watch,
-}) => {
+const TakePicture: React.FC<IKycSub> = ({ setValue, errors, clearErrors }) => {
   const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
-  const webcamRef = useRef<Webcam>(null);
-  const [verifiedImg, setVerifiedImg] = useState<string | null>(null);
+  const webcamRef = useRef<Webcam | null>(null);
+  const [verifiedImg, setVerifiedImg] = useState<string | undefined>(undefined);
 
-  const capture = useCallback(() => {
+  const capture = () => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       setVerifiedImg(imageSrc);
     }
-  }, [webcamRef]);
+    setValue("verifiedImg", imageSrc as string);
+    clearErrors("verifiedImg");
+  };
+  // this button handles setting up the camera for webcam
+  const handleSwitchToWebCam = () => {
+    setCaptureEnable(true);
+  };
+
+  const handleCancel = () => {
+    setVerifiedImg(undefined);
+    setValue("verifiedImg", "");
+  };
 
   const videoConstraints = {
     width: 450,
@@ -39,60 +46,54 @@ const TakePicture: React.FC<IKycSub> = ({
         <p className="md:w-[450px] text-[13.5px] py-2">
           We want to be sure it's you. Upload or take a recent picture.
         </p>
-
-        <br />
-        {isCaptureEnable || (
-          <Button
-            className="bg-lightGreen hover:bg-green-600"
-            onClick={() => setCaptureEnable(true)}
-          >
-            Start Capture
-          </Button>
-        )}
-        {isCaptureEnable && (
-          <>
+        <div className=" w-full md:w-[450px]">
+          {isCaptureEnable ? (
             <div>
-              <Button
-                className="bg-red-500 hover:bg-red-400 my-1"
-                onClick={() => setCaptureEnable(false)}
-              >
-                End Capture
-              </Button>
+              {verifiedImg ? (
+                <div className=" w-full h-[300px] relative">
+                  <Image
+                    src={verifiedImg}
+                    alt=""
+                    width={200}
+                    height={200}
+                    className=" w-full h-full object-cover"
+                  />
+                  <div
+                    onClick={handleCancel}
+                    className=" cursor-pointer transition-all ease-in-out duration-700 hover:bg-red-600 w-[50px] aspect-square transform -translate-x-1/2 rounded-full bg-red-700 absolute bottom-2 left-1/2 flex items-center justify-center "
+                  >
+                    <AiOutlineClose className=" text-white text-[25px]" />
+                  </div>
+                </div>
+              ) : (
+                <div className=" w-full relative ">
+                  <Webcam
+                    className=" w-full h-full"
+                    audio={false}
+                    ref={webcamRef}
+                    screenshotFormat="image/jpeg"
+                    videoConstraints={videoConstraints}
+                  />
+                  <div
+                    onClick={capture}
+                    className=" cursor-pointer transition-all ease-in-out duration-700 hover:bg-green-600 w-[50px] aspect-square transform -translate-x-1/2 rounded-full bg-green-700 absolute bottom-2 left-1/2 flex items-center justify-center "
+                  >
+                    <FaCheck className=" text-white text-[25px]" />
+                  </div>
+                </div>
+              )}
             </div>
-            <Webcam
-           
-              ref={webcamRef}
-              audio={false}
-              screenshotFormat="image/jpeg"
-              videoConstraints={videoConstraints}
-            />
-            <div className="flex space-x-2 justify-center max-w-[450px] mt-2 font-bold text-white">
-              <Button
-                className="bg-lightGreen text-[13px] rounded-md py-2 px-6"
-                onClick={capture}
-              >
-                Capture
-              </Button>
-              <Button
-                className="bg-red-500 text-[13px] rounded-md py-2 px-6"
-                onClick={() => setVerifiedImg(null)}
-              >
-                Refresh
-              </Button>
-            </div>
-          </>
-        )}
-
-        {verifiedImg && (
-          <div>
-            <Image
-              src={verifiedImg}
-              alt="Screenshot"
-              width={450}
-              height={250}
-              className="my-3 shadow-xl"
-            />
-          </div>
+          ) : (
+            <button
+              onClick={handleSwitchToWebCam}
+              className=" px-4 py-2 bg-green-700 text-white rounded-md"
+            >
+              Take a pix
+            </button>
+          )}
+        </div>
+        {errors.verifiedImg && (
+          <small className=" text-red-600">{errors.verifiedImg.message}</small>
         )}
       </Container>
     </section>
