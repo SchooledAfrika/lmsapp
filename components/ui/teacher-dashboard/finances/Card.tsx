@@ -9,6 +9,7 @@ import { WithdrawDialog } from "./WithdrawDialog";
 import { NotVerified } from "./NotVerified";
 import TransactionTable from "@/components/TransactionTable";
 import { MdOutlineContactSupport } from "react-icons/md";
+import KycCard from "./KycCard";
 
 const Card = () => {
   const { verified, setVerified } = useContext(CommonDashboardContext);
@@ -20,39 +21,7 @@ const Card = () => {
         <div className="flex  flex-6 flex-col">
           <div className="flex  gap-6">
             {/* First card */}
-            <div className="flex flex-2   text-sm pl-4  pr-3 py-3  justify-between space-x-2  bg-white rounded-md">
-              <div className="flex flex-col  justify-evenly">
-                <h3 className="font-semibold text-slate-500 text-[13px] pb-3">
-                  Account Balance
-                </h3>
-
-                <p className="font-bold text-[22px] text-lightGreen pb-2 ">
-                  $1,090.65
-                </p>
-                <p className="inline text-[11.5px] mt-2 font-subtext font-medium">
-                  <span className="text-red-500 ">15%</span> less than last
-                  month
-                </p>
-                {verified ? (
-                  <p className="inline text-[13px] my-3   font-semibold">
-                    {" "}
-                    Complete Your
-                    <Link
-                      href={`/teacher-dashboard/finance/kyc`}
-                      className="text-lightGreen underline font-bold "
-                    >
-                      {" "}
-                      KYC
-                    </Link>
-                  </p>
-                ) : (
-                  <p className="inline text-[13px] my-3 text-lightGreen  font-semibold">
-                    {" "}
-                    Verified
-                  </p>
-                )}
-              </div>
-            </div>
+            <KycCard />
             {/* second card */}
             <div className="flex flex-3  text-sm  py-3 px-4  justify-between space-x-2  bg-white rounded-md">
               <div className="flex flex-col  justify-evenly">
@@ -61,8 +30,8 @@ const Card = () => {
                 </h3>
 
                 <p className=" text-[11.5px] my-3 font-medium">
-                Your earnings will be sent to the account details provided. Please,confirm your account details
-                before proceeding.
+                  Your earnings will be sent to the account details provided.
+                  Please,confirm your account details before proceeding.
                 </p>
 
                 {!verified ? <WithdrawDialog /> : <NotVerified />}
@@ -84,7 +53,6 @@ const Card = () => {
               </Button>
             </div>
 
-           
             <p className=" font-bold">Payment Information</p>
             <div className="font-semibold  text-[13px] flex  mr-1">
               <Image
@@ -97,7 +65,9 @@ const Card = () => {
               <div className="flex ml-1 flex-col">
                 <div className="text-[12px]">Rotimi Amaechi</div>
                 <div className="flex  mt-1 justify-between">
-                  <p className="text-[10px] px-[10px] py-[2px] rounded-md mr-3 bg-lightGreen text-white">Student</p>
+                  <p className="text-[10px] px-[10px] py-[2px] rounded-md mr-3 bg-lightGreen text-white">
+                    Student
+                  </p>
                 </div>
               </div>
             </div>
@@ -136,12 +106,21 @@ const Card = () => {
             <hr className="my-1" />
 
             <div className="space-y-2 font-header">
-                <h3 className="font-bold">Need Help ?</h3>
-                <p className="text-[13px]">Send us a message, we are one click away!</p>
-                <Button asChild variant="outline"  className="border font-bold border-lightGreen text-lightGreen hover:text-lightGreen"> 
-                    <Link href="/"> <MdOutlineContactSupport className="mr-2 text-[18px]"/> Contact Support</Link>
-                </Button>
-                
+              <h3 className="font-bold">Need Help ?</h3>
+              <p className="text-[13px]">
+                Send us a message, we are one click away!
+              </p>
+              <Button
+                asChild
+                variant="outline"
+                className="border font-bold border-lightGreen text-lightGreen hover:text-lightGreen"
+              >
+                <Link href="/">
+                  {" "}
+                  <MdOutlineContactSupport className="mr-2 text-[18px]" />{" "}
+                  Contact Support
+                </Link>
+              </Button>
             </div>
           </div>
         </div>

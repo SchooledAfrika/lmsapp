@@ -13,11 +13,8 @@ export const KycInfo: IprogressType[] = [
     name: "Document Upload",
     field: ["docType", "docImg"] as const,
   },
-  { name: "Take Picture", field: ["verifiedImg"] as const, },
- 
+  { name: "Take Picture", field: ["verifiedImg"] as const },
 ];
-
-
 
 // the zod types for completing profile information
 //
@@ -33,31 +30,22 @@ const ACCEPTED_IMAGE_TYPES = [
 // below is the zod schema for booking of session with teachers
 //
 export const kycSchema = z.object({
-  docType: z.string().min(3, { message: "field is required" }),
+  docType: z
+    .string({ message: "select your document type" })
+    .min(3, { message: "select your document type" }),
   docImg: z
-  .any()
-  // To not allow empty files
-  .refine((files) => files?.length >= 1, { message: "Image is required." })
-  // To not allow files other than images
-  .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-    message: ".jpg, .jpeg, .png and .webp files are accepted.",
-  })
-  // To not allow files larger than 5MB
-  .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-    message: `Max file size is 5MB.`,
-  }),
+    .any()
+    // To not allow empty files
+    .refine((files) => files?.length >= 1, { message: "Image is required." })
+    // To not allow files other than images
+    .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
+      message: ".jpg, .jpeg, .png and .webp files are accepted.",
+    })
+    // To not allow files larger than 5MB
+    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+      message: `Max file size is 5MB.`,
+    }),
   verifiedImg: z
-  .any()
-  // To not allow empty files
-  .refine((files) => files?.length >= 1, { message: "Image is required." })
-  // To not allow files other than images
-  .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-    message: ".jpg, .jpeg, .png and .webp files are accepted.",
-  })
-  // To not allow files larger than 5MB
-  .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-    message: `Max file size is 5MB.`,
-  }),
-  
+    .string({ message: "please take a picture" })
+    .min(10, { message: "please take a picture" }),
 });
-

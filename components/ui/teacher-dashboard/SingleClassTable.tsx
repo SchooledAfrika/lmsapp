@@ -25,25 +25,17 @@ interface ISingular {
 }
 
 const SingleClassTable: React.FC<ISingular> = ({ studentIds, dataId }) => {
-  const { id } = useParams();
-
-  const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["add"],
-    queryFn: async () => {
-      const response = await fetch(`/api/class/specific/${id}`);
-      const result = await response.json();
-      return result;
-    },
-  });
+  console.log(studentIds);
 
   // getting individual student IDs using parallel query with usequeries
 
   const queries = useQueries({
-    queries: studentIds.map((id: any) => {
+    queries: studentIds?.map((id: any) => {
+      console.log(id);
       return {
         queryKey: ["student", id],
         queryFn: async () => {
-          const response = await fetch(`/api/class/specific/${dataId}`);
+          const response = await fetch(`/api/about-student/${id}`);
           const result = await response.json();
           return result;
         },
@@ -51,25 +43,7 @@ const SingleClassTable: React.FC<ISingular> = ({ studentIds, dataId }) => {
     }),
   });
 
-  console.log(queries);
-
-  //if is loading
-  if (isLoading) {
-    return (
-      <div className=" flex-1">
-        <p className="my-2 font-semibold">loading...</p>
-        <TableSkeleton />
-      </div>
-    );
-  }
-  //if is error
-  if (isError) {
-    return (
-      <div className=" flex-1">
-        <p className="my-2 font-semibold">{error.message}</p>
-      </div>
-    );
-  }
+  const arrayOfStudent = queries.map((item) => item.data);
 
   return (
     <Table className="bg-white overflow-x-auto    rounded-md my-6">
@@ -84,20 +58,20 @@ const SingleClassTable: React.FC<ISingular> = ({ studentIds, dataId }) => {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {queries.map((student: any) => (
-          <TableRow key={student.id} className="">
+        {arrayOfStudent.map((student: any, index) => (
+          <TableRow key={index} className="">
             <TableCell className="font-bold text-[13px] mr-3">
               <Image
-                src={student.profilePhoto}
+                src={student?.profilePhoto}
                 alt="icon"
                 width={100}
                 height={100}
                 className="w-[40px] h-[40px] mr-1"
               />
-              {student.name}
+              {student?.name}
             </TableCell>
             <TableCell className="text-[12px]  font-semibold">
-              {student.createdAt}
+              {student?.createdAt}
             </TableCell>
           </TableRow>
         ))}
