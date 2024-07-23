@@ -336,7 +336,7 @@ model VacancyTeacher {
   @@index([teacherId, vacancyId], name: "vacancy_teacher")
 }
 
-// this is the model that creates a connection getween teachers and school they are working with
+// this is the model that creates a connection between teachers and school they are working with
 // this can help us to be able to use pending, active and rejected status
 model SchoolTeacher {
   id        String         @id @default(auto()) @map("_id") @db.ObjectId
@@ -368,20 +368,28 @@ model SchoolStudent {
 
 // this is the model for school classes
 model SchoolClass {
-  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
-  classDesc          String
-  grade              Grade[]
-  name               String
-  subject            Subjects[]
-  schoolName         String
-  school             School               @relation(fields: [schoolId], references: [id])
-  schoolId           String               @db.ObjectId
-  SchoolClassTeacher SchoolClassTeacher[]
-  SchoolClassStudent SchoolClassStudent[]
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @default(now())
+  id                        String                      @id @default(auto()) @map("_id") @db.ObjectId
+  grade                     Grade
+  name                      String
+  subject                   Subjects
+  time                      String
+  school                    School                      @relation(fields: [schoolId], references: [id])
+  schoolId                  String                      @db.ObjectId
+  SchoolClassTeacher        SchoolClassTeacher[]
+  SchoolClassStudent        SchoolClassStudent[]
+  createdAt                 DateTime                    @default(now())
+  updatedAt                 DateTime                    @default(now())
+  AnnouncementBySchoolClass AnnouncementBySchoolClass[]
 
   @@index([schoolId], name: "school_class")
+}
+
+model AnnouncementBySchoolClass {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  desc          String
+  schoolClass   SchoolClass @relation(fields: [schoolClassId], references: [id])
+  schoolClassId String      @db.ObjectId
 }
 
 // creating a model for school class teachers
@@ -497,6 +505,13 @@ enum Grade {
   Grade3
   Grade4
   Grade5
+  Grade6
+  Grade7
+  Grade8
+  Grade9
+  Grade10
+  Grade11
+  Grade12
 }
 
 // enum for contract status

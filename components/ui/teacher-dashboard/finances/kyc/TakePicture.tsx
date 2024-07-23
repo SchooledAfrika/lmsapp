@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+import React, { useState, useRef, useCallback } from "react";
+import Webcam from "react-webcam";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Container from "@/components/Container";
@@ -13,6 +14,22 @@ const TakePicture: React.FC<IKycSub> = ({
   clearErrors,
   watch,
 }) => {
+  const [isCaptureEnable, setCaptureEnable] = useState<boolean>(false);
+  const webcamRef = useRef<Webcam>(null);
+  const [verifiedImg, setVerifiedImg] = useState<string | null>(null);
+
+  const capture = useCallback(() => {
+    const imageSrc = webcamRef.current?.getScreenshot();
+    if (imageSrc) {
+      setVerifiedImg(imageSrc);
+    }
+  }, [webcamRef]);
+
+  const videoConstraints = {
+    width: 450,
+    height: 250,
+    facingMode: "user",
+  };
   return (
     <section className="py-[1rem] font-header md:pt-[3rem]">
       <Container>
@@ -20,26 +37,63 @@ const TakePicture: React.FC<IKycSub> = ({
           Complete Your KYC Verification
         </h3>
         <p className="md:w-[450px] text-[13.5px] py-2">
-       
-        We want to be sure it's you.
-        Upload or take a recent picture.
+          We want to be sure it's you. Upload or take a recent picture.
         </p>
 
         <br />
-
-        <div className=" w-full rounded-md  font-header  bg-transparent flex items-center text-black justify-between px-2 ">
-          <div className=" w-[150px] bg-dimWhite cursor-pointer mr-3 text-[13px] aspect-square rounded-full flex items-center  justify-center">
-            <div className="w-[100px] h-[100px] bg-dimWhite rounded-full pt-6 text-center">
-              Image
+        {isCaptureEnable || (
+          <Button
+            className="bg-lightGreen hover:bg-green-600"
+            onClick={() => setCaptureEnable(true)}
+          >
+            Start Capture
+          </Button>
+        )}
+        {isCaptureEnable && (
+          <>
+            <div>
+              <Button
+                className="bg-red-500 hover:bg-red-400 my-1"
+                onClick={() => setCaptureEnable(false)}
+              >
+                End Capture
+              </Button>
             </div>
+            <Webcam
+           
+              ref={webcamRef}
+              audio={false}
+              screenshotFormat="image/jpeg"
+              videoConstraints={videoConstraints}
+            />
+            <div className="flex space-x-2 justify-center max-w-[450px] mt-2 font-bold text-white">
+              <Button
+                className="bg-lightGreen text-[13px] rounded-md py-2 px-6"
+                onClick={capture}
+              >
+                Capture
+              </Button>
+              <Button
+                className="bg-red-500 text-[13px] rounded-md py-2 px-6"
+                onClick={() => setVerifiedImg(null)}
+              >
+                Refresh
+              </Button>
+            </div>
+          </>
+        )}
+
+        {verifiedImg && (
+          <div>
+            <Image
+              src={verifiedImg}
+              alt="Screenshot"
+              width={450}
+              height={250}
+              className="my-3 shadow-xl"
+            />
           </div>
-          <input
-            type="file"
-            name="verifiedImg"
-            placeholder="Upload Document"
-            className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
-          />
-        </div>
+        )}
       </Container>
     </section>
   );

@@ -56,14 +56,15 @@ const Login: React.FC = () => {
             />
           </Link>
           <span className="font-bold text-[22px]">
-            Welcome to Schooled Afrika !
+            Welcome to SchooledAfrika !
           </span>
           <p className="text-gray-500 py-6 text-[14px]">
-            Welcome to our Lorem ipsum dolor sit amet, consectetuer adipiscing
-            elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-            natoque penatibus et magnis dis parturient montes, nascetur
-            ridiculus mus...Lorem ipsum dolor sit amet, consectetuer adipiscing
-            elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis...
+          SchooledAfrika is a dynamic and innovative educational platform dedicated to nurturing young
+          minds and fostering a love for learning.<br/>
+          Our mission is to provide children with engaging and interactive learning experiences that
+          inspire creativity, critical thinking, and curiosity. Through our carefully curated curriculum and
+          hands-on approach, we aim to empower children to reach their full potential and thrive
+          academically, socially, and emotionally.
           </p>
           <span className="text-gray-500 text-[12px]">
             New User?

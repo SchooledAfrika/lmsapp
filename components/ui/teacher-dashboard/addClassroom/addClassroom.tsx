@@ -111,6 +111,7 @@ const AddClassroom = () => {
     // checking if the scheduled day is already in the array
     // if there is remove, else add it
     let arrayInstance = [...schedules];
+    console.log(schedules)
     const checkSchedule = arrayInstance.find((value) => value === item);
     if (checkSchedule) {
       const removedSchedule = arrayInstance.filter((value) => value !== item);
@@ -376,6 +377,7 @@ const AddClassroom = () => {
                 <label className="font-bold text-[16px]">Class Schedule</label>
                 <div className="grid grid-cols-3 gap-2 w-3/4 border p-3 ">
                   {Schedules.map((schedule, index) => (
+                    
                     <div
                       onClick={() => handleSchedule(schedule)}
                       key={index}
