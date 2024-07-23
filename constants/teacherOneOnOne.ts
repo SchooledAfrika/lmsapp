@@ -8,48 +8,58 @@ export interface oneOnOneSection {
 }
 
 export const Preferences = [
-  "HomeWork Support",
-  "1 on 1 Sessions",
-  "Open to Jobs",
-  "Group Sessions",
+  "Homework Support",
+  "OneOnOne Section",
+  "Open To Jobs",
+  "Group Work",
+];
+
+export const Subject = [
+  "CHEMISTRY",
+  "PHYSICS",
+  "BIOLOGY",
+  "GOVERNMENT",
+  "ENGLISH",
+  "LITERATURE",
+  "CRS",
+  "MATHEMATICS",
 ];
 
 export const TeacherOneOnOneSection: oneOnOneSection[] = [
-  { name: "Profile Data", field: ["teacherImg", "aboutTeacher"] },
+  { name: "Profile Data", field: ["aboutTutor"] },
   {
     name: "Subject and Preferences",
-    field: ["subject", "grade", "preferences"],
+    field: ["subjects", "grade", "preference"],
   },
   {
     name: "Pricing Details",
-    field: ["pricing"],
+    field: ["minPrice", "maxPrice"],
   },
 ];
 
-const MAX_FILE_SIZE = 5000000;
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
+// const MAX_FILE_SIZE = 5000000;
+// const ACCEPTED_IMAGE_TYPES = [
+//   "image/jpeg",
+//   "image/jpg",
+//   "image/png",
+//   "image/webp",
+// ];
 
 export const oneOnOneSectionSchema = z.object({
-  teacherImg: z
-    .any()
-    // To not allow empty files
-    .refine((files) => files?.length >= 1, { message: "Image is required." })
-    // To not allow files other than images
-    .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
-      message: ".jpg, .jpeg, .png and .webp files are accepted.",
-    })
-    // To not allow files larger than 5MB
-    .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
-      message: `Max file size is 5MB.`,
-    }),
-  aboutTeacher: z.string().min(3, { message: "please enter your bio" }),
-  // language: z.string({ message: "please enter language" }),
-  subject: z.string({ message: "please enter subject" }),
+  // teacherImg: z
+  //   .any()
+  //   // To not allow empty files
+  //   .refine((files) => files?.length >= 1, { message: "Image is required." })
+  //   // To not allow files other than images
+  //   .refine((files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type), {
+  //     message: ".jpg, .jpeg, .png and .webp files are accepted.",
+  //   })
+  //   // To not allow files larger than 5MB
+  //   .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
+  //     message: `Max file size is 5MB.`,
+  //   }),
+  aboutTutor: z.string().min(3, { message: "please enter your bio" }),
+  subjects: z.array(z.string(), { message: "please enter subject" }),
   grade: z.enum(
     [
       "Grade1",
@@ -66,9 +76,12 @@ export const oneOnOneSectionSchema = z.object({
       "Grade12",
     ],
     {
-      message: "you can only enter Grade1 format",
+      message: "please enter grade",
     }
   ),
-  preferences: z.array(z.string(), { message: "please enter preferences" }),
-  pricing: z.number({ message: "please enter price" }),
+  preference: z.array(z.string(), { message: "please enter preferences" }),
+  minPrice: z.number({ message: "please enter minimum price" }),
+  maxPrice: z.number({ message: "please enter maximum price" }),
+  duration: z.string().min(3, { message: "please enter duration" }),
+  startTime: z.string().min(3, { message: "please enter your start time" }),
 });

@@ -14,12 +14,17 @@ import {
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useCloudinary } from "@/data-access/cloudinary";
 
 export type IteacherOneOnOne = z.infer<typeof oneOnOneSectionSchema>;
 
 export const TeacherOneOnOne: React.FC = () => {
-  // const [loading, setloading] = useState<boolean>(false);
+  const [loading, setloading] = useState<boolean>(false);
   const [currentPage, setcurrentPage] = useState<number>(1);
+  const { imageUpload } = useCloudinary();
 
   const {
     register,
@@ -27,10 +32,40 @@ export const TeacherOneOnOne: React.FC = () => {
     trigger,
     control,
     watch,
+    reset,
     clearErrors,
     formState: { errors },
   } = useForm<IteacherOneOnOne>({
     resolver: zodResolver(oneOnOneSectionSchema),
+  });
+
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ["teacher"],
+    mutationFn: async (data: IteacherOneOnOne) => {
+      console.log("Please work na", data);
+      const result = await fetch("/api/one-on-one-section", {
+        method: "POST",
+        body: JSON.stringify({
+          ...data,
+          minPrice: Number(data.minPrice),
+          maxPrice: Number(data.maxPrice),
+        }),
+      });
+      return result;
+    },
+    onSuccess: async (result) => {
+      queryClient.invalidateQueries({ queryKey: ["teacherProfile"] });
+      if (result.ok) {
+        const body = await result.json();
+        setloading(false);
+        reset();
+        return toast.success("Session profile edited successfully");
+      } else {
+        setloading(false);
+        return toast.error("Error editing session profile");
+      }
+    },
   });
 
   // const submittingState = (): string => {
@@ -40,7 +75,14 @@ export const TeacherOneOnOne: React.FC = () => {
   //   return "Editing profile...";
   // };
 
-  const runSubmit: SubmitHandler<IteacherOneOnOne> = async () => {};
+  const runSubmit: SubmitHandler<IteacherOneOnOne> = async (data) => {
+    setloading(true);
+
+    // const teacherProfileBlob = new Blob([data.teacherImg[0]]);
+    // const teacherProfileUrl = await imageUpload(teacherProfileBlob);
+    // data.teacherImg = teacherProfileUrl;
+    // mutation.mutate(data);
+  };
 
   type fieldName = keyof IteacherOneOnOne;
   const handleNextPage = async () => {
@@ -71,7 +113,7 @@ export const TeacherOneOnOne: React.FC = () => {
           currentPage={currentPage}
           setcurrentPage={setcurrentPage}
         />
-        <form>
+        <form onSubmit={handleSubmit(runSubmit)}>
           {currentPage === 1 ? (
             <TeacherProfileData
               errors={errors}
@@ -97,12 +139,13 @@ export const TeacherOneOnOne: React.FC = () => {
               clearErrors={clearErrors}
             />
           )}
-          <div className="flex justify-center w-full">
+          <div>
             <Button
               onClick={handleNextPage}
               type="button"
-              // disabled={loading}
-              className="bg-secondary w-[93%] text-white text-[16px] py-7 my-3"
+              className={`bg-secondary text-white text-[16px] py-7 my-3 ${
+                currentPage < 3 ? "w-full" : "w-1/2"
+              }`}
             >
               {currentPage < 3 ? "Proceed" : "Submit"}
             </Button>

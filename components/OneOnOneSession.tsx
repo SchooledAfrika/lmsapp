@@ -20,7 +20,7 @@ const OneOnOne = () => {
                 className="mr-2"
                 alt="Create Session Profile"
               />
-              Edit Session Profile
+              Create Session Profile
             </Button>
           </Link>
         </div>
