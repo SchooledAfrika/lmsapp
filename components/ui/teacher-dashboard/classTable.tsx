@@ -73,7 +73,7 @@ const ClassTable = () => {
                 {item.grade}
               </TableCell>
               <TableCell className="text-[13px] font-semibold p-2">
-                {item.maxCapacity}
+                {item.studentIds ? item.studentIds.length : 0}
               </TableCell>
               <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
                 <IndividualClass dataId={item.id} />
