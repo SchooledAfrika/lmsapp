@@ -1,5 +1,8 @@
-import Image from "next/image";
+
+"use client";
 import React from "react";
+import { useQuery, useQueries } from "@tanstack/react-query";
+import Image from "next/image";
 import { FiEdit } from "react-icons/fi";
 import { SiGoogleclassroom } from "react-icons/si";
 import { Button } from "@/components/ui/button";
@@ -9,13 +12,66 @@ import StudentDetails from "./StudentDetails";
 import { CiMail } from "react-icons/ci";
 import { MdOutlineMail } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
+import { useParams } from "next/navigation";
 
-const SingleStudent = () => {
+interface ISingularStudentProps {
+  classIds: string[];
+}
+
+const SingleStudent = ({classIds}:ISingularStudentProps) => {
+  const { id } = useParams();
+  console.log(id);
+
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["add"],
+    queryFn: async () => {
+      const response = await fetch(`/api/about-student/${id}`);
+      const result = await response.json();
+      return result;
+    },
+  });
+  console.log(data)
+
+  // getting individual student IDs using parallel query with usequeries
+
+  // const queries = useQueries({
+  //   queries: classIds?.map((id: any) => {
+  //     console.log(id);
+  //     return {
+  //       queryKey: ["class", id],
+  //       queryFn: async () => {
+  //         const response = await fetch(`/api/about-student/${id}`);
+  //         const result = await response.json();
+  //         return result;
+  //       },
+  //     };
+  //   }),
+  // });
+  //   if is loading
+  if (isLoading) {
+    return (
+      <div className="">
+        <p className="my-4 font-bold">loading...</p>
+
+        {/* <TableSkeleton /> */}
+      </div>
+    );
+  }
+  // if is error
+  if (isError) {
+    return <div className=" flex-1">{error.message}</div>;
+  }
+
+  //const arrayOfClass = queries.map((item) => item.data);
   return (
-    <div className="font-header md:mt-12 mt-24">
+    <div>
+
+   
+    {data && (
+    <div key={data.id} className="font-header md:mt-12 mt-24">
       <div className="flex justify-between">
         <p className="font-bold text-lg">Details</p>
-        <Link href="/teacher-dashboard/students" className="cursor-pointer">
+        <Link href={`/teacher-dashboard/classroom/individual-session/${id}`} className="cursor-pointer">
           <Image
             src="/closeAlt.svg"
             alt="cancel"
@@ -30,16 +86,16 @@ const SingleStudent = () => {
         <div className=" flex flex-col space-y-8">
           <div className=" bg-white flex pl-3 pr-4 py-6 rounded-md  space-x-3 pb-2">
             <Image
-              src="/tutors.jpg"
-              alt=""
+              src={data.profilePhoto}
+              alt="profilePhoto"
               width={100}
               height={100}
               className="rounded-md w-[100px] h-[100px]"
             />
 
             <div className=" ">
-              <p className=" text-[13px] font-bold">Alex Iwobi Samuel</p>
-              <p className="my-3 text-[11.5px] font-semibold">Grade 11</p>
+              <p className=" text-[13px] font-bold">{data.name}</p>
+              <p className="my-3 text-[11.5px] font-semibold">{data.grade}</p>
 
               <Link
                 href="/"
@@ -198,6 +254,9 @@ const SingleStudent = () => {
       </div>
       <StudentDetails />
     </div>
+     )}
+     </div>
+     
   );
 };
 

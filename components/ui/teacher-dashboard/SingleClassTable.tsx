@@ -13,11 +13,9 @@ import {
 } from "@/components/ui/table";
 
 import { useParams } from "next/navigation";
-// import Image from "next/image";
-// import IndividualClass from "./IndividualClass";
-// import SingleClassroom from "./SingleClassroom";
 import { TableSkeleton } from "@/components/TableSkeleton";
 import Image from "next/image";
+import IndividualStudent from "./individualStudent";
 
 interface ISingular {
   dataId: string;
@@ -52,27 +50,32 @@ const SingleClassTable: React.FC<ISingular> = ({ studentIds, dataId }) => {
 
         <TableRow className="text-[13px]">
           <TableHead>Name</TableHead>
-          <TableHead className="">Start Date</TableHead>
-          <TableHead className="">Sessions Attended</TableHead>
+          <TableHead className="text-[12px]">Start Date</TableHead>
+          {/* <TableHead className="text-[12px]">Sessions Attended</TableHead> */}
+          <TableHead className="text-right text-[12px]">Options</TableHead>
           {/* <TableHead className="text-right">Options</TableHead> */}
         </TableRow>
       </TableHeader>
       <TableBody>
         {arrayOfStudent.map((student: any, index) => (
           <TableRow key={index} className="">
-            <TableCell className="font-bold text-[13px] mr-3">
+            <TableCell className="font-bold flex text-[13px] mr-3">
               <Image
                 src={student?.profilePhoto}
                 alt="icon"
                 width={100}
                 height={100}
-                className="w-[40px] h-[40px] mr-1"
+                className="w-[40px] h-[40px] mr-1 rounded-md"
               />
-              {student?.name}
+              <p className="ml-1 flex items-center"> {student?.name}</p>
+             
             </TableCell>
             <TableCell className="text-[12px]  font-semibold">
               {student?.createdAt}
             </TableCell>
+            <TableCell className="float-right text-[16px]  text-lightGreen cursor-pointer">
+                <IndividualStudent dataId={student?.id} />
+              </TableCell>
           </TableRow>
         ))}
       </TableBody>

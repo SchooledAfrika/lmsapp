@@ -12,13 +12,17 @@ import { Input } from "@/components/ui/input";
 import { RiErrorWarningFill } from "react-icons/ri";
 import Image from "next/image";
 import Link from "next/link";
-export function AssignDialog() {
+
+interface schoolSubjectProps {
+  subject: string;
+}
+export const AssignDialog = ({subject}:schoolSubjectProps) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="border font-bold px-6 text-[13px] rounded-lg border-lightGreen hover:text-lightGreen"
+          className="border font-bold px-3 text-[12px] rounded-lg border-lightGreen hover:text-lightGreen"
         >
           Assign
         </Button>
@@ -34,7 +38,8 @@ export function AssignDialog() {
             <Input
               id="name"
               type="text"
-              placeholder="Mathematics class"
+             
+              value={subject}
               className="col-span-6 font-semibold w-full"
             />
           </div>

@@ -48,7 +48,7 @@ const RemoveClass: React.FC<Idelete> = ({ dataId }) => {
         return toast.success("Class Successfully Deleted");
       } else {
         setloading(false);
-        return toast.error("error creating class");
+        return toast.error("error deleting class");
       }
       
      

@@ -1,6 +1,7 @@
+import AddTeacher from "@/components/AddTeacher";
 import Teachers from "@/components/Teachers";
 import React from "react";
-import AddTeacher from "@/components/AddTeacher";
+
 
 const page = () => {
   return (
