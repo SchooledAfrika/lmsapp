@@ -24,14 +24,12 @@ interface ISingular {
   studentIds: string[];
 }
 
-const SingleClassTable: React.FC<ISingular> = ({ studentIds, dataId }) => {
-  console.log(studentIds);
-
+const SingleClassTable: React.FC<ISingular> = ({ studentIds }) => {
+  // Ensure studentIds is defined and is an array
+  const validStudentIds = Array.isArray(studentIds) ? studentIds : [];
   // getting individual student IDs using parallel query with usequeries
-
   const queries = useQueries({
-    queries: studentIds?.map((id: any) => {
-      console.log(id);
+    queries: validStudentIds.map((id: any) => {
       return {
         queryKey: ["student", id],
         queryFn: async () => {
@@ -42,6 +40,12 @@ const SingleClassTable: React.FC<ISingular> = ({ studentIds, dataId }) => {
       };
     }),
   });
+
+  // check if there is still any student we are fetching
+  const checkFetching = queries.some((item) => item.isLoading);
+  if (checkFetching) {
+    return <div>loading...</div>;
+  }
 
   const arrayOfStudent = queries.map((item) => item.data);
 

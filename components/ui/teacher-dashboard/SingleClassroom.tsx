@@ -18,7 +18,6 @@ interface studentProps {
 
 const SingleClassroom = () => {
   const { id } = useParams();
-  console.log(id);
 
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["add"],
@@ -28,6 +27,7 @@ const SingleClassroom = () => {
       return result;
     },
   });
+
   //   if is loading
   if (isLoading) {
     return (
@@ -184,7 +184,7 @@ const SingleClassroom = () => {
             </div>
           </div>
 
-          <SingleClassTable dataId={data.id} studentIds={data.studentIDs} />
+          <SingleClassTable dataId={data?.id} studentIds={data?.studentIDs} />
         </div>
       )}
     </div>
