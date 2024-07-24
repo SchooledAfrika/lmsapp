@@ -25,13 +25,11 @@ interface ISingular {
 }
 
 const SingleClassTable: React.FC<ISingular> = ({ studentIds }) => {
-  // first check if the studentIds exist and they are an array
-  if (!studentIds || !Array.isArray(studentIds)) {
-    return <p>you have not student</p>;
-  }
+  // Ensure studentIds is defined and is an array
+  const validStudentIds = Array.isArray(studentIds) ? studentIds : [];
   // getting individual student IDs using parallel query with usequeries
   const queries = useQueries({
-    queries: studentIds.map((id: any) => {
+    queries: validStudentIds.map((id: any) => {
       return {
         queryKey: ["student", id],
         queryFn: async () => {
