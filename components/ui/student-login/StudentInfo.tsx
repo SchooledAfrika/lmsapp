@@ -17,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ImCross } from "react-icons/im";
 import PreviewItem from "../PreviewItem";
 export interface IStudentSub {
   register: UseFormRegister<Istudent>;
