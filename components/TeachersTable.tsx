@@ -13,8 +13,9 @@ import {
 
 import Image from "next/image";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
-import { TeacherOptions } from "./TeacherOptions";
+
 import { TableSkeleton } from "@/components/TableSkeleton";
+import TeacherOptions from "./TeacherOptions";
 
 
 const TeachersType = [
@@ -89,7 +90,7 @@ const TeachersTable = () => {
       {Array.isArray(data) &&
           data.map((Teacher: any) => (
           <TableRow key={Teacher.id} className="">
-            <TableCell className="font-bold text-[13px] mt-6 md:mt-0 w-[200px]  flex  mr-1">
+            <TableCell className="font-bold text-[13px] mt-2 md:mt-0 w-[200px]  flex  mr-1">
               {/* <Image
                 src={Teacher.icon}
                 alt="icon"
@@ -99,6 +100,18 @@ const TeachersTable = () => {
               />{" "} */}
               <div className="flex ml-1 flex-col">
                 <div>{Teacher.name}</div>
+                <div className="flex  mt-2 justify-between">
+                    <p
+                      className={`${
+                        Teacher.active
+                          ? "text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-lightGreen text-white"
+                          : "text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-gold text-white"
+                      }`}
+                    >
+                      {Teacher.status}
+                    </p>
+                   
+                  </div>
                 
                  
                   
@@ -122,7 +135,7 @@ const TeachersTable = () => {
             <TableCell className="text-[12px]  font-medium">{Teacher.Grade}</TableCell>
             <TableCell className="text-[12px]  font-medium">{Teacher.Added}</TableCell>
             <TableCell className="float-right  text-[16px]   text-lightGreen cursor-pointer">
-             <TeacherOptions/>
+            <TeacherOptions offerId={Teacher.id}/>
             </TableCell>
           </TableRow>
         ))}

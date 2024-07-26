@@ -18,11 +18,9 @@ import { TableSkeleton } from "@/components/TableSkeleton";
 import { AssignDialog } from "./AssignDialog";
 import OptionsDialog from "./OptionsDialog";
 
-interface schoolTableProps {
-  subject: string;
-}
 
-const Tables: React.FC<schoolTableProps> = ({subject}) => {
+
+const Tables = () => {
 
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["addSchool"],
@@ -32,6 +30,7 @@ const Tables: React.FC<schoolTableProps> = ({subject}) => {
       return result;
     },
   });
+  console.log(data)
   //   if is loading
   if (isLoading) {
     return (
@@ -63,14 +62,14 @@ const Tables: React.FC<schoolTableProps> = ({subject}) => {
       {Array.isArray(data) &&
           data.map((item: any) => (
           <TableRow key={item.id} className="">
-            <TableCell className="font-bold  w-[230px] text-[12px]  mr-3">
-              {/* <Image
-                src={Class.icon}
+            <TableCell className="text-[12px] font-bold px-2 py-1 flex  gap-2">
+              <Image
+                src={`/${item?.subject.toLowerCase()}.png`}
                 alt="icon"
-                width={100}
-                height={100}
-                className="w-[50px] h-[50px] mr-1"
-              /> */}
+                width={25}
+                height={25}
+                className="w-[30px] h-[30px] mr-1"
+              />
               {item.subject}
             </TableCell>
             <TableCell className="text-[12px]  font-semibold">{item.name}</TableCell>

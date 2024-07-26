@@ -12,11 +12,13 @@ import SingleClassTable from "./SingleClassTable";
 import { useParams } from "next/navigation";
 import { TableSkeleton } from "@/components/TableSkeleton";
 
-
+interface studentProps {
+  studentIds: string[];
+ 
+}
 
 const SingleClassroom = () => {
   const { id } = useParams();
-  console.log(id);
 
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["add"],
@@ -26,6 +28,7 @@ const SingleClassroom = () => {
       return result;
     },
   });
+
   //   if is loading
   if (isLoading) {
     return (
@@ -69,7 +72,7 @@ const SingleClassroom = () => {
               </div>
               <div className="px-6 flex  space-x-2 pb-2">
                 <Image
-                  src={data.classBanner}
+                  src={data?.classBanner}
                   alt=""
                   width={100}
                   height={100}
@@ -182,8 +185,7 @@ const SingleClassroom = () => {
             </div>
           </div>
 
-          <SingleClassTable dataId={data.id} studentIds={data.studentIDs} />
-         
+          <SingleClassTable dataId={data?.id} studentIds={data?.studentIDs} />
         </div>
       )}
     </div>

@@ -19,6 +19,7 @@ interface Idelete {
 
 
 const OptionsDialog: React.FC<Idelete> = ({classId}) => {
+  console.log(classId)
   return (
     <Popover>
       <PopoverTrigger asChild>

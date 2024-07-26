@@ -10,9 +10,10 @@ import {
 } from "@/components/ui/table";
 
 import Image from "next/image";
-import { StudentOptions } from "./StudentOptions";
+
 import { TableSkeleton } from "@/components/TableSkeleton";
 import { useParams } from "next/navigation";
+import StudentOptions from "./StudentOptions";
 
 const StudentsType = [
   {
@@ -71,7 +72,7 @@ export default function StudentsTable() {
 
             <TableCell className="float-right   text-[16px]  text-lightGreen cursor-pointer">
              
-                <StudentOptions />
+                <StudentOptions dataId={Student.id} />
               
             </TableCell>
           </TableRow>

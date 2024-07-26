@@ -14,11 +14,11 @@ import { MdOutlineMail } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
 import { useParams } from "next/navigation";
 
-interface ISingularStudentProps {
-  classIds: string[];
-}
 
-const SingleStudent = ({classIds}:ISingularStudentProps) => {
+
+const SingleStudent = () => {
+
+ 
   const { id } = useParams();
   console.log(id);
 
@@ -31,38 +31,7 @@ const SingleStudent = ({classIds}:ISingularStudentProps) => {
     },
   });
   console.log(data)
-
-  // getting individual student IDs using parallel query with usequeries
-
-  // const queries = useQueries({
-  //   queries: classIds?.map((id: any) => {
-  //     console.log(id);
-  //     return {
-  //       queryKey: ["class", id],
-  //       queryFn: async () => {
-  //         const response = await fetch(`/api/about-student/${id}`);
-  //         const result = await response.json();
-  //         return result;
-  //       },
-  //     };
-  //   }),
-  // });
-  //   if is loading
-  if (isLoading) {
-    return (
-      <div className="">
-        <p className="my-4 font-bold">loading...</p>
-
-        {/* <TableSkeleton /> */}
-      </div>
-    );
-  }
-  // if is error
-  if (isError) {
-    return <div className=" flex-1">{error.message}</div>;
-  }
-
-  //const arrayOfClass = queries.map((item) => item.data);
+ 
   return (
     <div>
 
@@ -186,72 +155,32 @@ const SingleStudent = ({classIds}:ISingularStudentProps) => {
          
           
         </div>
+       
         <div className="bg-white rounded-md py-6 px-6 ">
           <div className="flex justify-between">
             <p className=" font-bold text-[15px]">Schedule</p>
             <p className="text-[12px] font-semibold my-2">April 24, 2024</p>
           </div>
-
-          <div className="flex items-center space-x-3">
+         
+           <div className="flex items-center space-x-3">
             <Image
-              src="/maths.png"
+              src=""
               alt="teacher"
               width={100}
               height={100}
               className="w-[30px]  mt-3 rounded-md h-[30px]"
             />
             <div className="flex flex-col font-header">
-              <p className="text-[13px] font-bold">Mathematics Class</p>
+              <p className="text-[13px] font-bold"></p>
               <p className="text-[11.5px]">09:00 - 10:00am</p>
             </div>
           </div>
-          <hr className="w-full mt-2 font-semibold text-black" />
-
-          <div className="flex items-center space-x-3">
-            <Image
-              src="/govt.png"
-              alt="teacher"
-              width={100}
-              height={100}
-              className="w-[30px]  mt-3 rounded-md h-[30px]"
-            />
-            <div className="flex flex-col font-header">
-              <p className="text-[13px] font-bold">Government Class</p>
-              <p className="text-[11.5px]">09:00 - 10:00am</p>
-            </div>
-          </div>
-          <hr className="w-full my-2 font-semibold text-black" />
-
-          <div className="flex items-center space-x-3">
-            <Image
-              src="/crs.png"
-              alt="teacher"
-              width={100}
-              height={100}
-              className="w-[40px]  mt-3 rounded-md h-[40px]"
-            />
-            <div className="flex flex-col font-header">
-              <p className="text-[13px] font-bold">C.R.S Class</p>
-              <p className="text-[11.5px]">09:00 - 10:00am</p>
-            </div>
-          </div>
-          <hr className="w-full my-2 font-semibold text-black" />
-          <div className="flex items-center space-x-3">
-            <Image
-              src="/chem.png"
-              alt="teacher"
-              width={100}
-              height={100}
-              className="w-[30px]  mt-3 rounded-md h-[30px]"
-            />
-            <div className="flex flex-col font-header">
-              <p className="text-[13px] font-bold">Chemistry Class</p>
-              <p className="text-[11.5px]">09:00 - 10:00am</p>
-            </div>
-          </div>
+       
           <hr className="w-full my-3 font-semibold text-black" />
-        </div>
-      </div>
+        </div> 
+    
+      </div>  
+  
       <StudentDetails />
     </div>
      )}

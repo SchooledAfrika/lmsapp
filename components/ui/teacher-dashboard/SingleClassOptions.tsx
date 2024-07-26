@@ -9,7 +9,7 @@ import {
 import { FaEllipsisH } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import Link from "next/link";
-import { RemoveClass } from "@/components/RemoveClass";
+
 
 export function SingleClassOptions() {
   return (
@@ -29,9 +29,9 @@ export function SingleClassOptions() {
               </Link>
             </div>
             <hr className="bg-black" />
-            <div className="flex justify-start">
+            {/* <div className="flex justify-start">
               <RemoveClass/>
-            </div>
+            </div> */}
           </div>
         </div>
       </PopoverContent>
