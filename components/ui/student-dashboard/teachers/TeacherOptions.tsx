@@ -9,7 +9,7 @@ import {
 import { FaEllipsisH } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import Link from "next/link";
-import { RemoveTeacher } from "@/components/RemoveTeacher";
+// import { RemoveTeacher } from "@/components/RemoveTeacher";
 
 
 export function TeacherOptions() {
@@ -30,9 +30,9 @@ export function TeacherOptions() {
               </Link>
             </div>
             <hr className="bg-black" />
-            <div className="flex justify-start">
+            {/* <div className="flex justify-start">
               <RemoveTeacher/>
-            </div>
+            </div> */}
           </div>
         </div>
       </PopoverContent>

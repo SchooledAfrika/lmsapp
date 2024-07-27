@@ -15,7 +15,6 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Trash2 } from "lucide-react";
 
-
 interface Idelete {
   dataId: string;
 }
@@ -27,15 +26,12 @@ const RemoveClass: React.FC<Idelete> = ({ dataId }) => {
   const queryClient = useQueryClient();
   //   creating a delete using mutation to the backend
   const { mutate } = useMutation({
-    mutationFn: async (id:string) => {
+    mutationFn: async (id: string) => {
       const result = await fetch(`/api/class`, {
         method: "DELETE",
         body: JSON.stringify({
-          id:dataId,
-          
-         
+          id: dataId,
         }),
-        
       });
       return result;
       console.log(dataId);
@@ -48,24 +44,20 @@ const RemoveClass: React.FC<Idelete> = ({ dataId }) => {
         return toast.success("Class Successfully Deleted");
       } else {
         setloading(false);
-        return toast.error("error creating class");
+        return toast.error("error deleting class");
       }
-      
-     
-     
     },
     onError: (error) => {
-        console.error('Error deleting data:', error);
-        setloading(false);
-        
-        // Handle error as needed
-      },
+      console.error("Error deleting data:", error);
+      setloading(false);
+
+      // Handle error as needed
+    },
   });
   const handleDelete = () => {
     setloading(true);
     mutate(dataId);
     console.log(dataId);
-   
   };
 
   return (
@@ -73,7 +65,7 @@ const RemoveClass: React.FC<Idelete> = ({ dataId }) => {
       <DialogTrigger asChild>
         <p className="inline text-[14px] cursor-pointer  font-semibold">
           <Trash2 className="inline w-4 h-4 mr-2 ml-0 text-lightGreen " />
-             Remove
+          Remove
         </p>
       </DialogTrigger>
       <DialogContent className="sm:w-[500px] w-[380px] font-subtext">

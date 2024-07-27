@@ -14,6 +14,7 @@ import { TableSkeleton } from "@/components/TableSkeleton";
 
 interface studentProps {
   studentIds: string[];
+ 
 }
 
 const SingleClassroom = () => {
@@ -71,7 +72,7 @@ const SingleClassroom = () => {
               </div>
               <div className="px-6 flex  space-x-2 pb-2">
                 <Image
-                  src={data.classBanner}
+                  src={data?.classBanner}
                   alt=""
                   width={100}
                   height={100}
