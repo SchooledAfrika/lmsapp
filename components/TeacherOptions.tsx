@@ -7,35 +7,46 @@ import {
 } from "@/components/ui/popover";
 
 import { FaEllipsisH } from "react-icons/fa";
-import { GoDotFill } from "react-icons/go";
+import { ListCollapse } from "lucide-react";
 import Link from "next/link";
-import { RemoveTeacher } from "./RemoveTeacher";
+import RemoveTeacher from "./RemoveTeacher";
 
 
-export function TeacherOptions() {
+interface Idelete {
+  offerId:string
+}
+
+
+const TeacherOptions: React.FC<Idelete> = ({offerId}) => {
+  console.log(offerId)
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <FaEllipsisH className="ml-3 items-center mb-3" />
+      <Button className="border-none" variant="outline">
+        <FaEllipsisH className="ml-3 " />
+      </Button>
       </PopoverTrigger>
       <PopoverContent className="w-40">
         <div className="grid gap-4 font-subtext">
           <div className="grid gap-2">
             <div className="flex justify-start">
-              <Link href={`/school-dashboard/teachers/test`}>
+              <Link href={`/school-dashboard/teachers/${offerId}`}>
                 <p className="inline text-[14px]  font-semibold">
-                  <GoDotFill className="inline ml-0 text-lightGreen" />
+                  <ListCollapse className="inline w-4 h-4 mr-2 ml-0 text-lightGreen" />
                   Details
                 </p>
               </Link>
             </div>
             <hr className="bg-black" />
             <div className="flex justify-start">
-              <RemoveTeacher/>
+              <RemoveTeacher offerId={offerId}/>
             </div>
+            <hr className="bg-black" />
           </div>
         </div>
       </PopoverContent>
     </Popover>
   );
 }
+
+export default TeacherOptions

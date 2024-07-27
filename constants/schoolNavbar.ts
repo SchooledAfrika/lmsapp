@@ -113,6 +113,11 @@ export const TeacherNavbar: SchoolNavType[] = [
     path: "courses",
   },
   {
+    title: "Open Offers",
+    description: "Keep track of your open job offers.",
+    path: "open-offers",
+  },
+  {
     title: "Finances",
     description: "Monitor your earnings according to your performance",
     path: "finance",

@@ -13,15 +13,16 @@ import {
 } from "@/components/ui/table";
 
 import { useParams } from "next/navigation";
-// import Image from "next/image";
-// import IndividualClass from "./IndividualClass";
-// import SingleClassroom from "./SingleClassroom";
 import { TableSkeleton } from "@/components/TableSkeleton";
 import Image from "next/image";
+import StudentOptions from "./StudentOptions";
+import SingleStudent from "./SingleStudent";
+
 
 interface ISingular {
   dataId: string;
   studentIds: string[];
+
 }
 
 const SingleClassTable: React.FC<ISingular> = ({ studentIds }) => {
@@ -48,6 +49,7 @@ const SingleClassTable: React.FC<ISingular> = ({ studentIds }) => {
   }
 
   const arrayOfStudent = queries.map((item) => item.data);
+  
 
   return (
     <Table className="bg-white overflow-x-auto    rounded-md my-6">
@@ -57,8 +59,8 @@ const SingleClassTable: React.FC<ISingular> = ({ studentIds }) => {
         <TableRow className="text-[13px]">
           <TableHead>Name</TableHead>
           <TableHead className="">Start Date</TableHead>
-          <TableHead className="">Sessions Attended</TableHead>
-          {/* <TableHead className="text-right">Options</TableHead> */}
+          {/* <TableHead className="">Sessions Attended</TableHead> */}
+          <TableHead className="text-right">Options</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -77,7 +79,14 @@ const SingleClassTable: React.FC<ISingular> = ({ studentIds }) => {
             <TableCell className="text-[12px]  font-semibold">
               {student?.createdAt}
             </TableCell>
+            <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
+                <StudentOptions dataId={student?.id}  />
+                
+               
+              </TableCell> 
+             
           </TableRow>
+         
         ))}
       </TableBody>
     </Table>

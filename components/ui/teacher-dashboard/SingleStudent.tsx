@@ -1,5 +1,8 @@
-import Image from "next/image";
+
+"use client";
 import React from "react";
+import { useQuery, useQueries } from "@tanstack/react-query";
+import Image from "next/image";
 import { FiEdit } from "react-icons/fi";
 import { SiGoogleclassroom } from "react-icons/si";
 import { Button } from "@/components/ui/button";
@@ -9,13 +12,35 @@ import StudentDetails from "./StudentDetails";
 import { CiMail } from "react-icons/ci";
 import { MdOutlineMail } from "react-icons/md";
 import { GoDotFill } from "react-icons/go";
+import { useParams } from "next/navigation";
+
+
 
 const SingleStudent = () => {
+
+ 
+  const { id } = useParams();
+  console.log(id);
+
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["add"],
+    queryFn: async () => {
+      const response = await fetch(`/api/about-student/${id}`);
+      const result = await response.json();
+      return result;
+    },
+  });
+  console.log(data)
+ 
   return (
-    <div className="font-header md:mt-12 mt-24">
+    <div>
+
+   
+    {data && (
+    <div key={data.id} className="font-header md:mt-12 mt-24">
       <div className="flex justify-between">
         <p className="font-bold text-lg">Details</p>
-        <Link href="/teacher-dashboard/students" className="cursor-pointer">
+        <Link href={`/teacher-dashboard/classroom/individual-session/${id}`} className="cursor-pointer">
           <Image
             src="/closeAlt.svg"
             alt="cancel"
@@ -30,16 +55,16 @@ const SingleStudent = () => {
         <div className=" flex flex-col space-y-8">
           <div className=" bg-white flex pl-3 pr-4 py-6 rounded-md  space-x-3 pb-2">
             <Image
-              src="/tutors.jpg"
-              alt=""
+              src={data.profilePhoto}
+              alt="profilePhoto"
               width={100}
               height={100}
               className="rounded-md w-[100px] h-[100px]"
             />
 
             <div className=" ">
-              <p className=" text-[13px] font-bold">Alex Iwobi Samuel</p>
-              <p className="my-3 text-[11.5px] font-semibold">Grade 11</p>
+              <p className=" text-[13px] font-bold">{data.name}</p>
+              <p className="my-3 text-[11.5px] font-semibold">{data.grade}</p>
 
               <Link
                 href="/"
@@ -130,74 +155,37 @@ const SingleStudent = () => {
          
           
         </div>
+       
         <div className="bg-white rounded-md py-6 px-6 ">
           <div className="flex justify-between">
             <p className=" font-bold text-[15px]">Schedule</p>
             <p className="text-[12px] font-semibold my-2">April 24, 2024</p>
           </div>
-
-          <div className="flex items-center space-x-3">
+         
+           <div className="flex items-center space-x-3">
             <Image
-              src="/maths.png"
+              src=""
               alt="teacher"
               width={100}
               height={100}
               className="w-[30px]  mt-3 rounded-md h-[30px]"
             />
             <div className="flex flex-col font-header">
-              <p className="text-[13px] font-bold">Mathematics Class</p>
+              <p className="text-[13px] font-bold"></p>
               <p className="text-[11.5px]">09:00 - 10:00am</p>
             </div>
           </div>
-          <hr className="w-full mt-2 font-semibold text-black" />
-
-          <div className="flex items-center space-x-3">
-            <Image
-              src="/govt.png"
-              alt="teacher"
-              width={100}
-              height={100}
-              className="w-[30px]  mt-3 rounded-md h-[30px]"
-            />
-            <div className="flex flex-col font-header">
-              <p className="text-[13px] font-bold">Government Class</p>
-              <p className="text-[11.5px]">09:00 - 10:00am</p>
-            </div>
-          </div>
-          <hr className="w-full my-2 font-semibold text-black" />
-
-          <div className="flex items-center space-x-3">
-            <Image
-              src="/crs.png"
-              alt="teacher"
-              width={100}
-              height={100}
-              className="w-[40px]  mt-3 rounded-md h-[40px]"
-            />
-            <div className="flex flex-col font-header">
-              <p className="text-[13px] font-bold">C.R.S Class</p>
-              <p className="text-[11.5px]">09:00 - 10:00am</p>
-            </div>
-          </div>
-          <hr className="w-full my-2 font-semibold text-black" />
-          <div className="flex items-center space-x-3">
-            <Image
-              src="/chem.png"
-              alt="teacher"
-              width={100}
-              height={100}
-              className="w-[30px]  mt-3 rounded-md h-[30px]"
-            />
-            <div className="flex flex-col font-header">
-              <p className="text-[13px] font-bold">Chemistry Class</p>
-              <p className="text-[11.5px]">09:00 - 10:00am</p>
-            </div>
-          </div>
+       
           <hr className="w-full my-3 font-semibold text-black" />
-        </div>
-      </div>
+        </div> 
+    
+      </div>  
+  
       <StudentDetails />
     </div>
+     )}
+     </div>
+     
   );
 };
 

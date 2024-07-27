@@ -11,10 +11,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import Image from "next/image";
-import RemoveClass from "./RemoveClass";
 import { TableSkeleton } from "@/components/TableSkeleton";
 import IndividualClass from "./IndividualClass";
+import Image from "next/image";
 
 const ClassTable = () => {
   const { isLoading, isError, error, data } = useQuery({

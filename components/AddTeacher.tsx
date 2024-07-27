@@ -4,9 +4,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { addingStudentSchoolSchema } from "@/constants/addStudent";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { addingTeacherSchoolSchema } from "@/constants/addTeacher";
+export type IaddingTeacherSchool = z.infer<typeof addingTeacherSchoolSchema>;
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,12 +16,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
 import { Input } from "@/components/ui/input";
-import { LiaGraduationCapSolid } from "react-icons/lia";
+import { LiaChalkboardTeacherSolid } from "react-icons/lia";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export type IaddingStudentSchool = z.infer<typeof addingStudentSchoolSchema>;
-
-const AddStudent = () => {
+const AddTeacher = () => {
   const [loading, setloading] = useState<boolean>(false);
   // react hook form instance below here
   const {
@@ -32,18 +33,18 @@ const AddStudent = () => {
     setValue,
     reset,
     formState: { errors },
-  } = useForm<IaddingStudentSchool>({
-    resolver: zodResolver(addingStudentSchoolSchema),
+  } = useForm<IaddingTeacherSchool>({
+    resolver: zodResolver(addingTeacherSchoolSchema),
   });
 
   //   instance of client
   const queryClient = useQueryClient();
   //   creating a post using mutation to the backend
   const mutation = useMutation({
-    mutationKey: ["postStudent"],
-    mutationFn: async (data: IaddingStudentSchool) => {
+    mutationKey: ["postTeacher"],
+    mutationFn: async (data: IaddingTeacherSchool) => {
       console.log(data);
-      const result = await fetch("/api/add-student-by-school", {
+      const result = await fetch("/api/add-teacher-by-school", {
         method: "POST",
         body: JSON.stringify({
           ...data,
@@ -53,7 +54,7 @@ const AddStudent = () => {
       return result;
     },
     onSuccess: async (result) => {
-      queryClient.invalidateQueries({ queryKey: ["addStudent"] });
+      queryClient.invalidateQueries({ queryKey: ["addTeacher"] });
       if (result.ok) {
         const body = await result.json();
         setloading(false);
@@ -61,46 +62,47 @@ const AddStudent = () => {
         return toast.success(body.message);
       } else {
         setloading(false);
-        return toast.error("Error adding student");
+        return toast.error("Error adding teacher");
       }
     },
   });
   // here we validate the datas in our form submission
   // only if there is data, before the mutation function is called
-  const runSubmit: SubmitHandler<IaddingStudentSchool> = async (data) => {
+  const runSubmit: SubmitHandler<IaddingTeacherSchool> = async (data) => {
     setloading(true);
     mutation.mutate(data);
   };
+
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="bg-lightGreen bg-none border-none rounded-lg hover:bg-green-700  text-white text-[14px] font-bold  px-3 sm:w-36 w-28  py-2 text-start lg:block">
-          <LiaGraduationCapSolid className="sm:inline-block text-lg hidden mr-1" />
-          Add Student
+        <Button className="bg-lightGreen bg-none border-none rounded-lg hover:bg-green-700  text-white text-[14px]  px-3 font-bold sm:w-36 w-28  py-2 text-start lg:block">
+          <LiaChalkboardTeacherSolid className="sm:inline-block text-lg hidden mr-1" />
+          Add Teacher
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px] font-subtext">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold">Add Student</DialogTitle>
+          <DialogTitle className="text-3xl font-bold">Add Teacher</DialogTitle>
         </DialogHeader>
         <div className="w-full mt-2">
           <form
             onSubmit={handleSubmit(runSubmit)}
             className=" flex flex-col gap-2 w-full px-2"
           >
-            <div className="grid grid-cols-4 items-center gap-4">
+            <div className="flex flex-col">
               <Input
-                id="studentId"
+                id="teacherId"
                 type="text"
-                {...register("studentId")}
-                name="studentId"
-                onChange={() => clearErrors("studentId")}
-                placeholder="Enter Student ID"
+                {...register("teacherId")}
+                name="teacherId"
+                onChange={() => clearErrors("teacherId")}
+                placeholder="Enter Teacher ID"
                 className="col-span-6 w-full"
               />
-              {errors.studentId && (
+              {errors.teacherId && (
                 <small className="text-red-600">
-                  {errors.studentId.message}
+                  {errors.teacherId.message}
                 </small>
               )}
             </div>
@@ -136,10 +138,11 @@ const AddStudent = () => {
             </Button>
           </form>
         </div>
+        
       </DialogContent>
       <ToastContainer />
     </Dialog>
   );
 };
 
-export default AddStudent;
+export default AddTeacher;

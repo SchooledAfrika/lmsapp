@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       },
     });
     return new Response(
-      JSON.stringify({ message: "Teacher created successfully" }),
+      JSON.stringify({ message: "Teacher invited successfully" }),
       { status: 200, statusText: "success" }
     );
   } catch (error) {
