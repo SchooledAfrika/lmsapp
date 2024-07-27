@@ -3,6 +3,7 @@ import Image from "next/image";
 import { IexamZod } from "./TestDetails";
 import {
   Control,
+  Controller,
   FieldErrors,
   UseFormClearErrors,
   UseFormGetValues,
@@ -10,6 +11,16 @@ import {
   UseFormSetValue,
   UseFormWatch,
 } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "./ui/select";
+import { ScrollArea } from "./ui/scroll-area";
+import { Subject } from "@/constants/addClassroom";
 
 export interface IExamSubSub {
   register: UseFormRegister<IexamZod>;
@@ -30,6 +41,7 @@ const TestType: React.FC<IExamSubSub> = ({
   clearErrors,
   setValue,
   getValues,
+  control,
 }) => {
   const [selectedOption, setSelectedOption] = useState<string | undefined>(() =>
     getValues("type")
@@ -43,6 +55,39 @@ const TestType: React.FC<IExamSubSub> = ({
   return (
     <div className="flex flex-col mt-[40px] md:mt-[0]">
       <label className="font-bold text-[18px]">Set up your Test !</label>
+      <div className="flex flex-col">
+        <Controller
+          control={control}
+          name="subject"
+          render={({ field }) => (
+            <Select
+              onValueChange={(value) => {
+                field.onChange(value);
+                clearErrors("subject");
+              }}
+            >
+              <SelectTrigger className=" w-full py-6">
+                <SelectValue placeholder="Subject" />
+              </SelectTrigger>
+
+              <SelectContent className=" font-subtext font-medium">
+                <ScrollArea className="h-[500px] w-full ">
+                  <SelectGroup>
+                    {Subject.map((item, index) => (
+                      <SelectItem key={index} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </ScrollArea>
+              </SelectContent>
+            </Select>
+          )}
+        />
+        {errors.subject && (
+          <small className="text-red-600">{errors.subject.message}</small>
+        )}
+      </div>
       <input
         {...register("title")}
         type="text"
