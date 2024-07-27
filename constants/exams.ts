@@ -14,13 +14,21 @@ export const Iexam: IprogressType[] = [
 export const examSchema = z.object({
   title: z.string().min(3, { message: "enter your exam title" }),
   type: z.string({ message: "select the exam type" }),
-  test: z.array(
-    z.object({
-      question: z.string({ message: "enter your question" }),
-      answer: z.string({ message: "enter a valid answer" }),
-      obtions: z.array(z.string()),
-    })
-  ),
+  test: z
+    .array(
+      z.object({
+        question: z
+          .string({ message: "enter your question" })
+          .min(4, { message: "enter a valid answer" }),
+        answer: z
+          .string({ message: "enter a valid answer" })
+          .min(1, {
+            message: "click beside the correct option to add the answer",
+          }),
+        options: z.array(z.string()),
+      })
+    )
+    .default([{ question: "", answer: "", options: ["", "", "", ""] }]),
   grade: z.enum([
     "Grade1",
     "Grade2",

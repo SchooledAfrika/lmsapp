@@ -1,8 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import Container from "./Container";
-import Link from "next/link";
-import { Button } from "./ui/button";
 
 interface TestSettingsProps {
   onChangeComponent: (view: string) => void;

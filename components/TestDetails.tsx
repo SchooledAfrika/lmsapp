@@ -41,8 +41,9 @@ const TestDetails = () => {
   const handleNextPage = async () => {
     const fields = Iexam[currentPage - 1].field as fieldName[];
     const isValid = await trigger(fields, { shouldFocus: true });
+    console.log(isValid);
     if (!isValid) return;
-    if (currentPage === 2) {
+    if (currentPage === 4) {
       await handleSubmit(runSubmit)();
     } else {
       setcurrentPage((prev) => prev + 1);
@@ -78,7 +79,15 @@ const TestDetails = () => {
               getValues={getValues}
             />
           ) : currentPage === 2 ? (
-            <TestPaper />
+            <TestPaper
+              register={register}
+              errors={errors}
+              clearErrors={clearErrors}
+              setValue={setValue}
+              watch={watch}
+              control={control}
+              getValues={getValues}
+            />
           ) : currentPage === 3 ? (
             <TestSettings />
           ) : (

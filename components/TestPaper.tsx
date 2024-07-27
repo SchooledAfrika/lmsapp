@@ -1,53 +1,91 @@
 "use client";
-import React, { useState } from "react";
-import { GrFormPrevious } from "react-icons/gr";
-import { GrFormNext } from "react-icons/gr";
-interface TestPaperProps {
-  onChangeComponent: (view: string) => void;
-}
+import React, { useState, useEffect } from "react";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import { IExamSubSub } from "./TestType";
 
-const TestPaper = () => {
-  const [questions, setQuestions] = useState([
-    { question: "", options: ["", "", "", ""], answer: undefined },
-  ]);
+const TestPaper: React.FC<IExamSubSub> = ({ getValues, setValue, errors }) => {
+  const [questions, setQuestions] = useState(() => {
+    const initialQuestions = getValues("test");
+    return (
+      initialQuestions ?? [
+        { question: "", answer: "", options: ["", "", "", ""] },
+      ]
+    );
+  });
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  const handleAddQuestion = (e: any) => {
+  useEffect(() => {
+    const initialQuestions = getValues("test");
+    if (initialQuestions) {
+      setQuestions(initialQuestions);
+    }
+  }, [getValues]);
+
+  const handleAddQuestion = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setQuestions([
+    const newQuestions = [
       ...questions,
-      { question: "", options: ["", "", "", ""], answer: undefined },
-    ]);
+      { question: "", options: ["", "", "", ""], answer: "" },
+    ];
+    setQuestions(newQuestions);
+    setValue("test", newQuestions);
+    setCurrentIndex((index) => index + 1);
   };
 
   const handleQuestionChange = (
-    index: any,
+    index: number,
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const newQuestions = [...questions];
     newQuestions[index].question = e.target.value;
     setQuestions(newQuestions);
+    setValue("test", newQuestions);
   };
 
-  const handleOptionChange = (qIndex: any, oIndex: any, event: any) => {
+  const handleOptionChange = (
+    qIndex: number,
+    oIndex: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     const newQuestions = [...questions];
     newQuestions[qIndex].options[oIndex] = event.target.value;
     setQuestions(newQuestions);
+    setValue("test", newQuestions);
   };
 
-  const handleCheckboxChange = (qIndex: any, oIndex: any) => {
+  const handleCheckboxChange = (qIndex: number, oIndex: number) => {
     const newQuestions = [...questions];
-    newQuestions[qIndex].answer = oIndex;
+    newQuestions[qIndex].answer = newQuestions[qIndex].options[oIndex];
     setQuestions(newQuestions);
+    setValue("test", newQuestions);
   };
 
-  const data = ["Option A", "Option B", "Option C", "Option D"];
+  const handlePrev = () => {
+    if (currentIndex === 0) {
+      return;
+    } else {
+      setCurrentIndex((index) => index - 1);
+    }
+  };
+  const handleNext = () => {
+    if (currentIndex === questions.length - 1) {
+      return;
+    } else {
+      setCurrentIndex((index) => index + 1);
+    }
+  };
 
   return (
     <div className="flex flex-col pl-[0] mt-[40px] md:mt-[0]">
-      <label className="font-bold text-[18px] pb-3">Set up your Test !</label>
+      <label className="font-bold text-[18px] pb-3">Set up your Test!</label>
       <div className=" bg-[#FFFFFF] p-5">
         {questions.map((q, qIndex) => (
-          <div key={qIndex} className="flex flex-col mb-5">
+          <div
+            key={qIndex}
+            className={` ${
+              qIndex === currentIndex ? "flex" : "hidden"
+            } flex-col mb-5`}
+          >
             <label className="font-bold">Question {qIndex + 1}</label>
             <input
               type="text"
@@ -71,7 +109,6 @@ const TestPaper = () => {
                 <input
                   type="checkbox"
                   name="preferences"
-                  checked={q.answer === oIndex}
                   onChange={() => handleCheckboxChange(qIndex, oIndex)}
                   className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-green-600 checked:border-transparent focus:outline-none"
                 />
@@ -81,14 +118,21 @@ const TestPaper = () => {
         ))}
         <div className=" w-full flex items-center justify-between ">
           <div className=" flex items-center gap-2">
-            <div className=" cursor-pointer w-[40px] aspect-square flex items-center justify-center border rounded-md">
+            <div
+              onClick={handlePrev}
+              className=" cursor-pointer w-[40px] aspect-square flex items-center justify-center border rounded-md"
+            >
               <GrFormPrevious />
             </div>
-            <div className=" cursor-pointer w-[40px] aspect-square flex items-center justify-center border rounded-md">
+            <div
+              onClick={handleNext}
+              className=" cursor-pointer w-[40px] aspect-square flex items-center justify-center border rounded-md"
+            >
               <GrFormNext />
             </div>
           </div>
           <button
+            type="button"
             onClick={handleAddQuestion}
             className="font-bold text-[12px] hover:bg-green-200 rounded px-2 py-3 transform ease-in-out duration-500 transition-all"
           >
@@ -96,6 +140,11 @@ const TestPaper = () => {
           </button>
         </div>
       </div>
+      {errors.test && (
+        <small className=" text-red-600">
+          error occured, enter all field and the right option
+        </small>
+      )}
     </div>
   );
 };
