@@ -19,6 +19,7 @@ export type IexamZod = z.infer<typeof examSchema>;
 
 const TestDetails = () => {
   const [currentPage, setcurrentPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
   // registering our hookform
   const {
     register,
@@ -33,6 +34,7 @@ const TestDetails = () => {
   } = useForm<IexamZod>({ resolver: zodResolver(examSchema) });
 
   const runSubmit = (data: IexamZod) => {
+    setLoading(true);
     console.log(data);
   };
 
@@ -67,7 +69,7 @@ const TestDetails = () => {
           currentPage={currentPage}
           setcurrentPage={setcurrentPage}
         />
-        <form className=" flex flex-col gap-2">
+        <form className=" flex flex-col gap-2 flex-1">
           {currentPage === 1 ? (
             <TestType
               register={register}
@@ -89,16 +91,37 @@ const TestDetails = () => {
               getValues={getValues}
             />
           ) : currentPage === 3 ? (
-            <TestSettings />
+            <TestSettings
+              register={register}
+              errors={errors}
+              clearErrors={clearErrors}
+              setValue={setValue}
+              watch={watch}
+              control={control}
+              getValues={getValues}
+            />
           ) : (
-            <TestFinalization />
+            <TestFinalization
+              register={register}
+              errors={errors}
+              clearErrors={clearErrors}
+              setValue={setValue}
+              watch={watch}
+              control={control}
+              getValues={getValues}
+            />
           )}
           <Button
             onClick={handleNextPage}
             type="button"
-            className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-5"
+            disabled={loading}
+            className="bg-secondary hover:bg-green-800 w-full md:w-3/5 text-white text-[16px] px-6 py-7 my-5"
           >
-            Proceed
+            {loading ? (
+              <p>uploading exam...</p>
+            ) : (
+              <p>{currentPage < 4 ? "Proceed" : "Submit"}</p>
+            )}
           </Button>
         </form>
       </div>

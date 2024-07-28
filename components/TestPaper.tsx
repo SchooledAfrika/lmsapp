@@ -76,7 +76,7 @@ const TestPaper: React.FC<IExamSubSub> = ({ getValues, setValue, errors }) => {
   };
 
   return (
-    <div className="flex flex-col pl-[0] mt-[40px] md:mt-[0]">
+    <div className="flex flex-col pl-[0] mt-[40px] md:mt-[0] w-full md:w-3/5">
       <label className="font-bold text-[18px] pb-3">Set up your Test!</label>
       <div className=" bg-[#FFFFFF] p-5">
         {questions.map((q, qIndex) => (

@@ -53,7 +53,7 @@ const TestType: React.FC<IExamSubSub> = ({
   };
 
   return (
-    <div className="flex flex-col mt-[40px] md:mt-[0]">
+    <div className="flex flex-col w-3/5 md:w-3/5 mt-[40px] md:mt-[0]">
       <label className="font-bold text-[18px]">Set up your Test !</label>
       <div className="flex flex-col">
         <Controller

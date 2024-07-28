@@ -4,10 +4,10 @@ export interface IprogressType {
   field: string[];
 }
 export const Iexam: IprogressType[] = [
-  { name: "Choose Type", field: ["title", "type"] },
+  { name: "Choose Type", field: ["subject", "title", "type"] },
   { name: "Test Paper", field: ["test"] },
-  { name: "Settings", field: ["grade", "duration", "start", "end"] },
-  { name: "Finalization", field: [""] },
+  { name: "Settings", field: ["grade", "duration"] },
+  { name: "Finalization", field: ["summary"] },
 ];
 
 // creating the zod defination for the exams we have
@@ -43,6 +43,5 @@ export const examSchema = z.object({
     "Grade12",
   ]),
   duration: z.string({ message: "enter the duration" }),
-  start: z.date(),
-  end: z.date(),
+  summary: z.string().optional(),
 });

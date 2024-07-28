@@ -430,6 +430,7 @@ model Exams {
   test      ExamQuestions[]
   duration  String
   grade     Grade
+  subject   Subjects
   createdAt DateTime        @default(now())
   updatedAt DateTime        @default(now())
 
