@@ -1,0 +1,50 @@
+================================================================================================================
+endpoint to manage changing of password for teacher, student, schools and parents
+================================================================================================================
+
+route: /api/changepassword
+method:PUT
+payload:{
+oldPassword: string,
+newPassword: string,
+}
+comment: in each dashboard, just submit oldpassword and newpassword to the backend for updating the password
+
+================================================================================================================
+endpoint that handles updating profile of users, this can be for teacher, student, school and parents
+================================================================================================================
+
+route: /api/modifyaccount
+method: PUT
+//because this endpoint can work for multiple dashboard and information passed are often different, so take not the payload we
+are expecting at the backend for each dashbaord
+
+//school dadhboard
+payload:{
+    name:string,
+    phoneNo:string,
+    email:string,
+    schAddress:string,
+    ownerName:string,
+    schoolLogo:string
+}
+
+//teacher dashbaord
+payload:{
+    name:string,
+    phoneNo:string,
+    email:string,
+    address:string
+}
+
+//student dashbaord
+payload:{
+    name:string,
+    email:string,
+    grade:string enum example:Grade1 Grade2
+    phoneNo:string
+    address:string
+    gender: string enum Male | Female
+}
+
+comment: the user can update one or many of this fields

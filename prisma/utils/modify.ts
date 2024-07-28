@@ -3,7 +3,6 @@ import bcrypt from "bcryptjs";
 import { NextResponse } from "next/server";
 // here we modify students
 export const modifyStudent = async (id: string, updateData: any) => {
-  console.log("entered");
   const studentUpdate = await prisma.student.update({
     where: {
       id: id,

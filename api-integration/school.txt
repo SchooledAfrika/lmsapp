@@ -121,3 +121,61 @@ method:GET
 comment: id is the id of the student you want to fetch its information
 
 
+new endpoints
+================================================================================================================
+endpoint for school to create advert for job or offers
+================================================================================================================
+====> create job offers
+route: /api/advertise
+method:POST
+payload: {
+    "level": string // Enum like Grade1, Grade2 and so on,
+    "location": string,
+    "role":string //Enum like FULLTIME or PARTTIME,
+    "description":string,
+    "responsibility": array of strings,
+    "qualifications":array of strings,
+    "minSalary": string,
+    "maxSalary":string,
+    "state":string,
+    "jobTitle":string,
+    "note": string,
+}
+
+====> get job offers
+endpoint:/api/advertise
+method:GET
+comment: this gets all the offers
+
+====> delete job offers
+endpoint: /api/advertise
+method:DELETE
+payload:{
+    vacancyId:string
+}
+comment: this deletes a particular job offer
+
+====> edit job offers
+endpoint:/api/advertise
+method:PUT
+payload:{
+    vacancyId:string,
+    others: //this is for other input and it must be of the type we used in the create job offer
+}
+
+================================================================================================================
+endpoint for school to accept the job offer teachers applied for
+================================================================================================================
+====> accept or reject offers
+endpoint:/api/advert-application
+method: PUT
+payload:{
+    vacancyTeacherId:string,
+    status:string // this is an Enum of ACCEPTED or REJECTED
+}
+comment: is is where school will accept a teacher or reject there application
+
+
+
+
+

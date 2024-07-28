@@ -1,0 +1,17 @@
+================================================================================================================
+endpoint for website to get all job offers so teachers can apply
+================================================================================================================
+
+=====>get all job offers :teacher gets all the offer in the website
+endpoint: /api/advert-application?page=pagenumber
+method:GET
+comment: use infinite query for this, where page === 1 initially and should be incremented by 1 till the end
+you can look at what i did in class in the website for more insight
+
+=====> teacher apply for an offer in the website
+endpoint: /api/advert-application
+method:POST
+payload:{
+    vacancyId:string
+}
+// here the teacher makes a post request once he click on apply
