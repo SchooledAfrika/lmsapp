@@ -6,7 +6,6 @@ import Image from "next/image";
 import Link from "next/link";
 import ProgressLine from "./ui/PrograssLine";
 import { Button } from "./ui/button";
-import Container from "./Container";
 import Footer from "./Footer";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

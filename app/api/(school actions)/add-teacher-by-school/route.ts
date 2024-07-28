@@ -159,6 +159,16 @@ export async function GET(req: Request) {
       where: {
         schoolId,
       },
+      include: {
+        teacher: {
+          select: {
+            profilePhoto: true,
+            name: true,
+            phoneNo: true,
+            email: true,
+          },
+        },
+      },
     });
     return new Response(JSON.stringify(allSchoolStudents), {
       status: 200,

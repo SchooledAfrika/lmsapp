@@ -3,11 +3,13 @@
 // the teacher which is the applicant can delete the his application to this school
 
 import prisma from "@/prisma/prismaConnect";
+import { notAuthenticated, serverError } from "@/prisma/utils/error";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // teacher apply here to an advertisement
 export async function POST(req: Request) {
-  // TODO: remember to change the teacherId to the nextauth id
-  const { teacherId, vacancyId } = await req.json();
+  const { vacancyId } = await req.json();
+  const teacherId = await serverSessionId();
   if (!teacherId) {
     return new Response(
       JSON.stringify({ message: "you are not authenticated" }),
@@ -53,8 +55,11 @@ export async function POST(req: Request) {
 // here, we will update the vacancy teacher model
 // only the school that avertised this is allow th update it
 export async function PUT(req: Request) {
-  // TODO: change this schoolId to the nextauth id
-  const { schoolId, vacancyTeacherId, status } = await req.json();
+  const { vacancyTeacherId, status } = await req.json();
+  const schoolId = await serverSessionId();
+  if (schoolId) {
+    return notAuthenticated();
+  }
   // first lets fetch the vacancy teacher we have, then check if schoolId matches
   // first fetching the info that will help us connect to the schoolid which is the vacancy
   const getVacancyTeacher = await prisma.vacancyTeacher.findUnique({
@@ -113,7 +118,7 @@ export async function PUT(req: Request) {
       // proceed to add the teacher to the school
       await prisma.schoolTeacher.create({
         data: {
-          schoolId,
+          schoolId: schoolId!,
           teacherId: updatedApplication.teacherId,
           status: "ACTIVE",
         },
@@ -159,5 +164,29 @@ export async function DELETE(req: Request) {
     });
   } catch (error) {
     throw new Error(JSON.stringify({ message: "something went wrong" }));
+  }
+}
+
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const page = url.searchParams.get("page");
+  // get the lower border for slice
+  const Start = Number(page) - 1;
+  const skipAmt = Start * 20;
+  const takeAmt = 20;
+
+  // now we can go ahead and get the job adverts
+  // by returning only 20 at a time
+  try {
+    const jobAdverts = await prisma.vacancy.findMany({
+      skip: skipAmt,
+      take: takeAmt,
+      include: {
+        school: true,
+      },
+    });
+    return new Response(JSON.stringify(jobAdverts), { status: 200 });
+  } catch (error) {
+    return serverError();
   }
 }
