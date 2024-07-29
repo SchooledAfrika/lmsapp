@@ -13,6 +13,9 @@ import Container from "./Container";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "./ui/button";
+import { useMutation } from "@tanstack/react-query";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 // lets infer the for our zoc Resolver
 export type IexamZod = z.infer<typeof examSchema>;
@@ -20,6 +23,25 @@ export type IexamZod = z.infer<typeof examSchema>;
 const TestDetails = () => {
   const [currentPage, setcurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
+  const mutation = useMutation({
+    mutationKey: ["addexam"],
+    mutationFn: async (exams: IexamZod) => {
+      // submit exam to the backend
+      const response = await fetch("/api/exam-by-teachers", {
+        method: "POST",
+        body: JSON.stringify(exams),
+      });
+      return response;
+    },
+    onSuccess: async (response) => {
+      const body = await response.json();
+      if (response.ok) {
+        return toast.success(body.message);
+      } else {
+        return toast.error(body.message);
+      }
+    },
+  });
   // registering our hookform
   const {
     register,
@@ -35,7 +57,7 @@ const TestDetails = () => {
 
   const runSubmit = (data: IexamZod) => {
     setLoading(true);
-    console.log(data);
+    mutation.mutate(data);
   };
 
   type fieldName = keyof IexamZod;
@@ -125,6 +147,7 @@ const TestDetails = () => {
           </Button>
         </form>
       </div>
+      <ToastContainer />
     </Container>
   );
 };
