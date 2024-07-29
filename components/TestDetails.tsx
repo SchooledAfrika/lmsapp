@@ -16,6 +16,7 @@ import { Button } from "./ui/button";
 import { useMutation } from "@tanstack/react-query";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useRouter } from "next/navigation";
 
 // lets infer the for our zoc Resolver
 export type IexamZod = z.infer<typeof examSchema>;
@@ -23,6 +24,7 @@ export type IexamZod = z.infer<typeof examSchema>;
 const TestDetails = () => {
   const [currentPage, setcurrentPage] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(false);
+  const router = useRouter();
   const mutation = useMutation({
     mutationKey: ["addexam"],
     mutationFn: async (exams: IexamZod) => {
@@ -36,7 +38,10 @@ const TestDetails = () => {
     onSuccess: async (response) => {
       const body = await response.json();
       if (response.ok) {
-        return toast.success(body.message);
+        toast.success(body.message);
+        setTimeout(() => {
+          return router.push("/teacher-dashboard/test-and-resources");
+        }, 4500);
       } else {
         return toast.error(body.message);
       }

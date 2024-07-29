@@ -9,6 +9,118 @@ import TestResources from "./TestResources";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { GoDotFill } from "react-icons/go";
 import { TestUploadResource } from "./TestUploadResource";
+import { useQuery } from "@tanstack/react-query";
+import { IexamZod } from "./TestDetails";
+import { format } from "timeago.js";
+
+interface modefiedExamType extends IexamZod {
+  createdAt: string;
+}
+
+// component that will return all the test
+const AllTest = () => {
+  // here we get all the exams from teacher
+  const { data, isFetching, isError, error } = useQuery({
+    queryKey: ["allexam"],
+    queryFn: async () => {
+      const response = await fetch("/api/exam-by-teachers");
+      const result = await response.json();
+      return result;
+    },
+  });
+  if (isFetching) {
+    return (
+      <div>
+        <p>loading</p>
+      </div>
+    );
+  }
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
+  // const get the date
+  function handleDate(time: string) {
+    const fullTime = new Date(time);
+    const formattedDate = fullTime.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+    return formattedDate;
+  }
+  // here we get time
+  function handleTime(time: string) {
+    const singleTime = new Date(time);
+    const gottenTime = singleTime.toLocaleDateString("en-Us", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+    const showTime = gottenTime.split(",")[1].trim();
+    return showTime;
+  }
+  // handle timeago dot js
+  function getTimeAgo(time: string) {
+    const date = new Date(time);
+    const timeAgo = format(date);
+    return timeAgo;
+  }
+  return (
+    <div>
+      <p className="font-bold text-[12px] px-5 pt-8 pb-3 text-gray-400">Test</p>
+      {Array.isArray(data) && (
+        <div>
+          {data.length === 0 ? (
+            <div></div>
+          ) : (
+            <div className=" flex flex-col gap-2">
+              {data.map((exam: modefiedExamType, index) => (
+                <div key={index} className={`cursor-pointer bg-[#359C7133]`}>
+                  <div className="flex items-center px-5 pt-3 pb-2 gap-3 ">
+                    <Image
+                      src={`/${exam?.subject.toLowerCase()}.png`}
+                      width={30}
+                      height={30}
+                      alt="Calculator"
+                    />
+                    <span className="font-bold text-[14px]">
+                      {exam?.subject}
+                    </span>
+                  </div>
+                  <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
+                    <span>{handleDate(exam?.createdAt)}</span>
+                    <span>{handleTime(exam?.createdAt)}</span>
+                    <span>{getTimeAgo(exam?.createdAt)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+// component that will return all the resources
+const AllResources = () => {
+  return (
+    <div>
+      <p className="font-bold text-[12px] px-5 py-3 text-gray-400">Resources</p>
+      <div>
+        <div className="flex items-center px-5 pt-3 pb-1 gap-3 ">
+          <Image src="/svgs/link.svg" width={30} height={30} alt="Calculator" />
+          <span className="font-bold text-[12px] italic cursor-pointer text-[#099ECF]">
+            docs.google.com/History of Economics/...
+          </span>
+        </div>
+        <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
+          <span>April 22, 2024.</span>
+          <span>12:09PM</span>
+          <span>25 Minutes</span>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const TeacherTestAndResources = () => {
   const [showComponent, setShowComponent] = useState(true);
@@ -60,93 +172,8 @@ const TeacherTestAndResources = () => {
         </div>
         <div className="block md:flex gap-4">
           <div className="flex-2 bg-[#FFFFFF] rounded-[8px]">
-            <p className="font-bold text-[12px] px-5 pt-8 pb-3 text-gray-400">
-              Test
-            </p>
-            <div
-              onClick={handleTestComponent}
-              className={`cursor-pointer ${
-                showComponent ? "bg-[#359C7133]" : ""
-              }`}
-            >
-              <div className="flex items-center px-5 pt-3 pb-2 gap-3 ">
-                <Image
-                  src="/svgs/calculate.svg"
-                  width={30}
-                  height={30}
-                  alt="Calculator"
-                />
-                <span className="font-bold text-[14px]">Mathematics</span>
-              </div>
-              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
-                <span>April 22, 2024.</span>
-                <span>12:09PM</span>
-                <span>25 Minutes</span>
-              </div>
-            </div>
-            <p className="font-bold text-[12px] px-5 py-3 text-gray-400">
-              Resources
-            </p>
-            <div>
-              <div className="flex items-center px-5 pt-3 pb-1 gap-3 ">
-                <Image
-                  src="/svgs/link.svg"
-                  width={30}
-                  height={30}
-                  alt="Calculator"
-                />
-                <span className="font-bold text-[12px] italic cursor-pointer text-[#099ECF]">
-                  docs.google.com/History of Economics/...
-                </span>
-              </div>
-              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
-                <span>April 22, 2024.</span>
-                <span>12:09PM</span>
-                <span>25 Minutes</span>
-              </div>
-            </div>
-            <div
-              onClick={handleResourceComponent}
-              className={`cursor-pointer my-3 ${
-                showComponent ? "" : "bg-orange-100"
-              }`}
-            >
-              <div className="flex items-center px-5 pt-3 pb-2 gap-3 ">
-                <Image
-                  src="/svgs/book.svg"
-                  width={30}
-                  height={30}
-                  alt="Calculator"
-                />
-                <span className="font-bold text-[14px]">
-                  How Europe underdeveloped Africa
-                </span>
-              </div>
-              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
-                <span>April 22, 2024.</span>
-                <span>12:09PM</span>
-                <span>25 Minutes</span>
-              </div>
-            </div>
-            <p className="font-bold text-[12px] px-5 pb-3 text-gray-400">
-              Test
-            </p>
-            <div className="cursor-pointer pb-10">
-              <div className="flex items-center px-5 pt-3 pb-2 gap-3 ">
-                <Image
-                  src="/svgs/calculate.svg"
-                  width={30}
-                  height={30}
-                  alt="Calculator"
-                />
-                <span className="font-bold text-[14px]">Mathematics</span>
-              </div>
-              <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
-                <span>April 22, 2024.</span>
-                <span>12:09PM</span>
-                <span>25 Minutes</span>
-              </div>
-            </div>
+            <AllTest />
+            <AllResources />
           </div>
           <div className="flex-3 bg-[#FFFFFF] h-[70vh] rounded-[8px] p-5">
             {showComponent ? <TeacherTestSubject /> : <TestResources />}

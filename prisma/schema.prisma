@@ -425,6 +425,7 @@ model SchoolClassStudent {
 model Exams {
   id        String          @id @default(auto()) @map("_id") @db.ObjectId
   title     String
+  type      ExamType
   teacher   Teacher         @relation(fields: [teacherId], references: [id])
   teacherId String          @db.ObjectId
   test      ExamQuestions[]
@@ -595,4 +596,9 @@ type ExamQuestions {
   answer        String
   studentAnswer String?
   options       String[]
+}
+
+enum ExamType {
+  MANUAL
+  AUTO
 }
