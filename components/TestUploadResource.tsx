@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import Image from "next/image";
-import { Controller } from "react-hook-form";
 import { GoDotFill } from "react-icons/go";
 import {
   Select,
@@ -21,20 +20,54 @@ import {
 } from "./ui/select";
 import { ScrollArea } from "./ui/scroll-area";
 import { Subject, urlRegex } from "@/constants/addClassroom";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { useToast } from "./ui/use-toast";
+import { toast, useToast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useCloudinary } from "@/data-access/cloudinary";
-export const TestUploadResource = () => {
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+
+// here we handle upload resouces
+interface IdialogUpload {
+  dialog: boolean;
+  setDialog: React.Dispatch<React.SetStateAction<boolean>>;
+}
+export const TestUploadResource: React.FC<IdialogUpload> = ({
+  dialog,
+  setDialog,
+}) => {
   const [subject, setSubject] = useState<string | undefined>(undefined);
   const [title, settitle] = useState<string | undefined>(undefined);
   const [linka, setLinka] = useState<string | undefined>(undefined);
   const [linkb, setLinkb] = useState<Blob | undefined>(undefined);
   const { imageUpload } = useCloudinary();
-  const { toast } = useToast();
+  const queryclient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ["upload-resources"],
+    mutationFn: async (img: string | undefined) => {
+      //here we make call to the backend
+      const response = await fetch("/api/manage-resources", {
+        method: "POST",
+        body: JSON.stringify({
+          subject,
+          title,
+          sourceLink: linka ?? img,
+          type: linka ? "LINK" : "DOC",
+        }),
+      });
+      return response;
+    },
+    onSuccess: async (response) => {
+      if (response.ok) {
+        const message = await response.json();
+        setDialog(false);
+        toast.success(message.message);
+        queryclient.invalidateQueries({ queryKey: ["resources"] });
+      }
+    },
+  });
+  // here we upload using the react-query
+
+  // here we validate the form and handle any other things
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const verifyUrl = urlRegex.test(linka as string);
@@ -53,20 +86,7 @@ export const TestUploadResource = () => {
     }
     // get image link is image was passed
     const imgUrl = await imageUpload(linkb as Blob);
-    //here we make call to the backend
-    const response = await fetch("/api/manage-resources", {
-      method: "POST",
-      body: JSON.stringify({
-        subject,
-        title,
-        sourceLink: linka ?? imgUrl,
-        type: linka ? "LINK" : "DOC",
-      }),
-    });
-
-    if (response.ok) {
-      console.log("success");
-    }
+    mutation.mutate(imgUrl);
   };
 
   const handleImg = (e: ChangeEvent<HTMLInputElement>) => {
@@ -76,7 +96,7 @@ export const TestUploadResource = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={dialog} onOpenChange={() => setDialog(false)}>
       <DialogTrigger asChild>
         <div className="inline text-[12px] font-semibold cursor-pointer">
           <GoDotFill className="inline ml-0 text-lightGreen" />

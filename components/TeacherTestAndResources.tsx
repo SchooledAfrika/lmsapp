@@ -11,14 +11,40 @@ import { GoDotFill } from "react-icons/go";
 import { TestUploadResource } from "./TestUploadResource";
 import { useQuery } from "@tanstack/react-query";
 import { IexamZod } from "./TestDetails";
-import { format } from "timeago.js";
+import { useConversion } from "@/data-access/conversion";
+import { Skeleton } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface modefiedExamType extends IexamZod {
   createdAt: string;
 }
 
+const LoadingView: React.FC<{ heading: string }> = ({ heading }) => {
+  const mappingArray = new Array(3).fill("");
+  return (
+    <div className=" flex flex-col px-2 gap-3">
+      <div className="font-bold text-[12px] px-5 pt-2 pb-3 text-gray-400">
+        {heading}
+      </div>
+      <div className=" flex flex-col gap-2">
+        {mappingArray.map((item, index) => (
+          <Skeleton
+            variant="rectangular"
+            animation={"wave"}
+            height={60}
+            key={index}
+            className=" w-full rounded-md"
+          ></Skeleton>
+        ))}
+      </div>
+    </div>
+  );
+};
+
 // component that will return all the test
 const AllTest = () => {
+  const { getTimeAgo, handleDate, handleTime } = useConversion();
   // here we get all the exams from teacher
   const { data, isFetching, isError, error } = useQuery({
     queryKey: ["allexam"],
@@ -29,41 +55,12 @@ const AllTest = () => {
     },
   });
   if (isFetching) {
-    return (
-      <div>
-        <p>loading</p>
-      </div>
-    );
+    return <LoadingView heading="Test" />;
   }
   if (isError) {
     return <div>{error.message}</div>;
   }
-  // const get the date
-  function handleDate(time: string) {
-    const fullTime = new Date(time);
-    const formattedDate = fullTime.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-    return formattedDate;
-  }
-  // here we get time
-  function handleTime(time: string) {
-    const singleTime = new Date(time);
-    const gottenTime = singleTime.toLocaleDateString("en-Us", {
-      hour: "2-digit",
-      minute: "2-digit",
-    });
-    const showTime = gottenTime.split(",")[1].trim();
-    return showTime;
-  }
-  // handle timeago dot js
-  function getTimeAgo(time: string) {
-    const date = new Date(time);
-    const timeAgo = format(date);
-    return timeAgo;
-  }
+
   return (
     <div>
       <p className="font-bold text-[12px] px-5 pt-8 pb-3 text-gray-400">Test</p>
@@ -100,31 +97,77 @@ const AllTest = () => {
     </div>
   );
 };
+
 // component that will return all the resources
+interface IResouces {
+  subject: string;
+  title: string;
+  sourceLink: string;
+  type: string;
+  createdAt: string;
+}
 const AllResources = () => {
+  const { handleDate, handleTime, getTimeAgo } = useConversion();
+  const { data, isFetching, error, isError } = useQuery({
+    queryKey: ["resources"],
+    queryFn: async () => {
+      const response = await fetch("/api/manage-resources");
+      const result = await response.json();
+      return result;
+    },
+  });
+  if (isFetching) {
+    return <LoadingView heading="Resources" />;
+  }
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
   return (
     <div>
       <p className="font-bold text-[12px] px-5 py-3 text-gray-400">Resources</p>
-      <div>
-        <div className="flex items-center px-5 pt-3 pb-1 gap-3 ">
-          <Image src="/svgs/link.svg" width={30} height={30} alt="Calculator" />
-          <span className="font-bold text-[12px] italic cursor-pointer text-[#099ECF]">
-            docs.google.com/History of Economics/...
-          </span>
+      {Array.isArray(data) && (
+        <div>
+          {data.length === 0 ? (
+            <div></div>
+          ) : (
+            <div className=" flex flex-col gap-2">
+              {data.map((resource: IResouces, index) => (
+                <div key={index}>
+                  <div className="flex items-center px-5 pt-3 pb-1 gap-3 ">
+                    <Image
+                      src="/svgs/link.svg"
+                      width={30}
+                      height={30}
+                      alt="Calculator"
+                    />
+                    <div className=" flex flex-col">
+                      <span className=" text-[14px]">{resource?.title}</span>
+                      <Link
+                        href={`${resource?.sourceLink}`}
+                        className="font-bold text-[12px] italic cursor-pointer text-[#099ECF]"
+                      >
+                        {resource?.sourceLink}
+                      </Link>
+                    </div>
+                  </div>
+                  <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
+                    <span>{handleDate(resource?.createdAt)}</span>
+                    <span>{handleTime(resource?.createdAt)}</span>
+                    <span>{getTimeAgo(resource?.createdAt)}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
-        <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
-          <span>April 22, 2024.</span>
-          <span>12:09PM</span>
-          <span>25 Minutes</span>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
 
 const TeacherTestAndResources = () => {
   const [showComponent, setShowComponent] = useState(true);
-
+  const [dialog, setDialog] = useState<boolean>(false);
   const handleTestComponent = () => {
     setShowComponent(true);
   };
@@ -164,7 +207,9 @@ const TeacherTestAndResources = () => {
                     </Link>
                   </div>
                   <hr className="bg-black" />
-                  <TestUploadResource />
+                  <div onClick={() => setDialog(true)}>
+                    <TestUploadResource dialog={dialog} setDialog={setDialog} />
+                  </div>
                 </div>
               </div>
             </PopoverContent>
@@ -180,6 +225,7 @@ const TeacherTestAndResources = () => {
           </div>
         </div>
       </Container>
+      <ToastContainer />
     </section>
   );
 };

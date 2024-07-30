@@ -10,7 +10,6 @@ export async function POST(req: Request) {
   const teacherId = await serverSessionId();
   const role = await serverSessionRole();
   const payload = await req.json();
-  console.log(payload);
   if (!teacherId) return notAuthenticated();
   if (role !== "Teacher")
     return new Response(
@@ -28,6 +27,7 @@ export async function POST(req: Request) {
       JSON.stringify({ message: "article uploaded successfully" })
     );
   } catch (error) {
+    console.log(error);
     return serverError();
   }
 }
@@ -59,6 +59,31 @@ export async function DELETE(req: Request) {
     return new Response(
       JSON.stringify({ message: "article deleted successfully" })
     );
+  } catch (error) {
+    return serverError();
+  }
+}
+
+export async function GET(req: Request) {
+  const teacherId = await serverSessionId();
+  const role = await serverSessionRole();
+
+  if (!teacherId) return notAuthenticated();
+  if (role !== "Teacher") {
+    return new Response(
+      JSON.stringify({ message: "only teacher is allowed" }),
+      { status: 400 }
+    );
+  }
+
+  // now we make call to the backend
+  try {
+    const allTeacherArticle = await prisma.teachersArticle.findMany({
+      where: {
+        teacherId,
+      },
+    });
+    return new Response(JSON.stringify(allTeacherArticle), { status: 200 });
   } catch (error) {
     return serverError();
   }
