@@ -153,14 +153,15 @@ model Parents {
 // the link to the pdf or article is stored here
 // this article id can be pushed into the array inclasses so that students can actually access it
 model TeachersArticle {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
   subject    Subjects
   title      String
   sourceLink String
-  teacher    Teacher  @relation(fields: [teacherId], references: [id])
-  teacherId  String   @db.ObjectId
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
+  type       ResourceType
+  teacher    Teacher      @relation(fields: [teacherId], references: [id])
+  teacherId  String       @db.ObjectId
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
 }
 
 // once a teacher is registered
@@ -601,4 +602,9 @@ type ExamQuestions {
 enum ExamType {
   MANUAL
   AUTO
+}
+
+enum ResourceType {
+  LINK
+  DOCS
 }
