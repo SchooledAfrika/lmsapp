@@ -1,36 +1,204 @@
-import { useState } from "react";
+"use client";
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import JobDescription from "./JobDescription";
 import JobResponsibility from "./ui/JobResponsibility";
 import JobQualification from "./JobQualification";
 import JobFinalization from "./JobFinalization";
+import Image from "next/image";
+import Link from "next/link";
+import ProgressLine from "./ui/PrograssLine";
+import { Button } from "./ui/button";
+import { useForm, useFieldArray, SubmitHandler, Controller, Control } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
-const JobNewList: React.FC = () => {
-  const [currentView, setCurrentView] = useState("description");
+import {JobListingInfo, jobListingSchema} from "@/constants/jobListing"
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Container from "./Container";
 
-  const [canTransition, setCanTransition] = useState(true);
+export type IjobListing = z.infer<typeof jobListingSchema>;
 
-  const handleCurrentView = (view: string) => {
-    if (canTransition) {
-      setCurrentView(view);
 
-      if (view === "finalization") {
-        setCanTransition(false);
+const JobNewList = () => {
+  const { data: session, update } = useSession();
+  const router = useRouter();
+  const [loading, setloading] = useState<boolean>(false);
+  const [currentPage, setcurrentPage] = useState<number>(1);
+
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    control,
+    watch,
+    clearErrors,
+    reset,
+    setValue,
+    formState: { errors },
+  } = useForm<IjobListing>({
+   
+      
+   
+    resolver: zodResolver(jobListingSchema),
+  });
+
+  const { fields, append, prepend, remove } = useFieldArray({
+   
+    control,
+    name: "responsibility"
+   
+  });
+
+  //   instance of client
+  const queryClient = useQueryClient();
+  //   creating a post using mutation to the backend
+  const mutation = useMutation({
+    mutationKey: ["postjob"],
+    mutationFn: async (data: IjobListing) => {
+      const result = await fetch("", {
+        method: "POST",
+        body: JSON.stringify({
+          ...data,
+        }),
+      });
+
+      return result;
+    },
+    onSuccess: async (result) => {
+      queryClient.invalidateQueries({ queryKey: ["addjob"] });
+      if (result.ok) {
+        const body = await result.json();
+        setloading(false);
+        toast.success(body.message);
+        setTimeout(() => {
+          router.push("/school-dashboard/job-listing");
+        }, 4500);
+      } else {
+        setloading(false);
+        return toast.error("error posting job");
       }
+    },
+  });
+
+  const runSubmit: SubmitHandler<IjobListing> = async (data) => {
+    console.log(data);
+    // converting the selected image to a blob and uploading to cloudinary
+    // using the useCloudinary custom hook;
+    setloading(true);
+    mutation.mutate(data);
+    // handle file submission to the backend server
+  };
+
+  type fieldName = keyof IjobListing;
+  // function to validate form on each proceed clicked
+  const handleNextPage = async () => {
+    const fields = JobListingInfo[currentPage - 1].field as fieldName[];
+    const isValid = await trigger(fields, { shouldFocus: true });
+    if (!isValid) return;
+    if (currentPage === 4) {
+      console.log("entered");
+      await handleSubmit(runSubmit)();
+    } else {
+      setcurrentPage((prev) => prev + 1);
     }
   };
+
+  // function to display submiting
+  const submittingState = (): string => {
+    if (loading === false) {
+      return "Post";
+    }
+    return "Posting...";
+  };
+
   return (
-    <div>
-      {currentView === "description" && (
-        <JobDescription onClickCurrentView={handleCurrentView} />
-      )}
-      {currentView === "responsibility" && (
-        <JobResponsibility onClickCurrentView={handleCurrentView} />
-      )}
-      {currentView === "qualification" && (
-        <JobQualification onClickCurrentView={handleCurrentView} />
-      )}
-      {currentView === "finalization" && <JobFinalization />}
+    <div className="mx-auto">
+    <Container>
+    <div className="flex md:mt-6 mb-12 mt-24 justify-between ml-[0] md:ml-[40px]">
+      <p className="font-bold text-lg"></p>
+      <Link href="/school-dashboard/job-listing" className="cursor-pointer">
+        <Image
+          src="/closeAlt.svg"
+          alt="cancel"
+          width={100}
+          height={100}
+          className="w-[20px] h-[20px]"
+        />
+      </Link>
     </div>
+
+    {/* the div holding both the form progress and the form */}
+    {/* the form contains each form based on the state number above */}
+    <div className=" flex flex-col md:flex-row gap-3 md:gap-16">
+      <ProgressLine
+        formArrays={JobListingInfo}
+        currentPage={currentPage}
+        setcurrentPage={setcurrentPage}
+      />
+      <form className=" flex-1">
+        {/* conditionaly rendering each form */}
+        {currentPage === 1 ? (
+          <JobDescription
+            register={register}
+            errors={errors}
+            control={control}
+            watch={watch}
+            clearErrors={clearErrors}
+            setValue={setValue}
+          />
+        ) :  currentPage === 2 ? (
+          <JobResponsibility
+                 clearErrors={clearErrors}
+                  register={register}
+                  control={control} 
+                  fields={fields}
+                  append={append}
+                  prepend={prepend}
+                  remove={remove}
+          
+          />
+        
+         ) : currentPage === 3 ?  (
+
+          <JobQualification
+            register={register}
+            errors={errors}
+            control={control}
+            watch={watch}
+            setValue={setValue}
+          />
+         ) : (
+          <JobFinalization
+            register={register}
+            errors={errors}
+            control={control}
+            watch={watch}
+            clearErrors={clearErrors}
+            setValue={setValue}
+          />
+        )}
+      
+
+      
+          <Button
+            onClick={handleNextPage}
+            type="button"
+            disabled={loading}
+            className="bg-secondary w-full md:ml-[100px] md:w-[500px] text-white text-[16px] px-6 py-7 my-3"
+          >
+            {currentPage < 4 ? "Proceed" : submittingState()}
+          </Button>
+        
+       
+      </form>
+    </div>
+    <ToastContainer />
+    </Container>
+  </div>
   );
 };
 
