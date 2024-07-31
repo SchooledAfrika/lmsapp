@@ -8,12 +8,13 @@ import {
   teacherPasswordUpdate,
   schoolPasswordUpdate,
 } from "@/prisma/utils/modify";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // running the password update method below
 export async function PUT(req: Request) {
-  // TODO: remove both the id and role in the body below and
-  // use next auth to get those values
-  const { oldPassword, newPassword, id, role } = await req.json();
+  const { oldPassword, newPassword } = await req.json();
+  const id = await serverSessionId();
+  const role = await serverSessionRole();
   //   return an error if the user does not pass the required fields
   if (!oldPassword || !newPassword) {
     return new Response(
@@ -25,22 +26,38 @@ export async function PUT(req: Request) {
   try {
     // check if is student that want to change password
     if (role === "Student") {
-      const result = await studentPasswordUpdate(id, oldPassword, newPassword);
+      const result = await studentPasswordUpdate(
+        id as string,
+        oldPassword,
+        newPassword
+      );
       return result;
     }
     // check if is teacher that want to change password
     if (role === "Teacher") {
-      const result = await teacherPasswordUpdate(id, oldPassword, newPassword);
+      const result = await teacherPasswordUpdate(
+        id as string,
+        oldPassword,
+        newPassword
+      );
       return result;
     }
     // check if is student that want to change password
     if (role === "School") {
-      const result = await schoolPasswordUpdate(id, oldPassword, newPassword);
+      const result = await schoolPasswordUpdate(
+        id as string,
+        oldPassword,
+        newPassword
+      );
       return result;
     }
     // check if is student that want to change password
     if (role === "Parents") {
-      const result = await parentsPasswordUpdate(id, oldPassword, newPassword);
+      const result = await parentsPasswordUpdate(
+        id as string,
+        oldPassword,
+        newPassword
+      );
       return result;
     }
   } catch (error) {

@@ -1,14 +1,18 @@
 import React from "react";
 import Image from "next/image";
 import { MdVerified } from "react-icons/md";
+import { useQueries } from "@tanstack/react-query";
 import SingleStudentTable from "./SingleStudentTable";
 import Link from "next/link";
 
+
+
 const StudentDetails = () => {
+ 
   return (
     <div className="  md:flex md:flex-row grid grid-cols-1 items-center  text-[15px] gap-3   md:gap-2 rounded-md">
       <div className="flex md:flex-5 overflow-x-auto    rounded-md   flex-col">
-        <SingleStudentTable />
+        <SingleStudentTable   />
       </div>
       <div className="flex md:mb-0 mb-6 py-6 px-3 rounded-md  bg-white flex-3">
         <div className="w-full">

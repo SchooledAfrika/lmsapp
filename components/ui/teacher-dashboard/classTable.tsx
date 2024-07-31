@@ -11,12 +11,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import Image from "next/image";
-import RemoveClass from "./RemoveClass";
 import { TableSkeleton } from "@/components/TableSkeleton";
 import IndividualClass from "./IndividualClass";
-
-
+import Image from "next/image";
 
 const ClassTable = () => {
   const { isLoading, isError, error, data } = useQuery({
@@ -27,72 +24,57 @@ const ClassTable = () => {
       return result;
     },
   });
-  //   if is loading
+
+  // If loading
   if (isLoading) {
     return (
       <div className="">
         <p className="my-4 font-bold">loading...</p>
-
         <TableSkeleton />
       </div>
     );
   }
-  // if is error
+
+  // If error
   if (isError) {
-    return <div className=" flex-1">{error.message}</div>;
+    return <div className="flex-1">{error.message}</div>;
   }
 
   return (
-    <Table className="bg-white overflow-x-auto    rounded-md mt-12">
+    <Table className="bg-white overflow-x-auto rounded-md mt-12">
       <TableHeader>
         <TableRow>
-          <TableHead className="text-[12px]">Subject</TableHead>
-          <TableHead className="md:w-[100px] text-[12px]">Class</TableHead>
-          <TableHead className="text-[12px]">Grade</TableHead>
-          <TableHead className="text-[12px]">Students</TableHead>
-          <TableHead className="text-right text-[12px]">Options</TableHead>
+          <TableHead className="text-[12px] text-left p-2">Subject</TableHead>
+          <TableHead className="text-[12px] text-left p-2">Class</TableHead>
+          <TableHead className="text-[12px] text-left p-2">Grade</TableHead>
+          <TableHead className="text-[12px] text-left p-2">Students</TableHead>
+          <TableHead className="text-[12px] text-right p-2">Options</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {Array.isArray(data) &&
           data.map((item: any) => (
-            <TableRow key={item.id} className="">
-              <TableCell className="font-bold text-[13px] mr-3">
-                {/* <Image
-                  src=""
+            <TableRow key={item.id}>
+              <TableCell className="text-[13px] font-bold p-2 flex items-center gap-2">
+                <Image
+                  src={`/${item?.subject.toLowerCase()}.png`}
                   alt="icon"
-                  width={100}
-                  height={100}
-                  className="w-[40px] h-[40px] mr-1"
-                /> */}
+                  width={25}
+                  height={25}
+                  className="w-[25px] h-[25px]"
+                />
                 {item.subject}
               </TableCell>
-              <TableCell className="text-[12px]  font-semibold">
+              <TableCell className="text-[12px] font-semibold p-2">
                 {item.className}
               </TableCell>
-              <TableCell className="text-[12px]  font-semibold">
+              <TableCell className="text-[12px] font-semibold p-2">
                 {item.grade}
               </TableCell>
-              {/* <TableCell
-                className=""
-              >
-
-                   
-                <div  className={`${
-                      item.publicClass
-                        ? "rotate-[45deg] text-[12px] w-[33px] rounded-[5px] py-2 pl-2 pr-6 mx-auto  font-bold  bg-dimOrange"
-                        :  "font-bold mx-auto text-[12px]"
-                    }`} >
-                   {item.publicClass} 
-                </div>
-               
-              </TableCell> */}
-
-              <TableCell className="text-[13px]  font-semibold">
-                {item.maxCapacity}
+              <TableCell className="text-[13px] font-semibold p-2">
+                {item.studentIds ? item.studentIds.length : 0}
               </TableCell>
-
-              <TableCell className="float-right text-[16px]  text-lightGreen cursor-pointer">
+              <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
                 <IndividualClass dataId={item.id} />
               </TableCell>
             </TableRow>

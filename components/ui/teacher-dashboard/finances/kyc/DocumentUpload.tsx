@@ -7,8 +7,7 @@ import {
   Control,
   Controller,
   UseFormWatch,
-  UseFormSetValue
- 
+  UseFormSetValue,
 } from "react-hook-form";
 
 import Link from "next/link";
@@ -47,7 +46,7 @@ const DocumentUpload: React.FC<IKycSub> = ({
   setValue,
 }) => {
   const [docImg, setDocImg] = useState<string | undefined>(undefined);
-  
+
   // handles remove image that is already present
   // if the user decides to remove it
   const handleRemove = () => {
@@ -72,9 +71,7 @@ const DocumentUpload: React.FC<IKycSub> = ({
         </h3>
 
         <p className="md:w-[450px] text-[13.5px] py-2">
-       
-        Provide a valid means of identification.
-
+          Provide a valid means of identification.
         </p>
 
         <Controller
@@ -96,7 +93,9 @@ const DocumentUpload: React.FC<IKycSub> = ({
                   <SelectItem value="NIN">NIN</SelectItem>
                   <SelectItem value="dLicence">Driver's License</SelectItem>
                   <SelectItem value="vCard">Voter's Card</SelectItem>
-                  <SelectItem value="intPassport">International Passport</SelectItem>
+                  <SelectItem value="intPassport">
+                    International Passport
+                  </SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
@@ -107,26 +106,26 @@ const DocumentUpload: React.FC<IKycSub> = ({
         )}
         <br />
         {docImg === undefined ? (
-        <div
-          className={`flex items-center md:w-[450px] h-[60px] w-[330px] bg-[#FFFFFF] py-4 pl-2 my-2 rounded-[8px]`}
-        >
-          <input
-            type="file"
-            multiple={false}
-            accept="image/*"
-            onChange={handleShowPix}
-            name="docImg"
-            placeholder="Upload Document"
-            className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
-          />
-           {errors.docImg && (
-                    <small className="text-red-600">
-                      {String(errors.docImg.message)}
-                    </small>
-                  )}
-        </div>
-         ) : (
-          <PreviewItem  handleRemove={handleRemove} imageItem={docImg} />
+          <div
+            className={`flex  items-center md:w-[450px] h-[60px] w-[330px] bg-[#FFFFFF] py-4 pl-2 my-2 rounded-[8px]`}
+          >
+            <input
+              type="file"
+              multiple={false}
+              accept="image/*"
+              onChange={handleShowPix}
+              name="docImg"
+              placeholder="Upload Document"
+              className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
+            />
+            {errors.docImg && (
+              <small className="text-red-600">
+                {String(errors.docImg.message)}
+              </small>
+            )}
+          </div>
+        ) : (
+          <PreviewItem handleRemove={handleRemove} imageItem={docImg} />
         )}
       </Container>
     </section>

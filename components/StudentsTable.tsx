@@ -1,3 +1,7 @@
+"use client";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+
 import {
     Table,
     TableBody,
@@ -9,7 +13,9 @@ import {
   
   import Image from "next/image";
   import Link from "next/link";
-import { StudentOptions } from "./StudentOptions";
+
+import { TableSkeleton } from "./TableSkeleton";
+import StudentOptions from "./StudentOptions";
   
   const StudentsType = [
     {
@@ -34,6 +40,29 @@ import { StudentOptions } from "./StudentOptions";
   ];
   
   export default function StudentsTable() {
+    const { isLoading, isError, error, data } = useQuery({
+      queryKey: ["addStudent"],
+      queryFn: async () => {
+        const response = await fetch("/api/add-student-by-school");
+        const result = await response.json();
+        return result;
+      },
+    });
+    console.log(data)
+    //   if is loading
+    if (isLoading) {
+      return (
+        <div className="">
+          <p className="my-4 font-bold">loading...</p>
+  
+          <TableSkeleton />
+        </div>
+      );
+    }
+    // if is error
+    if (isError) {
+      return <div className=" flex-1">{error.message}</div>;
+    }
     return (
       <Table className="bg-white overflow-x-auto    rounded-md mt-12">
         <TableHeader>
@@ -44,16 +73,17 @@ import { StudentOptions } from "./StudentOptions";
           </TableRow>
         </TableHeader>
         <TableBody>
-          {StudentsType.map((Student) => (
+        {Array.isArray(data) &&
+          data.map((Student: any) => (
             <TableRow key={Student.id} className="">
               <TableCell className="font-semibold w-[200px] text-[14px]  flex  mr-1">
-                <Image
+                {/* <Image
                   src={Student.icon}
                   alt="icon"
                   width={100}
                   height={100}
                   className="w-[50px] h-[60px] rounded-md mr-1"
-                />{" "}
+                />{" "} */}
                 <div className="flex ml-1 flex-col">
                   <div className="text-[13px]  font-bold">{Student.name}</div>
                   <div className="flex  mt-2 justify-between">
@@ -64,7 +94,7 @@ import { StudentOptions } from "./StudentOptions";
                           : "text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-gold text-white"
                       }`}
                     >
-                      {Student.active || Student.pending}
+                      {Student.status}
                     </p>
                    
                   </div>
@@ -74,7 +104,7 @@ import { StudentOptions } from "./StudentOptions";
               <TableCell className="text-[12.5px] font-semibold">{Student.classrooms}</TableCell>
   
               <TableCell className="float-right text-[16px]  text-lightGreen cursor-pointer">
-             <StudentOptions/>
+             <StudentOptions offerId={Student?.id}/>
             </TableCell>
             </TableRow>
           ))}

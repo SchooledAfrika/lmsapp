@@ -11,6 +11,8 @@ import {
   import Image from "next/image";
 
 
+  
+
 
   
   const SingleclassType = [
@@ -39,7 +41,7 @@ import {
       },
   ];
   
-  export default function SingleStudentTable() {
+  const SingleStudentTable = () => {
     return (
       <Table className="bg-white overflow-x-auto    rounded-md my-6">
         
@@ -85,4 +87,6 @@ import {
       </Table>
     );
   }
+
+  export default SingleStudentTable
   

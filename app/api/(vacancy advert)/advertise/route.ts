@@ -3,16 +3,26 @@
 // and deleting them.
 
 import prisma from "@/prisma/prismaConnect";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
+import { json } from "stream/consumers";
 
 // first, lets create the advert
 export async function POST(req: Request) {
-  // TOTO:change the schoolId to the nextauth id
-  const { schoolId, ...others } = await req.json();
+  const schoolId = await serverSessionId();
+  const role = await serverSessionRole();
+  const others = await req.json();
   // first checking if the school is login already
   if (!schoolId) {
     return new Response(JSON.stringify({ message: "you must login" }), {
       status: 401,
     });
+  }
+  // if the user is not school, return an error message to the user
+  if (role !== "School") {
+    return new Response(
+      JSON.stringify({ message: "only schools is allowed to create adverts" }),
+      { status: 400 }
+    );
   }
   // lets proceed to creating the adverts
   try {
@@ -35,8 +45,8 @@ export async function POST(req: Request) {
 // when deleting advert, we will also delete the associated vancacyTeacher models
 // that has the id of the vacancy
 export async function DELETE(req: Request) {
-  // TODO: remember to change the schoolId to nextauth id of the school
-  const { schoolId, vacancyId } = await req.json();
+  const { vacancyId } = await req.json();
+  const schoolId = await serverSessionId();
   // lets check if the user is logged in first
   if (!schoolId) {
     return new Response(JSON.stringify({ message: "Please login" }), {
@@ -112,8 +122,8 @@ export async function DELETE(req: Request) {
 
 // incase the school want to update the vacancy or advertisement
 export async function PUT(req: Request) {
-  // TODO: remember to change this school id to nextauthid
-  const { schoolId, vacancyId, ...others } = await req.json();
+  const { vacancyId, ...others } = await req.json();
+  const schoolId = await serverSessionId();
   // return error if the user is not logged in
   if (!schoolId) {
     return new Response(JSON.stringify({ message: "Please login" }), {
@@ -161,15 +171,14 @@ export async function PUT(req: Request) {
 // here, a school can get there adverts
 // here we will replace the query parameter school id we pass to nextauth id
 export async function GET(req: Request) {
-  const querys = new URL(req.url).searchParams;
-  const schoolId = querys.get("schoolId");
+  const schoolId = await serverSessionId();
 
   try {
     const schoolAdverts = await prisma.vacancy.findMany({
       where: {
         schoolId: schoolId!,
       },
-      include: {
+      select: {
         VacancyTeacher: true,
       },
     });

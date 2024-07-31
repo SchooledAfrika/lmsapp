@@ -16,18 +16,17 @@ import { KycInfo, kycSchema } from "@/constants/kyc";
 import { useCloudinary } from "@/data-access/cloudinary";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Container from "./Container";
 
 export type Ikyc = z.infer<typeof kycSchema>;
 
 const KYC = () => {
   const { data: session, update } = useSession();
-  console.log(session?.user);
   const router = useRouter();
   const [loading, setloading] = useState<boolean>(false);
   const [currentPage, setcurrentPage] = useState<number>(1);
   const { imageUpload } = useCloudinary();
- 
+
   const {
     register,
     handleSubmit,
@@ -48,43 +47,45 @@ const KYC = () => {
   const mutation = useMutation({
     mutationKey: ["postkey"],
     mutationFn: async (data: Ikyc) => {
-      console.log(data);
       const result = await fetch("/api/kyc", {
         method: "POST",
         body: JSON.stringify({
           ...data,
-          
         }),
       });
 
       return result;
-  
     },
     onSuccess: async (result) => {
       queryClient.invalidateQueries({ queryKey: ["addkyc"] });
       if (result.ok) {
         const body = await result.json();
         setloading(false);
-        return toast.success(body.message);
-        
+        toast.success(body.message);
+        setTimeout(() => {
+          router.push("/teacher-dashboard/finance");
+        }, 4500);
       } else {
         setloading(false);
         return toast.error("error uploading kyc");
       }
-     
     },
   });
 
   const runSubmit: SubmitHandler<Ikyc> = async (data) => {
-   
     // converting the selected image to a blob and uploading to cloudinary
     // using the useCloudinary custom hook;
     setloading(true);
+    // blob for doctype
     const docImgBlob = new Blob([data.docImg[0]]);
+    // blob for the capture that is verifiedImg
+    const verifiedBlob = new Blob([data.verifiedImg]);
+    console.log(verifiedBlob);
     const docImgUrl = await imageUpload(docImgBlob);
+    const verifiedImg = await imageUpload(verifiedBlob);
     data.docImg = docImgUrl;
+    data.verifiedImg = verifiedImg as string;
     mutation.mutate(data);
-    console.log(data);
     // handle file submission to the backend server
   };
 
@@ -95,6 +96,7 @@ const KYC = () => {
     const isValid = await trigger(fields, { shouldFocus: true });
     if (!isValid) return;
     if (currentPage === 2) {
+      console.log("entered");
       await handleSubmit(runSubmit)();
     } else {
       setcurrentPage((prev) => prev + 1);
@@ -108,7 +110,6 @@ const KYC = () => {
     }
     return "Waiting for approval...";
   };
-
 
   return (
     <div className="mx-auto">
@@ -133,7 +134,7 @@ const KYC = () => {
           currentPage={currentPage}
           setcurrentPage={setcurrentPage}
         />
-        <form onSubmit={handleSubmit(runSubmit)} className=" flex-1">
+        <form className=" flex-1">
           {/* conditionaly rendering each form */}
           {currentPage === 1 ? (
             <DocumentUpload
@@ -154,16 +155,19 @@ const KYC = () => {
               setValue={setValue}
             />
           )}
-          <Button
-            onClick={handleNextPage}
-            type="button"
-            disabled={loading}
-            className="bg-secondary md:w-[450px]  h-[60px] w-[330px] hover:bg-green-800 text-white text-[16px] ml-4  py-7 my-2"
-          >
-            {currentPage < 2 ? "Proceed" : submittingState()}
-          </Button>
+          <Container>
+            <Button
+              onClick={handleNextPage}
+              type="button"
+              disabled={loading}
+              className="bg-secondary md:w-[450px]  h-[60px] w-full hover:bg-green-800 text-white text-[16px]  py-7 my-2"
+            >
+              {currentPage < 2 ? "Proceed" : submittingState()}
+            </Button>
+          </Container>
         </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };

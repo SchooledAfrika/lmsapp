@@ -10,6 +10,7 @@ import {
   deleteStudent,
   deleteTeacher,
 } from "@/prisma/utils/delete";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // here, we will modify the account of the user,
 // first by fetching the role of the user
@@ -18,10 +19,9 @@ import {
 // together with the roles also
 
 export async function PUT(req: Request) {
-  // TODO: the role and id should be coming from the nextauth
-  const { role, id, ...updateData } = await req.json();
-  console.log(role, id);
-  console.log(updateData);
+  const { updateData } = await req.json();
+  const id = await serverSessionId();
+  const role = await serverSessionRole();
   //   checking if the user is authenticated before we continue
   // if not authenticated return an error immediately
   if (!role || !id) {

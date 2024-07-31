@@ -50,7 +50,7 @@ export async function POST(req: Request) {
       },
     });
     return new Response(
-      JSON.stringify({ message: "Teacher created successfully" }),
+      JSON.stringify({ message: "Teacher invited successfully" }),
       { status: 200, statusText: "success" }
     );
   } catch (error) {
@@ -158,6 +158,16 @@ export async function GET(req: Request) {
     const allSchoolStudents = await prisma.schoolTeacher.findMany({
       where: {
         schoolId,
+      },
+      include: {
+        teacher: {
+          select: {
+            profilePhoto: true,
+            name: true,
+            phoneNo: true,
+            email: true,
+          },
+        },
       },
     });
     return new Response(JSON.stringify(allSchoolStudents), {

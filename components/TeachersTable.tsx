@@ -1,3 +1,7 @@
+"use client";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+
 import {
   Table,
   TableBody,
@@ -9,7 +13,9 @@ import {
 
 import Image from "next/image";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
-import { TeacherOptions } from "./TeacherOptions";
+
+import { TableSkeleton } from "@/components/TableSkeleton";
+import TeacherOptions from "./TeacherOptions";
 
 
 const TeachersType = [
@@ -42,7 +48,32 @@ const TeachersType = [
   },
 ];
 
-export default function TeachersTable() {
+const TeachersTable = () => {
+
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["addTeacher"],
+    queryFn: async () => {
+      const response = await fetch("/api/add-teacher-by-school");
+      const result = await response.json();
+      return result;
+    },
+  });
+  console.log(data)
+  //   if is loading
+  if (isLoading) {
+    return (
+      <div className="">
+        <p className="my-4 font-bold">loading...</p>
+
+        <TableSkeleton />
+      </div>
+    );
+  }
+  // if is error
+  if (isError) {
+    return <div className=" flex-1">{error.message}</div>;
+  }
+
   return (
     <Table className="bg-white overflow-x-auto    rounded-md mt-12">
       <TableHeader>
@@ -56,30 +87,35 @@ export default function TeachersTable() {
         </TableRow>
       </TableHeader>
       <TableBody>
-        {TeachersType.map((Teacher) => (
+      {Array.isArray(data) &&
+          data.map((Teacher: any) => (
           <TableRow key={Teacher.id} className="">
-            <TableCell className="font-bold text-[13px] mt-6 md:mt-0 w-[200px]  flex  mr-1">
-              <Image
+            <TableCell className="font-bold text-[13px] mt-2 md:mt-0 w-[200px]  flex  mr-1">
+              {/* <Image
                 src={Teacher.icon}
                 alt="icon"
                 width={100}
                 height={100}
                 className="w-[60px] h-[60px] rounded-md mr-1"
-              />{" "}
+              />{" "} */}
               <div className="flex ml-1 flex-col">
                 <div>{Teacher.name}</div>
                 <div className="flex  mt-2 justify-between">
-                  <p
-                    className={`${
-                      Teacher.active
-                        ? "text-[11px] px-[20px] py-[5px] w-28 text-center rounded-md mr-3 bg-lightGreen text-white"
-                        : "text-[11px] px-[20px] py-[5px] w-28 text-center rounded-md mr-3 bg-gold text-white"
-                    }`}
-                  >
-                    {Teacher.active || Teacher.pending}
-                  </p>
+                    <p
+                      className={`${
+                        Teacher.active
+                          ? "text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-lightGreen text-white"
+                          : "text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-gold text-white"
+                      }`}
+                    >
+                      {Teacher.status}
+                    </p>
+                   
+                  </div>
+                
+                 
                   
-                </div>
+               
               </div>
             </TableCell>
             <TableCell className="">
@@ -99,7 +135,7 @@ export default function TeachersTable() {
             <TableCell className="text-[12px]  font-medium">{Teacher.Grade}</TableCell>
             <TableCell className="text-[12px]  font-medium">{Teacher.Added}</TableCell>
             <TableCell className="float-right  text-[16px]   text-lightGreen cursor-pointer">
-             <TeacherOptions/>
+            <TeacherOptions offerId={Teacher.id}/>
             </TableCell>
           </TableRow>
         ))}
@@ -107,3 +143,5 @@ export default function TeachersTable() {
     </Table>
   );
 }
+
+export default TeachersTable
