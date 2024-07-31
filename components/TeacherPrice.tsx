@@ -1,6 +1,4 @@
 import React from "react";
-import Container from "./Container";
-import Link from "next/link";
 import Image from "next/image";
 import { IteacherOneOnOneSub } from "./TeacherProfileData";
 
@@ -13,8 +11,7 @@ const TeacherPrice: React.FC<IteacherOneOnOneSub> = ({
 }) => {
   watch("minPrice");
   watch("maxPrice");
-  watch("duration");
-  watch("startTime");
+
   return (
     <section>
       <div className="flex flex-col mb-[30px] w-full">
@@ -26,10 +23,10 @@ const TeacherPrice: React.FC<IteacherOneOnOneSub> = ({
         </span>
         <div className="flex justify-between items-center my-2 p-4  w-full md:w-[50%] outline-none rounded-[8px] bg-white">
           <input
-            type="text"
-            {...register("minPrice")}
-            name="minPice"
+            {...register("minPrice", { valueAsNumber: true })}
+            name="minPrice"
             placeholder="$10 - $15"
+            type="number"
             className="outline-none w-full"
           />
           <div className="flex items-center gap-1">
@@ -42,10 +39,10 @@ const TeacherPrice: React.FC<IteacherOneOnOneSub> = ({
         )}
         <div className="flex justify-between items-center my-2 p-4  w-full md:w-[50%] outline-none rounded-[8px] bg-white">
           <input
-            type="text"
-            {...register("maxPrice")}
+            {...register("maxPrice", { valueAsNumber: true })}
             name="maxPrice"
             placeholder="$8 - $12"
+            type="number"
             className="outline-none w-full"
           />
           <div className="flex items-center gap-1">
@@ -55,30 +52,6 @@ const TeacherPrice: React.FC<IteacherOneOnOneSub> = ({
         </div>
         {errors.maxPrice && (
           <small className="text-red-600">{errors.maxPrice.message}</small>
-        )}
-        <div className="flex justify-between items-center my-2 p-4  w-full md:w-[50%] outline-none rounded-[8px] bg-white">
-          <input
-            type="text"
-            {...register("duration")}
-            name="duration"
-            placeholder="Duration"
-            className="outline-none w-full"
-          />
-        </div>
-        {errors.duration && (
-          <small className="text-red-600">{errors.duration.message}</small>
-        )}
-        <div className="flex justify-between items-center my-2 p-4  w-full md:w-[50%] outline-none rounded-[8px] bg-white">
-          <input
-            type="text"
-            {...register("startTime")}
-            name="startTime"
-            placeholder="Start Time"
-            className="outline-none w-full"
-          />
-        </div>
-        {errors.startTime && (
-          <small className="text-red-600">{errors.startTime.message}</small>
         )}
       </div>
     </section>

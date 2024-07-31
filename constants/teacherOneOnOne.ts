@@ -82,6 +82,4 @@ export const oneOnOneSectionSchema = z.object({
   preference: z.array(z.string(), { message: "please enter preferences" }),
   minPrice: z.number({ message: "please enter minimum price" }),
   maxPrice: z.number({ message: "please enter maximum price" }),
-  duration: z.string().min(3, { message: "please enter duration" }),
-  startTime: z.string().min(3, { message: "please enter your start time" }),
 });

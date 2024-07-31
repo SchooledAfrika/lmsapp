@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import Container from "./Container";
-import { IteacherOneOnOneSub } from "./TeacherProfileData";
 import { Controller } from "react-hook-form";
 import {
   Select,
@@ -12,30 +10,35 @@ import {
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Preferences, Subject } from "@/constants/teacherOneOnOne";
+import { IteacherOneOnOneSub } from "./TeacherProfileData";
 
 const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
   errors,
-  watch,
   control,
-  register,
   clearErrors,
 }) => {
   const [subjects, setSubjects] = useState<string[]>([]);
   const [preference, setPreference] = useState<string[]>([]);
 
-  const handleAddSubject = (value: string) => {
+  const handleAddSubject = (value: string, field: any) => {
     if (!subjects.includes(value)) {
-      setSubjects([...subjects, value]);
+      const updatedSubjects = [...subjects, value];
+      setSubjects(updatedSubjects);
+      field.onChange(updatedSubjects);
       clearErrors("subjects");
+      console.log("Subjects after addition:", updatedSubjects);
     }
   };
 
-  const handleRemoveSubject = (value: string) => {
-    setSubjects(subjects.filter((subject) => subject !== value));
+  const handleRemoveSubject = (value: string, field: any) => {
+    const updatedSubjects = subjects.filter((subject) => subject !== value);
+    setSubjects(updatedSubjects);
+    field.onChange(updatedSubjects);
     clearErrors("subjects");
+    console.log("Subjects after removal:", updatedSubjects);
   };
 
-  const handlePreference = (item: string) => {
+  const handlePreference = (item: string, field: any) => {
     let updatedPreference = [...preference];
     const preferenceExists = updatedPreference.includes(item);
 
@@ -46,7 +49,9 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
     }
 
     setPreference(updatedPreference);
+    field.onChange(updatedPreference);
     clearErrors("preference");
+    console.log("Preferences after update:", updatedPreference);
   };
 
   return (
@@ -62,10 +67,7 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
                 render={({ field }) => (
                   <div>
                     <Select
-                      onValueChange={(value) => {
-                        handleAddSubject(value);
-                        field.onChange(subjects);
-                      }}
+                      onValueChange={(value) => handleAddSubject(value, field)}
                     >
                       <SelectTrigger className="w-full py-6">
                         <SelectValue placeholder="Select subjects" />
@@ -101,7 +103,7 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
                           />
                           <button
                             type="button"
-                            onClick={() => handleRemoveSubject(subject)}
+                            onClick={() => handleRemoveSubject(subject, field)}
                             className="ml-2 p-2 text-red-600 border border-red-600 rounded"
                           >
                             Remove
@@ -160,10 +162,7 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
                   {Preferences.map((item, index) => (
                     <label
                       key={index}
-                      onClick={() => {
-                        handlePreference(item);
-                        field.onChange(preference);
-                      }}
+                      onClick={() => handlePreference(item, field)}
                       className="flex justify-between items-center gap-2 my-2 px-4 py-3 outline-none rounded-[8px] bg-white cursor-pointer"
                     >
                       {item}

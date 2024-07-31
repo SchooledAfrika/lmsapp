@@ -22,8 +22,8 @@ import { useCloudinary } from "@/data-access/cloudinary";
 export type IteacherOneOnOne = z.infer<typeof oneOnOneSectionSchema>;
 
 export const TeacherOneOnOne: React.FC = () => {
-  const [loading, setloading] = useState<boolean>(false);
-  const [currentPage, setcurrentPage] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const { imageUpload } = useCloudinary();
 
   const {
@@ -43,7 +43,6 @@ export const TeacherOneOnOne: React.FC = () => {
   const mutation = useMutation({
     mutationKey: ["teacher"],
     mutationFn: async (data: IteacherOneOnOne) => {
-      console.log("Please work na", data);
       const result = await fetch("/api/one-on-one-section", {
         method: "POST",
         body: JSON.stringify({
@@ -55,33 +54,20 @@ export const TeacherOneOnOne: React.FC = () => {
       return result;
     },
     onSuccess: async (result) => {
+      setLoading(false);
       queryClient.invalidateQueries({ queryKey: ["teacherProfile"] });
       if (result.ok) {
-        const body = await result.json();
-        setloading(false);
         reset();
-        return toast.success("Session profile edited successfully");
+        toast.success("Session profile edited successfully");
       } else {
-        setloading(false);
-        return toast.error("Error editing session profile");
+        toast.error("Error editing session profile");
       }
     },
   });
 
-  // const submittingState = (): string => {
-  //   if (loading === false) {
-  //     return "Submit";
-  //   }
-  //   return "Editing profile...";
-  // };
-
   const runSubmit: SubmitHandler<IteacherOneOnOne> = async (data) => {
-    setloading(true);
-
-    // const teacherProfileBlob = new Blob([data.teacherImg[0]]);
-    // const teacherProfileUrl = await imageUpload(teacherProfileBlob);
-    // data.teacherImg = teacherProfileUrl;
-    // mutation.mutate(data);
+    setLoading(true);
+    mutation.mutate(data);
   };
 
   type fieldName = keyof IteacherOneOnOne;
@@ -92,12 +78,13 @@ export const TeacherOneOnOne: React.FC = () => {
     if (currentPage === 3) {
       await handleSubmit(runSubmit)();
     } else {
-      setcurrentPage((prev) => prev + 1);
+      setCurrentPage((prev) => prev + 1);
     }
   };
 
   return (
     <div>
+      <ToastContainer />
       <div className="flex justify-between items-center mb-5">
         <span className="font-bold">Details</span>
         <Link
@@ -111,7 +98,7 @@ export const TeacherOneOnOne: React.FC = () => {
         <ProgressLine
           formArrays={TeacherOneOnOneSection}
           currentPage={currentPage}
-          setcurrentPage={setcurrentPage}
+          setcurrentPage={setCurrentPage}
         />
         <form onSubmit={handleSubmit(runSubmit)}>
           {currentPage === 1 ? (
@@ -146,8 +133,13 @@ export const TeacherOneOnOne: React.FC = () => {
               className={`bg-secondary text-white text-[16px] py-7 my-3 ${
                 currentPage < 3 ? "w-full" : "w-1/2"
               }`}
+              disabled={loading}
             >
-              {currentPage < 3 ? "Proceed" : "Submit"}
+              {loading
+                ? "Submitting..."
+                : currentPage < 3
+                ? "Proceed"
+                : "Submit"}
             </Button>
           </div>
         </form>

@@ -9,8 +9,9 @@ import {
   Schedules,
   Subject,
 } from "@/constants/addClassroomSchool";
-export type IaddingClassroomSchool = z.infer<typeof addingClassroomSchoolSchema>;
-
+export type IaddingClassroomSchool = z.infer<
+  typeof addingClassroomSchoolSchema
+>;
 
 import {
   Dialog,
@@ -44,7 +45,6 @@ import {
 import Image from "next/image";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
 
 const AddClassroom = () => {
   const [loading, setloading] = useState<boolean>(false);
@@ -118,7 +118,6 @@ const AddClassroom = () => {
       clearErrors("schedules");
     }
   };
- 
 
   return (
     <Dialog>
@@ -129,14 +128,14 @@ const AddClassroom = () => {
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
-      <ScrollArea className="h-[500px] w-full ">
-        <DialogHeader>
-          <DialogTitle className="text-3xl font-bold">
-            Create Classroom
-          </DialogTitle>
-        </DialogHeader>
+        <ScrollArea className="h-[500px] w-full ">
+          <DialogHeader>
+            <DialogTitle className="text-3xl font-bold">
+              Create Classroom
+            </DialogTitle>
+          </DialogHeader>
 
-        <div className="w-[96%] mt-2">
+          <div className="w-[96%] mt-2">
             <form
               onSubmit={handleSubmit(runSubmit)}
               className=" flex flex-col gap-2 w-full px-2"
@@ -157,7 +156,7 @@ const AddClassroom = () => {
                   </small>
                 )}
               </div>
-             
+
               <div className="flex flex-col">
                 <Controller
                   control={control}
@@ -415,7 +414,6 @@ const AddClassroom = () => {
                 )}
               </div>
 
-             
               <div className="flex flex-col">
                 <Input
                   id="maxCapacity"
@@ -431,8 +429,7 @@ const AddClassroom = () => {
                   </small>
                 )}
               </div>
-              
-              
+
               <Button
                 type="submit"
                 className="w-full py-6 bg-lightGreen hover:bg-green-700"
@@ -442,12 +439,10 @@ const AddClassroom = () => {
               </Button>
             </form>
           </div>
-          </ScrollArea>
-       
-        
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
-}
+};
 
 export default AddClassroom;
