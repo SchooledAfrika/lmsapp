@@ -90,7 +90,7 @@ const TestDetails = () => {
           <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />
         </Link>
       </div>
-      <div className="flex flex-col md:flex-row mb-[50px] gap-20">
+      <div className="flex flex-col md:flex-row mb-[50px] gap-3 md:gap-20">
         <ProgressLine
           formArrays={Iexam}
           currentPage={currentPage}

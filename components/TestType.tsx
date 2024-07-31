@@ -53,7 +53,7 @@ const TestType: React.FC<IExamSubSub> = ({
   };
 
   return (
-    <div className="flex flex-col w-3/5 md:w-3/5 mt-[40px] md:mt-[0]">
+    <div className="flex flex-col w-full md:w-3/5">
       <label className="font-bold text-[18px]">Set up your Test !</label>
       <div className="flex flex-col">
         <Controller
@@ -99,10 +99,7 @@ const TestType: React.FC<IExamSubSub> = ({
       {errors.title && (
         <small className=" text-red-600">{errors.title.message}</small>
       )}
-      <div
-        id="questionType"
-        className="flex flex-col md:flex-row gap-3 my-2 w-full"
-      >
+      <div id="questionType" className="flex  gap-3 my-2 w-full">
         <div
           onClick={() => selectType("MANUAL")}
           className="bg-[#FFFFFF] p-4 w-full rounded-[5px] cursor-pointer"
@@ -123,7 +120,7 @@ const TestType: React.FC<IExamSubSub> = ({
               height={50}
               alt="Type Question"
             />
-            <span className="font-bold text-[14px] pb-8 pt-6">
+            <span className="font-bold text-[10px] md:text-[14px] pb-8 pt-6">
               Type Question Paper
             </span>
           </div>
@@ -148,7 +145,7 @@ const TestType: React.FC<IExamSubSub> = ({
               height={50}
               alt="Upload Question"
             />
-            <span className="font-bold text-[14px] pb-8 pt-6">
+            <span className="font-bold text-[10px] md:text-[14px] pb-8 pt-6">
               Upload Question Paper
             </span>
           </div>

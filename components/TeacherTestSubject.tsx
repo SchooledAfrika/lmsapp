@@ -10,8 +10,14 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { useQuery } from "@tanstack/react-query";
 
-const TeacherTestSubject = () => {
+interface Iexams {
+  id: string | boolean;
+}
+
+const TeacherTestSubject: React.FC<Iexams> = ({ id }) => {
+  console.log(id);
   return (
     <section>
       <div className="flex items-center px-4 pt-3 pb-2 gap-3 ">

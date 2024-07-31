@@ -18,6 +18,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 interface modefiedExamType extends IexamZod {
   createdAt: string;
+  id: string;
 }
 
 const LoadingView: React.FC<{ heading: string }> = ({ heading }) => {
@@ -41,9 +42,13 @@ const LoadingView: React.FC<{ heading: string }> = ({ heading }) => {
     </div>
   );
 };
-
+interface IallTest {
+  setId: React.Dispatch<React.SetStateAction<string | boolean>>;
+  id: string | boolean;
+}
 // component that will return all the test
-const AllTest = () => {
+const AllTest: React.FC<IallTest> = ({ setId, id }) => {
+  console.log(id);
   const { getTimeAgo, handleDate, handleTime } = useConversion();
   // here we get all the exams from teacher
   const { data, isFetching, isError, error } = useQuery({
@@ -60,18 +65,49 @@ const AllTest = () => {
   if (isError) {
     return <div>{error.message}</div>;
   }
-
+  if (data) {
+    const emptyArray = Array.isArray(data) && data.length;
+    if (emptyArray === 0) {
+      setId(false);
+    } else {
+      const firstId = Array.isArray(data) && data[0].id;
+      if (!id) {
+        setId(firstId);
+      }
+    }
+  }
+  const handleChange = (theid: string) => {
+    setId(theid);
+  };
   return (
-    <div>
-      <p className="font-bold text-[12px] px-5 pt-8 pb-3 text-gray-400">Test</p>
+    <div className=" pt-3 flex flex-col gap-2">
+      <p className="font-bold text-[12px] px-5 text-gray-400">Test</p>
       {Array.isArray(data) && (
         <div>
           {data.length === 0 ? (
-            <div></div>
+            <div className=" w-full flex items-center justify-center flex-col gap-2">
+              <Image
+                priority
+                src="/noitem.avif"
+                alt="noitem"
+                width={200}
+                height={200}
+                className=" w-[120px] h-[120px]"
+              />
+              <div className=" px-4 py-2 border border-green-700 rounded-md text-sm">
+                <p>no test, create new test</p>
+              </div>
+            </div>
           ) : (
             <div className=" flex flex-col gap-2">
               {data.map((exam: modefiedExamType, index) => (
-                <div key={index} className={`cursor-pointer bg-[#359C7133]`}>
+                <div
+                  onClick={() => handleChange(exam.id)}
+                  key={index}
+                  className={`cursor-pointer ${
+                    id == exam.id && "bg-[#359C7133]"
+                  }`}
+                >
                   <div className="flex items-center px-5 pt-3 pb-2 gap-3 ">
                     <Image
                       src={`/${exam?.subject.toLowerCase()}.png`}
@@ -128,7 +164,19 @@ const AllResources = () => {
       {Array.isArray(data) && (
         <div>
           {data.length === 0 ? (
-            <div></div>
+            <div className=" w-full flex items-center justify-center flex-col gap-2 mb-2">
+              <Image
+                priority
+                src="/noitem.avif"
+                alt="noitem"
+                width={200}
+                height={200}
+                className=" w-[120px] h-[120px]"
+              />
+              <div className=" px-4 py-2 border border-green-700 rounded-md text-sm">
+                <p>no resources, create a resources</p>
+              </div>
+            </div>
           ) : (
             <div className=" flex flex-col gap-2">
               {data.map((resource: IResouces, index) => (
@@ -166,16 +214,10 @@ const AllResources = () => {
 };
 
 const TeacherTestAndResources = () => {
-  const [showComponent, setShowComponent] = useState(true);
+  const [showexam, setShowexam] = useState(true);
+  const [id, setId] = useState<boolean | string>(false);
   const [dialog, setDialog] = useState<boolean>(false);
-  const handleTestComponent = () => {
-    setShowComponent(true);
-  };
-
-  const handleResourceComponent = () => {
-    setShowComponent(false);
-  };
-
+  console.log(id);
   return (
     <section>
       <Container>
@@ -215,13 +257,15 @@ const TeacherTestAndResources = () => {
             </PopoverContent>
           </Popover>
         </div>
-        <div className="block md:flex gap-4">
-          <div className="flex-2 bg-[#FFFFFF] rounded-[8px]">
-            <AllTest />
-            <AllResources />
+        <div className=" flex flex-col md:flex-row gap-4">
+          <div className="flex-2 ">
+            <div className=" bg-[#FFFFFF] rounded-[8px] w-full pb-2">
+              <AllTest id={id} setId={setId} />
+              <AllResources />
+            </div>
           </div>
           <div className="flex-3 bg-[#FFFFFF] h-[70vh] rounded-[8px] p-5">
-            {showComponent ? <TeacherTestSubject /> : <TestResources />}
+            {showexam ? <TeacherTestSubject id={id} /> : <TestResources />}
           </div>
         </div>
       </Container>
