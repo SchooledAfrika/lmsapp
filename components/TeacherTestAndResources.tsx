@@ -43,12 +43,11 @@ const LoadingView: React.FC<{ heading: string }> = ({ heading }) => {
   );
 };
 interface IallTest {
-  setId: React.Dispatch<React.SetStateAction<string | boolean>>;
-  id: string | boolean;
+  setId: React.Dispatch<React.SetStateAction<string | undefined>>;
+  id: string | undefined;
 }
 // component that will return all the test
 const AllTest: React.FC<IallTest> = ({ setId, id }) => {
-  console.log(id);
   const { getTimeAgo, handleDate, handleTime } = useConversion();
   // here we get all the exams from teacher
   const { data, isFetching, isError, error } = useQuery({
@@ -68,7 +67,7 @@ const AllTest: React.FC<IallTest> = ({ setId, id }) => {
   if (data) {
     const emptyArray = Array.isArray(data) && data.length;
     if (emptyArray === 0) {
-      setId(false);
+      setId(undefined);
     } else {
       const firstId = Array.isArray(data) && data[0].id;
       if (!id) {
@@ -104,7 +103,7 @@ const AllTest: React.FC<IallTest> = ({ setId, id }) => {
                 <div
                   onClick={() => handleChange(exam.id)}
                   key={index}
-                  className={`cursor-pointer ${
+                  className={`cursor-pointer transition-all ease-in-out duration-700 hover:bg-[#359C7133] ${
                     id == exam.id && "bg-[#359C7133]"
                   }`}
                 >
@@ -215,9 +214,8 @@ const AllResources = () => {
 
 const TeacherTestAndResources = () => {
   const [showexam, setShowexam] = useState(true);
-  const [id, setId] = useState<boolean | string>(false);
+  const [id, setId] = useState<undefined | string>(undefined);
   const [dialog, setDialog] = useState<boolean>(false);
-  console.log(id);
   return (
     <section>
       <Container>

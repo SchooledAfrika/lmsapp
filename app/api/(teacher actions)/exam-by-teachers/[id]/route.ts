@@ -3,7 +3,10 @@ import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
-export async function GET(req: Request, { param }: { param: { id: string } }) {
+export async function GET(
+  req: Request,
+  { params }: { params: { id: string } }
+) {
   const teacherId = await serverSessionId();
   const teacherRole = await serverSessionRole();
   if (!teacherId) return notAuthenticated();
@@ -16,11 +19,12 @@ export async function GET(req: Request, { param }: { param: { id: string } }) {
   try {
     const theExam = await prisma.exams.findUnique({
       where: {
-        id: param.id,
+        id: params.id,
       },
     });
     return new Response(JSON.stringify(theExam), { status: 200 });
   } catch (error) {
+    console.log(error);
     return serverError();
   }
 }
