@@ -17,7 +17,22 @@ interface Iexams {
 }
 
 const TeacherTestSubject: React.FC<Iexams> = ({ id }) => {
-  console.log(id);
+  const { data, isFetching, isError, error } = useQuery({
+    queryKey: ["oneexam"],
+    queryFn: async () => {
+      const response = await fetch(`/api/exam-by-teachers/${id}`);
+      const result = await response.json();
+      return result;
+    },
+  });
+
+  if (isFetching) {
+    return <div>fetching</div>;
+  }
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
+  console.log(data);
   return (
     <section>
       <div className="flex items-center px-4 pt-3 pb-2 gap-3 ">
