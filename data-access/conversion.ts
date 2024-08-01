@@ -18,7 +18,7 @@ export const useConversion = () => {
       hour: "2-digit",
       minute: "2-digit",
     });
-    const showTime = gottenTime.split(",")[1].trim();
+    const showTime = gottenTime.split(",")[1]?.trim();
     return showTime;
   }
   // handle timeago dot js
@@ -28,5 +28,15 @@ export const useConversion = () => {
     return timeAgo;
   }
 
-  return { getTimeAgo, handleTime, handleDate };
+  function makeSubstring(link: string, amt: number) {
+    const substring = link.substring(0, amt);
+    if (link.length > amt) {
+      const total = `${substring}...`;
+      return total;
+    } else {
+      return link;
+    }
+  }
+
+  return { getTimeAgo, handleTime, handleDate, makeSubstring };
 };

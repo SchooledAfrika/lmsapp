@@ -45,9 +45,11 @@ const LoadingView: React.FC<{ heading: string }> = ({ heading }) => {
 interface IallTest {
   setId: React.Dispatch<React.SetStateAction<string | undefined>>;
   id: string | undefined;
+  setShowExam: React.Dispatch<React.SetStateAction<boolean>>;
+  showExam: boolean;
 }
 // component that will return all the test
-const AllTest: React.FC<IallTest> = ({ setId, id }) => {
+const AllTest: React.FC<IallTest> = ({ setId, id, setShowExam, showExam }) => {
   const { getTimeAgo, handleDate, handleTime } = useConversion();
   // here we get all the exams from teacher
   const { data, isFetching, isError, error } = useQuery({
@@ -66,10 +68,10 @@ const AllTest: React.FC<IallTest> = ({ setId, id }) => {
   }
   if (data) {
     const emptyArray = Array.isArray(data) && data.length;
-    if (emptyArray === 0) {
+    if (emptyArray) {
       setId(undefined);
     } else {
-      const firstId = Array.isArray(data) && data[0].id;
+      const firstId = Array.isArray(data) && data[0]?.id;
       if (!id) {
         setId(firstId);
       }
@@ -77,6 +79,7 @@ const AllTest: React.FC<IallTest> = ({ setId, id }) => {
   }
   const handleChange = (theid: string) => {
     setId(theid);
+    setShowExam(true);
   };
   return (
     <div className=" pt-3 flex flex-col gap-2">
@@ -135,14 +138,15 @@ const AllTest: React.FC<IallTest> = ({ setId, id }) => {
 
 // component that will return all the resources
 interface IResouces {
+  id: string;
   subject: string;
   title: string;
   sourceLink: string;
   type: string;
   createdAt: string;
 }
-const AllResources = () => {
-  const { handleDate, handleTime, getTimeAgo } = useConversion();
+const AllResources: React.FC<IallTest> = ({ id, setId, setShowExam }) => {
+  const { handleDate, handleTime, getTimeAgo, makeSubstring } = useConversion();
   const { data, isFetching, error, isError } = useQuery({
     queryKey: ["resources"],
     queryFn: async () => {
@@ -157,6 +161,10 @@ const AllResources = () => {
   if (isError) {
     return <div>{error.message}</div>;
   }
+  const handleChange = (theid: string) => {
+    setId(theid);
+    setShowExam(false);
+  };
   return (
     <div>
       <p className="font-bold text-[12px] px-5 py-3 text-gray-400">Resources</p>
@@ -179,22 +187,25 @@ const AllResources = () => {
           ) : (
             <div className=" flex flex-col gap-2">
               {data.map((resource: IResouces, index) => (
-                <div key={index}>
+                <div
+                  onClick={() => handleChange(resource.id)}
+                  key={index}
+                  className={`cursor-pointer transition-all ease-in-out duration-700 hover:bg-[#359C7133] ${
+                    id == resource.id && "bg-[#359C7133]"
+                  }`}
+                >
                   <div className="flex items-center px-5 pt-3 pb-1 gap-3 ">
                     <Image
-                      src="/svgs/link.svg"
+                      src={`/${resource.type.toLowerCase()}.png`}
                       width={30}
                       height={30}
                       alt="Calculator"
                     />
                     <div className=" flex flex-col">
                       <span className=" text-[14px]">{resource?.title}</span>
-                      <Link
-                        href={`${resource?.sourceLink}`}
-                        className="font-bold text-[12px] italic cursor-pointer text-[#099ECF]"
-                      >
-                        {resource?.sourceLink}
-                      </Link>
+                      <p className="font-bold text-[12px] italic cursor-pointer text-[#099ECF]">
+                        {makeSubstring(resource?.sourceLink, 25)}
+                      </p>
                     </div>
                   </div>
                   <div className="flex gap-2 text-[12px] font-medium pb-3 pl-[20px] md:pl-[60px]">
@@ -216,6 +227,7 @@ const TeacherTestAndResources = () => {
   const [showexam, setShowexam] = useState(true);
   const [id, setId] = useState<undefined | string>(undefined);
   const [dialog, setDialog] = useState<boolean>(false);
+  console.log(id);
   return (
     <section>
       <Container>
@@ -258,12 +270,26 @@ const TeacherTestAndResources = () => {
         <div className=" flex flex-col md:flex-row gap-4">
           <div className="flex-2 ">
             <div className=" bg-[#FFFFFF] rounded-[8px] w-full pb-2">
-              <AllTest id={id} setId={setId} />
-              <AllResources />
+              <AllTest
+                setShowExam={setShowexam}
+                id={id}
+                setId={setId}
+                showExam={showexam}
+              />
+              <AllResources
+                setShowExam={setShowexam}
+                id={id}
+                setId={setId}
+                showExam={showexam}
+              />
             </div>
           </div>
           <div className="flex-3 bg-[#FFFFFF] h-[70vh] rounded-[8px] p-5">
-            {showexam ? <TeacherTestSubject id={id} /> : <TestResources />}
+            {showexam ? (
+              <TeacherTestSubject id={id} />
+            ) : (
+              <TestResources id={id} />
+            )}
           </div>
         </div>
       </Container>

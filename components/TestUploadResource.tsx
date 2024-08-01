@@ -51,7 +51,7 @@ export const TestUploadResource: React.FC<IdialogUpload> = ({
           subject,
           title,
           sourceLink: linka ?? img,
-          type: linka ? "LINK" : "DOC",
+          type: linka ? "LINK" : "DOCS",
         }),
       });
       return response;

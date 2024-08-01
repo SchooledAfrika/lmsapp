@@ -27,7 +27,6 @@ export async function POST(req: Request) {
       JSON.stringify({ message: "article uploaded successfully" })
     );
   } catch (error) {
-    console.log(error);
     return serverError();
   }
 }
@@ -36,6 +35,7 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   const teacherId = await serverSessionId();
   const { id } = await req.json();
+  console.log(id);
   if (!teacherId) return notAuthenticated();
   // lets get the article and check if is the owner that is about to delete it
   const article = await prisma.teachersArticle.findUnique({

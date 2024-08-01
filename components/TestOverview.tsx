@@ -6,6 +6,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { modefiedExamType } from "./TeacherTestAndResources";
 import { toast, ToastContainer } from "react-toastify";
+import { Skeleton } from "@mui/material";
 
 const TestOverview = () => {
   const { id } = useParams();
@@ -56,8 +57,16 @@ const TestOverview = () => {
   // return loading component if is fetching
   if (isFetching) {
     return (
-      <div>
-        <p>loading</p>
+      <div className=" w-full">
+        <p className=" text-black font-bold">Details</p>
+        <div className=" w-full md:w-2/5">
+          <Skeleton
+            height={500}
+            variant="rectangular"
+            animation="wave"
+            className=" w-full"
+          />
+        </div>
       </div>
     );
   }
@@ -76,7 +85,12 @@ const TestOverview = () => {
           onClickChange={handleDisplayComponent}
         />
       ) : (
-        <ViewAllQuestions />
+        <ViewAllQuestions
+          data={data}
+          deleting={deleting}
+          deleteTest={deleteTest}
+          onClickChange={handleDisplayComponent}
+        />
       )}
       <ToastContainer />
     </div>

@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import ViewPerformance from "./ViewPerformance";
 import { modefiedExamType } from "./TeacherTestAndResources";
 
-interface ViewTestDetailsProps {
+export interface ViewTestDetailsProps {
   onClickChange: () => void;
   data: modefiedExamType;
   deleteTest: () => void;
