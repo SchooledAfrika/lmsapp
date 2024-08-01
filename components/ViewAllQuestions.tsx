@@ -25,7 +25,7 @@ const ViewAllQuestions: React.FC<ViewTestDetailsProps> = ({
         <div className="flex-4 px-8 py-5 bg-[#FFFFFF] w-full h-[100vh] md:h-[80vh] overflow-y-scroll scrollbar-hide">
           <span className="font-bold ">All Questions</span>
           {data?.test.map((item, index) => (
-            <div className="shadow-lg mt-3 ">
+            <div key={index} className="shadow-lg mt-3 ">
               <div key={index} className="flex flex-col bg-[#FFFFFF] p-5">
                 <label className="font-bold">Question {index + 1}</label>
                 <input
