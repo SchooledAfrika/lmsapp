@@ -16,7 +16,7 @@ import { Skeleton } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-interface modefiedExamType extends IexamZod {
+export interface modefiedExamType extends IexamZod {
   createdAt: string;
   id: string;
 }

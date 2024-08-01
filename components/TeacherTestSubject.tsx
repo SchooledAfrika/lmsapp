@@ -34,7 +34,8 @@ const TeacherTestSubject: React.FC<Iexams> = ({ id }) => {
         <Skeleton
           variant="rectangular"
           animation={"wave"}
-          className=" w-full h-full"
+          className=" w-full"
+          height={350}
         />
       </div>
     );
@@ -110,7 +111,7 @@ const TeacherTestSubject: React.FC<Iexams> = ({ id }) => {
         </div>
 
         <Link
-          href={"/teacher-dashboard/test-and-resources/view-details"}
+          href={`/teacher-dashboard/test-and-resources/view-details/${data?.id}`}
           className="ml-4"
         >
           <Button className="bg-secondary text-white text-[12px] py-3 mr-0 md:mr-6">

@@ -51,7 +51,7 @@ export async function GET(req: Request) {
 // here teacher can delete the exam that they actually created
 export async function DELETE(req: Request) {
   const teacherId = await serverSessionId();
-  const id = await req.json();
+  const { id } = await req.json();
   if (!teacherId) return notAuthenticated();
   //   lets now get the exam then  compare the teacherId in it
   // if it does not match we should return an error
