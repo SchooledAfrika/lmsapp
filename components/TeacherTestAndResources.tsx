@@ -66,12 +66,12 @@ const AllTest: React.FC<IallTest> = ({ setId, id, setShowExam, showExam }) => {
   if (isError) {
     return <div>{error.message}</div>;
   }
-  if (data) {
-    const emptyArray = Array.isArray(data) && data.length;
-    if (emptyArray) {
+  if (data && id == undefined) {
+    const emptyArray = Array.isArray(data) && data.length > 0;
+    if (!emptyArray) {
       setId(undefined);
     } else {
-      const firstId = Array.isArray(data) && data[0]?.id;
+      const firstId = Array.isArray(data) && data[0].id;
       if (!id) {
         setId(firstId);
       }
