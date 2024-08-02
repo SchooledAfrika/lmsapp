@@ -16,7 +16,7 @@ const ProgressLine = ({
     setcurrentPage(goTOpage);
   };
   return (
-    <div className="flex sm:flex-col ml-[0] md:ml-[40px] mb-[50px]">
+    <div className="flex sm:flex-col ml-[0] md:ml-[40px] mb-[30px]">
       {formArrays.map((item, index) => (
         <div key={index} className=" flex sm:flex-col">
           <div
