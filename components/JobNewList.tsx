@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import ProgressLine from "./ui/PrograssLine";
 import { Button } from "./ui/button";
-import { useForm, useFieldArray, SubmitHandler, Controller, Control } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useSession } from "next-auth/react";
@@ -36,22 +36,15 @@ const JobNewList = () => {
     control,
     watch,
     clearErrors,
-    reset,
     setValue,
+    getValues,
+    reset,
     formState: { errors },
   } = useForm<IjobListing>({
-   
-      
-   
-    resolver: zodResolver(jobListingSchema),
+   resolver: zodResolver(jobListingSchema),
   });
 
-  const { fields, append, prepend, remove } = useFieldArray({
-   
-    control,
-    name: "responsibility"
-   
-  });
+  
 
   //   instance of client
   const queryClient = useQueryClient();
@@ -59,7 +52,7 @@ const JobNewList = () => {
   const mutation = useMutation({
     mutationKey: ["postjob"],
     mutationFn: async (data: IjobListing) => {
-      const result = await fetch("", {
+      const result = await fetch("/api/advertise", {
         method: "POST",
         body: JSON.stringify({
           ...data,
@@ -73,10 +66,8 @@ const JobNewList = () => {
       if (result.ok) {
         const body = await result.json();
         setloading(false);
+        reset();
         toast.success(body.message);
-        setTimeout(() => {
-          router.push("/school-dashboard/job-listing");
-        }, 4500);
       } else {
         setloading(false);
         return toast.error("error posting job");
@@ -86,8 +77,6 @@ const JobNewList = () => {
 
   const runSubmit: SubmitHandler<IjobListing> = async (data) => {
     console.log(data);
-    // converting the selected image to a blob and uploading to cloudinary
-    // using the useCloudinary custom hook;
     setloading(true);
     mutation.mutate(data);
     // handle file submission to the backend server
@@ -149,36 +138,43 @@ const JobNewList = () => {
             watch={watch}
             clearErrors={clearErrors}
             setValue={setValue}
+            getValues={getValues}
           />
         ) :  currentPage === 2 ? (
           <JobResponsibility
-                 clearErrors={clearErrors}
-                  register={register}
-                  control={control} 
-                  fields={fields}
-                  append={append}
-                  prepend={prepend}
-                  remove={remove}
+          register={register}
+          errors={errors}
+          control={control}
+          watch={watch}
+          clearErrors={clearErrors}
+          setValue={setValue}
+          getValues={getValues}
+                  
           
           />
         
          ) : currentPage === 3 ?  (
 
           <JobQualification
-            register={register}
-            errors={errors}
-            control={control}
-            watch={watch}
-            setValue={setValue}
+          register={register}
+          errors={errors}
+          control={control}
+          watch={watch}
+          clearErrors={clearErrors}
+          setValue={setValue}
+          getValues={getValues}
+           
           />
          ) : (
           <JobFinalization
-            register={register}
-            errors={errors}
-            control={control}
-            watch={watch}
-            clearErrors={clearErrors}
-            setValue={setValue}
+          register={register}
+          errors={errors}
+          control={control}
+          watch={watch}
+          clearErrors={clearErrors}
+          setValue={setValue}
+          getValues={getValues}
+            
           />
         )}
       

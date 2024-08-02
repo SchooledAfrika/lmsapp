@@ -7,6 +7,7 @@ import {
   Controller,
   UseFormWatch,
   UseFormSetValue,
+  UseFormGetValues
 } from "react-hook-form";
 import { States } from "@/constants/jobListing"
 import Link from "next/link";
@@ -33,6 +34,7 @@ export interface IJobSub {
   clearErrors: UseFormClearErrors<IjobListing>;
   watch: UseFormWatch<IjobListing>;
   setValue: UseFormSetValue<IjobListing>;
+  getValues: UseFormGetValues<IjobListing>;
 }
 
 
@@ -44,6 +46,7 @@ const JobDescription: React.FC<IJobSub> = ({
   watch,
   clearErrors,
   setValue,
+  getValues
 }) => {
  
 
@@ -156,7 +159,7 @@ const JobDescription: React.FC<IJobSub> = ({
                       </SelectTrigger>
 
                       <SelectContent className=" font-subtext font-medium">
-                        <ScrollArea className="h-[500px] w-full ">
+                        <ScrollArea className="h-[200px] w-full ">
                           <SelectGroup>
                             <SelectItem value="Grade1">Grade 1</SelectItem>
                             <SelectItem value="Grade2">Grade 2</SelectItem>
@@ -240,12 +243,7 @@ const JobDescription: React.FC<IJobSub> = ({
                   </small>
                 )}
               </div>
-              {/* <Button
-                onClick={handleDescriptionView}
-                className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
-              >
-                Proceed
-              </Button> */}
+             
           
         </div>
      
