@@ -1,94 +1,79 @@
-import { useState } from "react";
-import Container from "../Container";
-import Link from "next/link";
-import Image from "next/image";
-import { Button } from "./button";
+"use client";
+import React, { useState, useEffect } from "react";
+import { IJobSub } from "../JobDescription";
 
-interface JobResponsibilityProps {
-  onClickCurrentView: (view: string) => void;
-}
-
-const JobResponsibility: React.FC<JobResponsibilityProps> = ({
-  onClickCurrentView,
+const JobResponsibility: React.FC<IJobSub> = ({
+  getValues,
+  setValue,
+  errors,
 }) => {
-  const handleResponsibleView = () => {
-    onClickCurrentView("qualification");
-  };
-  const [inputs, setInputs] = useState(["", "", "", "", ""]);
+  const [responsibility, setResponsibility] = useState<string[]>(() => {
+    const initialResponsibility = getValues("responsibility");
+    return initialResponsibility ?? [{ responsibility: [""] }];
+  });
+  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-  const addInputField = () => {
-    setInputs([...inputs, ""]);
+  useEffect(() => {
+    const initialResponsibility = getValues("responsibility");
+    if (initialResponsibility) {
+      setResponsibility(initialResponsibility);
+    }
+  }, [getValues]);
+
+  const handleAddedResponsibility = (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+    const newResponsibility = [...responsibility, { responsibility: [""] }];
+    
+    setResponsibility(newResponsibility);
+    setValue("responsibility", newResponsibility);
+    setCurrentIndex((index) => index + 1);
+  };
+
+  const handleResponsibilityChange = (
+    rIndex: number,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const newResponsibility = [...responsibility];
+    newResponsibility[rIndex] = event.target.value;
+    setResponsibility(newResponsibility);
+    setValue("responsibility", newResponsibility);
   };
 
   return (
-    <section className="my-[80px] md:my-6">
-      <Container>
-        <div className="flex justify-between mb-5">
-          <span className="font-bold">Details</span>
-          <Link href="/school-dashboard/job-listing" className="cursor-pointer">
-            <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />
-          </Link>
+    <section className="my-[80px] md:my-6  ">
+      <div className="md:pl-[100px] w-full">
+        <label className="font-bold text-[18px]">Job Responsibilities</label>
+        {responsibility.map((responsibility, rIndex) => (
+          <label key={rIndex} className="flex items-center gap-3">
+            <input
+              type="text"
+              name="text"
+              value={responsibility}
+              placeholder={`Responsibility ${rIndex + 1}`}
+              onChange={(e) => handleResponsibilityChange(rIndex, e)}
+              className="my-2 p-4 text-[12px] rounded-md outline-none w-full md:w-[500px] bg-[#fff]"
+            />
+          </label>
+        ))}
+
+        <div className=" w-full flex items-center justify-between ">
+          <button
+            type="button"
+            onClick={handleAddedResponsibility}
+            className="font-bold text-[12px] hover:bg-green-200 rounded px-2 py-3 transform ease-in-out duration-500 transition-all"
+          >
+            Add More Responsibilities +
+          </button>
         </div>
-        <div className="flex flex-col md:flex-row  mb-[50px]">
-          <div>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] px-[7px] rounded-full text-white">
-                1
-              </span>
-              <p className="text-[#359C71] font-bold">Job Description</p>
-            </div>
-            <p className="border-l-2 border-[#359C71] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] rounded-full px-[7px] text-white">
-                2
-              </span>
-              <p className="text-[#359C71] font-bold">Responsibilities</p>
-            </div>
-            <p className="border-l-2 border-[#E9ECEB] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#E9ECEB] rounded-full px-[7px] text-white">
-                3
-              </span>
-              <p>Qualifications</p>
-            </div>
-            <p className="border-l-2 border-[#E9ECEB] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#E9ECEB] rounded-full px-[7px] text-white">
-                4
-              </span>
-              <p>Finalization</p>
-            </div>
-          </div>
-          <div>
-            <form className="flex flex-col pl-[0] md:pl-[100px] mt-[40px] md:mt-[0]">
-              <label className="font-bold text-[18px]">
-                What is lorem ipsum dolor sit ?
-              </label>
-              {inputs.map((input, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  value={input}
-                  placeholder="Responsibility"
-                  className="my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[80vh] bg-white"
-                />
-              ))}
-              <button
-                onClick={addInputField}
-                className="p-4 mt-2 font-bold rounded text-[12px] hover:bg-green-200"
-              >
-                Add More Responsibilities +
-              </button>
-              <Button
-                onClick={handleResponsibleView}
-                className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
-              >
-                Proceed
-              </Button>
-            </form>
-          </div>
-        </div>
-      </Container>
+
+        {errors.responsibility && (
+          <small className=" text-red-600">
+            please enter job Responsibilities
+          </small>
+        )}
+      </div>
     </section>
   );
 };

@@ -1,142 +1,192 @@
 import React, { useState } from "react";
-import { Button } from "./ui/button";
-import Container from "./Container";
-import Link from "next/link";
-import Image from "next/image";
+import { Controller } from "react-hook-form";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Preferences, Subject } from "@/constants/teacherOneOnOne";
+import { IteacherOneOnOneSub } from "./TeacherProfileData";
 
-interface TeacherPrice {
-  onClickTeacherDetails: (view: string) => void;
-}
+const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
+  errors,
+  control,
+  clearErrors,
+}) => {
+  const [subjects, setSubjects] = useState<string[]>([]);
+  const [preference, setPreference] = useState<string[]>([]);
 
-const TeacherSubject: React.FC<TeacherPrice> = ({ onClickTeacherDetails }) => {
-  const [inputFields, setInputFields] = useState<string[]>([""]);
-  const preferences = [
-    "HomeWork Support",
-    "1 on 1 Sessions",
-    "Open to Jobs",
-    "Group Sessions",
-  ];
-
-  const handleAddInput = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>
-  ) => {
-    event.preventDefault();
-    setInputFields([...inputFields, ""]);
+  const handleAddSubject = (value: string, field: any) => {
+    if (!subjects.includes(value)) {
+      const updatedSubjects = [...subjects, value];
+      setSubjects(updatedSubjects);
+      field.onChange(updatedSubjects);
+      clearErrors("subjects");
+      console.log("Subjects after addition:", updatedSubjects);
+    }
   };
 
-  const handlePriceView = () => {
-    onClickTeacherDetails("price");
+  const handleRemoveSubject = (value: string, field: any) => {
+    const updatedSubjects = subjects.filter((subject) => subject !== value);
+    setSubjects(updatedSubjects);
+    field.onChange(updatedSubjects);
+    clearErrors("subjects");
+    console.log("Subjects after removal:", updatedSubjects);
+  };
+
+  const handlePreference = (item: string, field: any) => {
+    let updatedPreference = [...preference];
+    const preferenceExists = updatedPreference.includes(item);
+
+    if (preferenceExists) {
+      updatedPreference = updatedPreference.filter((value) => value !== item);
+    } else {
+      updatedPreference.push(item);
+    }
+
+    setPreference(updatedPreference);
+    field.onChange(updatedPreference);
+    clearErrors("preference");
+    console.log("Preferences after update:", updatedPreference);
   };
 
   return (
-    <section className="my-[80px] md:my-6">
-      <Container>
-        <div className="flex justify-between items-center mb-5">
-          <span className="font-bold">Details</span>
-          <Link href="/school-dashboard/job-listing" className="cursor-pointer">
-            <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />
-          </Link>
-        </div>
-        <div className="flex flex-col md:flex-row mb-[50px]">
+    <section className="my-[20px] md:my-6">
+      <div className="flex flex-col md:flex-row mb-[30px]">
+        <div>
+          <label className="font-bold text-[16px]">Session Details</label>
           <div>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] px-[7px] rounded-full text-white">
-                1
-              </span>
-              <p className="text-[#359C71] font-bold">Profile Data</p>
-            </div>
-            <p className="border-l-2 border-[#359C71] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#359C71] rounded-full px-[7px] text-white">
-                2
-              </span>
-              <p className="text-[#359C71] font-bold">
-                Subject and Preferences
-              </p>
-            </div>
-            <p className="border-l-2 border-[#E9ECEB] h-[40px] md:h-[80px] ml-[10px]"></p>
-            <div className="flex gap-10">
-              <span className="bg-[#E9ECEB] rounded-full px-[7px] text-white">
-                3
-              </span>
-              <p>Pricing Details</p>
-            </div>
-          </div>
-
-          <div>
-            <form className="flex flex-col pl-[0] md:pl-[100px] mt-[40px] md:mt-[0]">
-              <label className="font-bold text-[16px]">Session Details</label>
-              <div>
-                {inputFields.map((_, index) => (
-                  <div
-                    key={index}
-                    className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[70vh] bg-white"
-                  >
-                    <input
-                      type="text"
-                      name={`subject-${index}`}
-                      placeholder={`Subject ${index + 1}`}
-                      className="outline-none w-full pr-4"
-                    />
-                    <Image
-                      src="/svgs/lock.svg"
-                      width={15}
-                      height={15}
-                      alt="Lock"
-                    />
+            <div className="flex flex-col mt-2">
+              <Controller
+                name="subjects"
+                control={control}
+                render={({ field }) => (
+                  <div>
+                    <Select
+                      onValueChange={(value) => handleAddSubject(value, field)}
+                    >
+                      <SelectTrigger className="w-full py-6">
+                        <SelectValue placeholder="Select subjects" />
+                      </SelectTrigger>
+                      <SelectContent className="font-subtext font-medium">
+                        <ScrollArea className="h-[500px] w-full">
+                          <SelectGroup>
+                            {Subject.map((item, index) => (
+                              <SelectItem key={index} value={item}>
+                                <div className="flex items-center">
+                                  <input
+                                    type="checkbox"
+                                    checked={subjects.includes(item)}
+                                    readOnly
+                                    className="mr-2"
+                                  />
+                                  {item}
+                                </div>
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </ScrollArea>
+                      </SelectContent>
+                    </Select>
+                    <div className="mt-4">
+                      {subjects.map((subject, index) => (
+                        <div key={index} className="flex items-center mb-2">
+                          <input
+                            type="text"
+                            value={subject}
+                            readOnly
+                            className="flex-grow p-2 border rounded"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveSubject(subject, field)}
+                            className="ml-2 p-2 text-red-600 border border-red-600 rounded"
+                          >
+                            Remove
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                ))}
-              </div>
-              <button
-                onClick={handleAddInput}
-                className="font-bold text-[12px] w-full hover:bg-green-200 rounded p-4 mt-2"
-              >
-                <span className="text-green-500">Go Premium</span> Add Another
-                Subject +
-              </button>
-              <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] w-full md:w-[40vh] lg:w-[70vh] bg-white">
-                <input
-                  type="text"
-                  name="text"
-                  placeholder="Grade 10, Grade 11 & Grade 12"
-                  className="outline-none w-full pr-4"
-                />
-                <Image
-                  src="/svgs/polygon.svg"
-                  width={15}
-                  height={15}
-                  alt="Lock"
-                />
-              </div>
-              <div>
-                <label className="font-bold text-[16px]">Preferences</label>
-                <div className="grid grid-cols-2 gap-x-2 w-full">
-                  {preferences.map((preference, index) => (
+                )}
+              />
+            </div>
+            {errors.subjects && (
+              <small className="text-red-600">{errors.subjects.message}</small>
+            )}
+          </div>
+          <div className="flex flex-col">
+            <Controller
+              control={control}
+              name="grade"
+              render={({ field }) => (
+                <Select
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    clearErrors("grade");
+                  }}
+                >
+                  <SelectTrigger className="w-full py-6">
+                    <SelectValue placeholder="Grade" />
+                  </SelectTrigger>
+                  <SelectContent className="font-subtext font-medium">
+                    <ScrollArea className="h-[500px] w-full ">
+                      <SelectGroup>
+                        {Array.from({ length: 12 }, (_, i) => (
+                          <SelectItem key={i} value={`Grade${i + 1}`}>
+                            Grade {i + 1}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </ScrollArea>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+          {errors.grade && (
+            <small className="text-red-600">{errors.grade.message}</small>
+          )}
+          <div className="mt-3">
+            <label className="font-bold text-[16px]">Preferences</label>
+
+            <Controller
+              control={control}
+              name="preference"
+              render={({ field }) => (
+                <div className="grid grid-cols md:grid-cols-2 gap-x-2 w-full">
+                  {Preferences.map((item, index) => (
                     <label
                       key={index}
+                      onClick={() => handlePreference(item, field)}
                       className="flex justify-between items-center gap-2 my-2 px-4 py-3 outline-none rounded-[8px] bg-white cursor-pointer"
                     >
-                      {preference}
+                      {item}
                       <input
                         type="checkbox"
-                        name="preferences"
-                        value={preference}
+                        name="preference"
+                        value={item}
+                        checked={preference.includes(item)}
+                        readOnly
                         className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-green-600 checked:border-transparent focus:outline-none"
                       />
                     </label>
                   ))}
                 </div>
-              </div>
-              <Button
-                onClick={handlePriceView}
-                className="bg-secondary w-full text-white text-[16px] px-6 py-7 my-3"
-              >
-                Proceed
-              </Button>
-            </form>
+              )}
+            />
+            {errors.preference && (
+              <small className="text-red-600">
+                {errors.preference.message}
+              </small>
+            )}
           </div>
         </div>
-      </Container>
+      </div>
     </section>
   );
 };

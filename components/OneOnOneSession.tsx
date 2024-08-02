@@ -18,9 +18,9 @@ const OneOnOne = () => {
                 width={20}
                 height={20}
                 className="mr-2"
-                alt="Edit Session Profile"
+                alt="Create Session Profile"
               />
-              Edit Session Profile
+              Create Session Profile
             </Button>
           </Link>
         </div>
