@@ -11,7 +11,6 @@ const JobResponsibility: React.FC<IJobSub> = ({
     const initialResponsibility = getValues("responsibility");
     return initialResponsibility ?? [""];
   });
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   useEffect(() => {
     const initialResponsibility = getValues("responsibility");
@@ -27,7 +26,6 @@ const JobResponsibility: React.FC<IJobSub> = ({
     const newResponsibility = [...responsibility, ""];
     setResponsibility(newResponsibility);
     setValue("responsibility", newResponsibility);
-    setCurrentIndex((index) => index + 1);
   };
 
   const handleResponsibilityChange = (

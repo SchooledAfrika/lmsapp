@@ -9,9 +9,8 @@ const JobQualification: React.FC<IJobSub> = ({
 }) => {
   const [qualifications, setQualifications] = useState<string[]>(() => {
     const initialQualifications = getValues("qualifications");
-    return initialQualifications ?? [{ qualifications: [""] }];
+    return initialQualifications ?? [""];
   });
-  const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   useEffect(() => {
     const initialQualifications = getValues("qualifications");
@@ -20,15 +19,12 @@ const JobQualification: React.FC<IJobSub> = ({
     }
   }, [getValues]);
 
-  const handleAddedQualification = (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleAddedQualification = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const newQualification = [...qualifications, { qualifications: [""] }];
-    
+    const newQualification = [...qualifications, ""];
+
     setQualifications(newQualification);
     setValue("responsibility", newQualification);
-    setCurrentIndex((index) => index + 1);
   };
 
   const handleQualificationChange = (
