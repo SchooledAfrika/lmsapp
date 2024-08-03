@@ -9,7 +9,7 @@ const JobResponsibility: React.FC<IJobSub> = ({
 }) => {
   const [responsibility, setResponsibility] = useState<string[]>(() => {
     const initialResponsibility = getValues("responsibility");
-    return initialResponsibility ?? [{ responsibility: [""] }];
+    return initialResponsibility ?? [""];
   });
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
@@ -24,8 +24,7 @@ const JobResponsibility: React.FC<IJobSub> = ({
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
-    const newResponsibility = [...responsibility, { responsibility: [""] }];
-    
+    const newResponsibility = [...responsibility, ""];
     setResponsibility(newResponsibility);
     setValue("responsibility", newResponsibility);
     setCurrentIndex((index) => index + 1);
