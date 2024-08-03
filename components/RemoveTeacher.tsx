@@ -20,8 +20,6 @@ interface Idelete {
   offerId: string;
 }
 const RemoveTeacher: React.FC<Idelete> = ({ offerId }) => {
-  console.log(offerId);
-
   const [loading, setloading] = useState<boolean>(false);
 
   //   instance of client
@@ -36,7 +34,6 @@ const RemoveTeacher: React.FC<Idelete> = ({ offerId }) => {
         }),
       });
       return result;
-      console.log(offerId);
     },
 
     onSuccess: async (result) => {
@@ -52,14 +49,11 @@ const RemoveTeacher: React.FC<Idelete> = ({ offerId }) => {
     onError: (error) => {
       console.error("Error deleting data:", error);
       setloading(false);
-
-      // Handle error as needed
     },
   });
   const handleDelete = () => {
     setloading(true);
     mutate(offerId);
-    console.log(offerId);
   };
   return (
     <Dialog>

@@ -10,45 +10,127 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import Image from "next/image";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
-
-import { TableSkeleton } from "@/components/TableSkeleton";
 import TeacherOptions from "./TeacherOptions";
+import { useConversion } from "@/data-access/conversion";
+import { Skeleton } from "@mui/material";
+interface ITeacherInfo {
+  profilePhoto: string;
+  name: string;
+  phoneNo: string;
+  email: string;
+}
+interface ISchoolTeacher {
+  id: string;
+  schoolId: string;
+  teacherId: string;
+  status: string;
+  createdAt: string;
+  teacher: ITeacherInfo;
+}
 
+export const LoadingTable = () => {
+  const dummyArray = new Array(5).fill("");
+  return (
+    <div>
+      <div className=" w-full px-4 py-2 bg-white rounded-md flex flex-col gap-2">
+        {dummyArray.map((item, index) => (
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            height={50}
+            className="w-full"
+            key={index}
+          />
+        ))}
+      </div>
+      <div className=" w-full flex items-center justify-center mt-4">
+        <p>Loading...</p>
+      </div>
+    </div>
+  );
+};
 
-// const TeachersType = [
-//   {
-//     id: "1",
-//     icon: "/teacher-img.png",
-//     name: "Odo Maurice ",
-//     mail: "odo@gmail.com",
-//     phone: "+2349130893924",
-//     subject: "Mathematics, English, Accounting",
-//     Grade: "Grade 10, Grade 11, & Grade 12",
+export const NoItem: React.FC<{ itemName: string }> = ({ itemName }) => {
+  return (
+    <div className=" mt-4 md:mt-20 w-full flex flex-col items-center justify-center gap-2">
+      <Image
+        src="/noitem.avif"
+        alt="no-item"
+        width={200}
+        height={200}
+        className=" w-[300px]"
+      />
+      <div className=" px-4 py-2 border border-green-700 rounded-md">
+        <p>
+          No {itemName}, add {itemName}
+        </p>
+      </div>
+    </div>
+  );
+};
 
-//     Added: "April 20, 2024",
-//     active: "Active",
-//     status: "Teacher",
-//     options: "...",
-//   },
-//   {
-//     id: "2",
-//     icon: "/tutors.jpg",
-//     name: "Augustine David",
-//     mail: "odo@gmail.com",
-//     phone: "+2349130893924",
-//     subject: "Mathematics, English, Accounting",
-//     Grade: "Grade 10, Grade 11, & Grade 12",
-//     Added: "April 20, 2024",
-//     pending: "pending",
-//     status: "Teacher",
-//     options: "...",
-//   },
-// ];
+const Teachers = ({ item }: { item: ISchoolTeacher }) => {
+  const { handleDate } = useConversion();
+  return (
+    <TableRow key={item.id} className="">
+      <TableCell className="flex items-center gap-2">
+        <Image
+          src={item?.teacher.profilePhoto}
+          alt="profile"
+          width={200}
+          height={200}
+          className=" w-[50px] h-[50px] rounded-md"
+        />
+        <div className=" flex flex-col">
+          <p className=" font-bold text-black text-[12px]">
+            {item.teacher.name}
+          </p>
+          <div
+            className={` px-2 w-fit py-1 rounded-md ${
+              item.status == "PENDING"
+                ? " bg-yellow-500 text-white"
+                : item.status == "ACTIVE"
+                ? "bg-green-700 text-white"
+                : "bg-red-600 text-white"
+            }`}
+          >
+            <p className=" text-[8px]">{item.status}</p>
+          </div>
+        </div>
+      </TableCell>
+      <TableCell className="">
+        <div className="flex flex-col">
+          <div className="text-[12px] flex items-center gap-2  font-medium">
+            <FaEnvelope className="text-[10px" />
+            <p className="text-[10px">{item?.teacher.email}</p>
+          </div>
+          <div className="text-[12px] flex items-center gap-2  font-medium">
+            <FaPhoneAlt className="" />
+            <p className="text-[10px]">{item?.teacher.phoneNo}</p>
+          </div>
+        </div>
+      </TableCell>
+      <TableCell className="text-[12px]  font-medium">
+        <p>N/A</p>
+      </TableCell>
+
+      <TableCell className="text-[12px]  font-medium">
+        <p>N/A</p>
+      </TableCell>
+      <TableCell className="text-[12px]  font-medium">
+        <p className=" text-[10px]">{handleDate(item.createdAt)}</p>
+      </TableCell>
+      <TableCell className="float-right  text-[16px]   text-lightGreen cursor-pointer">
+        <TeacherOptions offerId={item?.id} />
+      </TableCell>
+    </TableRow>
+  );
+};
 
 const TeachersTable = () => {
+  const { handleDate } = useConversion();
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["addTeacher"],
     queryFn: async () => {
@@ -57,14 +139,11 @@ const TeachersTable = () => {
       return result;
     },
   });
-  console.log(data)
   //   if is loading
   if (isLoading) {
     return (
-      <div className="">
-        <p className="my-4 font-bold">loading...</p>
-
-       
+      <div className=" mt-10">
+        <LoadingTable />
       </div>
     );
   }
@@ -72,77 +151,37 @@ const TeachersTable = () => {
   if (isError) {
     return <div className=" flex-1">{error.message}</div>;
   }
-
-  
-
   return (
-    <Table className="bg-white overflow-x-auto    rounded-md mt-12">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="text-[12px]">Name</TableHead>
-          <TableHead className=" text-[12px]">Contact</TableHead>
-          <TableHead className="text-[12px]">Subject</TableHead>
-          <TableHead className="text-[12px]">Grade</TableHead>
-          <TableHead className="text-[12px]">Date</TableHead>
-          <TableHead className="text-right text-[12px]">Options</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-      {Array.isArray(data) &&
-      data.map((item: any) => (
-          <TableRow key={item.id}   className="">
-            <TableCell className="font-bold text-[13px] mt-2 md:mt-0 w-[200px]  flex  mr-1">
-              {/* <Image
-                src={Teacher.icon}
-                alt="icon"
-                width={100}
-                height={100}
-                className="w-[60px] h-[60px] rounded-md mr-1"
-              />{" "} */}
-              <div className="flex ml-1 flex-col">
-                <div></div>
-                {/* <div className="flex  mt-2 justify-between">
-                    <p
-                      className={`${
-                       
-                          ? "text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-lightGreen text-white"
-                          : "text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-gold text-white"
-                      }`}
-                    >
-                     
-                    </p>
-                   
-                  </div> */}
-                
-                 
-                  
-               
-              </div>
-            </TableCell>
-            <TableCell className="">
-              <div className="flex flex-col">
-                <p className="inline mb-2 text-[12px] font-medium">
-                  <FaEnvelope className="inline mr-1 " />
-                
-                </p>
-                <p className="inline text-[12px] font-medium">
-                  <FaPhoneAlt className="inline mr-1" />
-                  
-                </p>
-              </div>
-            </TableCell>
-            <TableCell className="text-[12px]  font-medium"></TableCell>
-
-            <TableCell className="text-[12px]  font-medium"></TableCell>
-            <TableCell className="text-[12px]  font-medium"></TableCell>
-            <TableCell className="float-right  text-[16px]   text-lightGreen cursor-pointer">
-            {/* <TeacherOptions /> */}
-            </TableCell>
-          </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+    <div>
+      {Array.isArray(data) && (
+        <div>
+          {data.length === 0 ? (
+            <NoItem itemName="Teacher" />
+          ) : (
+            <Table className="bg-white overflow-x-auto    rounded-md mt-12">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-[12px]">Name</TableHead>
+                  <TableHead className=" text-[12px]">Contact</TableHead>
+                  <TableHead className="text-[12px]">Subject</TableHead>
+                  <TableHead className="text-[12px]">Grade</TableHead>
+                  <TableHead className="text-[12px]">Date</TableHead>
+                  <TableHead className="text-right text-[12px]">
+                    Options
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((item: ISchoolTeacher, index) => (
+                  <Teachers key={index} item={item} />
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </div>
+      )}
+    </div>
   );
-}
+};
 
-export default TeachersTable
+export default TeachersTable;

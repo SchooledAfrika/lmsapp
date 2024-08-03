@@ -11,20 +11,17 @@ import { ListCollapse } from "lucide-react";
 import Link from "next/link";
 import RemoveTeacher from "./RemoveTeacher";
 
-
 interface Idelete {
-  offerId:string
+  offerId: string;
 }
 
-
-const TeacherOptions: React.FC<Idelete> = ({offerId}) => {
-  console.log(offerId)
+const TeacherOptions: React.FC<Idelete> = ({ offerId }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-      <Button className="border-none" variant="outline">
-        <FaEllipsisH className="ml-3 " />
-      </Button>
+        <Button className="border-none" variant="outline">
+          <FaEllipsisH className="ml-3 " />
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-40">
         <div className="grid gap-4 font-subtext">
@@ -39,7 +36,7 @@ const TeacherOptions: React.FC<Idelete> = ({offerId}) => {
             </div>
             <hr className="bg-black" />
             <div className="flex justify-start">
-              <RemoveTeacher offerId={offerId}/>
+              <RemoveTeacher offerId={offerId} />
             </div>
             <hr className="bg-black" />
           </div>
@@ -47,6 +44,6 @@ const TeacherOptions: React.FC<Idelete> = ({offerId}) => {
       </PopoverContent>
     </Popover>
   );
-}
+};
 
-export default TeacherOptions
+export default TeacherOptions;

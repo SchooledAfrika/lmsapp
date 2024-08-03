@@ -22,8 +22,17 @@ import { LiaChalkboardTeacherSolid } from "react-icons/lia";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const AddTeacher = () => {
+interface IAddTeacher {
+  setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  openDialog: boolean;
+}
+
+const TeacherDialog: React.FC<IAddTeacher> = ({
+  setOpenDialog,
+  openDialog,
+}) => {
   const [loading, setloading] = useState<boolean>(false);
+  const [loadingB, setLoadingB] = useState<boolean>(false);
   // react hook form instance below here
   const {
     register,
@@ -43,7 +52,6 @@ const AddTeacher = () => {
   const mutation = useMutation({
     mutationKey: ["postTeacher"],
     mutationFn: async (data: IaddingTeacherSchool) => {
-      console.log(data);
       const result = await fetch("/api/add-teacher-by-school", {
         method: "POST",
         body: JSON.stringify({
@@ -59,7 +67,10 @@ const AddTeacher = () => {
         const body = await result.json();
         setloading(false);
         reset();
-        return toast.success(body.message);
+        toast.success(body.message);
+        setTimeout(() => {
+          return setOpenDialog(false);
+        }, 4000);
       } else {
         setloading(false);
         return toast.error("Error adding teacher");
@@ -74,7 +85,7 @@ const AddTeacher = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={() => setOpenDialog(false)}>
       <DialogTrigger asChild>
         <Button className="bg-lightGreen bg-none border-none rounded-lg hover:bg-green-700  text-white text-[14px]  px-3 font-bold sm:w-36 w-28  py-2 text-start lg:block">
           <LiaChalkboardTeacherSolid className="sm:inline-block text-lg hidden mr-1" />
@@ -132,16 +143,24 @@ const AddTeacher = () => {
             <Button
               type="submit"
               className="w-full py-6 mt-6 bg-lightGreen hover:bg-green-700"
-              disabled={loading}
+              disabled={loadingB}
             >
-              {loading ? "Sending Invite..." : "Send Invite"}
+              {loadingB ? "Sending Invite..." : "Send Invite"}
             </Button>
           </form>
         </div>
-        
       </DialogContent>
       <ToastContainer />
     </Dialog>
+  );
+};
+
+const AddTeacher = () => {
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  return (
+    <div onClick={() => setOpenDialog(true)}>
+      <TeacherDialog openDialog={openDialog} setOpenDialog={setOpenDialog} />
+    </div>
   );
 };
 

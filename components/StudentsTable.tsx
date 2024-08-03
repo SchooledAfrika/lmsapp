@@ -3,113 +3,135 @@ import React from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-  } from "@/components/ui/table";
-  
-  import Image from "next/image";
-  import Link from "next/link";
-
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import Image from "next/image";
+import Link from "next/link";
 import { TableSkeleton } from "./TableSkeleton";
 import StudentOptions from "./StudentOptions";
-  
-  const StudentsType = [
-    {
-      id: "1",
-      icon: "/teacher-img.png",
-      name: "Odo Maurice O",
-      classrooms: "Daisy, Alpha, Beta",
-      active: "Active",
-      status: "Student",
-      options: "...",
-    },
-    {
-      id: "2",
-      icon: "/tutors.jpg",
-      name: "Augustine David",
-      classrooms: "Daisy, Alpha, Beta",
-      pending: "pending",
-      status: "Student",
-      accept: "Accept",
-      reject: "Reject",
-    },
-  ];
-  
-  export default function StudentsTable() {
-    const { isLoading, isError, error, data } = useQuery({
-      queryKey: ["addStudent"],
-      queryFn: async () => {
-        const response = await fetch("/api/add-student-by-school");
-        const result = await response.json();
-        return result;
-      },
-    });
-    console.log(data)
-    //   if is loading
-    if (isLoading) {
-      return (
-        <div className="">
-          <p className="my-4 font-bold">loading...</p>
-  
-          <TableSkeleton />
+import { NoItem, LoadingTable } from "./TeachersTable";
+import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+
+interface IstudentInfo {
+  name: string;
+  profilePhoto: string;
+  email: string;
+  phoneNo: string;
+}
+
+interface IstudentSchool {
+  id: string;
+  status: string;
+  createdAt: string;
+  student: IstudentInfo;
+}
+
+// the part showing information about the table for students
+const StudentInfo: React.FC<{ student: IstudentSchool }> = ({ student }) => {
+  return (
+    <TableRow className="">
+      <TableCell className="font-semibold w-[200px] text-[14px]  flex  items-center gap-2">
+        <Image
+          src={student?.student.profilePhoto}
+          alt="studentimage"
+          width={200}
+          height={200}
+          className=" w-[45px] h-[45px] rounded-md"
+        />
+        <div className=" flex flex-col gap-1">
+          <p className="font-bold text-black text-[12px]">
+            {student?.student.name}
+          </p>
+          <div
+            className={` px-2 w-fit py-1 rounded-md ${
+              student?.status == "PENDING"
+                ? " bg-yellow-500 text-white"
+                : student?.status == "ACTIVE"
+                ? "bg-green-700 text-white"
+                : "bg-red-600 text-white"
+            }`}
+          >
+            <p className=" text-[8px]">{student?.status}</p>
+          </div>
         </div>
-      );
-    }
-    // if is error
-    if (isError) {
-      return <div className=" flex-1">{error.message}</div>;
-    }
+      </TableCell>
+      <TableCell className="text-[12.5px] font-semibold">
+        <div className="flex flex-col">
+          <div className="text-[12px] flex items-center gap-2  font-medium">
+            <FaEnvelope className="text-[10px" />
+            <p className="text-[10px">{student.student.email}</p>
+          </div>
+          <div className="text-[12px] flex items-center gap-2  font-medium">
+            <FaPhoneAlt className="" />
+            <p className="text-[10px]">{student.student.phoneNo}</p>
+          </div>
+        </div>
+      </TableCell>
+      <TableCell className="text-[12.5px] font-semibold">
+        <p>N/A</p>
+      </TableCell>
+
+      <TableCell className="float-right text-[16px]  text-lightGreen cursor-pointer">
+        <StudentOptions offerId={student.id} />
+      </TableCell>
+    </TableRow>
+  );
+};
+
+// the main component for showing students in school
+export default function StudentsTable() {
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["addStudent"],
+    queryFn: async () => {
+      const response = await fetch("/api/add-student-by-school");
+      const result = await response.json();
+      return result;
+    },
+  });
+  //   if is loading
+  if (isLoading) {
     return (
-      <Table className="bg-white overflow-x-auto    rounded-md mt-12">
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-[12px]">Name</TableHead>
-            <TableHead className="text-[12px]">Classrooms</TableHead>
-            <TableHead className="text-right text-[12px]">Options</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-        {Array.isArray(data) &&
-          data.map((Student: any) => (
-            <TableRow key={Student.id} className="">
-              <TableCell className="font-semibold w-[200px] text-[14px]  flex  mr-1">
-                {/* <Image
-                  src={Student.icon}
-                  alt="icon"
-                  width={100}
-                  height={100}
-                  className="w-[50px] h-[60px] rounded-md mr-1"
-                />{" "} */}
-                <div className="flex ml-1 flex-col">
-                  <div className="text-[13px]  font-bold">{Student.name}</div>
-                  <div className="flex  mt-2 justify-between">
-                    <p
-                      className={`${
-                        Student.active
-                          ? "text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-lightGreen text-white"
-                          : "text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-gold text-white"
-                      }`}
-                    >
-                      {Student.status}
-                    </p>
-                   
-                  </div>
-                </div>
-              </TableCell>
-             
-              <TableCell className="text-[12.5px] font-semibold">{Student.classrooms}</TableCell>
-  
-              <TableCell className="float-right text-[16px]  text-lightGreen cursor-pointer">
-             <StudentOptions offerId={Student?.id}/>
-            </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <div className=" mt-10">
+        <LoadingTable />
+      </div>
     );
   }
-  
+  // if is error
+  if (isError) {
+    return <div className=" flex-1">{error.message}</div>;
+  }
+  return (
+    <div>
+      {Array.isArray(data) && (
+        <div>
+          {data.length === 0 ? (
+            <NoItem itemName="Student" />
+          ) : (
+            <Table className="bg-white overflow-x-auto    rounded-md mt-12">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-[12px]">Name</TableHead>
+                  <TableHead className="text-[12px]">Contacts</TableHead>
+                  <TableHead className="text-[12px]">Classrooms</TableHead>
+                  <TableHead className="text-right text-[12px]">
+                    Options
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.map((student: IstudentSchool, index) => (
+                  <StudentInfo key={index} student={student} />
+                ))}
+              </TableBody>
+            </Table>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
