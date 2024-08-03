@@ -24,7 +24,7 @@ const DashboardPagination = () => {
   const ITEM_PER_PAGE = 6;
 
   return (
-    <Pagination className="font-subtext mt-24  mb-6 rounded-xl py-3">
+    <Pagination className="font-subtext mt-12  mb-6 rounded-xl py-3">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious onClick={() => "prev"} href="#" />

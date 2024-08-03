@@ -18,38 +18,37 @@ import { TableSkeleton } from "@/components/TableSkeleton";
 import TeacherOptions from "./TeacherOptions";
 
 
-const TeachersType = [
-  {
-    id: "1",
-    icon: "/teacher-img.png",
-    name: "Odo Maurice ",
-    mail: "odo@gmail.com",
-    phone: "+2349130893924",
-    subject: "Mathematics, English, Accounting",
-    Grade: "Grade 10, Grade 11, & Grade 12",
+// const TeachersType = [
+//   {
+//     id: "1",
+//     icon: "/teacher-img.png",
+//     name: "Odo Maurice ",
+//     mail: "odo@gmail.com",
+//     phone: "+2349130893924",
+//     subject: "Mathematics, English, Accounting",
+//     Grade: "Grade 10, Grade 11, & Grade 12",
 
-    Added: "April 20, 2024",
-    active: "Active",
-    status: "Teacher",
-    options: "...",
-  },
-  {
-    id: "2",
-    icon: "/tutors.jpg",
-    name: "Augustine David",
-    mail: "odo@gmail.com",
-    phone: "+2349130893924",
-    subject: "Mathematics, English, Accounting",
-    Grade: "Grade 10, Grade 11, & Grade 12",
-    Added: "April 20, 2024",
-    pending: "pending",
-    status: "Teacher",
-    options: "...",
-  },
-];
+//     Added: "April 20, 2024",
+//     active: "Active",
+//     status: "Teacher",
+//     options: "...",
+//   },
+//   {
+//     id: "2",
+//     icon: "/tutors.jpg",
+//     name: "Augustine David",
+//     mail: "odo@gmail.com",
+//     phone: "+2349130893924",
+//     subject: "Mathematics, English, Accounting",
+//     Grade: "Grade 10, Grade 11, & Grade 12",
+//     Added: "April 20, 2024",
+//     pending: "pending",
+//     status: "Teacher",
+//     options: "...",
+//   },
+// ];
 
 const TeachersTable = () => {
-
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["addTeacher"],
     queryFn: async () => {
@@ -65,7 +64,7 @@ const TeachersTable = () => {
       <div className="">
         <p className="my-4 font-bold">loading...</p>
 
-        <TableSkeleton />
+       
       </div>
     );
   }
@@ -73,6 +72,8 @@ const TeachersTable = () => {
   if (isError) {
     return <div className=" flex-1">{error.message}</div>;
   }
+
+  
 
   return (
     <Table className="bg-white overflow-x-auto    rounded-md mt-12">
@@ -88,8 +89,8 @@ const TeachersTable = () => {
       </TableHeader>
       <TableBody>
       {Array.isArray(data) &&
-          data.map((Teacher: any) => (
-          <TableRow key={Teacher.id} className="">
+      data.map((item: any) => (
+          <TableRow key={item.id}   className="">
             <TableCell className="font-bold text-[13px] mt-2 md:mt-0 w-[200px]  flex  mr-1">
               {/* <Image
                 src={Teacher.icon}
@@ -99,19 +100,19 @@ const TeachersTable = () => {
                 className="w-[60px] h-[60px] rounded-md mr-1"
               />{" "} */}
               <div className="flex ml-1 flex-col">
-                <div>{Teacher.name}</div>
-                <div className="flex  mt-2 justify-between">
+                <div></div>
+                {/* <div className="flex  mt-2 justify-between">
                     <p
                       className={`${
-                        Teacher.active
+                       
                           ? "text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-lightGreen text-white"
                           : "text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-gold text-white"
                       }`}
                     >
-                      {Teacher.status}
+                     
                     </p>
                    
-                  </div>
+                  </div> */}
                 
                  
                   
@@ -122,20 +123,20 @@ const TeachersTable = () => {
               <div className="flex flex-col">
                 <p className="inline mb-2 text-[12px] font-medium">
                   <FaEnvelope className="inline mr-1 " />
-                  {Teacher.mail}
+                
                 </p>
                 <p className="inline text-[12px] font-medium">
                   <FaPhoneAlt className="inline mr-1" />
-                  {Teacher.phone}
+                  
                 </p>
               </div>
             </TableCell>
-            <TableCell className="text-[12px]  font-medium">{Teacher.subject}</TableCell>
+            <TableCell className="text-[12px]  font-medium"></TableCell>
 
-            <TableCell className="text-[12px]  font-medium">{Teacher.Grade}</TableCell>
-            <TableCell className="text-[12px]  font-medium">{Teacher.Added}</TableCell>
+            <TableCell className="text-[12px]  font-medium"></TableCell>
+            <TableCell className="text-[12px]  font-medium"></TableCell>
             <TableCell className="float-right  text-[16px]   text-lightGreen cursor-pointer">
-            <TeacherOptions offerId={Teacher.id}/>
+            {/* <TeacherOptions /> */}
             </TableCell>
           </TableRow>
         ))}

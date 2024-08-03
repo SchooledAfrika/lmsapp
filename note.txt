@@ -1,1 +1,7 @@
+Here are the bugs I have currently
 
+1. I am able to post job adverts in the schools dashboards sucessfully but there are little type issues in the Lines 29 and 30 of the Job responsibilities and Job qualifications components which might cause deployment issues.
+
+2. In the schools dashboard I am able to add teachers and students but I can't read through that data of the teacher and students I added to display them in the appropriate tables.
+
+3. In the vacancies page on the website, I find it difficult to get all the job vacancies made by schools after implementing the infinite query, I still get a server error (undefined || 500)
