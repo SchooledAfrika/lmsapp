@@ -5,6 +5,7 @@ import { useRouter, usePathname } from "next/navigation";
 import { FaPowerOff } from "react-icons/fa";
 import { CommonDashboardContext } from "@/providers/Statecontext";
 import {
+  AdminSideBarComponent,
   ParentSideBarComponent,
   SchoolSideBarComponent,
   StudentSideBarComponent,
@@ -42,20 +43,20 @@ const Sidebar = ({ dashboard }: { dashboard: string }) => {
           onClick={() => router.push("/")}
         />
       </div>
-      {/* the side bar menu */}
-      {
-        // if we are in the school dashboard this links should show
-        // the null should be replaced with the last dashboard which is the admin dashboard
-        dashboard === "school" ? (
-          <SchoolSideBarComponent findpath={findpath} />
-        ) : dashboard === "teacher" ? (
-          <TeacherSideBarComponent findpath={findpath} />
-        ) : dashboard === "student" ? (
-          <StudentSideBarComponent findpath={findpath} />
-        ) : dashboard === "parent" ? (
-          <ParentSideBarComponent findpath={findpath} />
-        ) : null
-      }
+      {/* the side bar menu
+       Conditionally render the sidebar component based on the dashboard type */}
+      {dashboard === "school" ? (
+        <SchoolSideBarComponent findpath={findpath} />
+      ) : dashboard === "teacher" ? (
+        <TeacherSideBarComponent findpath={findpath} />
+      ) : dashboard === "student" ? (
+        <StudentSideBarComponent findpath={findpath} />
+      ) : dashboard === "parent" ? (
+        <ParentSideBarComponent findpath={findpath} />
+      ) : dashboard === "admin" ? (
+        <AdminSideBarComponent findpath={findpath} />
+      ) : null}
+
       {/* then the last part for log out */}
       <div className="w-full h-[120px] bg-green-800 mt-16  flex items-end justify-center  relative rounded-lg">
         <div className=" w-3/5 h-[120px] left-1/2 rounded-xl transform -translate-x-1/2 bg-white absolute gap-1 -translate-y-1/2 flex flex-col items-center justify-center">
