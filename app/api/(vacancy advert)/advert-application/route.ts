@@ -182,7 +182,16 @@ export async function GET(req: Request) {
       skip: skipAmt,
       take: takeAmt,
       include: {
-        school: true,
+        school: {
+          select: {
+            name: true,
+          },
+        },
+        VacancyTeacher: {
+          select: {
+            teacherId: true,
+          },
+        },
       },
     });
     return new Response(JSON.stringify(jobAdverts), { status: 200 });
