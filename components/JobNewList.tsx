@@ -55,7 +55,6 @@ const JobNewList = () => {
           ...data,
         }),
       });
-
       return result;
     },
     onSuccess: async (result) => {
@@ -65,6 +64,9 @@ const JobNewList = () => {
         setloading(false);
         reset();
         toast.success(body.message);
+        setTimeout(() => {
+          return router.push("/school-dashboard/job-listing");
+        }, 4000);
       } else {
         setloading(false);
         return toast.error("error posting job");
@@ -73,7 +75,6 @@ const JobNewList = () => {
   });
 
   const runSubmit: SubmitHandler<IjobListing> = async (data) => {
-    console.log(data);
     setloading(true);
     mutation.mutate(data);
     // handle file submission to the backend server
@@ -119,7 +120,7 @@ const JobNewList = () => {
 
         {/* the div holding both the form progress and the form */}
         {/* the form contains each form based on the state number above */}
-        <div className=" flex flex-col md:flex-row gap-3 md:gap-16">
+        <div className=" flex flex-col md:flex-row gap-3 md:gap-14">
           <ProgressLine
             formArrays={JobListingInfo}
             currentPage={currentPage}
@@ -172,7 +173,7 @@ const JobNewList = () => {
               onClick={handleNextPage}
               type="button"
               disabled={loading}
-              className="bg-secondary w-full md:ml-[100px] md:w-[500px] text-white text-[16px] px-6 py-7 my-3"
+              className="bg-secondary w-full md:w-2/3  text-white text-[16px] px-6 py-7 my-3"
             >
               {currentPage < 4 ? "Proceed" : submittingState()}
             </Button>

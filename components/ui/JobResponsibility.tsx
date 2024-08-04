@@ -39,23 +39,30 @@ const JobResponsibility: React.FC<IJobSub> = ({
   };
 
   return (
-    <section className="my-[80px] md:my-6  ">
-      <div className="md:pl-[100px] w-full">
-        <label className="font-bold text-[18px]">Job Responsibilities</label>
-        {responsibility.map((responsibility, rIndex) => (
-          <label key={rIndex} className="flex items-center gap-3">
-            <input
-              type="text"
-              name="text"
-              value={responsibility}
-              placeholder={`Responsibility ${rIndex + 1}`}
-              onChange={(e) => handleResponsibilityChange(rIndex, e)}
-              className="my-2 p-4 text-[12px] rounded-md outline-none w-full md:w-[500px] bg-[#fff]"
-            />
-          </label>
-        ))}
+    <section className="w-full md:w-2/3 flex flex-col gap-3">
+      <label className="font-bold text-[18px]">Job Responsibilities</label>
+      <div className=" flex flex-col gap-2">
+        <div className=" flex flex-col gap-1">
+          {responsibility.map((responsibility, rIndex) => (
+            <label key={rIndex} className="flex items-center gap-3">
+              <input
+                type="text"
+                name="text"
+                value={responsibility}
+                placeholder={`Responsibility ${rIndex + 1}`}
+                onChange={(e) => handleResponsibilityChange(rIndex, e)}
+                className=" p-4 text-[12px] rounded-md outline-none w-full md:w-[500px] bg-[#fff]"
+              />
+            </label>
+          ))}
+        </div>
+        {errors.responsibility && (
+          <small className=" text-red-600">
+            please enter job Responsibilities
+          </small>
+        )}
 
-        <div className=" w-full flex items-center justify-between ">
+        <div className=" w-full ">
           <button
             type="button"
             onClick={handleAddedResponsibility}
@@ -64,12 +71,6 @@ const JobResponsibility: React.FC<IJobSub> = ({
             Add More Responsibilities +
           </button>
         </div>
-
-        {errors.responsibility && (
-          <small className=" text-red-600">
-            please enter job Responsibilities
-          </small>
-        )}
       </div>
     </section>
   );

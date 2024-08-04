@@ -38,5 +38,10 @@ export const useConversion = () => {
     }
   }
 
-  return { getTimeAgo, handleTime, handleDate, makeSubstring };
+  function convertMoney(item: number) {
+    const newAmount = item.toLocaleString();
+    return newAmount;
+  }
+
+  return { getTimeAgo, handleTime, handleDate, makeSubstring, convertMoney };
 };
