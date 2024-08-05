@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Preferences, Subject } from "@/constants/teacherOneOnOne";
+import { Preferences, Subject, Grade } from "@/constants/teacherOneOnOne"; // Ensure these imports match your actual structure
 import { IteacherOneOnOneSub } from "./TeacherProfileData";
 
 const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
@@ -18,6 +18,7 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
   clearErrors,
 }) => {
   const [subjects, setSubjects] = useState<string[]>([]);
+  const [grades, setGrades] = useState<string[]>([]);
   const [preference, setPreference] = useState<string[]>([]);
 
   const handleAddSubject = (value: string, field: any) => {
@@ -26,7 +27,6 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
       setSubjects(updatedSubjects);
       field.onChange(updatedSubjects);
       clearErrors("subjects");
-      console.log("Subjects after addition:", updatedSubjects);
     }
   };
 
@@ -35,7 +35,21 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
     setSubjects(updatedSubjects);
     field.onChange(updatedSubjects);
     clearErrors("subjects");
-    console.log("Subjects after removal:", updatedSubjects);
+  };
+
+  const handleGrade = (value: string, field: any) => {
+    let updatedGrades = [...grades];
+    const gradeExists = updatedGrades.includes(value);
+
+    if (gradeExists) {
+      updatedGrades = updatedGrades.filter((grade) => grade !== value);
+    } else {
+      updatedGrades.push(value);
+    }
+
+    setGrades(updatedGrades);
+    field.onChange(updatedGrades);
+    clearErrors("grade");
   };
 
   const handlePreference = (item: string, field: any) => {
@@ -51,7 +65,6 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
     setPreference(updatedPreference);
     field.onChange(updatedPreference);
     clearErrors("preference");
-    console.log("Preferences after update:", updatedPreference);
   };
 
   return (
@@ -119,38 +132,65 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
               <small className="text-red-600">{errors.subjects.message}</small>
             )}
           </div>
-          <div className="flex flex-col">
+
+          {/* Grades Selection */}
+          <div className="flex flex-col mt-4">
             <Controller
               control={control}
               name="grade"
               render={({ field }) => (
-                <Select
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    clearErrors("grade");
-                  }}
-                >
-                  <SelectTrigger className="w-full py-6">
-                    <SelectValue placeholder="Grade" />
-                  </SelectTrigger>
-                  <SelectContent className="font-subtext font-medium">
-                    <ScrollArea className="h-[500px] w-full ">
-                      <SelectGroup>
-                        {Array.from({ length: 12 }, (_, i) => (
-                          <SelectItem key={i} value={`Grade${i + 1}`}>
-                            Grade {i + 1}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </ScrollArea>
-                  </SelectContent>
-                </Select>
+                <div>
+                  <Select onValueChange={(value) => handleGrade(value, field)}>
+                    <SelectTrigger className="w-full py-6">
+                      <SelectValue placeholder="Select Grades" />
+                    </SelectTrigger>
+                    <SelectContent className="font-subtext font-medium">
+                      <ScrollArea className="h-[500px] w-full">
+                        <SelectGroup>
+                          {Grade.map((item, index) => (
+                            <SelectItem key={index} value={item}>
+                              <div className="flex items-center">
+                                <input
+                                  type="checkbox"
+                                  checked={grades.includes(item)}
+                                  readOnly
+                                  className="mr-2"
+                                />
+                                {item}
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectGroup>
+                      </ScrollArea>
+                    </SelectContent>
+                  </Select>
+                  <div className="mt-4">
+                    {grades.map((grade, index) => (
+                      <div key={index} className="flex items-center mb-2">
+                        <input
+                          type="text"
+                          value={grade}
+                          readOnly
+                          className="flex-grow p-2 border rounded"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleGrade(grade, field)}
+                          className="ml-2 p-2 text-red-600 border border-red-600 rounded"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               )}
             />
           </div>
           {errors.grade && (
             <small className="text-red-600">{errors.grade.message}</small>
           )}
+
           <div className="mt-3">
             <label className="font-bold text-[16px]">Preferences</label>
 
