@@ -63,9 +63,9 @@ const RemoveClass: React.FC<Idelete> = ({ dataId }) => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <p className="inline text-[14px] cursor-pointer  font-semibold">
+        <p className="inline text-[13px] cursor-pointer  font-semibold">
           <Trash2 className="inline w-4 h-4 mr-2 ml-0 text-lightGreen " />
-          Remove
+          Remove 
         </p>
       </DialogTrigger>
       <DialogContent className="sm:w-[500px] w-[380px] font-subtext">

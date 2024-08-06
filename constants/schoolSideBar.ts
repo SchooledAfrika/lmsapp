@@ -2,8 +2,10 @@ import { SiGoogleclassroom } from "react-icons/si";
 import {
   MdInsertChartOutlined,
   MdOutlineCalendarMonth,
-  MdOutlineDisplaySettings,
+  MdOutlineSettings,
+  MdOutlineDisplaySettings
 } from "react-icons/md";
+import { RiParentLine, RiAdminLine, RiSchoolLine } from "react-icons/ri";
 import {
   LiaChalkboardTeacherSolid,
   LiaGraduationCapSolid,
@@ -36,11 +38,14 @@ export const SchoolSideBar: SchoolSideBarType[] = [
 export const AdminSideBar: AdminSideBarType[] = [
   { path: "", name: "Dashboard", icon: MdInsertChartOutlined },
   { path: "courses", name: "Courses", icon: SiGoogleclassroom },
-  { path: "instructors", name: "Instructors", icon: LiaChalkboardTeacherSolid },
-  { path: "admin-profile", name: "Admin Profile", icon: LiaGraduationCapSolid },
+  { path: "schools", name: "Schools", icon: RiSchoolLine },
+  { path: "teachers", name: "Teachers", icon: LiaChalkboardTeacherSolid },
+  {path: "students", name: "Students", icon: LiaGraduationCapSolid },
+  { path: "parent", name: "Parents", icon: RiParentLine },
+  { path: "admin-profile", name: "Admin Profile", icon: RiAdminLine },
   {
     path: "admin-setting",
     name: "Admin Settings",
-    icon: MdOutlineCalendarMonth,
+    icon: MdOutlineSettings,
   },
 ];

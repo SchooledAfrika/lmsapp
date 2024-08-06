@@ -241,3 +241,59 @@ export const ParentsNavbar: SchoolNavType[] = [
     path: "transactions",
   },
 ];
+
+export const AdminNavbar: SchoolNavType[] = [
+  {
+    title: "Welcome to the Admin Dashboard",
+    description: "Begin to manage SchooledAfrika.",
+    path: "overview",
+  },
+  {
+    title: "Courses",
+    description: "Organize your classes easily with one click.",
+    path: "courses",
+    subDetails: {
+      title: " Single course here",
+      description: " this is for single course path",
+    },
+  },
+  {
+    title: "Schools",
+    description: "Overview of all schools registered with SchooledAfrika.",
+    path: "schools",
+    subDetails: {
+      title: " Single school here",
+      description: " this is for single school path",
+    },
+  },
+  {
+    title: "Teachers",
+    description: "An Overview of all the teachers working with SchooledAfrika for easy access and management",
+    path: "teachers",
+    subDetails: {
+      title: " Single teacher details",
+      description: " this is for single teacher path",
+    },
+  },
+  {
+    title: "Students",
+    description: "Keep a tab on all students of SchooledAfrika for easy access and management",
+    path: "students",
+  },
+  {
+    title: "Parents",
+    description: "Manage all parents at a go.",
+    path: "parents",
+  },
+  {
+    title: "Admin Profile",
+    description: "View and Edit your profile.",
+    path: "admin-profile",
+  },
+  {
+    title: "Admin Settings",
+    description: "Edit your settings, set it all up.",
+    path: "setting",
+  },
+ 
+];
