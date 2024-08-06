@@ -375,13 +375,13 @@ const AddClassroom = () => {
 
               <div>
                 <label className="font-bold text-[16px]">Class Schedule</label>
-                <div className="grid grid-cols-3 gap-2 w-3/4 border p-3 ">
+                <div className="grid grid-cols-3 gap-2 w-full rounded-md border p-3 ">
                   {Schedules.map((schedule, index) => (
                     
                     <div
                       onClick={() => handleSchedule(schedule)}
                       key={index}
-                      className=" flex justify-between items-center cursor-pointer hover:text-green-500"
+                      className=" flex justify-between items-center md:px-2 cursor-pointer hover:text-green-500"
                     >
                       <p className=" text-[14px]">{schedule.toLowerCase()}</p>
                       <input

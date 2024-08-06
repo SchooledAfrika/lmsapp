@@ -45,7 +45,7 @@ const ClassTable = () => {
     <Table className="bg-white overflow-x-auto rounded-md mt-12">
       <TableHeader>
         <TableRow>
-          <TableHead className="text-[12px] text-left p-2">Subject</TableHead>
+          <TableHead className="text-[12px] w-[100px] text-left p-2">Subject</TableHead>
           <TableHead className="text-[12px] text-left p-2">Class</TableHead>
           <TableHead className="text-[12px] text-left p-2">Grade</TableHead>
           <TableHead className="text-[12px] text-left p-2">Students</TableHead>
@@ -56,7 +56,7 @@ const ClassTable = () => {
         {Array.isArray(data) &&
           data.map((item: any) => (
             <TableRow key={item.id}>
-              <TableCell className="text-[13px] font-bold p-2 flex items-center gap-2">
+              <TableCell className="text-[13px] md:w-[250px]  w-[150px] font-bold  flex items-center gap-2">
                 <Image
                   src={`/${item?.subject.toLowerCase()}.png`}
                   alt="icon"
@@ -66,13 +66,14 @@ const ClassTable = () => {
                 />
                 {item.subject}
               </TableCell>
-              <TableCell className="text-[12px] font-semibold p-2">
+              <TableCell className="text-[12px]  font-semibold p-2">
                 {item.className}
               </TableCell>
+             
               <TableCell className="text-[12px] font-semibold p-2">
                 {item.grade}
               </TableCell>
-              <TableCell className="text-[13px] font-semibold p-2">
+              <TableCell className="text-[13px]  font-semibold p-2">
                 {item.studentIds ? item.studentIds.length : 0}
               </TableCell>
               <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">

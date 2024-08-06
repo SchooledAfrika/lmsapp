@@ -68,7 +68,7 @@ export default function TransactionTable() {
 
       <TableHeader>
         <TableRow className="mt-0 text-[12.5px]">
-          <TableHead>Name</TableHead>
+          <TableHead className="w-[100px]">Name</TableHead>
           <TableHead className="">Type</TableHead>
           <TableHead className="">Date</TableHead>
           <TableHead className="text-right">Amount</TableHead>
@@ -77,7 +77,7 @@ export default function TransactionTable() {
       <TableBody>
         {TransactionType.map((Transaction) => (
           <TableRow key={Transaction.id} className="py-2">
-            <TableCell className="font-semibold w-[200px] text-[13px] py-2 flex  mr-1">
+            <TableCell className="font-semibold md:w-[200px]  text-[13px] py-2 flex  mr-1">
               <Image
                 src={Transaction.icon}
                 alt="icon"

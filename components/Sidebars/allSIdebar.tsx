@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CommonDashboardContext } from "@/providers/Statecontext";
+import { AdminDashboardContext } from "@/providers/Admincontext";
 import { useContext } from "react";
 import {
   AdminSideBar,
@@ -114,7 +115,7 @@ export const ParentSideBarComponent = ({ findpath }: Isidebar) => {
 };
 
 export const AdminSideBarComponent = ({ findpath }: Isidebar) => {
-  const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
+  const { showSideBar, setShowSideBar } = useContext(AdminDashboardContext);
   return (
     <div className="w-full flex flex-col space-y-2">
       {AdminSideBar.map((item: AdminSideBarType, index) => (

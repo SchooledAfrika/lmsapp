@@ -83,7 +83,7 @@ const Vacancies = () => {
   const { ref, inView } = useInView();
 
   // function that is called at each step to get the classes based on parameter
-  const getItems = async ({ pageParam }: { pageParam: number }) => {
+  const getJobs = async ({ pageParam }: { pageParam: number }) => {
     const response = await fetch(`/api/advert-application?page=${pageParam}`);
     return response.json();
   };
@@ -98,7 +98,7 @@ const Vacancies = () => {
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["infinitejobs"],
-    queryFn: getItems,
+    queryFn: getJobs,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPage) => {
       const nextPage = lastPage.length !== 0 ? allPage.length + 1 : undefined;
@@ -181,10 +181,10 @@ const Vacancies = () => {
       {/* searchbar ends */}
       <div className="w-full  mx-auto px-4 pt-16 pb-6">
         <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 items-center xl:grid-cols-3 gap-6  lgl:px-10">
-          {Array.isArray(queryData) &&
+          {/* {Array.isArray(queryData) &&
             queryData.map((item: Ivacancy, index) => (
               <VacancyCard key={index} item={item} />
-            ))}
+            ))} */}
         </div>
       </div>
       <div className=" w-full flex items-center justify-center">

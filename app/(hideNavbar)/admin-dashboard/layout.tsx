@@ -1,23 +1,42 @@
+import type { Metadata } from "next";
 import React from "react";
-import Navbar from "@/components/ui/admin-dashboard/navbar";
-import Sidebar from "@/components/ui/admin-dashboard/sidebar";
-import CommonDashboardContext from "@/providers/Statecontext";
+import Sidebar from "@/components/ui/admin-dashboard/sidebar/sidebar";
+import MobileNav from "@/components/ui/admin-dashboard/navbar/MobileNav";
+import MobileSideBar from "@/components/ui/admin-dashboard/sidebar/MobileSidebar";
+import AdminDashboardContext from "@/providers/Admincontext";
+import { redirect } from "next/navigation";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/nextAuth";
+import Navbar from "@/components/ui/admin-dashboard/navbar/navbar";
 
-const Layout = ({ children }: { children: React.ReactNode }) => {
+export const metadata: Metadata = {
+  title: "Admin",
+  description: "Admin dashboard",
+};
+
+
+export default async function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
-    <CommonDashboardContext>
-      <div className="flex h-screen">
-        <div className="hidden sm:block sm:w-1/4 md:w-1/6 bg-white h-full sticky top-0 overflow-auto">
-          <Sidebar />
-        </div>
-
-        <div className="flex-1 sm:w-3/4 md:w-5/6 h-full overflow-auto px-4 md:px-8">
-          <Navbar />
-          {children}
-        </div>
-      </div>
-    </CommonDashboardContext>
+    <AdminDashboardContext>
+      <main className="bg-stone-100 flex flex-col sm:flex-row font-header">
+          <div className=" hidden sm:block sm:flex-4 md:flex-2 font-semibold  px-6 py-10 bg-white h-screen sticky top-0 overflow-auto scrollbar-hide">
+            <Sidebar dashboard="admin" />
+          </div>
+          <div className=" sm:flex-10 md:flex-12 h-full md:px-8 px-4">
+            {/* this component below serves the purpose of the pricing model */}
+           
+            <MobileSideBar dashboard="admin" />
+             <Navbar dashboard="admin"/>
+            <MobileNav />
+            {children}
+          </div>
+        </main>
+    </AdminDashboardContext>
   );
 };
 
-export default Layout;
+
