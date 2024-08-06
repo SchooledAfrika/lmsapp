@@ -27,24 +27,25 @@ const Header = () => {
   const { status, data } = useSession();
 
   return (
-    <div className=" bg-white h-[75px] sticky md:top-0 font-subtext border-b-2 font-semibold    md:shadow-none z-50 ">
+    <div className=" bg-white h-[75px] sticky sm:top-0 font-subtext border-b-2 font-semibold    md:shadow-none z-50 ">
       {/* DESKTOP */}
-      <div className=" hidden lg:block p-4 ">
-        <div className="flex justify-between items-center">
-          <Link href="/">
-            <div>
-              <Image
-                src={"/logo.png"}
-                alt="logo"
-                width={100}
-                height={100}
-                priority={true}
-                className="w-[100px] mb-2 overflow-hidden ml-10 "
-              />
-            </div>
-          </Link>
 
-          <div className="flex gap-[20px] font-header xl:gap-[50px] text-[14px] space-x-6  items-center select-none">
+      <div className=" hidden w-full h-full sm:flex justify-between items-stretch px-2 md:px-4 ">
+        <div className=" flex items-center">
+          <Link href="/">
+            <Image
+              src={"/logo.png"}
+              alt="logo"
+              width={100}
+              height={100}
+              priority={true}
+              className="w-[100px]"
+            />
+          </Link>
+        </div>
+
+        <div className=" flex h-full pt-[30px] ">
+          <div className="flex gap-4 font-header xl:gap-[50px] sm:text-[14px] md:text-[14px] ">
             {navLinks.map((link) => {
               const isActive = pathname.startsWith(link.href);
               return (
@@ -53,8 +54,8 @@ const Header = () => {
                   key={link.name}
                   className={
                     isActive
-                      ? "font-bold border-b-2 leading-[57px]  border-lightGreen"
-                      : "font-semibold leading-[20px]"
+                      ? "font-bold border-lightGreen border-b-2 "
+                      : "font-semibold"
                   }
                 >
                   {link.name}
@@ -62,31 +63,26 @@ const Header = () => {
               );
             })}
           </div>
-
-          {status === "unauthenticated" ? (
-            <div className="flex items-center leading-[20px] mr-8 gap-4">
-              <Button
-                asChild
-                className="hidden bg-secondary  rounded-[10px] items-center hover:bg-green-600 text-white   text-[13px] px-6 py-[11px] lg:block"
-              >
-                <Link href="/login">Login</Link>
-              </Button>
-
-              <Button
-                asChild
-                className="hidden rounded-[10px]  bg-dimOrange hover:bg-orange-600 text-white  text-[13px] px-6 py-[11px] lg:block"
-              >
-                <Link href="/register">Register</Link>
-              </Button>
-            </div>
-          ) : (
-            <ShowProfile />
-          )}
         </div>
+
+        {status === "unauthenticated" ? (
+          <div className="flex items-center  gap-1 md:gap-3 lg:gap-4">
+            <div className=" bg-secondary rounded-md  md:rounded-[10px] flex items-center hover:bg-green-600 text-white text-[12px] md:text-[13px] px-4 md:px-6 justify-center py-2 md:py-[11px] sm:block">
+              <Link href="/login">Login</Link>
+            </div>
+
+            <div className=" flex rounded-[10px] justify-center items-center  bg-dimOrange hover:bg-orange-600 text-white text-[12px]  md:text-[14px] md:px-6 px-4 py-2 md:py-[11px] sm:block">
+              <Link href="/register">Register</Link>
+            </div>
+          </div>
+        ) : (
+          <ShowProfile />
+        )}
       </div>
+
       {/* MOBILE */}
       <div
-        className={` block md:hidden  rounded-xl   fixed top-0 w-full z-[999]   py-6 animate-in fade-in zoom-in  ${
+        className={` block sm:hidden  rounded-xl   fixed top-0 w-full z-[999]   py-6 animate-in fade-in zoom-in  ${
           menu ? " bg-white py-2" : "bg-white"
         } `}
       >

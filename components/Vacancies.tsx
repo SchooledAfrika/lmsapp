@@ -89,10 +89,10 @@ const PricePart: React.FC<{ data: Ivacancy }> = ({ data }) => {
   const { convertMoney } = useConversion();
   return (
     <div className=" flex items-center gap-4">
-      <div className=" px-4 py-2 rounded-md text-[12px] bg-orange-200 border border-orange-400">
+      <div className=" px-2 py-1 sm:px-4 sm:py-2 rounded-md text-[10px] sm:text-[12px] bg-orange-200 border border-orange-400">
         {data?.role === "FULLTIME" ? "Full-time" : "Part-time"}
       </div>
-      <div className=" flex items-center px-4 py-2 text-[12px] rounded-md bg-orange-200 border border-orange-400">
+      <div className=" flex items-center px-2 py-1 sm:px-4 sm:py-2 rounded-md text-[10px] sm:text-[12px] bg-orange-200 border border-orange-400">
         <p>&#8358;{convertMoney(Number(data?.minSalary))}</p>
         <GoDash />
         <p>&#8358;{convertMoney(Number(data?.maxSalary))}</p>
@@ -151,20 +151,25 @@ const ViewDetails: React.FC<{
   };
 
   return (
-    <div className=" w-full sticky top-[80px]">
-      <div className=" w-full bg-white rounded-md px-7 flex flex-col py-3 gap-6">
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className=" w-full sticky top-[80px]"
+    >
+      <div className=" w-full bg-white rounded-md px-3 py-2 md:px-7 flex flex-col md:py-3 gap-6">
         {/* first div for some info */}
         <div className=" flex items-center justify-between">
           <div className=" flex flex-col gap-3">
             <p className="text-black font-bold">{viewDetail?.jobTitle}</p>
-            <div className=" flex gap-3 text-[12px] font-semibold">
-              <div className=" flex items-center gap-1">
-                <FaGraduationCap className=" text-[14px]" />
-                <p>{viewDetail?.level}</p>
-              </div>
-              <div className=" flex items-center gap-1">
-                <FaLocationDot className=" text-[14px]" />
-                <p>{viewDetail?.location}</p>
+            <div className=" flex flex-col md:flex-row gap-3 text-[12px] font-semibold">
+              <div className=" flex items-center gap-3">
+                <div className=" flex items-center gap-1">
+                  <FaGraduationCap className=" text-[14px]" />
+                  <p>{viewDetail?.level}</p>
+                </div>
+                <div className=" flex items-center gap-1">
+                  <FaLocationDot className=" text-[14px]" />
+                  <p>{viewDetail?.location}</p>
+                </div>
               </div>
               <div className=" flex items-center gap-1">
                 <FaSchoolFlag className=" text-[14px]" />
@@ -180,7 +185,7 @@ const ViewDetails: React.FC<{
                 (check) => check.teacherId === (data?.user.id as string)
               )
             )}
-            className=" cursor-pointer hover:bg-green-600 duration-700 ease-in-out transition-all transform px-8 py-3 bg-green-700 text-white rounded-md flex items-center justify-center text-[14px]"
+            className=" cursor-pointer hover:bg-green-600 duration-700 ease-in-out transition-all transform px-3 sm:px-5 py-2 md:px-8 md:py-5 bg-green-700 text-white rounded-md flex items-center justify-center text-[10px] sm:text-[14px]"
           >
             <p>
               {Boolean(
@@ -232,12 +237,16 @@ const EachVacancy: React.FC<{
   data: Ivacancy;
   currentId: string | undefined;
   setViewDetail: React.Dispatch<React.SetStateAction<Ivacancy | undefined>>;
-}> = ({ data, currentId, setViewDetail }) => {
+  setMobileDetails: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ data, currentId, setViewDetail, setMobileDetails }) => {
   const { getTimeAgo, makeSubstring, convertMoney } = useConversion();
   return (
     <div
-      onClick={() => setViewDetail(data)}
-      className={` w-full px-4 py-5 rounded-md bg-white cursor-pointer ${
+      onClick={() => {
+        setMobileDetails(true);
+        setViewDetail(data);
+      }}
+      className={` w-full px-2 py-3 md:px-4 md:py-5 rounded-md bg-white cursor-pointer ${
         currentId === data.id && " border border-green-600"
       } flex flex-col gap-6 hover:bg-slate-100 transition-all hover:border hover:border-green-600 ease-in-out duration-700 transform`}
     >
@@ -245,11 +254,11 @@ const EachVacancy: React.FC<{
       <div className=" flex flex-col gap-1">
         <p className=" text-black font-bold">{data?.jobTitle}</p>
         <div className=" flex justify-between items-center">
-          <div className=" flex flex-col gap-2 text-[12px] font-semibold">
+          <div className=" flex flex-col gap-2 text-[10px] sm:text-[12px] font-semibold">
             <div className=" flex items-center gap-2">
-              <FaGraduationCap className=" text-[14px]" /> <p>{data?.level}</p>
+              <FaGraduationCap className="text-[14px]" /> <p>{data?.level}</p>
             </div>
-            <div className=" flex items-center gap-2">
+            <div className=" flex-col  gap-2  lg:items-center  lg:flex-row">
               <div className=" flex items-center gap-1">
                 <FaLocationDot className=" text-[14px]" />
                 <p>{data?.location}</p>
@@ -272,7 +281,7 @@ const EachVacancy: React.FC<{
         </div>
       </div>
       {/* middle div */}
-      <div className=" flex flex-col gap-1">
+      <div className=" flex flex-col gap-1 text-[16px] xs:text-[12px] sm:text-[16px]">
         <p className=" font-bold text-black">Details</p>
         <p className=" font-serif">{makeSubstring(data?.description, 230)}</p>
       </div>
@@ -284,6 +293,7 @@ const EachVacancy: React.FC<{
 
 const Vacancies = () => {
   const [viewDeatil, setViewDetail] = useState<Ivacancy | undefined>(undefined);
+  const [mobileDetails, setMobileDetails] = useState<boolean>(false);
   // creating our useref for watching the button when displayed
   const { ref, inView } = useInView();
 
@@ -334,86 +344,102 @@ const Vacancies = () => {
     setViewDetail(firstItem);
   }
   return (
-    <Container>
-      {/* Searchbar */}
-      <div className="bg-stone-100 font-subtext">
-        <h2 className="font-bold font-subtext my-20 text-2xl text-center">
-          Job Listing
-        </h2>
-        <div className=" md:w-[90%] w-[90%] mt-16 md:mt-6 mx-auto  cursor-pointer font-header  h-[100px] md:mx-auto bg-white rounded-[50px] flex items-center justify-center p-6 shadow-md">
-          <div className="relative   overflow-hidden flex md:w-1/3 w-full  flex-col   mr-2 justify-center items-start md:border-r-2 leading-[90px]">
-            <label className="ml-3 font-bold  absolute -top-4   ">SEARCH</label>
+    <div>
+      <Container>
+        {/* Searchbar */}
+        <div className="bg-stone-100 font-subtext">
+          <h2 className="font-bold font-subtext my-20 text-2xl text-center">
+            Job Listing
+          </h2>
+          <div className=" md:w-[90%] w-[90%] mt-16 md:mt-6 mx-auto  cursor-pointer font-header  h-[100px] md:mx-auto bg-white rounded-[50px] flex items-center justify-center p-6 shadow-md">
+            <div className="relative   overflow-hidden flex md:w-1/3 w-full  flex-col   mr-2 justify-center items-start md:border-r-2 leading-[90px]">
+              <label className="ml-3 font-bold  absolute -top-4   ">
+                SEARCH
+              </label>
 
-            <input
-              placeholder="By class, Course, School"
-              className="bg-transparent    ml-2 mt-3   focus:outline-none"
-            />
-          </div>
+              <input
+                placeholder="By class, Course, School"
+                className="bg-transparent    ml-2 mt-3   focus:outline-none"
+              />
+            </div>
 
-          <div className="relative hidden    overflow-hidden md:flex w-1/4  flex-col   mr-2 justify-center items-start border-r-2 leading-[90px]">
-            <label className="ml-3 font-bold  absolute -top-4   ">
-              EXPERIENCE LEVEL
-            </label>
+            <div className="relative hidden    overflow-hidden md:flex w-1/4  flex-col   mr-2 justify-center items-start border-r-2 leading-[90px]">
+              <label className="ml-3 font-bold  absolute -top-4   ">
+                EXPERIENCE LEVEL
+              </label>
 
-            <input
-              placeholder="Years of Experience"
-              className="bg-transparent   ml-2 mt-3   focus:outline-none"
-            />
-          </div>
-          <div className="relative hidden   overflow-hidden md:flex w-1/4  flex-col   mr-2 justify-center items-start border-r-2 leading-[90px]">
-            <label className="ml-3 font-bold  absolute -top-4   ">
-              LOCATION
-            </label>
+              <input
+                placeholder="Years of Experience"
+                className="bg-transparent   ml-2 mt-3   focus:outline-none"
+              />
+            </div>
+            <div className="relative hidden   overflow-hidden md:flex w-1/4  flex-col   mr-2 justify-center items-start border-r-2 leading-[90px]">
+              <label className="ml-3 font-bold  absolute -top-4   ">
+                LOCATION
+              </label>
 
-            <input
-              placeholder="Search by Location"
-              className="bg-transparent   ml-2 mt-3   focus:outline-none"
-            />
-          </div>
-          <div className="relative hidden   overflow-hidden md:flex w-1/3  flex-col   mr-2 justify-center items-start leading-[100px]">
-            <label className="ml-3 font-bold  absolute -top-4   ">
-              PRICE RANGE
-            </label>
+              <input
+                placeholder="Search by Location"
+                className="bg-transparent   ml-2 mt-3   focus:outline-none"
+              />
+            </div>
+            <div className="relative hidden   overflow-hidden md:flex w-1/3  flex-col   mr-2 justify-center items-start leading-[100px]">
+              <label className="ml-3 font-bold  absolute -top-4   ">
+                PRICE RANGE
+              </label>
 
-            <input
-              placeholder="0-100,000"
-              className="bg-transparent   ml-2 mt-3   focus:outline-none"
-            />
-          </div>
+              <input
+                placeholder="0-100,000"
+                className="bg-transparent   ml-2 mt-3   focus:outline-none"
+              />
+            </div>
 
-          <div className=" md:w-[80px] w-[60px] font-bold aspect-square rounded-full flex items-center md:justify-center justify-end bg-lightGreen text-white">
-            <IoIosSearch className="font-bold text-2xl md:mr-0 md:text-xl mr-3" />
+            <div className=" md:w-[80px] w-[60px] font-bold aspect-square rounded-full flex items-center md:justify-center justify-end bg-lightGreen text-white">
+              <IoIosSearch className="font-bold text-2xl md:mr-0 md:text-xl mr-3" />
+            </div>
           </div>
         </div>
-      </div>
-      <div className=" flex w-full gap-3 mt-8">
-        <div className=" flex-2 flex flex-col gap-2">
-          {queryData.map((data: Ivacancy, index) => (
-            <EachVacancy
-              key={index}
-              data={data}
+        <div className=" flex w-full gap-3 mt-8">
+          <div className=" flex-1 sm:flex-2 flex flex-col gap-2">
+            {queryData.map((data: Ivacancy, index) => (
+              <EachVacancy
+                key={index}
+                data={data}
+                setViewDetail={setViewDetail}
+                currentId={viewDeatil?.id}
+                setMobileDetails={setMobileDetails}
+              />
+            ))}
+            <div className=" mt-4 flex items-center justify-center">
+              {hasNextPage && (
+                <div
+                  ref={ref}
+                  className=" px-4 py-2 rounded-md border bg-white w-fit flex items-center gap-2"
+                >
+                  <CircularProgress color="success" />
+                  <p className=" text-green-800 font-bold">loading...</p>
+                </div>
+              )}
+            </div>
+          </div>
+          <div className=" hidden sm:block sm:flex-3">
+            <ViewDetails
+              viewDetail={viewDeatil}
               setViewDetail={setViewDetail}
-              currentId={viewDeatil?.id}
             />
-          ))}
-          <div className=" mt-4 flex items-center justify-center">
-            {hasNextPage && (
-              <div
-                ref={ref}
-                className=" px-4 py-2 rounded-md border bg-white w-fit flex items-center gap-2"
-              >
-                <CircularProgress color="success" />
-                <p className=" text-green-800 font-bold">loading...</p>
-              </div>
-            )}
           </div>
         </div>
-        <div className=" flex-3">
+        <ToastContainer />
+      </Container>
+      {mobileDetails && (
+        <div
+          onClick={() => setMobileDetails(false)}
+          className=" px-5 flex items-center justify-center  sm:hidden fixed w-full h-screen top-0 left-0 bottom-0 bg-[rgba(0,0,0,0.3)] z-[999] backdrop-blur-sm"
+        >
           <ViewDetails viewDetail={viewDeatil} setViewDetail={setViewDetail} />
         </div>
-      </div>
-      <ToastContainer />
-    </Container>
+      )}
+    </div>
   );
 };
 
