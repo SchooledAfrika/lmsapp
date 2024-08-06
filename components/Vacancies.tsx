@@ -55,12 +55,18 @@ const LoadingVacancy = () => {
     <div className=" mt-32 w-full items-center flex flex-col gap-9">
       <Skeleton
         height={100}
-        className=" w-3/5  rounded-full"
+        className=" w-3/5  rounded-full hidden sm:block"
+        variant="rectangular"
+        animation="wave"
+      />
+      <Skeleton
+        height={80}
+        className=" w-3/5  rounded-full sm:hidden"
         variant="rectangular"
         animation="wave"
       />
       <div className=" w-full flex gap-4 ">
-        <div className=" flex flex-2 gap-3 flex-col">
+        <div className=" flex flex-1 sm:flex-2 gap-3 flex-col">
           {loadingArray.map((item, index) => (
             <Skeleton
               key={index}
@@ -71,7 +77,7 @@ const LoadingVacancy = () => {
             />
           ))}
         </div>
-        <div className=" flex flex-3">
+        <div className=" hidden sm:flex flex-3">
           <Skeleton
             variant="rectangular"
             animation="wave"
