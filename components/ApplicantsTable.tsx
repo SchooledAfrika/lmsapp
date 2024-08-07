@@ -1,3 +1,4 @@
+"use client";
 import {
   Table,
   TableBody,
@@ -6,85 +7,132 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
+import { useQuery } from "@tanstack/react-query";
+import { useParams } from "next/navigation";
 import Image from "next/image";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import React from "react";
+import { useConversion } from "@/data-access/conversion";
 
-const ApplicantType = [
-  {
-    id: "1",
-    icon: "/teacher-img.png",
-    name: "Cole Palmer",
-    rating: "⭐ 4.7/5",
-    mail: "Odomaurice@gmail.com",
-    phone: "+234 912 7836 353",
-    Added: "April 20, 2024",
-    view: "View",
-  },
-  {
-    id: "2",
-    icon: "/tutors.jpg",
-    name: "Michael Imodu",
-    rating: "⭐ Unrated",
-    mail: "Odomaurice@gmail.com",
-    phone: "+234 912 7836 353",
-    Added: "April 20, 2024",
-    view: "View",
-  },
-];
+interface IVacancyTeacher {
+  createdAt: string;
+  teacher: {
+    name: string;
+    phoneNo: string;
+    profilePhoto: string;
+    rating: string;
+    email: string;
+    id: string;
+  };
+}
 
-export default function ApplicantsTable() {
+interface IOneVacancy {
+  id: string;
+  VacancyTeacher: IVacancyTeacher[];
+}
+// component for each row for a particular information
+const OneTeacher: React.FC<{ applicant: IVacancyTeacher; vacancy: string }> = ({
+  applicant,
+  vacancy,
+}) => {
+  const { handleDate } = useConversion();
   return (
-    <Table className="bg-white overflow-x-auto rounded-md mt-6">
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead className="sm:w-[100px] w-full">Contact</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead className="text-right">Action</TableHead>
+    <TableRow className=" w-full flex">
+      <TableCell className="font-bold text-[12px]  flex flex-1">
+        <Image
+          src={applicant?.teacher.profilePhoto}
+          alt="icon"
+          width={100}
+          height={100}
+          className="w-[60px] h-[60px] rounded-md mr-1"
+        />{" "}
+        <div className="flex ml-1 flex-col">
+          <div>{applicant.teacher.name}</div>
+          {applicant.teacher.rating ? applicant.teacher.rating : "unratted"}
+        </div>
+      </TableCell>
+      <TableCell className=" flex-1 text-[12px] flex justify-center">
+        <div className="flex flex-col">
+          <p className="inline mb-2">
+            <FaEnvelope className="inline mr-1 " />
+            {applicant?.teacher.email}
+          </p>
+          <p className="inline">
+            <FaPhoneAlt className="inline mr-1" />
+            {applicant?.teacher.phoneNo}
+          </p>
+        </div>
+      </TableCell>
+
+      <TableCell className=" flex-1 flex justify-center">
+        {handleDate(applicant?.createdAt)}
+      </TableCell>
+      <TableCell className="text-[11px]  flex-1 flex justify-center text-center ">
+        <div>
+          <Link
+            href={`/school-dashboard/job-listing/applicant/${vacancy}/${applicant?.teacher.id}`}
+            className=" px-4 py-2 bg-green-600 text-white rounded-md"
+          >
+            View
+          </Link>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+};
+// the parents component here
+export default function ApplicantsTable() {
+  const { id } = useParams();
+  // fetching some information about the vacancy here
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["get-one-vacancy"],
+    queryFn: async () => {
+      const response = await fetch(`/api/advertise/${id}`);
+      const result = await response.json();
+      return result;
+    },
+  });
+  // loading state
+  if (isLoading) {
+    return (
+      <div>
+        <p>loading...</p>
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div>
+        <p>{error.message}</p>
+      </div>
+    );
+  }
+
+  return (
+    <Table className="bg-white w-full overflow-x-auto rounded-md mt-6">
+      <TableHeader className="">
+        <TableRow className=" flex  ">
+          <TableHead className=" flex-1 flex items-center justify-center ">
+            Name
+          </TableHead>
+          <TableHead className=" flex-1 flex text-center justify-center items-center ">
+            Contact
+          </TableHead>
+          <TableHead className=" flex-1 flex text-center justify-center items-center ">
+            Date
+          </TableHead>
+          <TableHead className=" flex-1 flex text-center justify-center items-center">
+            Action
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {ApplicantType.map((Applicant) => (
-          <TableRow key={Applicant.id} className="">
-            <TableCell className="font-semibold text-[14px] w-[200px] flex mr-1">
-              <Image
-                src={Applicant.icon}
-                alt="icon"
-                width={100}
-                height={100}
-                className="w-[60px] h-[60px] rounded-md mr-1"
-              />{" "}
-              <div className="flex ml-1 flex-col">
-                <div>{Applicant.name}</div>
-                {Applicant.rating}
-              </div>
-            </TableCell>
-            <TableCell className="w-[250px]">
-              <div className="flex flex-col">
-                <p className="inline mb-2">
-                  <FaEnvelope className="inline mr-1 " />
-                  {Applicant.mail}
-                </p>
-                <p className="inline">
-                  <FaPhoneAlt className="inline mr-1" />
-                  {Applicant.phone}
-                </p>
-              </div>
-            </TableCell>
-
-            <TableCell className="w-[400px]">{Applicant.Added}</TableCell>
-            <TableCell className="text-[11px] w-[10px] text-center">
-              <Link href={"/school-dashboard/job-listing/applicant/details"}>
-                <Button className="bg-secondary w-[60px] md:w-[100px] text-white text-[12px] py-3 my-3">
-                  {Applicant.view}
-                </Button>
-              </Link>
-            </TableCell>
-          </TableRow>
-        ))}
+        {Array.isArray(data.VacancyTeacher) &&
+          data?.VacancyTeacher.map((applicant: IVacancyTeacher, index: any) => (
+            <OneTeacher key={index} applicant={applicant} vacancy={data?.id} />
+          ))}
       </TableBody>
     </Table>
   );
