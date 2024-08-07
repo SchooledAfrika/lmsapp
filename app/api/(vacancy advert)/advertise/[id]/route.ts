@@ -1,4 +1,5 @@
 // here, we get only one vacancy advertisement
+// and also it will contain all the teacher attached to the job
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
@@ -35,6 +36,7 @@ export async function GET(
                 profilePhoto: true,
                 phoneNo: true,
                 rating: true,
+                id: true,
               },
             },
           },

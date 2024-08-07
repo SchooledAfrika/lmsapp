@@ -24,6 +24,7 @@ interface IVacancyTeacher {
     profilePhoto: string;
     rating: string;
     email: string;
+    id: string;
   };
 }
 
@@ -32,15 +33,16 @@ interface IOneVacancy {
   VacancyTeacher: IVacancyTeacher[];
 }
 // component for each row for a particular information
-const OneTeacher: React.FC<{ applicant: IVacancyTeacher }> = ({
+const OneTeacher: React.FC<{ applicant: IVacancyTeacher; vacancy: string }> = ({
   applicant,
+  vacancy,
 }) => {
   const { handleDate } = useConversion();
   return (
-    <TableRow>
-      <TableCell className="font-semibold text-[14px] w-[200px] flex mr-1">
+    <TableRow className=" w-full flex">
+      <TableCell className="font-bold text-[12px]  flex flex-1">
         <Image
-          src={applicant.teacher.profilePhoto}
+          src={applicant?.teacher.profilePhoto}
           alt="icon"
           width={100}
           height={100}
@@ -51,28 +53,31 @@ const OneTeacher: React.FC<{ applicant: IVacancyTeacher }> = ({
           {applicant.teacher.rating ? applicant.teacher.rating : "unratted"}
         </div>
       </TableCell>
-      <TableCell className="w-[250px]">
+      <TableCell className=" flex-1 text-[12px] flex justify-center">
         <div className="flex flex-col">
           <p className="inline mb-2">
             <FaEnvelope className="inline mr-1 " />
-            {applicant.teacher.email}
+            {applicant?.teacher.email}
           </p>
           <p className="inline">
             <FaPhoneAlt className="inline mr-1" />
-            {applicant.teacher.phoneNo}
+            {applicant?.teacher.phoneNo}
           </p>
         </div>
       </TableCell>
 
-      <TableCell className="w-[400px]">
-        {handleDate(applicant.createdAt)}
+      <TableCell className=" flex-1 flex justify-center">
+        {handleDate(applicant?.createdAt)}
       </TableCell>
-      <TableCell className="text-[11px] w-[10px] text-center">
-        <Link href={"/school-dashboard/job-listing/applicant/details"}>
-          <Button className="bg-secondary w-[60px] md:w-[100px] text-white text-[12px] py-3 my-3">
+      <TableCell className="text-[11px]  flex-1 flex justify-center text-center ">
+        <div>
+          <Link
+            href={`/school-dashboard/job-listing/applicant/${vacancy}/${applicant?.teacher.id}`}
+            className=" px-4 py-2 bg-green-600 text-white rounded-md"
+          >
             View
-          </Button>
-        </Link>
+          </Link>
+        </div>
       </TableCell>
     </TableRow>
   );
@@ -106,19 +111,27 @@ export default function ApplicantsTable() {
   }
 
   return (
-    <Table className="bg-white overflow-x-auto rounded-md mt-6">
-      <TableHeader>
-        <TableRow>
-          <TableHead>Name</TableHead>
-          <TableHead className="sm:w-[100px] w-full">Contact</TableHead>
-          <TableHead>Date</TableHead>
-          <TableHead className="text-right">Action</TableHead>
+    <Table className="bg-white w-full overflow-x-auto rounded-md mt-6">
+      <TableHeader className="">
+        <TableRow className=" flex  ">
+          <TableHead className=" flex-1 flex items-center justify-center ">
+            Name
+          </TableHead>
+          <TableHead className=" flex-1 flex text-center justify-center items-center ">
+            Contact
+          </TableHead>
+          <TableHead className=" flex-1 flex text-center justify-center items-center ">
+            Date
+          </TableHead>
+          <TableHead className=" flex-1 flex text-center justify-center items-center">
+            Action
+          </TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {Array.isArray(data.VacancyTeacher) &&
           data?.VacancyTeacher.map((applicant: IVacancyTeacher, index: any) => (
-            <OneTeacher key={index} applicant={applicant} />
+            <OneTeacher key={index} applicant={applicant} vacancy={data?.id} />
           ))}
       </TableBody>
     </Table>
