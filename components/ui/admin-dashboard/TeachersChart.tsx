@@ -45,7 +45,7 @@ const chartConfig = {
 
 export function TeachersChart() {
   return (
-    <Card className="mt-12 mb-6">
+    <Card className="md:mt-12 mb-6">
       <CardHeader>
         <CardTitle className="text-[18px]">Teachers</CardTitle>
         <CardDescription>January - December 2024</CardDescription>

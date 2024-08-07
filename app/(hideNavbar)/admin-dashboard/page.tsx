@@ -3,7 +3,7 @@ import AdminDashboard from "@/components/ui/admin-dashboard/dashboard/dashboard"
 
 const page = () => {
   return (
-    <div className=" mt-[80px]">
+    <div className=" my-[80px]">
       <AdminDashboard  />
     </div>
   );

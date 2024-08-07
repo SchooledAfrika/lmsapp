@@ -85,7 +85,7 @@ const UpdateProfile = () => {
           <small className="text-red-600">{errors.name.message}</small>
         )}
         <input
-          id="name"
+          id="phoneNo"
           {...register("phoneNo")}
           name="phoneNo"
           type="text"
