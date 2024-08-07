@@ -250,49 +250,54 @@ export const AdminNavbar: SchoolNavType[] = [
   },
   {
     title: "Courses",
-    description: "Organize your classes easily with one click.",
+    description: "",
     path: "courses",
     subDetails: {
-      title: " Single course here",
-      description: " this is for single course path",
+      title: "",
+      description: "",
     },
   },
   {
     title: "Schools",
-    description: "Overview of all schools registered with SchooledAfrika.",
+    description: "",
     path: "schools",
     subDetails: {
-      title: " Single school here",
-      description: " this is for single school path",
+      title: "",
+      description: "",
     },
   },
   {
     title: "Teachers",
-    description: "An Overview of all the teachers working with SchooledAfrika for easy access and management",
+    description: "",
     path: "teachers",
     subDetails: {
-      title: " Single teacher details",
-      description: " this is for single teacher path",
+      title: "",
+      description: "",
     },
   },
   {
     title: "Students",
-    description: "Keep a tab on all students of SchooledAfrika for easy access and management",
+    description: "",
     path: "students",
   },
   {
     title: "Parents",
-    description: "Manage all parents at a go.",
+    description: "",
     path: "parents",
   },
   {
+    title: "Invoice",
+    description: "",
+    path: "invoice",
+  },
+  {
     title: "Admin Profile",
-    description: "View and Edit your profile.",
+    description: "",
     path: "admin-profile",
   },
   {
     title: "Admin Settings",
-    description: "Edit your settings, set it all up.",
+    description: "",
     path: "setting",
   },
  

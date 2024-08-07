@@ -10,6 +10,7 @@ import {
   LiaChalkboardTeacherSolid,
   LiaGraduationCapSolid,
 } from "react-icons/lia";
+import { LuClipboardPaste } from "react-icons/lu";
 import { GrGroup } from "react-icons/gr";
 import { IconType } from "react-icons";
 
@@ -41,7 +42,8 @@ export const AdminSideBar: AdminSideBarType[] = [
   { path: "schools", name: "Schools", icon: RiSchoolLine },
   { path: "teachers", name: "Teachers", icon: LiaChalkboardTeacherSolid },
   {path: "students", name: "Students", icon: LiaGraduationCapSolid },
-  { path: "parent", name: "Parents", icon: RiParentLine },
+  { path: "parents", name: "Parents", icon: RiParentLine },
+  { path: "invoices", name: "Invoices", icon: LuClipboardPaste },
   { path: "admin-profile", name: "Admin Profile", icon: RiAdminLine },
   {
     path: "admin-setting",

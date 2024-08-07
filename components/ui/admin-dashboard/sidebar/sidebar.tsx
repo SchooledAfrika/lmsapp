@@ -18,7 +18,7 @@ const Sidebar = ({ dashboard }: { dashboard: string }) => {
     findpath = path[2];
   }
   return (
-    <div className=" font-header font-bold  flex flex-col gap-12 ">
+    <div className=" font-header font-semibold  flex flex-col gap-12 ">
     {/* the school logo */}
     <div className=" w-full flex items-center justify-center">
       <Image
