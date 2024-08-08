@@ -29,6 +29,7 @@ export async function GET(
         VacancyTeacher: {
           select: {
             createdAt: true,
+            id: true,
             teacher: {
               select: {
                 name: true,

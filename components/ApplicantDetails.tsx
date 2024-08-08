@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Container from "./Container";
 import Image from "next/image";
@@ -8,6 +8,38 @@ import { Button } from "./ui/button";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@mui/material";
+import { useConversion, useGetDocument } from "@/data-access/conversion";
+
+const DownLoad: React.FC<{ resume: any; name: string }> = ({
+  resume,
+  name,
+}) => {
+  const { downloadDoc } = useConversion();
+  const { dataSize } = useGetDocument(resume);
+  const handleDownload = async () => {
+    await downloadDoc(resume, name);
+  };
+  return (
+    <Button
+      onClick={handleDownload}
+      className="flex items-center sm:gap-4 bg-secondary px-[20px] text-white text-[12px] py-7 my-3"
+    >
+      <Image
+        src="/svgs/pdfIcon.svg"
+        width={20}
+        height={20}
+        className="mr-2"
+        alt="Download"
+      />
+      <div className="text-left">
+        <p>Applicants Credentials</p>
+        <p className="text-[10px]">{dataSize ? dataSize : "loading"}KB</p>
+      </div>
+
+      <FaDownload />
+    </Button>
+  );
+};
 
 const VacancyDesc = () => {
   const [showMore, setShowMore] = useState<boolean>(false);
@@ -95,6 +127,8 @@ const VacancyDesc = () => {
 const TeacherInfo = () => {
   const params = useParams();
   const teacherId = params.slug[1];
+  const [dataSize, setDataSize] = useState<any>(null);
+
   // make query to get information about only one vacancy
   const { data, isFetching, isError, error } = useQuery({
     queryKey: ["get-one-teacher"],
@@ -153,21 +187,7 @@ const TeacherInfo = () => {
               {data?.phoneNo}
             </p>
           </div>
-          <Button className="flex items-center sm:gap-4 bg-secondary px-[20px] text-white text-[12px] py-7 my-3">
-            <Image
-              src="/svgs/pdfIcon.svg"
-              width={20}
-              height={20}
-              className="mr-2"
-              alt="Download"
-            />
-            <div className="text-left">
-              <p>Applicants Credentials</p>
-              <p className="text-[10px]">100.01 kb</p>
-            </div>
-
-            <FaDownload />
-          </Button>
+          <DownLoad resume={data?.resume} name={data?.name} />
         </div>
       </div>
     </div>

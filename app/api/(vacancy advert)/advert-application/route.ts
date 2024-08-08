@@ -57,7 +57,7 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   const { vacancyTeacherId, status } = await req.json();
   const schoolId = await serverSessionId();
-  if (schoolId) {
+  if (!schoolId) {
     return notAuthenticated();
   }
   // first lets fetch the vacancy teacher we have, then check if schoolId matches
