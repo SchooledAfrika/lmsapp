@@ -24,6 +24,7 @@ import {
 import { MdMoreHoriz } from "react-icons/md";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { IoWarning } from "react-icons/io5";
+import TableStatus from "./ui/TableStatus";
 
 interface IVacancyTeacher {
   createdAt: string;
@@ -222,6 +223,23 @@ const OneTeacher: React.FC<{ applicant: IVacancyTeacher; vacancy: string }> = ({
     </TableRow>
   );
 };
+// no item here
+const Noitem: React.FC<{ desc: string }> = ({ desc }) => {
+  return (
+    <div className=" mt-32 md:mt-20 w-full flex flex-col items-center justify-center gap-2">
+      <Image
+        src="/noitem.avif"
+        alt="no-item"
+        width={200}
+        height={200}
+        className=" w-[300px]"
+      />
+      <div className=" px-4 py-2 border border-green-700 rounded-md">
+        <p className=" font-bold">{desc}</p>
+      </div>
+    </div>
+  );
+};
 // the parents component here
 export default function ApplicantsTable() {
   const { id } = useParams();
@@ -251,29 +269,50 @@ export default function ApplicantsTable() {
   }
 
   return (
-    <Table className="bg-white w-full overflow-x-auto rounded-md mt-6">
-      <TableHeader className="">
-        <TableRow className=" flex  ">
-          <TableHead className=" flex-1 flex items-center justify-center ">
-            Name
-          </TableHead>
-          <TableHead className=" flex-1 flex text-center justify-center items-center ">
-            Contact
-          </TableHead>
-          <TableHead className=" flex-1 flex text-center justify-center items-center ">
-            Date
-          </TableHead>
-          <TableHead className=" flex-1 flex text-center justify-center items-center">
-            Action
-          </TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {Array.isArray(data.VacancyTeacher) &&
-          data?.VacancyTeacher.map((applicant: IVacancyTeacher, index: any) => (
-            <OneTeacher key={index} applicant={applicant} vacancy={data?.id} />
-          ))}
-      </TableBody>
-    </Table>
+    <div>
+      {Array.isArray(data?.VacancyTeacher) && (
+        <div>
+          {data?.VacancyTeacher.length === 0 ? (
+            <div>
+              <Noitem desc="No applicants yet" />
+            </div>
+          ) : (
+            <div className="w-full overflow-x-auto flex flex-col gap-1">
+              <TableStatus active="Active" canceled="Canceled" />
+              <Table className="bg-white w-[900px] md:w-full rounded-md">
+                <TableHeader className="">
+                  <TableRow className=" flex  ">
+                    <TableHead className=" flex-1 flex items-center justify-center ">
+                      Name
+                    </TableHead>
+                    <TableHead className=" flex-1 flex text-center justify-center items-center ">
+                      Contact
+                    </TableHead>
+                    <TableHead className=" flex-1 flex text-center justify-center items-center ">
+                      Date
+                    </TableHead>
+                    <TableHead className=" flex-1 flex text-center justify-center items-center">
+                      Action
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {Array.isArray(data.VacancyTeacher) &&
+                    data?.VacancyTeacher.map(
+                      (applicant: IVacancyTeacher, index: any) => (
+                        <OneTeacher
+                          key={index}
+                          applicant={applicant}
+                          vacancy={data?.id}
+                        />
+                      )
+                    )}
+                </TableBody>
+              </Table>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
   );
 }

@@ -9,6 +9,7 @@ import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@mui/material";
 import { useConversion, useGetDocument } from "@/data-access/conversion";
+import Backwards from "./ui/Backwards";
 
 const DownLoad: React.FC<{ resume: any; name: string }> = ({
   resume,
@@ -22,21 +23,21 @@ const DownLoad: React.FC<{ resume: any; name: string }> = ({
   return (
     <Button
       onClick={handleDownload}
-      className="flex items-center sm:gap-4 bg-secondary px-[20px] text-white text-[12px] py-7 my-3"
+      className="flex items-center justify-between bg-secondary  max-lg:px-[10px] lg:px-[20px] text-white text-[12px] sm:py-3 lg:py-7"
     >
       <Image
         src="/svgs/pdfIcon.svg"
         width={20}
         height={20}
-        className="mr-2"
+        className=" w-[10px]"
         alt="Download"
       />
-      <div className="text-left">
+      <div className="text-left max-lg:text-[10px]">
         <p>Applicants Credentials</p>
         <p className="text-[10px]">{dataSize ? dataSize : "loading"}KB</p>
       </div>
 
-      <FaDownload />
+      <FaDownload className=" text-[10px]" />
     </Button>
   );
 };
@@ -74,7 +75,7 @@ const VacancyDesc = () => {
     );
   }
   return (
-    <div className="flex-1 bg-[#FFFFFF] rounded-[5px] py-5 px-8">
+    <div className="flex-1 bg-[#FFFFFF] rounded-[5px] py-3 px-4  lg:py-5 lg:px-8">
       <p className="font-bold text-[18px] pb-2">{data?.jobTitle}</p>
       <div className="flex gap-6">
         <div className="flex gap-2 font-bold text-[12px]">
@@ -155,17 +156,19 @@ const TeacherInfo = () => {
   }
 
   return (
-    <div className="flex-1 bg-[#FFFFFF] rounded-[5px] h-[60vh] md:h-[45vh] py-5 px-8">
-      <div className="block md:flex mt-5 gap-5">
-        <Image
-          src={data?.profilePhoto}
-          alt="Applicant Image"
-          width={130}
-          height={10}
-          className="h-[20vh] rounded-md"
-        />
+    <div className="flex-1 bg-[#FFFFFF] rounded-[5px] py-3 px-4  lg:py-5 lg:px-8">
+      <div className="flex  gap-5">
         <div>
-          <p className="flex gap-2 font-bold text-[17px] mb-2">
+          <Image
+            src={data?.profilePhoto}
+            alt="Applicant Image"
+            width={130}
+            height={10}
+            className=" max-md:w-[80px] md:aspect-square max-md:aspect-square rounded-md"
+          />
+        </div>
+        <div className=" flex flex-col gap-3">
+          <p className="flex gap-2 font-bold text-[17px] ">
             {data?.name}
             <Image
               src="/svgs/checkMark.svg"
@@ -177,7 +180,7 @@ const TeacherInfo = () => {
           <span className="text-[12px] font-bold">
             ⭐ {data?.rating ? data?.rating : "unratted"}
           </span>
-          <div className="flex flex-col my-5">
+          <div className="flex flex-col ">
             <p className="inline mb-1 text-[12px] font-medium">
               <FaEnvelope className="inline mr-1" />
               {data?.email}
@@ -197,19 +200,19 @@ const TeacherInfo = () => {
 const ApplicantDetails = () => {
   return (
     <section className="my-[80px] md:my-4">
-      <Container>
-        <div className="flex justify-between items-center mb-5">
-          <span className="font-bold">Details</span>
-          <Link href="/school-dashboard/job-listing" className="cursor-pointer">
-            <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />
-          </Link>
+      <Container className=" max-md:px-0">
+        <div className="flex justify-end items-center">
+          <Backwards />
         </div>
-        <div className="flex md:flex gap-4">
-          <div className=" flex-1">
-            <VacancyDesc />
-          </div>
-          <div className=" flex-1">
-            <TeacherInfo />
+        <div className=" flex flex-col  gap-1 mt-5">
+          <span className="font-bold">Details</span>
+          <div className="flex flex-col-reverse sm:flex-row gap-4 ">
+            <div className=" flex-1">
+              <VacancyDesc />
+            </div>
+            <div className=" flex-1">
+              <TeacherInfo />
+            </div>
           </div>
         </div>
       </Container>
