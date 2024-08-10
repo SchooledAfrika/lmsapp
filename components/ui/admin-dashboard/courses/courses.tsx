@@ -1,56 +1,34 @@
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 import { AdminCourses } from "@/constants/adminCourses";
-import { Button } from "../../button";
+import AdminCourseInfo from "../AdminCourseInfo";
+import Link from "next/link";
 
 const courses = () => {
   return (
     <section>
-      <div className="flex items-center justify-between pb-3">
-        <div>
-          <h1 className="text-[20px] font-bold">Course Categories</h1>
-          <span className="text-[14px]">You have total of 8 categories</span>
-        </div>
-
-        <Button className="bg-secondary text-white text-[12px] py-5 my-3 mr-0 md:mr-6">
-          <Image
-            src="/svgs/edit.svg"
-            width={20}
-            height={20}
-            className="mr-2"
-            alt="Add Category"
-          />
-          Add Category
-        </Button>
-      </div>
-      <div className="flex flex-wrap justify-center lg:justify-normal gap-3 w-full">
+      <div className="flex flex-wrap justify-center lg:justify-normal gap-5 w-full">
         {AdminCourses.map((details, index) => (
           <div
             key={index}
             className=" bg-[#FFFFFF] lg:w-[30%] py-7 shadow-lg px-4 rounded-[10px]"
           >
             <div className="flex justify-between">
-              <div className="flex gap-4">
-                <Image
-                  src={details.courseImg}
-                  width={50}
-                  height={50}
-                  alt="Teacher Image"
-                />
-                <div>
-                  <p className="font-bold text-[12px]">{details.courseName}</p>
-                  <span className="">{details.category}</span>
+              <Link href={"/admin-dashboard/courses/details"}>
+                <div className="cursor-pointer flex gap-4">
+                  <Image
+                    src={details.courseImg}
+                    width={50}
+                    height={50}
+                    alt="Teacher Image"
+                  />
+                  <div>
+                    <p className="font-bold">{details.courseName}</p>
+                    <span className="text-[14px]">{details.category}</span>
+                  </div>
                 </div>
-              </div>
-              <div>
-                <Image
-                  src="/svgs/ellipse.svg"
-                  width={20}
-                  height={20}
-                  alt="Ellipses"
-                />
-              </div>
+              </Link>
+              <AdminCourseInfo />
             </div>
             <div className="py-4">
               <p className="text-gray-500 text-[14px] font-bold">

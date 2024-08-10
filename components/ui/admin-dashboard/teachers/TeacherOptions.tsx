@@ -19,8 +19,6 @@ import { ListCollapse } from "lucide-react";
 import { FaUserSlash } from "react-icons/fa6";
 import RemoveTeacher from "./RemoveTeacher";
 
-
-
 const TeacherOptions = () => {
   return (
     <Popover>
@@ -58,7 +56,7 @@ const TeacherOptions = () => {
             <div className="flex justify-start">
               <p className="inline text-[13px]  font-semibold">
                 <FaUserSlash className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
-                 Suspend
+                Suspend
               </p>
             </div>
             <hr className="bg-black" />
