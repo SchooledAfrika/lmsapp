@@ -8,13 +8,13 @@ const JobResponsibility: React.FC<IJobSub> = ({
   errors,
 }) => {
   const [responsibility, setResponsibility] = useState<string[]>(() => {
-    const initialResponsibility = getValues("responsibility");
+    const initialResponsibility = getValues("responsibility") as string[];
     return initialResponsibility ?? [{ responsibility: [""] }];
   });
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   useEffect(() => {
-    const initialResponsibility = getValues("responsibility");
+    const initialResponsibility = getValues("responsibility") as string[];
     if (initialResponsibility) {
       setResponsibility(initialResponsibility);
     }
@@ -24,8 +24,8 @@ const JobResponsibility: React.FC<IJobSub> = ({
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
-    const newResponsibility = [...responsibility, { responsibility: [""] }];
-    
+    const newResponsibility = [...responsibility, ""];
+
     setResponsibility(newResponsibility);
     setValue("responsibility", newResponsibility);
     setCurrentIndex((index) => index + 1);
