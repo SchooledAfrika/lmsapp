@@ -279,7 +279,7 @@ export default function ApplicantsTable() {
           ) : (
             <div className="w-full overflow-x-auto flex flex-col gap-1">
               <TableStatus active="Active" canceled="Canceled" />
-              <Table className="bg-white w-[900px] md:w-full rounded-md">
+              <Table className="bg-white max-xs:w-[900px] md:w-full rounded-md">
                 <TableHeader className="">
                   <TableRow className=" flex  ">
                     <TableHead className=" flex-1 flex items-center justify-center ">
