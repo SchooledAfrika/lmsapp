@@ -25,6 +25,7 @@ import { MdMoreHoriz } from "react-icons/md";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { IoWarning } from "react-icons/io5";
 import TableStatus from "./ui/TableStatus";
+import Container from "./Container";
 
 interface IVacancyTeacher {
   createdAt: string;
@@ -269,7 +270,7 @@ export default function ApplicantsTable() {
   }
 
   return (
-    <div>
+    <Container className=" px-0">
       {Array.isArray(data?.VacancyTeacher) && (
         <div>
           {data?.VacancyTeacher.length === 0 ? (
@@ -313,6 +314,6 @@ export default function ApplicantsTable() {
           )}
         </div>
       )}
-    </div>
+    </Container>
   );
 }
