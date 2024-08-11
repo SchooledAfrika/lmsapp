@@ -20,8 +20,9 @@ interface ITeacherInfo {
   name: string;
   phoneNo: string;
   email: string;
+  id: string;
 }
-interface ISchoolTeacher {
+export interface ISchoolTeacher {
   id: string;
   schoolId: string;
   teacherId: string;

@@ -24,6 +24,18 @@ export async function POST(req: Request) {
       statusText: "teacher id is required",
     });
   }
+  // first, lets checkmate if the id send from the frontend is a teacher or exists in teacher mode
+  const checkIfIsTeacher = await prisma.teacher.findUnique({
+    where: { id: teacherId },
+    select: {
+      id: true,
+    },
+  });
+  if (!checkIfIsTeacher) {
+    return new Response(JSON.stringify({ message: "invalid teacher id" }), {
+      status: 401,
+    });
+  }
   // we also check if the teacher was created before by the school
   // we will return an error message showing that the teacher can not be created twice
   const checkTeacherExistence = await prisma.schoolTeacher.findFirst({
@@ -153,7 +165,7 @@ export async function DELETE(req: Request) {
 export async function GET(req: Request) {
   const schoolId = await serverSessionId();
   if (!schoolId) return notAuthenticated();
-  // proceed to fetch all the students that belong to the school
+  // proceed to fetch all the teachers that belong to the school
   try {
     const allSchoolStudents = await prisma.schoolTeacher.findMany({
       where: {
@@ -166,6 +178,7 @@ export async function GET(req: Request) {
             name: true,
             phoneNo: true,
             email: true,
+            id: true,
           },
         },
       },

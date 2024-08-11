@@ -61,6 +61,14 @@ export const useConversion = () => {
     }
   };
 
+  const getInitials = (fullName: string): string => {
+    const nameArray = fullName.split(" ");
+    const firstInitial = nameArray[0].split("")[0];
+    const secondInitial = nameArray[1].split("")[0];
+    const fullInitial = `${firstInitial}${secondInitial}`;
+    return fullInitial;
+  };
+
   return {
     getTimeAgo,
     handleTime,
@@ -68,6 +76,7 @@ export const useConversion = () => {
     makeSubstring,
     convertMoney,
     downloadDoc,
+    getInitials,
   };
 };
 

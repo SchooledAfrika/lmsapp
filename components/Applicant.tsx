@@ -9,12 +9,12 @@ import Backwards from "./ui/Backwards";
 const Applicant = () => {
   return (
     <section className="my-[80px] md:my-4">
-      <Container className=" px-0">
+      <div className="">
         <div className="flex justify-end items-center mb-5 mt-4">
           <Backwards />
         </div>
         <ApplicantsTable />
-      </Container>
+      </div>
     </section>
   );
 };

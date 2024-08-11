@@ -1,8 +1,6 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-
-
 import {
   Table,
   TableBody,
@@ -11,17 +9,101 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import Image from "next/image";
 import Link from "next/link";
 import { TableSkeleton } from "@/components/TableSkeleton";
 import { AssignDialog } from "./AssignDialog";
 import OptionsDialog from "./OptionsDialog";
+import { IgetTeachers, Iteacher } from "./AssignDialog";
+import { useConversion } from "@/data-access/conversion";
 
+export interface IteacherClass {
+  name: string;
+  id: string;
+}
+interface Iclass {
+  id: string;
+  grade: string;
+  name: string;
+  subject: string;
+  time: string;
+  createdAt: string;
+  SchoolClassStudent: string[];
+  SchoolClassTeacher: Iteacher[];
+}
 
+// each row component here
+const Eachclass: React.FC<{ item: Iclass; onlyTeachers: IgetTeachers[] }> = ({
+  item,
+  onlyTeachers,
+}) => {
+  const [showDialog, setShowdialog] = useState<boolean>(false);
+  const { getInitials } = useConversion();
+  // here, we flatten the kind of array we are getting which contains the teachers info
+  const classTeacher: IgetTeachers[] = item.SchoolClassTeacher.map(
+    (teacher: Iteacher) => teacher.teacher
+  );
+  // get only 3 teachers to show in the table
+  const previewTeacher = classTeacher.slice(0, 3);
+  return (
+    <TableRow key={item.id} className="">
+      <TableCell className="text-[12px] font-bold px-2 py-1 flex  gap-2">
+        <Image
+          src={`/${item?.subject.toLowerCase()}.png`}
+          alt="icon"
+          width={25}
+          height={25}
+          className="w-[30px] h-[30px] mr-1"
+        />
+        {item.subject}
+      </TableCell>
+      <TableCell className="text-[12px]  font-semibold">{item.name}</TableCell>
+      <TableCell className="text-[12px] w-[150px]   font-semibold">
+        {item.grade}
+      </TableCell>
+      <TableCell className="border-lightGreen   cursor-pointer text-[11px]  font-bold text-lightGreen rounded-xl">
+        {classTeacher?.length === 0 ? (
+          <div onClick={() => setShowdialog(true)}>
+            <AssignDialog
+              setShowdialog={setShowdialog}
+              subject={item?.subject}
+              classId={item?.id}
+              SchoolClassTeacher={classTeacher}
+              id={item?.id}
+              showDialog={showDialog}
+              onlyTeachers={onlyTeachers}
+            />
+          </div>
+        ) : (
+          <div className=" relative flex w-[100px] h-[40px] ">
+            {previewTeacher.map((oneTeacher, index) => (
+              <div
+                className={`text-black w-[30px] absolute rounded-md h-[30px] transition-all rotate-45 flex items-center justify-center ${
+                  index == 0
+                    ? "left-0 bg-yellow-500 "
+                    : index == 1
+                    ? "left-6 bg-orange-500"
+                    : "left-9 bg-green-800"
+                }`}
+                key={index}
+              >
+                <p>{getInitials(oneTeacher?.name)}</p>
+              </div>
+            ))}
+          </div>
+        )}
+      </TableCell>
 
+      {/* <TableCell className="text-[13px]  font-semibold">{Class.students}</TableCell> */}
+      <TableCell className="  text-[16px] float-right pr-3  text-lightGreen cursor-pointer">
+        <OptionsDialog classId={item.id} />
+      </TableCell>
+    </TableRow>
+  );
+};
+
+// the main component below here
 const Tables = () => {
-
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["addSchool"],
     queryFn: async () => {
@@ -30,7 +112,20 @@ const Tables = () => {
       return result;
     },
   });
-  console.log(data)
+  const { data: allTeachers, isPending } = useQuery({
+    queryKey: ["get-school-teacher-class"],
+    queryFn: async () => {
+      const response = await fetch("/api/class-teacher");
+      const result = await response.json();
+      return result;
+    },
+  });
+  if (isPending || isPending) {
+    return <div>loading</div>;
+  }
+  const onlyTeachers: IgetTeachers[] = allTeachers.map(
+    (teacher: Iteacher) => teacher.teacher
+  );
   //   if is loading
   if (isLoading) {
     return (
@@ -59,37 +154,13 @@ const Tables = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-      {Array.isArray(data) &&
-          data.map((item: any) => (
-          <TableRow key={item.id} className="">
-            <TableCell className="text-[12px] font-bold px-2 py-1 flex  gap-2">
-              <Image
-                src={`/${item?.subject.toLowerCase()}.png`}
-                alt="icon"
-                width={25}
-                height={25}
-                className="w-[30px] h-[30px] mr-1"
-              />
-              {item.subject}
-            </TableCell>
-            <TableCell className="text-[12px]  font-semibold">{item.name}</TableCell>
-            <TableCell className="text-[12px] w-[150px]   font-semibold">{item.grade}</TableCell>
-            <TableCell
-              className="border-lightGreen   cursor-pointer text-[11px]  font-bold text-lightGreen rounded-xl"
-              
-            >
-              <AssignDialog subject={item.subject}/>
-            </TableCell>
-
-            {/* <TableCell className="text-[13px]  font-semibold">{Class.students}</TableCell> */}
-            <TableCell className="  text-[16px] float-right pr-3  text-lightGreen cursor-pointer">
-             <OptionsDialog classId={item.id}/>
-            </TableCell>
-          </TableRow>
-        ))}
+        {Array.isArray(data) &&
+          data.map((item: Iclass, index) => (
+            <Eachclass item={item} key={index} onlyTeachers={onlyTeachers} />
+          ))}
       </TableBody>
     </Table>
   );
-}
+};
 
-export default Tables
+export default Tables;

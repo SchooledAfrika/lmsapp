@@ -157,8 +157,21 @@ export async function GET() {
         schoolId,
       },
       include: {
-        SchoolClassStudent: true,
-        SchoolClassTeacher: true,
+        SchoolClassStudent: {
+          select: {
+            studentId: true,
+          },
+        },
+        SchoolClassTeacher: {
+          select: {
+            teacher: {
+              select: {
+                name: true,
+                id: true,
+              },
+            },
+          },
+        },
         AnnouncementBySchoolClass: true,
       },
     });

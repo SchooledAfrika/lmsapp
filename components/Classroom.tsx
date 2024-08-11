@@ -5,17 +5,10 @@ import { SiGoogleclassroom } from "react-icons/si";
 import Tables from "@/components/Tables";
 import DashboardPagination from "./DashboardPagination";
 
-
-
-
 const Classroom = () => {
   return (
     <div className=" ">
-      
-      
-          <Tables />
-
-      <DashboardPagination />
+      <Tables />
     </div>
   );
 };
