@@ -21,6 +21,7 @@ import { toast } from "react-toastify";
 export interface IgetTeachers {
   name: string;
   id: string;
+  profilePhoto: string;
 }
 export interface Iteacher {
   teacher: IgetTeachers;
@@ -41,17 +42,18 @@ const SelectTeacher: React.FC<{
   const [showUp, setshowUp] = useState<boolean>(false);
   // the function that handles adding or removing the selectedTeacher
   const handleSelected = (teacherId: string) => {
+    // first, lets not push an existing teacher to the array collecting the teacher if a user clicks on it
+    // this will help us collect teachers that that does not exist before
+    const allreadexist = schoolClassTeacher.find(
+      (schteacher) => schteacher.id === teacherId
+    );
+    if (allreadexist) return;
+    // spread the former state
     const previousTeacher = [...selectedTeachers];
     // check if teacher already exist
     const checkIfIdExist = previousTeacher.find((item) => item === teacherId);
     // logic to remove the teacher if it already exist here
     if (checkIfIdExist) {
-      // first, lets not push an existing teacher to the array collecting the teacher if a user clicks on it
-      // this will help us collect teachers that that does not exist before
-      const allreadexist = schoolClassTeacher.find(
-        (schteacher) => schteacher.id === teacherId
-      );
-      if (allreadexist) return;
       const existIndex = previousTeacher.indexOf(teacherId);
       previousTeacher.splice(existIndex, 1);
       return setSeletecTeachers(previousTeacher);
@@ -88,7 +90,11 @@ const SelectTeacher: React.FC<{
               {onlyTeachers.map((teacher, index) => (
                 <div
                   onClick={() => handleSelected(teacher.id)}
-                  className=" flex gap-3 border px-4 py-3 rounded-sm cursor-pointer"
+                  className={` ${
+                    schoolClassTeacher.find(
+                      (regTeacher) => regTeacher.id === teacher.id
+                    ) && " bg-slate-200"
+                  } flex gap-3 border px-4 py-3 rounded-sm cursor-pointer`}
                   key={index}
                 >
                   <div
@@ -126,6 +132,7 @@ export const AssignDialog: React.FC<{
   showDialog: boolean;
   onlyTeachers: IgetTeachers[];
   classId: string;
+  title: string;
 }> = ({
   subject,
   showDialog,
@@ -133,6 +140,7 @@ export const AssignDialog: React.FC<{
   onlyTeachers,
   SchoolClassTeacher,
   classId,
+  title,
 }) => {
   const [selectedTeachers, setSeletecTeachers] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState<boolean>(false);
@@ -152,7 +160,9 @@ export const AssignDialog: React.FC<{
     onSuccess: async (response) => {
       const body = await response.json();
       if (response.ok) {
-        query.invalidateQueries({ queryKey: ["addSchool"] });
+        query.invalidateQueries({
+          queryKey: ["addSchool", "get-one-school-class"],
+        });
         setSeletecTeachers([]);
         setSubmitting(false);
         toast.success(body.message);
@@ -173,12 +183,14 @@ export const AssignDialog: React.FC<{
   return (
     <Dialog open={showDialog} onOpenChange={() => setShowdialog(false)}>
       <DialogTrigger asChild>
-        <Button
-          variant="outline"
-          className="border font-bold px-3 text-[12px] rounded-lg border-lightGreen hover:text-lightGreen"
+        <div
+          className={` font-bold px-3 text-[12px] rounded-lg ${
+            title === "Assign" &&
+            " border border-lightGreen hover:text-lightGreen w-fit py-2"
+          } `}
         >
-          Assign
-        </Button>
+          {title}
+        </div>
       </DialogTrigger>
       <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
         <DialogHeader>

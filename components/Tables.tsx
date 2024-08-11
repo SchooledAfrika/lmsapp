@@ -20,6 +20,7 @@ import { useConversion } from "@/data-access/conversion";
 export interface IteacherClass {
   name: string;
   id: string;
+  profilePhoto?: string;
 }
 interface Iclass {
   id: string;
@@ -72,10 +73,17 @@ const Eachclass: React.FC<{ item: Iclass; onlyTeachers: IgetTeachers[] }> = ({
               id={item?.id}
               showDialog={showDialog}
               onlyTeachers={onlyTeachers}
+              title="Assign"
             />
           </div>
         ) : (
-          <div className=" relative flex w-[100px] h-[40px] ">
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setShowdialog(true);
+            }}
+            className=" relative flex w-[100px] h-[40px] "
+          >
             {previewTeacher.map((oneTeacher, index) => (
               <div
                 className={`text-black w-[30px] absolute rounded-md h-[30px] transition-all rotate-45 flex items-center justify-center ${
@@ -90,6 +98,16 @@ const Eachclass: React.FC<{ item: Iclass; onlyTeachers: IgetTeachers[] }> = ({
                 <p>{getInitials(oneTeacher?.name)}</p>
               </div>
             ))}
+            <AssignDialog
+              setShowdialog={setShowdialog}
+              subject={item?.subject}
+              classId={item?.id}
+              SchoolClassTeacher={classTeacher}
+              id={item?.id}
+              showDialog={showDialog}
+              onlyTeachers={onlyTeachers}
+              title=""
+            />
           </div>
         )}
       </TableCell>
