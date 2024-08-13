@@ -1,8 +1,11 @@
+import Parents from '@/components/ui/admin-dashboard/parents/parents'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>page</div>
+    <div className='my-[80px]'>
+       <Parents/>
+    </div>
   )
 }
 

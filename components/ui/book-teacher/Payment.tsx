@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ISessionSub } from "./Duration";
+import { ISessionSub } from "./Details";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import Image from "next/image";
@@ -11,6 +11,9 @@ const Payment: React.FC<ISessionSub> = ({
   register,
   errors,
   control,
+  watch,
+  clearErrors,
+  setValue,
   
   
  }) => {
@@ -74,28 +77,7 @@ const Payment: React.FC<ISessionSub> = ({
 
               <input  {...register("flutterwave")} className="w-4 ml-4 accent-lightGreen" type="checkbox" />
             </div>
-            {/* Third child */}
-            <div className="border md:ml-3 px-4 bg-white justify-between md:pl-4 md:pr-6 flex py-3  rounded-md ">
-              <div className="flex space-x-6">
-                <Image
-                  src="/remitta.png"
-                  alt="remitta"
-                  width={100}
-                  height={100}
-                  className="w-[35px] h-[35px]"
-                />
-                <div className="flex space-y-1 flex-col">
-                  <p className="text-[13px] font-semibold">Remita</p>
-                  <p className="text-[11px]">
-                    Effortless Payments with Remita: Simplify Your Online
-                    Transactions
-                  </p>
-                </div>
-              </div>
-
-              <input  {...register("remita")} className="w-4 ml-4 accent-lightGreen" type="checkbox" />
             </div>
-          </div>
           <div className="bg-white rounded-md ml-3  mb-12 pt-3 pb-6 px-6">
             <h3 className="font-semibold pb-3 text-[14px]">Summary</h3>
             <div className="flex text-[12.5px] justify-between">

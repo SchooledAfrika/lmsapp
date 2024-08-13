@@ -8,36 +8,36 @@ import BookSession from "@/app/(showNavbar)/find-tutors/book-session/page";
 import { useQuery } from "@tanstack/react-query";
 
 const AllTutors = () => {
-  const fetchDetails = async () => {
-    const response = await fetch("/api/one-on-one-section");
-    console.log(response);
-    const result = await response.json();
-    return result;
-  };
+  // const fetchDetails = async () => {
+  //   const response = await fetch("/api/one-on-one-section");
+  //   console.log(response);
+  //   const result = await response.json();
+  //   return result;
+  // };
 
-  const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["fetchDetails"],
-    queryFn: fetchDetails,
-  });
+  // const { isLoading, isError, error, data } = useQuery({
+  //   queryKey: ["fetchDetails"],
+  //   queryFn: fetchDetails,
+  // });
 
-  console.log(data);
+  // console.log(data);
 
-  if (isLoading) {
-    return (
-      <div>
-        <p className="my-4 font-bold">Loading...</p>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div>
+  //       <p className="my-4 font-bold">Loading...</p>
+  //     </div>
+  //   );
+  // }
 
   // Handle error state
-  if (isError) {
-    return <div className="flex-1">{error.message}</div>;
-  }
+  // if (isError) {
+  //   return <div className="flex-1">{error.message}</div>;
+  // }
 
   return (
-    <div className="mx-3">
-      {data && (
+    <div className="mx-3 font-header font-semibold">
+     
         <>
           {/* Desktop view */}
           <div className="hidden md:flex md:w-[95%] mx-auto my-20 rounded-2xl shadow-md bg-white h-full">
@@ -50,13 +50,14 @@ const AllTutors = () => {
                 height={150}
                 className="w-full rounded-xl ml-6 mt-6"
               />
-              <div className="flex justify-center text-[14px] p-3">
-                <p className="mr-2">25 Sessions</p>
-                <p>|</p>
-                <p className="ml-2">8 Students</p>
+              <div className="flex space-x-2 text-center text-[13px] p-3">
+                <p className="">25 Sessions</p>
+                <p className="border-l-2 border-slate-700"></p>
+                
+                <p className="">38 Students</p>
               </div>
-              <div className="hidden md:flex font-header text-[14px] font-semibold p-2">
-                <h3>Online</h3>
+              <div className="hidden md:flex font-header text-[14px] font-semibold mb-2 p-2">
+                <h3 className="text-[13px]">Online</h3>
                 <div className="w-[10px] h-[10px] mt-1 rounded-full ml-3 bg-lightGreen"></div>
               </div>
             </div>
@@ -66,13 +67,13 @@ const AllTutors = () => {
               <h3 className="font-bold text-lg mb-3">
                 David Olushola <MdVerified className="inline text-lightGreen" />
               </h3>
-              <p className="hidden md:block">
+              <p className="hidden font-medium md:block">
                 Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
                 commodo ligula eget dolor. Aenean massa. Cum sociis natoque
                 penatibus et magnis dis parturient montes, nascetur ridiculus
                 mus...
               </p>
-              <ul className="flex flex-col md:flex-row justify-between my-2 text-[13px] font-bold items-center">
+              <ul className="flex flex-col md:flex-row  my-2 text-[13px] font-bold items-center">
                 <li className="md:mr-4 py-1">Speaks: English</li>
                 <li className="md:mr-4 py-1">
                   Teaches:{" "}
@@ -85,7 +86,7 @@ const AllTutors = () => {
                   />{" "}
                   Mathematics
                 </li>
-                <li className="md:mr-4 py-1">Grade: 10, 11 & 12</li>
+                <li className="md:mr-2 py-1">Grade: 10, 11 & 12</li>
               </ul>
               <Link
                 className="text-lightGreen font-semibold underline text-[13px] mb-2"
@@ -111,21 +112,19 @@ const AllTutors = () => {
 
             {/* Third flex section */}
             <div className="flex flex-col items-end p-6">
-              <h3 className="text-lightGreen font-bold text-lg">
-                $10.00 - $25.00
-              </h3>
-              <p className="text-sm">Per Hour</p>
+             
+             
               <div className="flex flex-col items-end mt-3">
                 <BookSession />
-                <Button
+                {/* <Button
                   asChild
                   variant="outline"
                   className="bg-white border-lightGreen hover:bg-lightGreen text-lightGreen hover:text-white text-sm mt-3 px-3 w-32 py-2"
                 >
                   <Link href="/register">Contact</Link>
-                </Button>
+                </Button> */}
               </div>
-              <div className="flex items-end mt-10">
+              <div className="flex items-end mt-6">
                 <Link className="text-sm underline font-bold" href="/">
                   Reviews
                 </Link>
@@ -198,19 +197,19 @@ const AllTutors = () => {
                 Group sessions
               </Button>
             </div>
-            <div className="flex">
+            <div className="">
               <BookSession />
-              <Button
+              {/* <Button
                 asChild
                 variant="outline"
                 className="bg-white border-lightGreen hover:bg-lightGreen text-lightGreen hover:text-white text-sm mt-3 px-3 w-28 mr-2 py-2"
               >
                 <Link href="/register">Contact</Link>
-              </Button>
+              </Button> */}
             </div>
           </div>
         </>
-      )}
+     
     </div>
   );
 };
