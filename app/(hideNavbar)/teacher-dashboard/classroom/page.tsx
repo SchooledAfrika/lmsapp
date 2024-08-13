@@ -1,6 +1,7 @@
 import React from "react";
 import Classroom from "@/components/ui/teacher-dashboard/classroom/classroom";
 import AddClassroom from "@/components/ui/teacher-dashboard/addClassroom/addClassroom";
+import DashboardPagination from "@/components/DashboardPagination";
 
 const page = () => {
   return (
@@ -9,6 +10,7 @@ const page = () => {
         <AddClassroom />
       </div>
       <Classroom />
+      <DashboardPagination/>
     </div>
   );
 };

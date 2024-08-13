@@ -62,9 +62,9 @@ const TeacherDialog: React.FC<IAddTeacher> = ({
       return result;
     },
     onSuccess: async (result) => {
+      const body = await result.json();
       queryClient.invalidateQueries({ queryKey: ["addTeacher"] });
       if (result.ok) {
-        const body = await result.json();
         setloading(false);
         reset();
         toast.success(body.message);
@@ -73,7 +73,7 @@ const TeacherDialog: React.FC<IAddTeacher> = ({
         }, 4000);
       } else {
         setloading(false);
-        return toast.error("Error adding teacher");
+        return toast.error(body.message);
       }
     },
   });

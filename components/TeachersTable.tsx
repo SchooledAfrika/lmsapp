@@ -158,7 +158,6 @@ const TeachersTable = () => {
       </div>
     );
   }
-  console.log(data);
   // if is error
   if (isError) {
     return <div className=" flex-1">{error.message}</div>;

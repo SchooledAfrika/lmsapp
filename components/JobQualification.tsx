@@ -69,6 +69,12 @@ const JobQualification: React.FC<IJobSub> = ({
             Add More Qualifications +
           </button>
         </div>
+
+        {errors.qualifications && (
+          <small className=" text-red-600">
+            please enter job Qualifications
+          </small>
+        )}
       </div>
     </section>
   );

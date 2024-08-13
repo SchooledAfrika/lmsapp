@@ -304,7 +304,7 @@ const Vacancies = () => {
   const { ref, inView } = useInView();
 
   // function that is called at each step to get the classes based on parameter
-  const getItems = async ({ pageParam }: { pageParam: number }) => {
+  const getJobs = async ({ pageParam }: { pageParam: number }) => {
     const response = await fetch(`/api/advert-application?page=${pageParam}`);
     return response.json();
   };
@@ -319,7 +319,7 @@ const Vacancies = () => {
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ["infinitejobs"],
-    queryFn: getItems,
+    queryFn: getJobs,
     initialPageParam: 1,
     getNextPageParam: (lastPage, allPage) => {
       const nextPage = lastPage.length !== 0 ? allPage.length + 1 : undefined;
@@ -330,7 +330,7 @@ const Vacancies = () => {
     if (inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, fetchNextPage]);
   // checking if it is loading
   if (status === "pending") {
     return (

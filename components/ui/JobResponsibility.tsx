@@ -13,7 +13,7 @@ const JobResponsibility: React.FC<IJobSub> = ({
   });
 
   useEffect(() => {
-    const initialResponsibility = getValues("responsibility");
+    const initialResponsibility = getValues("responsibility") as string[];
     if (initialResponsibility) {
       setResponsibility(initialResponsibility);
     }

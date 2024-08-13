@@ -16,7 +16,7 @@ const MobileSideBar = ({ dashboard }: { dashboard: string }) => {
         onClick={(e) => {
           e.stopPropagation();
         }}
-        className="  w-3/5 bg-white h-full px-6 py-3 overflow-auto"
+        className="  w-3/5 bg-white h-full font-bold px-6 py-3 overflow-auto"
       >
         <Sidebar dashboard={dashboard} />
       </div>

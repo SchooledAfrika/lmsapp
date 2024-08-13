@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ViewOffer from "./viewOffer";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 interface Props {
   icon: string;
@@ -15,7 +16,14 @@ interface Props {
   index: number;
 }
 
-const OfferCard = ({ icon, title, institution, grade, type, location }: Props) => {
+const OfferCard = ({
+  icon,
+  title,
+  institution,
+  grade,
+  type,
+  location,
+}: Props) => {
   return (
     <div className=" w-full  font-header rounded-lg bg-white p-4 flex flex-col justify-evenly gap-3 hover:-translate-y-2 transition-transform duration-300 group">
       <div className="flex justify-center items-center">
@@ -38,6 +46,23 @@ const OfferCard = ({ icon, title, institution, grade, type, location }: Props) =
 };
 
 const OpenOffers = () => {
+  // making use of react query to get all the offers
+  const { data, isFetching, isError, error } = useQuery({
+    queryKey: ["get-offers-for-teacher"],
+    queryFn: async () => {
+      const response = await fetch("/api/teachers-offer");
+      const result = await response.json();
+      return result;
+    },
+  });
+  if (isFetching) {
+    return <div>loading...</div>;
+  }
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
+
+  console.log(data);
   return (
     <section>
       <div className="max-w-full  py-6">
