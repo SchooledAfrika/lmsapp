@@ -19,7 +19,7 @@ import { Trash2 } from "lucide-react";
 //   dataId: string;
 // }
 
-const RemoveTeacher = () => {
+const RemoveCourse = () => {
   const [loading, setloading] = useState<boolean>(false);
 
   //   instance of client
@@ -84,7 +84,7 @@ const RemoveTeacher = () => {
           </div>
           <div className="grid  items-center font-header gap-4">
             <p className="font-bold text-[20px]  ">
-              Are you sure you want to remove Teacher?
+              Are you sure you want to remove Course?
             </p>
             <p className="text-sm">
               This action can not be reversed, be sure you want to remove before
@@ -99,7 +99,7 @@ const RemoveTeacher = () => {
             type="submit"
             className="w-full py-8 text-lg bg-lightGreen hover:bg-green-700"
           >
-            {loading ? "Deleting Class..." : "Delete Class"}
+            {loading ? "Removing course..." : "Remove Class"}
           </Button>
         </DialogFooter>
       </DialogContent>
@@ -107,4 +107,4 @@ const RemoveTeacher = () => {
   );
 };
 
-export default RemoveTeacher;
+export default RemoveCourse;
