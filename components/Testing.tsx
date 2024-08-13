@@ -37,7 +37,7 @@ const Testing = () => {
     if (data?.user.role === "Student") {
       router.push(`${process.env.NEXT_PUBLIC_HOMEPAGE}/student-dashboard`);
     }
-  }, [status, data]);
+  }, [status, data, router]);
 
   const handleCreate = (name: string) => {
     if (name === "google") {

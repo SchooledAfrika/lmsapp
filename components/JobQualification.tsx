@@ -9,8 +9,9 @@ const JobQualification: React.FC<IJobSub> = ({
 }) => {
   const [qualifications, setQualifications] = useState<string[]>(() => {
     const initialQualifications = getValues("qualifications");
-    return initialQualifications ?? [{ qualifications: [""] }];
+    return initialQualifications ?? [""];
   });
+
   const [currentIndex, setCurrentIndex] = useState<number>(0);
 
   useEffect(() => {
@@ -20,14 +21,12 @@ const JobQualification: React.FC<IJobSub> = ({
     }
   }, [getValues]);
 
-  const handleAddedQualification = (
-    e: React.MouseEvent<HTMLButtonElement>
-  ) => {
+  const handleAddedQualification = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const newQualification = [...qualifications, { qualifications: [""] }];
-    
+    const newQualification = [...qualifications, ""];
+
     setQualifications(newQualification);
-    setValue("responsibility", newQualification);
+    setValue("qualifications", newQualification);
     setCurrentIndex((index) => index + 1);
   };
 
@@ -42,7 +41,7 @@ const JobQualification: React.FC<IJobSub> = ({
   };
 
   return (
-    <section className="my-[80px] md:my-6  ">
+    <section className="my-[80px] md:my-6">
       <div className="md:pl-[100px] w-full">
         <label className="font-bold text-[18px]">Job Qualifications</label>
         {qualifications.map((qualification, qIndex) => (
@@ -58,7 +57,7 @@ const JobQualification: React.FC<IJobSub> = ({
           </label>
         ))}
 
-        <div className=" w-full flex items-center justify-between ">
+        <div className="w-full flex items-center justify-between">
           <button
             type="button"
             onClick={handleAddedQualification}
@@ -69,8 +68,8 @@ const JobQualification: React.FC<IJobSub> = ({
         </div>
 
         {errors.qualifications && (
-          <small className=" text-red-600">
-            please enter job Qualifications
+          <small className="text-red-600">
+            Please enter job qualifications
           </small>
         )}
       </div>

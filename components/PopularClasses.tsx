@@ -346,7 +346,7 @@ const PopularClasses = () => {
     if (inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, fetchNextPage]);
   // checking if it is loading
   if (status === "pending") {
     return (
