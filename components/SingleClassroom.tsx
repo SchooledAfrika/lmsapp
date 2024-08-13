@@ -12,6 +12,8 @@ import Backwards from "./ui/Backwards";
 import { PiBookFill } from "react-icons/pi";
 import { useConversion } from "@/data-access/conversion";
 import { AssignDialog, IgetTeachers } from "./AssignDialog";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface InnerTeacher {
   name: string;
@@ -159,7 +161,7 @@ const NoTeacher: React.FC<{ item: IsingleClass }> = ({ item }) => {
     (teacher: IouterPart) => teacher.teacher
   );
   return (
-    <div className=" w-full h-full flex items-center justify-center bg-white flex-col gap-2">
+    <div className=" w-full h-full flex items-center justify-center bg-white flex-col gap-2 max-ss:h-[150px]">
       <p className=" text-black">no teacher, assign</p>
       <div className=" cursor-pointer" onClick={() => setShowdialog(true)}>
         <AssignDialog
@@ -202,7 +204,7 @@ const SingleClassroom = () => {
   }
   const classData: IsingleClass = data;
   return (
-    <div className=" mt-6">
+    <div className=" mt-6 max-md:mt-[100px]">
       <div className=" w-full flex items-center justify-between">
         <p className=" font-bold">Details</p>
         <Backwards />
@@ -225,6 +227,7 @@ const SingleClassroom = () => {
           <SingleClassTable />
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -14,7 +14,11 @@ import React, { useState } from "react";
 import { IteacherClass } from "./Tables";
 import { IoCaretDownSharp } from "react-icons/io5";
 import { BiSolidUpArrow } from "react-icons/bi";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { IoIosCheckmark } from "react-icons/io";
 import { toast } from "react-toastify";
 
@@ -161,8 +165,9 @@ export const AssignDialog: React.FC<{
       const body = await response.json();
       if (response.ok) {
         query.invalidateQueries({
-          queryKey: ["addSchool", "get-one-school-class"],
+          queryKey: ["addSchool"],
         });
+        query.invalidateQueries({ queryKey: ["get-one-school-class"] });
         setSeletecTeachers([]);
         setSubmitting(false);
         toast.success(body.message);

@@ -16,6 +16,7 @@ import { AssignDialog } from "./AssignDialog";
 import OptionsDialog from "./OptionsDialog";
 import { IgetTeachers, Iteacher } from "./AssignDialog";
 import { useConversion } from "@/data-access/conversion";
+import { LoadingTable, NoItem } from "./TeachersTable";
 
 export interface IteacherClass {
   name: string;
@@ -48,18 +49,20 @@ const Eachclass: React.FC<{ item: Iclass; onlyTeachers: IgetTeachers[] }> = ({
   const previewTeacher = classTeacher.slice(0, 3);
   return (
     <TableRow key={item.id} className="">
-      <TableCell className="text-[12px] font-bold px-2 py-1 flex  gap-2">
-        <Image
-          src={`/${item?.subject.toLowerCase()}.png`}
-          alt="icon"
-          width={25}
-          height={25}
-          className="w-[30px] h-[30px] mr-1"
-        />
-        {item.subject}
+      <TableCell className="text-[12px] font-bold">
+        <div className=" flex items-center gap-1">
+          <Image
+            src={`/${item?.subject.toLowerCase()}.png`}
+            alt="icon"
+            width={25}
+            height={25}
+            className="w-[30px] h-[30px] mr-1"
+          />
+          <p>{item.subject}</p>
+        </div>
       </TableCell>
       <TableCell className="text-[12px]  font-semibold">{item.name}</TableCell>
-      <TableCell className="text-[12px] w-[150px]   font-semibold">
+      <TableCell className="text-[12px]   font-semibold">
         {item.grade}
       </TableCell>
       <TableCell className="border-lightGreen   cursor-pointer text-[11px]  font-bold text-lightGreen rounded-xl">
@@ -111,8 +114,9 @@ const Eachclass: React.FC<{ item: Iclass; onlyTeachers: IgetTeachers[] }> = ({
           </div>
         )}
       </TableCell>
-
-      {/* <TableCell className="text-[13px]  font-semibold">{Class.students}</TableCell> */}
+      <TableCell className="text-[12px]  font-semibold">
+        {item.SchoolClassStudent.length}
+      </TableCell>
       <TableCell className="  text-[16px] float-right pr-3  text-lightGreen cursor-pointer">
         <OptionsDialog classId={item.id} />
       </TableCell>
@@ -138,46 +142,60 @@ const Tables = () => {
       return result;
     },
   });
-  if (isPending || isPending) {
-    return <div>loading</div>;
-  }
-  const onlyTeachers: IgetTeachers[] = allTeachers.map(
-    (teacher: Iteacher) => teacher.teacher
-  );
-  //   if is loading
-  if (isLoading) {
+  //   if is loading or pending
+  if (isLoading && isPending) {
     return (
-      <div className="">
-        <p className="my-4 font-bold">loading...</p>
-
-        <TableSkeleton />
+      <div className=" mt-4">
+        <LoadingTable />
       </div>
     );
   }
+
   // if is error
   if (isError) {
     return <div className=" flex-1">{error.message}</div>;
   }
 
+  const onlyTeachers: IgetTeachers[] = allTeachers.map(
+    (teacher: Iteacher) => teacher.teacher
+  );
+
   return (
-    <Table className="bg-white overflow-x-auto    rounded-md mt-12">
-      <TableHeader>
-        <TableRow>
-          <TableHead className="text-[12px]">Subject</TableHead>
-          <TableHead className=" text-[12px]">Name</TableHead>
-          <TableHead className="text-[12px] w-[150px]">Grade</TableHead>
-          <TableHead className="text-[12px]">Teacher</TableHead>
-          {/* <TableHead className="text-[12px]">Students</TableHead> */}
-          <TableHead className="text-right text-[12px]">Options</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {Array.isArray(data) &&
-          data.map((item: Iclass, index) => (
-            <Eachclass item={item} key={index} onlyTeachers={onlyTeachers} />
-          ))}
-      </TableBody>
-    </Table>
+    <div>
+      {Array.isArray(data) && (
+        <div>
+          {data.length === 0 ? (
+            <NoItem itemName="Class" />
+          ) : (
+            <Table className="bg-white overflow-x-auto    rounded-md mt-12">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="text-[12px]">Subject</TableHead>
+                  <TableHead className=" text-[12px]">Name</TableHead>
+                  <TableHead className="text-[12px]">Grade</TableHead>
+                  <TableHead className="text-[12px]">Teacher</TableHead>
+                  <TableHead className="text-[12px]">Students</TableHead>
+                  {/* <TableHead className="text-[12px]">Students</TableHead> */}
+                  <TableHead className="text-right text-[12px]">
+                    Options
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {Array.isArray(data) &&
+                  data.map((item: Iclass, index) => (
+                    <Eachclass
+                      item={item}
+                      key={index}
+                      onlyTeachers={onlyTeachers}
+                    />
+                  ))}
+              </TableBody>
+            </Table>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 

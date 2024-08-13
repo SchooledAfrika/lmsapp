@@ -68,7 +68,10 @@ export const useConversion = () => {
     const fullInitial = `${firstInitial}${secondInitial}`;
     return fullInitial;
   };
-
+  const joinByComma = (item: string[]): string => {
+    const arrayItem = item.join(", ");
+    return arrayItem.toLocaleLowerCase();
+  };
   return {
     getTimeAgo,
     handleTime,
@@ -77,6 +80,7 @@ export const useConversion = () => {
     convertMoney,
     downloadDoc,
     getInitials,
+    joinByComma,
   };
 };
 

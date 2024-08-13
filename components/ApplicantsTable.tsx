@@ -12,7 +12,6 @@ import { useParams } from "next/navigation";
 import Image from "next/image";
 import { FaBullseye, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import Link from "next/link";
-import { Button } from "./ui/button";
 import React, { useState } from "react";
 import { useConversion } from "@/data-access/conversion";
 import { LoadingTable } from "./TeachersTable";
@@ -26,6 +25,8 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { IoWarning } from "react-icons/io5";
 import TableStatus from "./ui/TableStatus";
 import Container from "./Container";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface IVacancyTeacher {
   createdAt: string;
@@ -68,8 +69,10 @@ const AcceptDialog: React.FC<{
     onSuccess: async (response) => {
       const result = await response.json();
       if (!response.ok) {
-        alert(result.message);
+        toast.error(result.message);
       }
+      setShowAccept(false);
+      return toast.success(result.message);
     },
   });
   // this is to close the dialog
@@ -115,6 +118,27 @@ const RejectDialog: React.FC<{
   showReject: boolean;
   vacancyId: string;
 }> = ({ showReject, setShowReject }) => {
+  const mutation = useMutation({
+    mutationKey: ["accept-teacher-by-vacancy"],
+    mutationFn: async (id: string) => {
+      const response = await fetch("/api/advert-application", {
+        method: "PUT",
+        body: JSON.stringify({
+          vacancyTeacherId: id,
+          status: "REJECTED",
+        }),
+      });
+      return response;
+    },
+    onSuccess: async (response) => {
+      const result = await response.json();
+      if (!response.ok) {
+        toast.error(result.message);
+      }
+      setShowReject(false);
+      return toast.success(result.message);
+    },
+  });
   // this is to close the dialog
   const handleClose = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     e.stopPropagation();
@@ -314,6 +338,7 @@ export default function ApplicantsTable() {
           )}
         </div>
       )}
+      <ToastContainer />
     </Container>
   );
 }

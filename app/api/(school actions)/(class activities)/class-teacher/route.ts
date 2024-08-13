@@ -6,7 +6,6 @@ import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 export async function POST(req: Request) {
-  // TODO: change the schoolID in the body below to the nextauth id
   const { schoolClassId, teacherIds } = await req.json();
   const schoolId = await serverSessionId();
   // first, lets check if the school that want to add the teacher to the class is actually
@@ -17,6 +16,8 @@ export async function POST(req: Request) {
     },
     select: {
       schoolId: true,
+      subject: true,
+      grade: true,
     },
   });
   // returning an error if the class does not exist maybe a mistake from the frontend
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
   //   now we can go on and add the teacher to the class
   try {
     for (const teacher of teacherIds) {
-      console.log(teacher);
+      // first add the teacher to the class
       await prisma.schoolClassTeacher.upsert({
         where: { id: teacher },
         create: {
@@ -46,6 +47,37 @@ export async function POST(req: Request) {
         },
         update: {
           teacherId: teacher,
+        },
+      });
+      // then now update the schoolTeacher model to push the grades and the subject the teacher is teaching
+      // but lets find the schoolteacher first
+      const schoolTeacher = await prisma.schoolTeacher.findFirst({
+        where: {
+          schoolId,
+          teacherId: teacher,
+        },
+      });
+      // then we can now update the schoolTeacher now
+      // here we update the grade array and the subjects array
+      // but we will first check if the grade and the subject we want to add is already added
+      const grades = schoolTeacher?.grades;
+      const subjects = schoolTeacher?.subjects;
+      const checkGrade = grades?.find((item) => item === getClass.grade);
+      if (!checkGrade) {
+        grades?.push(getClass.grade);
+      }
+      const checkSubject = subjects?.find((item) => item === getClass.subject);
+      if (!checkSubject) {
+        subjects?.push(getClass.subject);
+      }
+
+      // now we can now proceed to update our schoolTeacher
+      await prisma.schoolTeacher.update({
+        where: { id: schoolTeacher?.id },
+        data: {
+          grades,
+          subjects,
+          updatedAt: new Date(),
         },
       });
     }

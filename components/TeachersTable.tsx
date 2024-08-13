@@ -29,6 +29,8 @@ export interface ISchoolTeacher {
   status: string;
   createdAt: string;
   teacher: ITeacherInfo;
+  grades: string[];
+  subjects: string[];
 }
 
 export const LoadingTable = () => {
@@ -73,7 +75,7 @@ export const NoItem: React.FC<{ itemName: string }> = ({ itemName }) => {
 };
 
 const Teachers = ({ item }: { item: ISchoolTeacher }) => {
-  const { handleDate } = useConversion();
+  const { handleDate, joinByComma } = useConversion();
   return (
     <TableRow key={item.id} className="">
       <TableCell className="flex items-center gap-2">
@@ -113,12 +115,20 @@ const Teachers = ({ item }: { item: ISchoolTeacher }) => {
           </div>
         </div>
       </TableCell>
-      <TableCell className="text-[12px]  font-medium">
-        <p>N/A</p>
+      <TableCell className="text-[12px]  font-medium max-w-[140px]">
+        {item.subjects.length === 0 ? (
+          <p>N/A</p>
+        ) : (
+          <small>{joinByComma(item.subjects)}</small>
+        )}
       </TableCell>
 
-      <TableCell className="text-[12px]  font-medium">
-        <p>N/A</p>
+      <TableCell className="text-[12px]  font-medium max-w-[140px]">
+        {item.grades.length === 0 ? (
+          <p>N/A</p>
+        ) : (
+          <small>{joinByComma(item.grades)}</small>
+        )}
       </TableCell>
       <TableCell className="text-[12px]  font-medium">
         <p className=" text-[10px]">{handleDate(item.createdAt)}</p>
@@ -148,6 +158,7 @@ const TeachersTable = () => {
       </div>
     );
   }
+  console.log(data);
   // if is error
   if (isError) {
     return <div className=" flex-1">{error.message}</div>;

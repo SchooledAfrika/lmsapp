@@ -346,6 +346,8 @@ model SchoolTeacher {
   teacher   Teacher        @relation(fields: [teacherId], references: [id])
   teacherId String         @db.ObjectId
   status    ContractStatus @default(PENDING)
+  grades    Grade[]        @default([])
+  subjects  Subjects[]     @default([])
   createdAt DateTime       @default(now())
   updatedAt DateTime       @default(now())
 
@@ -361,6 +363,7 @@ model SchoolStudent {
   school    School         @relation(fields: [schoolId], references: [id])
   schoolId  String         @db.ObjectId
   status    ContractStatus @default(PENDING)
+  classes   String[]       @default([])
   createdAt DateTime       @default(now())
   updatedAt DateTime       @default(now())
 
