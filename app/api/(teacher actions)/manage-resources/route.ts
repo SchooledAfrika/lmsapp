@@ -35,6 +35,7 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   const teacherId = await serverSessionId();
   const { id } = await req.json();
+  console.log(id);
   if (!teacherId) return notAuthenticated();
   // lets get the article and check if is the owner that is about to delete it
   const article = await prisma.teachersArticle.findUnique({
@@ -58,6 +59,31 @@ export async function DELETE(req: Request) {
     return new Response(
       JSON.stringify({ message: "article deleted successfully" })
     );
+  } catch (error) {
+    return serverError();
+  }
+}
+
+export async function GET(req: Request) {
+  const teacherId = await serverSessionId();
+  const role = await serverSessionRole();
+
+  if (!teacherId) return notAuthenticated();
+  if (role !== "Teacher") {
+    return new Response(
+      JSON.stringify({ message: "only teacher is allowed" }),
+      { status: 400 }
+    );
+  }
+
+  // now we make call to the backend
+  try {
+    const allTeacherArticle = await prisma.teachersArticle.findMany({
+      where: {
+        teacherId,
+      },
+    });
+    return new Response(JSON.stringify(allTeacherArticle), { status: 200 });
   } catch (error) {
     return serverError();
   }

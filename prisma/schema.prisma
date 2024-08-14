@@ -153,14 +153,15 @@ model Parents {
 // the link to the pdf or article is stored here
 // this article id can be pushed into the array inclasses so that students can actually access it
 model TeachersArticle {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  id         String       @id @default(auto()) @map("_id") @db.ObjectId
   subject    Subjects
   title      String
   sourceLink String
-  teacher    Teacher  @relation(fields: [teacherId], references: [id])
-  teacherId  String   @db.ObjectId
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @default(now())
+  type       ResourceType
+  teacher    Teacher      @relation(fields: [teacherId], references: [id])
+  teacherId  String       @db.ObjectId
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @default(now())
 }
 
 // once a teacher is registered
@@ -345,6 +346,8 @@ model SchoolTeacher {
   teacher   Teacher        @relation(fields: [teacherId], references: [id])
   teacherId String         @db.ObjectId
   status    ContractStatus @default(PENDING)
+  grades    Grade[]        @default([])
+  subjects  Subjects[]     @default([])
   createdAt DateTime       @default(now())
   updatedAt DateTime       @default(now())
 
@@ -360,6 +363,7 @@ model SchoolStudent {
   school    School         @relation(fields: [schoolId], references: [id])
   schoolId  String         @db.ObjectId
   status    ContractStatus @default(PENDING)
+  classes   String[]       @default([])
   createdAt DateTime       @default(now())
   updatedAt DateTime       @default(now())
 
@@ -425,11 +429,13 @@ model SchoolClassStudent {
 model Exams {
   id        String          @id @default(auto()) @map("_id") @db.ObjectId
   title     String
+  type      ExamType
   teacher   Teacher         @relation(fields: [teacherId], references: [id])
   teacherId String          @db.ObjectId
   test      ExamQuestions[]
   duration  String
   grade     Grade
+  subject   Subjects
   createdAt DateTime        @default(now())
   updatedAt DateTime        @default(now())
 
@@ -594,4 +600,14 @@ type ExamQuestions {
   answer        String
   studentAnswer String?
   options       String[]
+}
+
+enum ExamType {
+  MANUAL
+  AUTO
+}
+
+enum ResourceType {
+  LINK
+  DOCS
 }

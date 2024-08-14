@@ -11,6 +11,7 @@ export async function POST(req: Request) {
   const teacherId = await serverSessionId();
   const role = await serverSessionRole();
   const payload = await req.json();
+  console.log(payload);
   if (!teacherId) return notAuthenticated();
   if (role !== "Teacher")
     return new Response(

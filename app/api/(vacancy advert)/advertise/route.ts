@@ -178,7 +178,7 @@ export async function GET(req: Request) {
       where: {
         schoolId: schoolId!,
       },
-      select: {
+      include: {
         VacancyTeacher: true,
       },
     });

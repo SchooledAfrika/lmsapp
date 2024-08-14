@@ -26,8 +26,11 @@ export async function GET(
         profilePhoto: true,
         email: true,
         phoneNo: true,
+        rating: true,
+        resume: true,
       },
     });
+    console.log(teacherInfo);
     return new Response(JSON.stringify(teacherInfo), { status: 200 });
   } catch (error) {
     return serverError();

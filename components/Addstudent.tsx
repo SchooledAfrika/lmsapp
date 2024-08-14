@@ -21,8 +21,17 @@ import { LiaGraduationCapSolid } from "react-icons/lia";
 
 export type IaddingStudentSchool = z.infer<typeof addingStudentSchoolSchema>;
 
-const AddStudent = () => {
+interface IAddStudent {
+  setOpenDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  openDialog: boolean;
+}
+
+const AddStudentDialog: React.FC<IAddStudent> = ({
+  setOpenDialog,
+  openDialog,
+}) => {
   const [loading, setloading] = useState<boolean>(false);
+  const [loadingB, setLoadingB] = useState<boolean>(false);
   // react hook form instance below here
   const {
     register,
@@ -58,7 +67,10 @@ const AddStudent = () => {
         const body = await result.json();
         setloading(false);
         reset();
-        return toast.success(body.message);
+        toast.success(body.message);
+        setTimeout(() => {
+          return setOpenDialog(false);
+        }, 3000);
       } else {
         setloading(false);
         return toast.error("Error adding student");
@@ -72,7 +84,7 @@ const AddStudent = () => {
     mutation.mutate(data);
   };
   return (
-    <Dialog>
+    <Dialog open={openDialog} onOpenChange={() => setOpenDialog(false)}>
       <DialogTrigger asChild>
         <Button className="bg-lightGreen bg-none border-none rounded-lg hover:bg-green-700  text-white text-[14px] font-bold  px-3 sm:w-36 w-28  py-2 text-start lg:block">
           <LiaGraduationCapSolid className="sm:inline-block text-lg hidden mr-1" />
@@ -130,15 +142,24 @@ const AddStudent = () => {
             <Button
               type="submit"
               className="w-full py-6 mt-6 bg-lightGreen hover:bg-green-700"
-              disabled={loading}
+              disabled={loadingB}
             >
-              {loading ? "Sending Invite..." : "Send Invite"}
+              {loadingB ? "Sending Invite..." : "Send Invite"}
             </Button>
           </form>
         </div>
       </DialogContent>
       <ToastContainer />
     </Dialog>
+  );
+};
+
+const AddStudent = () => {
+  const [openDialog, setOpenDialog] = useState<boolean>(false);
+  return (
+    <div onClick={() => setOpenDialog(true)}>
+      <AddStudentDialog openDialog={openDialog} setOpenDialog={setOpenDialog} />
+    </div>
   );
 };
 

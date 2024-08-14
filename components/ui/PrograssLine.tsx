@@ -42,7 +42,7 @@ const ProgressLine = ({
           </div>
           {index + 1 < formArrays.length && (
             <div
-              className={` w-[80px] h-1 sm:w-1 -[40px] sm:h-[80px] border max-sm:mt-3 ${
+              className={` w-[60px] h-1 sm:w-1 -[40px] sm:h-[80px] border max-sm:mt-3 ${
                 currentPage > index + 1 ? " bg-[#359C71]" : "bg-[#E9ECEB]"
               } sm:ml-3 transform sm:-translate-x-1/2 max-sm:-translate-y-1/2`}
             ></div>

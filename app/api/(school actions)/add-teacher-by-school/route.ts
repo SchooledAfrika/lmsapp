@@ -7,7 +7,9 @@ import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // post request to add new teachers
 export async function POST(req: Request) {
+  console.log("entered");
   const { teacherId } = await req.json();
+  console.log("this is the id", teacherId);
   const schoolId = await serverSessionId();
   const role = await serverSessionRole();
   if (role !== "School")
@@ -24,25 +26,41 @@ export async function POST(req: Request) {
       statusText: "teacher id is required",
     });
   }
-  // we also check if the teacher was created before by the school
-  // we will return an error message showing that the teacher can not be created twice
-  const checkTeacherExistence = await prisma.schoolTeacher.findFirst({
-    where: {
-      schoolId,
-      teacherId,
-    },
-    select: {
-      id: true,
-    },
-  });
 
-  if (checkTeacherExistence) {
-    return new Response(JSON.stringify({ message: "Teacher already exists" }), {
-      status: 404,
-    });
-  }
   // lets proceed to creating the schoolTeacher for this particular teacher
   try {
+    // first, lets checkmate if the id send from the frontend is a teacher or exists in teacher mode
+    const checkIfIsTeacher = await prisma.teacher.findUnique({
+      where: { id: teacherId },
+      select: {
+        id: true,
+      },
+    });
+    if (!checkIfIsTeacher) {
+      return new Response(JSON.stringify({ message: "invalid teacher id" }), {
+        status: 401,
+      });
+    }
+    // we also check if the teacher was created before by the school
+    // we will return an error message showing that the teacher can not be created twice
+    const checkTeacherExistence = await prisma.schoolTeacher.findFirst({
+      where: {
+        schoolId,
+        teacherId,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (checkTeacherExistence) {
+      return new Response(
+        JSON.stringify({ message: "Teacher already exists" }),
+        {
+          status: 404,
+        }
+      );
+    }
     await prisma.schoolTeacher.create({
       data: {
         schoolId: schoolId,
@@ -55,55 +73,9 @@ export async function POST(req: Request) {
     );
   } catch (error) {
     console.log(error);
-    throw new Error(JSON.stringify({ mesage: "server error" }));
-  }
-}
-
-// creating an update request
-// this request will be open for teachers to update
-// because is open for teachers to either accept or reject the offer
-export async function PUT(req: Request) {
-  // TODO: make use of the nextauth teacher id in this place instead of the teachersId passed in the body
-  const { teacherId, offerId, status } = await req.json();
-
-  // lets check if the id exist in the body
-  if (!teacherId || !offerId) {
-    return new Response(JSON.stringify({ message: "offer id not found" }), {
-      status: 404,
-      statusText: "offerid needed",
+    return new Response(JSON.stringify({ message: "invalid teacherId" }), {
+      status: 500,
     });
-  }
-  // lets first fetch the schoolTeacher that has this id
-  // check if the teacher id matches with the teacherId passed
-  const getSchoolTeacher = await prisma.schoolTeacher.findUnique({
-    where: {
-      id: offerId,
-    },
-  });
-  if (getSchoolTeacher?.teacherId !== teacherId) {
-    return new Response(
-      JSON.stringify({ message: "you can not modify this offer" }),
-      { status: 402 }
-    );
-  }
-  // now we can now modify the model
-  // that is probably changing it from pending to active or cancelled
-  try {
-    await prisma.schoolTeacher.update({
-      where: {
-        id: offerId,
-      },
-      data: {
-        status: status,
-      },
-    });
-    return new Response(JSON.stringify({ message: `you are now ${status}` }), {
-      status: 200,
-    });
-  } catch (error) {
-    throw new Error(
-      JSON.stringify({ message: "something went wrong try again later" })
-    );
   }
 }
 
@@ -153,7 +125,7 @@ export async function DELETE(req: Request) {
 export async function GET(req: Request) {
   const schoolId = await serverSessionId();
   if (!schoolId) return notAuthenticated();
-  // proceed to fetch all the students that belong to the school
+  // proceed to fetch all the teachers that belong to the school
   try {
     const allSchoolStudents = await prisma.schoolTeacher.findMany({
       where: {
@@ -166,6 +138,7 @@ export async function GET(req: Request) {
             name: true,
             phoneNo: true,
             email: true,
+            id: true,
           },
         },
       },

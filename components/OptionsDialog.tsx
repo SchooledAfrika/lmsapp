@@ -11,21 +11,17 @@ import Link from "next/link";
 import { ListCollapse } from "lucide-react";
 import RemoveClass from "./RemoveClass";
 
-
-
 interface Idelete {
-  classId: string
+  classId: string;
 }
 
-
-const OptionsDialog: React.FC<Idelete> = ({classId}) => {
-  console.log(classId)
+const OptionsDialog: React.FC<Idelete> = ({ classId }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
-      <Button className="border-none" variant="outline">
-        <FaEllipsisH className="ml-3 " />
-      </Button>
+        <Button className="border-none" variant="outline">
+          <FaEllipsisH className="ml-3 " />
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-40">
         <div className="grid gap-4 font-subtext">
@@ -33,14 +29,14 @@ const OptionsDialog: React.FC<Idelete> = ({classId}) => {
             <div className="flex justify-start">
               <Link href={`/school-dashboard/classroom/${classId}`}>
                 <p className="inline text-[14px]  font-semibold">
-                <ListCollapse className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
+                  <ListCollapse className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
                   Details
                 </p>
               </Link>
             </div>
             <hr className="bg-black" />
             <div className="flex justify-start">
-             <RemoveClass classId={classId}/>
+              <RemoveClass classId={classId} />
             </div>
             <hr className="bg-black" />
           </div>
@@ -48,6 +44,6 @@ const OptionsDialog: React.FC<Idelete> = ({classId}) => {
       </PopoverContent>
     </Popover>
   );
-}
+};
 
-export default OptionsDialog
+export default OptionsDialog;

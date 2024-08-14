@@ -10,21 +10,75 @@ import {
 } from "@/components/ui/table";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@mui/material";
+import { useConversion } from "@/data-access/conversion";
+import { useMutation } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
-const TestResources = () => {
+interface IResource {
+  id: string | undefined;
+}
+const TestResources: React.FC<IResource> = ({ id }) => {
+  const { handleDate, handleTime } = useConversion();
+  const mutation = useMutation({
+    mutationKey: ["deleteresource"],
+    mutationFn: async () => {
+      const response = await fetch("/api/manage-resources", {
+        method: "DELETE",
+        body: JSON.stringify({ id }),
+      });
+      return response;
+    },
+    onSuccess: () => {
+      router.push("/teacher-dashboard/test-and-resources");
+    },
+  });
+
+  const router = useRouter();
+  const { data, isFetching, isError, error } = useQuery({
+    queryKey: ["oneexam", id],
+    queryFn: async () => {
+      const response = await fetch(`/api/manage-resources/${id}`);
+      const result = await response.json();
+      return result;
+    },
+    enabled: Boolean(id),
+  });
+
+  if (isFetching) {
+    return (
+      <div className=" w-full h-full p-2">
+        <Skeleton
+          variant="rectangular"
+          animation={"wave"}
+          className=" w-full"
+          height={350}
+        />
+      </div>
+    );
+  }
+
+  // here, we delete the resources
+  const handleDelete = () => {
+    mutation.mutate();
+  };
+
   return (
     <section>
       <div className="flex items-center px-4 pt-3 pb-2 gap-3 ">
-        <Image src="/svgs/book.svg" width={30} height={30} alt="Calculator" />
-        <span className="font-bold text-[14px]">
-          How Europe underdeveloped Africa
-        </span>
+        <Image
+          src={`/${data?.type?.toLowerCase()}.png`}
+          width={30}
+          height={30}
+          alt="Calculator"
+        />
+        <span className="font-bold text-[14px]">{data?.title}</span>
       </div>
       <div>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Author</TableHead>
               <TableHead>Grade</TableHead>
               <TableHead>Subject</TableHead>
               <TableHead>Upload Date</TableHead>
@@ -33,25 +87,33 @@ const TestResources = () => {
           </TableHeader>
           <TableBody>
             <TableRow>
-              <TableCell>Walter Rodney</TableCell>
-              <TableCell>Grade 11</TableCell>
-              <TableCell>Government</TableCell>
-              <TableCell>April 22, 2024</TableCell>
-              <TableCell>12:09pm</TableCell>
+              <TableCell>{data?.grade}</TableCell>
+              <TableCell>{data?.subject}</TableCell>
+              <TableCell>{handleDate(data?.createdAt)}</TableCell>
+              <TableCell>{handleTime(data?.createdAt)}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
-
-        <div className="pl-[20px] my-[40px]">
-          <p className="font-medium pb-4 text-[14px]">No of Views</p>
-          <span className="font-bold text-[14px]">10</span>
+        <div className=" flex items-center">
+          <button
+            onClick={handleDelete}
+            className=" bg-red-600 px-4 py-2 rounded-md text-white"
+          >
+            Delete
+          </button>
+          {data?.type == "LINK" && (
+            <Link
+              href="https://www.denhubb.com"
+              className="ml-4"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button className="bg-secondary text-white text-[12px] py-5 my-3 mr-0 md:mr-6">
+                Visit Link
+              </Button>
+            </Link>
+          )}
         </div>
-
-        <Link href={"/teachers-dashboard"} className="ml-4">
-          <Button className="bg-secondary text-white text-[12px] py-5 my-3 mr-0 md:mr-6">
-            View Resources
-          </Button>
-        </Link>
       </div>
     </section>
   );

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { SiGoogleclassroom } from "react-icons/si";
@@ -8,20 +8,188 @@ import Link from "next/link";
 import { BsBroadcast } from "react-icons/bs";
 import SingleClassTable from "./SingleClassTable";
 import { useParams } from "next/navigation";
+import Backwards from "./ui/Backwards";
+import { PiBookFill } from "react-icons/pi";
+import { useConversion } from "@/data-access/conversion";
+import { AssignDialog, IgetTeachers } from "./AssignDialog";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-const SingleClassroom = () => {
-  const { id } = useParams();
-  console.log(id);
+interface InnerTeacher {
+  name: string;
+  email: string;
+  profilePhoto: string;
+  id: string;
+}
+interface IouterPart {
+  teacher: InnerTeacher;
+}
 
-  const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["addSchool"],
+interface IsingleClass {
+  id: string;
+  grade: string;
+  name: string;
+  subject: string;
+  time: string;
+  createdAt: string;
+  SchoolClassTeacher: IouterPart[];
+  SchoolClassStudent: any[];
+  school: {
+    banner: string;
+  };
+}
+
+// information about the class
+const ClassInfo: React.FC<{ info: IsingleClass }> = ({ info }) => {
+  const { handleDate } = useConversion();
+  return (
+    <div className=" bg-white w-full rounded-md px-5 py-3 flex flex-col gap-4">
+      {/* first part */}
+      <div className=" flex items-center justify-between">
+        <p className=" text-slate-400 font-semibold text-[12px]">Overview</p>
+        <div className=" text-white w-[40px] aspect-square rounded-md flex items-center justify-center bg-green-700">
+          <PiBookFill />
+        </div>
+      </div>
+      {/* second part */}
+      <div className=" flex flex-col gap-3">
+        <div className=" flex  items-center gap-4">
+          <Image
+            className=" w-[110px] h-[90px] aspect-square rounded-md"
+            src={info.school.banner}
+            alt=""
+            width={200}
+            height={200}
+          />
+          <div className=" flex flex-col gap-1">
+            <div className=" flex items-center gap-1 font-bold">
+              <SiGoogleclassroom className=" text-[14px]" />
+              <p className=" text-[12px]">{info.name}</p>
+            </div>
+            <p className=" text-[12px]">{info.grade}</p>
+          </div>
+        </div>
+        <p className=" text-[12px] font-semibold ">Duration: {info.time}</p>
+      </div>
+      {/* last part */}
+      <div className=" flex flex-col gap-2">
+        <p className=" text-[12px] text-slate-600">
+          Date created: {handleDate(info.createdAt)}
+        </p>
+        <div className=" flex items-center gap-2 px-4 py-2 bg-orange-500 rounded-md w-fit text-white text-[12px] font-bold">
+          <BsBroadcast />
+          <p>Join Session</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// information about teachers here
+const TeachersInfo: React.FC<{ teachers: IouterPart[] }> = ({ teachers }) => {
+  const mappedTeacher = teachers.map((teacher) => teacher.teacher);
+  return (
+    <div className=" bg-white px-5 py-3 rounded-md">
+      <p className=" text-slate-400 font-semibold text-[12px] mt-3">Teachers</p>
+      <div className=" mt-4 flex flex-col gap-3">
+        {mappedTeacher.map((item, index) => (
+          <div key={index} className=" flex flex-col gap-2">
+            <div className=" flex items-center gap-3">
+              <Image
+                className=" w-[35px] aspect-square rounded-sm"
+                src={item.profilePhoto}
+                alt=""
+                width={200}
+                height={200}
+              />
+              <div className=" flex flex-col">
+                <p className=" text-[12px] font-bold">{item.name}</p>
+                <p className=" text-[10px]">{item.email}</p>
+              </div>
+            </div>
+            <hr />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+// information about the meetings
+const MeetingInfo = () => {
+  return (
+    <div className=" bg-white px-5 py-3 rounded-md">
+      <p className=" text-slate-400 font-semibold text-[12px] mt-3">
+        Invite Students
+      </p>
+      <div className=" flex flex-col gap-2 mt-2">
+        <p className=" font-bold text-[14px]">
+          use this link to invite students to join your live class
+        </p>
+        <p className=" text-blue-400 underline">
+          http://web.schoolafrika09=kidv
+        </p>
+        <div className=" flex flex-col gap-2">
+          <p className=" text-[14px] font-bold">Login ID for students</p>
+          <p className=" text-green-700 text-[14px] font-bold">209112</p>
+        </div>
+        <div className=" border border-green-700 py-3 rounded-md flex items-center justify-center text-[14px] text-green-700">
+          <p>Invite student</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const NoTeacher: React.FC<{ item: IsingleClass }> = ({ item }) => {
+  const [showDialog, setShowdialog] = useState<boolean>(false);
+  const { data: allTeachers, isPending } = useQuery({
+    queryKey: ["get-school-teacher-class"],
     queryFn: async () => {
-      const response = await fetch(`/api/class-action`);
+      const response = await fetch("/api/class-teacher");
       const result = await response.json();
       return result;
     },
   });
-  console.log(data);
+  if (isPending) {
+    return <div>loading</div>;
+  }
+  const onlyTeachers: IgetTeachers[] = allTeachers.map(
+    (teacher: IouterPart) => teacher.teacher
+  );
+  const classTeacher: IgetTeachers[] = item.SchoolClassTeacher.map(
+    (teacher: IouterPart) => teacher.teacher
+  );
+  return (
+    <div className=" w-full h-full flex items-center justify-center bg-white flex-col gap-2 max-ss:h-[150px]">
+      <p className=" text-black">no teacher, assign</p>
+      <div className=" cursor-pointer" onClick={() => setShowdialog(true)}>
+        <AssignDialog
+          setShowdialog={setShowdialog}
+          subject={item?.subject}
+          classId={item?.id}
+          SchoolClassTeacher={classTeacher}
+          id={item?.id}
+          showDialog={showDialog}
+          onlyTeachers={onlyTeachers}
+          title="Assign"
+        />
+      </div>
+    </div>
+  );
+};
+
+const SingleClassroom = () => {
+  const { id } = useParams();
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["get-one-school-class"],
+    queryFn: async () => {
+      const response = await fetch(`/api/class-action/single-class?id=${id}`);
+      const result = await response.json();
+      return result;
+    },
+  });
+
   //   if is loading
   if (isLoading) {
     return (
@@ -34,131 +202,32 @@ const SingleClassroom = () => {
   if (isError) {
     return <div className=" flex-1">{error.message}</div>;
   }
-
+  const classData: IsingleClass = data;
   return (
-    <div>
-      {data && (
-        <div key={data.id} className="font-header md:mt-12 mt-24">
-          <div className="flex justify-between">
-            <p className="font-bold text-lg">Details</p>
-            <Link href="/school-dashboard/classroom" className="cursor-pointer">
-              <Image
-                src="/closeAlt.svg"
-                alt="cancel"
-                width={100}
-                height={100}
-                className="w-[20px] h-[20px]"
-              />
-            </Link>
+    <div className=" mt-6 max-md:mt-[100px]">
+      <div className=" w-full flex items-center justify-between">
+        <p className=" font-bold">Details</p>
+        <Backwards />
+      </div>
+      <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-3">
+        <ClassInfo info={classData} />
+        {classData.SchoolClassTeacher.length === 0 ? (
+          <NoTeacher item={classData} />
+        ) : (
+          <TeachersInfo teachers={classData.SchoolClassTeacher} />
+        )}
+        <MeetingInfo />
+      </div>
+      <div>
+        {classData.SchoolClassStudent.length === 0 ? (
+          <div className=" mt-5 font-bold">
+            <p>No student in this class</p>
           </div>
-
-          <div className="grid font-subtext md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-3 mt-6">
-            <div className="bg-white py-6 rounded-md">
-              <div className="flex justify-between px-6 pt-3 pb-1">
-                <p className="text-slate-500 text-[14px] font-semibold">
-                  Overview
-                </p>
-              </div>
-              <div className="px-6 flex  space-x-2 pb-2">
-                <Image
-                  src="/schoolpic.png"
-                  alt=""
-                  width={100}
-                  height={100}
-                  className="rounded-md w-[150px] h-[120px]"
-                />
-
-                <div className="items-center mt-8">
-                  <p className="inline text-[14px]">
-                    <SiGoogleclassroom className="inline w-[18px] mr-2 h-[18px]" />
-                    {data?.name}
-                  </p>
-                  <p className="mt-3 text-[13px]">{data?.grade}</p>
-                </div>
-              </div>
-              <div className="flex px-6 flex-col justify-between">
-                <p className="text-[13px]">Last Session : April 18th, 2024.</p>
-                <p className="text-[13px]">Date Created : April 10th, 2024.</p>
-
-                <Button
-                  asChild
-                  className=" bg-dimOrange hover:bg-gold rounded-md text-white text-[13px] mt-3 px-3 w-32  py-2 text-center lg:block"
-                >
-                  <Link href="/" className="inline">
-                    <BsBroadcast className="inline mr-1" />
-                    Join Session
-                  </Link>
-                </Button>
-              </div>
-            </div>
-            <div className="bg-white rounded-md py-6 px-6 ">
-              <p className="pt-3 text-slate-500 font-semibold">Teachers</p>
-              <div className="flex items-center space-x-3">
-                <Image
-                  src="/teacher-img.png"
-                  alt="teacher"
-                  width={100}
-                  height={100}
-                  className="w-[40px]  mt-3 rounded-md h-[40px]"
-                />
-                <div className="flex flex-col">
-                  <p className="text-[14px]">Odo Maurice Augustine</p>
-                  <p className="text-[13px]">odomaurice@gmail.com</p>
-                </div>
-              </div>
-              <hr className="w-full mt-3 font-semibold text-black" />
-
-              <div className="flex items-center space-x-3">
-                <Image
-                  src="/teacher-img.png"
-                  alt="teacher"
-                  width={100}
-                  height={100}
-                  className="w-[40px]  my-3 rounded-md h-[40px]"
-                />
-                <div className="flex flex-col">
-                  <p className="text-[14px]">Odo Maurice Augustine</p>
-                  <p className="text-[13px]">odomaurice@gmail.com</p>
-                </div>
-              </div>
-              <hr className="w-full my-3 font-semibold text-black" />
-
-              <div className="flex items-center space-x-3">
-                <Image
-                  src="/teacher-img.png"
-                  alt="teacher"
-                  width={100}
-                  height={100}
-                  className="w-[40px]  mt-3 rounded-md h-[40px]"
-                />
-                <div className="flex flex-col">
-                  <p className="text-[14px]">Odo Maurice Augustine</p>
-                  <p className="text-[13px]">odomaurice@gmail.com</p>
-                </div>
-              </div>
-              <hr className="w-full my-3 font-semibold text-black" />
-            </div>
-            <div className="bg-white rounded-md py-6 px-6">
-              <p className="text-slate-500 mt-3">Invite students</p>
-              <p className="my-3 text-[14px]">
-                Use this link to invite students to join your live class.
-              </p>
-              <p className="text-blue-400 text-[14px] underline">
-                http://web.schooledafrika09=ab/live
-              </p>
-              <p className="text-[15px] my-3">Login ID for students:</p>
-              <p className="text-[1rem] text-lightGreen my-3">209112</p>
-              <Button
-                variant="outline"
-                className="w-full border-lightGreen text-lightGreen hover:text-lightGreen"
-              >
-                Invite Student
-              </Button>
-            </div>
-          </div>
+        ) : (
           <SingleClassTable />
-        </div>
-      )}
+        )}
+      </div>
+      <ToastContainer />
     </div>
   );
 };
