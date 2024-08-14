@@ -49,6 +49,7 @@ const data: Parents[] = [
     phone: "+2349130893924",
     state: "Enugu",
     status: "active",
+    plan: "Basic",
     email: "ken99@yahoo.com",
     wards: "2",
     options: "..."
@@ -59,6 +60,7 @@ const data: Parents[] = [
     phone: "+2349130893924",
     state: "Abia",
     status: "suspended",
+    plan: "Bronze",
     email: "ken99@yahoo.com",
     wards: "1",
     options: "..."
@@ -69,6 +71,7 @@ const data: Parents[] = [
     phone: "+2349130893924",
     state: "Lagos",
     status: "active",
+    plan: "Silver",
     email: "Monserrat44@gmail.com",
     wards: "2",
      options: "..."
@@ -79,6 +82,7 @@ const data: Parents[] = [
     phone: "+2349130893924",
     state: "Enugu",
     status: "suspended",
+    plan: "Gold",
     wards: "2",
     email: "Silas22@gmail.com",
      options: ""
@@ -90,6 +94,7 @@ const data: Parents[] = [
     phone: "+2349130893924",
     state: "Ibadan",
     status: "dismissed",
+    plan: "Diamond",
     email: "Monserrat44@gmail.com",
     wards: "4",
      options: "..."
@@ -103,6 +108,7 @@ export type Parents = {
   phone: string
   state: string
   status: "active" | "passive" | "suspended" | "dismissed"
+   plan: "Basic" | "Bronze" | "Silver" | "Gold" | "Diamond"
   email: string
   wards: string
   options: string
@@ -163,7 +169,13 @@ export const columns: ColumnDef<Parents>[] = [
       <div className="capitalize">{row.getValue("wards")}</div>
     ),
   },
-  
+  {
+    accessorKey: "plan",
+    header: "Plan",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("plan")}</div>
+    ),
+  },
   {
     accessorKey: "status",
     header: "Status",
@@ -276,7 +288,7 @@ const Parents = () => {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-[12px] font-medium">
+                    <TableCell key={cell.id} className="text-[12px] font-semibold">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

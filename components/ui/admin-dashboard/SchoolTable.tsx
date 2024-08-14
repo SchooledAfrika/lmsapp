@@ -102,7 +102,7 @@ const SchoolTable = () => {
       <TableBody>
         {data.map((school, index) => (
           <TableRow key={index} className="">
-            <TableCell className="font-bold text-[15px]">
+            <TableCell className="font-semibold text-[13px]">
               <Link
                 className="flex items-center gap-4"
                 href={`/admin-dashboard/schools/details`}

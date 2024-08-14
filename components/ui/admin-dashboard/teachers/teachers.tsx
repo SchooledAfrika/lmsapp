@@ -49,6 +49,7 @@ const data: Teachers[] = [
     phone: "+2349130893924",
     state: "Enugu",
     status: "active",
+    plan: "Basic",
     email: "ken99@yahoo.com",
     options: "..."
   },
@@ -58,6 +59,7 @@ const data: Teachers[] = [
     phone: "+2349130893924",
     state: "Abia",
     status: "passive",
+    plan: "Gold",
     email: "ken99@yahoo.com",
     options: "..."
   },
@@ -67,6 +69,7 @@ const data: Teachers[] = [
     phone: "+2349130893924",
     state: "Lagos",
     status: "active",
+    plan: "Silver",
     email: "Monserrat44@gmail.com",
      options: "..."
   },
@@ -76,6 +79,7 @@ const data: Teachers[] = [
     phone: "+2349130893924",
     state: "Enugu",
     status: "suspended",
+    plan: "Diamond",
     email: "Silas22@gmail.com",
      options: ""
   },
@@ -86,6 +90,7 @@ const data: Teachers[] = [
     phone: "+2349130893924",
     state: "Ibadan",
     status: "dismissed",
+    plan: "Bronze",
     email: "Monserrat44@gmail.com",
      options: "..."
   },
@@ -98,6 +103,7 @@ export type Teachers = {
   phone: string
   state: string
   status: "active" | "passive" | "suspended" | "dismissed"
+  plan: "Basic" | "Bronze" | "Silver" | "Gold" | "Diamond"
   email: string
   options: string
 }
@@ -149,6 +155,13 @@ export const columns: ColumnDef<Teachers>[] = [
       )
     },
     cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
+  },
+  {
+    accessorKey: "plan",
+    header: "Plan",
+    cell: ({ row }) => (
+      <div className="capitalize">{row.getValue("plan")}</div>
+    ),
   },
   {
     accessorKey: "status",
@@ -262,7 +275,7 @@ export function Teachers() {
                   data-state={row.getIsSelected() && "selected"}
                 >
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-[12px] font-medium">
+                    <TableCell key={cell.id} className="text-[12px] font-semibold">
                       {flexRender(
                         cell.column.columnDef.cell,
                         cell.getContext()

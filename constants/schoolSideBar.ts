@@ -43,7 +43,6 @@ export const AdminSideBar: AdminSideBarType[] = [
   { path: "teachers", name: "Teachers", icon: LiaChalkboardTeacherSolid },
   {path: "students", name: "Students", icon: LiaGraduationCapSolid },
   { path: "parents", name: "Parents", icon: RiParentLine },
-  { path: "invoices", name: "Invoices", icon: LuClipboardPaste },
   { path: "admin-profile", name: "Admin Profile", icon: RiAdminLine },
   {
     path: "admin-setting",
