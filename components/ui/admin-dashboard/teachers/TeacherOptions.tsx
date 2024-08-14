@@ -9,7 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { FaEllipsisH } from "react-icons/fa";
 import Link from "next/link";
-import { Layers3 } from "lucide-react";
+import { Layers3, User2 } from "lucide-react";
 import { FaRegEye } from "react-icons/fa";
 import { BookOpenCheck } from "lucide-react";
 // import RemoveClass from "./RemoveClass";
@@ -46,20 +46,20 @@ const TeacherOptions = () => {
               </p>
             </div>
             <hr className="bg-black" />
-            {/* <div className="flex justify-start">
+            <div className="flex justify-start cursor-pointer">
               <p className="inline text-[13px]  font-semibold">
-                <BookOpenCheck className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
-                Add Test
+                <User2 className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
+                Make Admin
               </p>
             </div>
-            <hr className="bg-black" /> */}
-            <div className="flex justify-start">
+            <hr className="bg-black" />
+            {/* <div className="flex justify-start">
               <p className="inline text-[13px]  font-semibold">
                 <FaUserSlash className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
                 Suspend
               </p>
             </div>
-            <hr className="bg-black" />
+            <hr className="bg-black" /> */}
             <div className="flex justify-start">
               <RemoveTeacher />
             </div>
