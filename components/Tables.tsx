@@ -23,6 +23,14 @@ export interface IteacherClass {
   id: string;
   profilePhoto?: string;
 }
+
+export interface IstudentClass {
+  name: string;
+  id: string;
+}
+export interface IStudent {
+  student: IstudentClass;
+}
 interface Iclass {
   id: string;
   grade: string;
@@ -30,7 +38,7 @@ interface Iclass {
   subject: string;
   time: string;
   createdAt: string;
-  SchoolClassStudent: string[];
+  SchoolClassStudent: IStudent[];
   SchoolClassTeacher: Iteacher[];
 }
 
@@ -40,13 +48,18 @@ const Eachclass: React.FC<{ item: Iclass; onlyTeachers: IgetTeachers[] }> = ({
   onlyTeachers,
 }) => {
   const [showDialog, setShowdialog] = useState<boolean>(false);
+  const [showStudent, setShowStudent] = useState<boolean>(false);
   const { getInitials } = useConversion();
   // here, we flatten the kind of array we are getting which contains the teachers info
   const classTeacher: IgetTeachers[] = item.SchoolClassTeacher.map(
     (teacher: Iteacher) => teacher.teacher
   );
-  // get only 3 teachers to show in the table
   const previewTeacher = classTeacher.slice(0, 3);
+
+  // here we flatten the array we are getting from the students
+  const classStudent: IstudentClass[] = item.SchoolClassStudent.map(
+    (student: IStudent) => student.student
+  );
   return (
     <TableRow key={item.id} className="">
       <TableCell className="text-[12px] font-bold">
@@ -118,7 +131,13 @@ const Eachclass: React.FC<{ item: Iclass; onlyTeachers: IgetTeachers[] }> = ({
         {item.SchoolClassStudent.length}
       </TableCell>
       <TableCell className="  text-[16px] float-right pr-3  text-lightGreen cursor-pointer">
-        <OptionsDialog classId={item.id} />
+        <OptionsDialog
+          setShowStudent={setShowStudent}
+          subject={item?.subject}
+          SchoolClassStudent={classStudent}
+          showStudent={showStudent}
+          classId={item.id}
+        />
       </TableCell>
     </TableRow>
   );

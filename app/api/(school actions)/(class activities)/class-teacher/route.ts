@@ -38,6 +38,17 @@ export async function POST(req: Request) {
   //   now we can go on and add the teacher to the class
   try {
     for (const teacher of teacherIds) {
+      // first, lets get the id of schoolClassTeacher
+      // which we can now use to upsert the schoolClassTeacher
+      const schoolClassTeacherId = await prisma.schoolClassTeacher.findFirst({
+        where: {
+          teacherId: teacher as string,
+          schoolClassId,
+        },
+        select: {
+          id: true,
+        },
+      });
       // first add the teacher to the class
       await prisma.schoolClassTeacher.upsert({
         where: { id: teacher },

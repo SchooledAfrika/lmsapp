@@ -42,6 +42,7 @@ export async function GET(req: Request) {
 // because is open for teachers to either accept or reject the offer
 export async function PUT(req: Request) {
   const { offerId, status } = await req.json();
+  console.log(offerId, status);
   const teacherId = await serverSessionId();
   // check for authentication
   if (!teacherId) return notAuthenticated();
@@ -73,7 +74,7 @@ export async function PUT(req: Request) {
         id: offerId,
       },
       data: {
-        status: status,
+        status,
       },
     });
     return new Response(JSON.stringify({ message: `you are now ${status}` }), {

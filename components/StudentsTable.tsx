@@ -16,6 +16,7 @@ import { TableSkeleton } from "./TableSkeleton";
 import StudentOptions from "./StudentOptions";
 import { NoItem, LoadingTable } from "./TeachersTable";
 import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+import { useConversion } from "@/data-access/conversion";
 
 interface IstudentInfo {
   name: string;
@@ -29,10 +30,12 @@ interface IstudentSchool {
   status: string;
   createdAt: string;
   student: IstudentInfo;
+  classes: string[];
 }
 
 // the part showing information about the table for students
 const StudentInfo: React.FC<{ student: IstudentSchool }> = ({ student }) => {
+  const { joinByComma } = useConversion();
   return (
     <TableRow className="">
       <TableCell className="font-semibold w-[200px] text-[14px]  flex  items-center gap-2">
@@ -72,8 +75,12 @@ const StudentInfo: React.FC<{ student: IstudentSchool }> = ({ student }) => {
           </div>
         </div>
       </TableCell>
-      <TableCell className="text-[12.5px] font-semibold">
-        <p>N/A</p>
+      <TableCell className="text-[12.5px] font-semibold max-w-[150px] ">
+        {student.classes.length === 0 ? (
+          <p>N/A</p>
+        ) : (
+          <small>{joinByComma(student.classes)}</small>
+        )}
       </TableCell>
 
       <TableCell className="float-right text-[16px]  text-lightGreen cursor-pointer">
