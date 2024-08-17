@@ -249,9 +249,7 @@ model OneOnOneSection {
   aboutTutor     String
   subjects       Subjects[]       @default([ENGLISH, MATHEMATICS])
   grade          Grade[]
-  preference     PreferSection[]  @default([oneOnOneSection])
-  minPrice       Float
-  maxPrice       Float
+  preference     String[]         @default([])
   // this will contain the list of connection between the student that 
   // applied for one on one sections
   AppliedSection AppliedSection[]
