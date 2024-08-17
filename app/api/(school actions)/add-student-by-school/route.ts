@@ -49,54 +49,6 @@ export async function POST(req: Request) {
   }
 }
 
-// here, we make use of put request to update the school Student data
-// here, is only the student that can modify this status to either pending or cancelled
-export async function PUT(req: Request) {
-  // TODO: remember to remove this studentId and add nextauth id we passed
-  const { status, studentId, offerId } = await req.json();
-  // lets return error if the inputs are not added
-  if (!status || !offerId) {
-    return new Response(JSON.stringify({ message: "inputs not complete" }), {
-      status: 404,
-    });
-  }
-  // lets get the offer, and also check if the studentId do match there
-  // if it does not match, we return an error
-  const getSchoolStudent = await prisma.schoolStudent.findUnique({
-    where: {
-      id: offerId,
-    },
-    select: {
-      id: true,
-      studentId: true,
-    },
-  });
-  if (getSchoolStudent?.studentId !== studentId) {
-    return new Response(
-      JSON.stringify({ message: "you can only modify your offers" }),
-      { status: 400 }
-    );
-  }
-  // everything is in check, we can proceed to make our changes
-  try {
-    await prisma.schoolStudent.update({
-      where: {
-        id: offerId,
-      },
-      data: {
-        status,
-      },
-    });
-    return new Response(
-      JSON.stringify({ message: "profile updated successfully" }),
-      { status: 200 }
-    );
-  } catch (error) {
-    console.log(error);
-    throw new Error(JSON.stringify({ message: "something went wrong" }));
-  }
-}
-
 // incase of expulsion or school wants to delete a student, they can actually delete them here
 // only school that created students has the power to delete student
 // students don't have the power to delete them selfs

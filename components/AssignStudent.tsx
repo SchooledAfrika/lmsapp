@@ -90,11 +90,11 @@ const SelectTeacher: React.FC<{
             </div>
           ) : (
             <div className=" flex w-full flex-col gap-2">
-              {activeStudent.map((student, index) => (
+              {activeStudent?.map((student, index) => (
                 <div
                   onClick={() => handleSelected(student.student.id)}
                   className={` ${
-                    schoolClassStudent.find(
+                    schoolClassStudent?.find(
                       (regStudent) => regStudent.id === student.student.id
                     ) && " bg-slate-200"
                   } flex gap-3 border px-4 py-3 rounded-sm cursor-pointer`}
@@ -102,18 +102,18 @@ const SelectTeacher: React.FC<{
                 >
                   <div
                     className={` ${
-                      selectedStudent.includes(student.student.id) ||
-                      schoolClassStudent.find(
+                      selectedStudent?.includes(student.student.id) ||
+                      schoolClassStudent?.find(
                         (regStudent) => regStudent.id === student.student.id
                       )
                         ? " bg-green-800"
                         : "bg-slate-500"
                     } rounded-sm w-[20px] aspect-square flex items-center justify-center text-[12px]  text-white`}
                   >
-                    {selectedStudent.includes(student.student.id) && (
+                    {selectedStudent?.includes(student.student.id) && (
                       <IoIosCheckmark />
                     )}
-                    {schoolClassStudent.find(
+                    {schoolClassStudent?.find(
                       (regStudent) => regStudent.id === student.student.id
                     ) && <IoIosCheckmark />}
                   </div>

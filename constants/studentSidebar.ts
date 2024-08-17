@@ -13,6 +13,7 @@ import {
   LiaMoneyCheckAltSolid,
 } from "react-icons/lia";
 import { PiCirclesFour } from "react-icons/pi";
+import { FaUserGraduate } from "react-icons/fa";
 
 export interface StudentSideBarType {
   path: string;
@@ -32,6 +33,7 @@ export const StudentSideBar: StudentSideBarType[] = [
   },
   { path: "courses", name: "Courses", icon: PiCirclesFour },
   { path: "calender", name: "Calender", icon: MdOutlineCalendarMonth },
+  { path: "admissions", name: "Admissions", icon: FaUserGraduate },
   { path: "transactions", name: "Transactions", icon: LiaMoneyCheckAltSolid },
   {
     path: "student-settings",

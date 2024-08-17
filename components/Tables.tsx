@@ -100,7 +100,7 @@ const Eachclass: React.FC<{ item: Iclass; onlyTeachers: IgetTeachers[] }> = ({
             }}
             className=" relative flex w-[100px] h-[40px] "
           >
-            {previewTeacher.map((oneTeacher, index) => (
+            {previewTeacher?.map((oneTeacher, index) => (
               <div
                 className={`text-black w-[30px] absolute rounded-md h-[30px] transition-all rotate-45 flex items-center justify-center ${
                   index == 0
@@ -202,7 +202,7 @@ const Tables = () => {
               </TableHeader>
               <TableBody>
                 {Array.isArray(data) &&
-                  data.map((item: Iclass, index) => (
+                  data?.map((item: Iclass, index) => (
                     <Eachclass
                       item={item}
                       key={index}

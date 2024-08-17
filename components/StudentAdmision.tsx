@@ -1,18 +1,13 @@
 "use client";
-import { offers } from "@/constants/offers";
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import ViewOffer from "./viewOffer";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState } from "react";
-import { useConversion } from "@/data-access/conversion";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-import { IoWarning } from "react-icons/io5";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { Skeleton } from "@mui/material";
-import { Noitem } from "@/components/ApplicantsTable";
+import { Noitem } from "./ApplicantsTable";
+import { ShowSkeleton } from "./ui/teacher-dashboard/openOffers/openOffers";
+import Image from "next/image";
+import { useConversion } from "@/data-access/conversion";
+import { Dialog, DialogContent, DialogTrigger } from "./ui/dialog";
+import { IoWarning } from "react-icons/io5";
 
 interface ISchoolInfo {
   name: string;
@@ -25,10 +20,7 @@ interface ISchoolInfo {
 interface IOffers {
   id: string;
   schoolId: string;
-  teacherId: string;
   status: string;
-  grades: string[];
-  subjects: string[];
   createdAt: string;
   school: ISchoolInfo;
 }
@@ -47,7 +39,7 @@ export const Approval: React.FC<{
   const mutation = useMutation({
     mutationKey: ["approve-offer"],
     mutationFn: async (item: { id: string; status: string }) => {
-      const response = await fetch("/api/teachers-offer", {
+      const response = await fetch("/api/student-offers", {
         method: "PUT",
         body: JSON.stringify({ offerId: item.id, status: item.status }),
       });
@@ -59,17 +51,11 @@ export const Approval: React.FC<{
         setTimeout(() => {
           setShowDialog(false);
           queryclient.invalidateQueries({
-            queryKey: ["get-offers-for-teacher"],
+            queryKey: ["get-offers-for-student"],
           });
         }, 4000);
       } else {
-        toast.error("you have successfully declined the offer");
-        setTimeout(() => {
-          setShowDialog(false);
-          queryclient.invalidateQueries({
-            queryKey: ["get-offers-for-teacher"],
-          });
-        }, 4000);
+        toast.error("something went wrong");
       }
     },
   });
@@ -203,35 +189,22 @@ const OfferCard: React.FC<{ item: IOffers }> = ({ item }) => {
   );
 };
 
-export const ShowSkeleton = () => {
-  const myArray = new Array(6).fill(" ");
-  return (
-    <div className=" w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-      {myArray.map((item, index) => (
-        <Skeleton
-          key={index}
-          className=" w-full rounded-md"
-          height={250}
-          variant="rectangular"
-          animation="wave"
-        />
-      ))}
-    </div>
-  );
-};
-
-const OpenOffers = () => {
+const StudentAdmision = () => {
   // making use of react query to get all the offers
   const { data, isFetching, isError, error } = useQuery({
-    queryKey: ["get-offers-for-teacher"],
+    queryKey: ["get-offers-for-student"],
     queryFn: async () => {
-      const response = await fetch("/api/teachers-offer");
+      const response = await fetch("/api/student-offers");
       const result = await response.json();
       return result;
     },
   });
   if (isFetching) {
-    return <ShowSkeleton />;
+    return (
+      <div className=" mt-4">
+        <ShowSkeleton />
+      </div>
+    );
   }
   if (isError) {
     return <div>{error.message}</div>;
@@ -244,7 +217,7 @@ const OpenOffers = () => {
           <div>
             {data.length === 0 ? (
               <div className=" w-full">
-                <Noitem desc="you don't have any open offers" />
+                <Noitem desc="You don't have new admissions" />
               </div>
             ) : (
               <div className="grid  grid-cols-1 xs:grid-cols-2 gap-3  md:grid-cols-3">
@@ -261,4 +234,4 @@ const OpenOffers = () => {
   );
 };
 
-export default OpenOffers;
+export default StudentAdmision;
