@@ -11,7 +11,6 @@ import { Input } from "@/components/ui/input";
 import { RiErrorWarningFill } from "react-icons/ri";
 import Link from "next/link";
 import React, { useState } from "react";
-import { IteacherClass } from "./Tables";
 import { IoCaretDownSharp } from "react-icons/io5";
 import { BiSolidUpArrow } from "react-icons/bi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
