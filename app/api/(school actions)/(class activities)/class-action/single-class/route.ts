@@ -12,6 +12,7 @@ export async function GET(req: Request) {
     const singleClass = await prisma.schoolClass.findUnique({
       where: { id: classId as string },
       include: {
+        AnnouncementBySchoolClass: true,
         SchoolClassTeacher: {
           select: {
             teacher: {

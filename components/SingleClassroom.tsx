@@ -22,7 +22,7 @@ interface InnerTeacher {
   profilePhoto: string;
   id: string;
 }
-interface IouterPart {
+export interface IouterPart {
   teacher: InnerTeacher;
 }
 interface InnerStudent {
@@ -35,8 +35,13 @@ export interface IouterStudent {
   createdAt: string;
   student: InnerStudent;
 }
+export interface Iannoucement {
+  id: string;
+  title: string;
+  desc: string;
+}
 
-interface IsingleClass {
+export interface IsingleClass {
   id: string;
   grade: string;
   name: string;
@@ -48,10 +53,11 @@ interface IsingleClass {
   school: {
     banner: string;
   };
+  AnnouncementBySchoolClass: Iannoucement[];
 }
 
 // information about the class
-const ClassInfo: React.FC<{ info: IsingleClass }> = ({ info }) => {
+export const ClassInfo: React.FC<{ info: IsingleClass }> = ({ info }) => {
   const { handleDate } = useConversion();
   return (
     <div className=" bg-white w-full rounded-md px-5 py-3 flex flex-col gap-4">

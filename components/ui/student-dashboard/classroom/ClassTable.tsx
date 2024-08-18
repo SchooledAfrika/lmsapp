@@ -10,11 +10,12 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import Link from "next/link";
-import { ClassOptions } from "../ClassOptions";
 import { useQuery } from "@tanstack/react-query";
 import { LoadingTable } from "@/components/TeachersTable";
 import React from "react";
 import { Noitem } from "@/components/ApplicantsTable";
+import { FiMoreHorizontal } from "react-icons/fi";
+import { useRouter } from "next/navigation";
 
 interface IStudentClass {
   id: string;
@@ -27,6 +28,17 @@ interface IStudentClass {
 
 // each class row
 const EachClass: React.FC<{ item: IStudentClass }> = ({ item }) => {
+  const router = useRouter();
+  // function to control where link will point to
+  const Linkto = (info: IStudentClass) => {
+    if (info.type === "group-class") {
+      return router.push(`/student-dashboard/classroom/group-class/${info.id}`);
+    } else {
+      return router.push(
+        `/student-dashboard/classroom/school-class/${info.id}`
+      );
+    }
+  };
   return (
     <TableRow key={item.id} className="">
       <TableCell className="text-[12px] font-bold">
@@ -49,7 +61,9 @@ const EachClass: React.FC<{ item: IStudentClass }> = ({ item }) => {
         {item.type}
       </TableCell>
       <TableCell className="text-[12px]  font-semibold">
-        <Link href={"/"}>view more</Link>
+        <div onClick={() => Linkto(item)}>
+          <FiMoreHorizontal className=" text-green-700 text-[20px] cursor-pointer" />
+        </div>
       </TableCell>
     </TableRow>
   );
