@@ -2,10 +2,8 @@
 import React, { useState } from "react";
 import TeacherSubject from "./TeacherSubject";
 import TeacherProfileData from "./TeacherProfileData";
-import TeacherPrice from "./TeacherPrice";
 import ProgressLine from "./ui/PrograssLine";
 import { Button } from "./ui/button";
-import Image from "next/image";
 import Link from "next/link";
 import {
   oneOnOneSectionSchema,

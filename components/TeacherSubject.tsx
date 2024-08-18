@@ -54,7 +54,7 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
     if (selectedPreference) {
       setPreference(selectedPreference);
     }
-  }, [subjects, grades, preference]);
+  }, [getValues]);
 
   const handleAddSubject = (value: string, field: Isubject) => {
     if (!subjects?.includes(value)) {
