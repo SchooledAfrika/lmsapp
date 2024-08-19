@@ -12,6 +12,7 @@ import {
 } from "./SingleClassroom";
 import { info } from "console";
 import Image from "next/image";
+import { IgetTeachers, Iteacher } from "./AssignDialog";
 
 // component for announcements
 const Announcement: React.FC<{
@@ -39,25 +40,50 @@ const Announcement: React.FC<{
 const ClassDetails: React.FC<{
   info: IsingleClass;
 }> = ({ info }) => {
-  const flattendTeacher = info.SchoolClassTeacher.map((teacher) => teacher);
+  const flattendTeacher: IgetTeachers[] = info.SchoolClassTeacher.map(
+    (teacher: Iteacher) => teacher.teacher
+  );
   return (
     <div className=" bg-white p-5 flex flex-col gap-4">
       <p className="text-slate-400 font-semibold text-[12px]">Class Details</p>
-      <div>
-        <p>Subject</p>
-        <div>
+      <div className=" flex items-center justify-between">
+        <p className=" text-[16px] font-semibold text-slate-600">Subject</p>
+        <div className=" flex gap-1 items-center">
           <Image
-            className=" w-[110px] h-[90px] aspect-square rounded-md"
+            className=" w-[20px] h-[20px] aspect-square rounded-md"
             src={`/${info?.subject.toLowerCase()}.png`}
             alt=""
             width={200}
             height={200}
           />
-          <p>{info.subject}</p>
+          <p className=" text-[12px] font-bold">{info.subject}</p>
         </div>
       </div>
-      <div></div>
-      <div></div>
+      <div className=" flex items-center justify-between">
+        <p className=" text-[16px] font-semibold text-slate-600">
+          Total student
+        </p>
+        <p className="text-[12px] font-bold">
+          {info.SchoolClassStudent.length}
+        </p>
+      </div>
+      <div className=" flex flex-col">
+        <p className=" text-slate-400 font-semibold">Teachers</p>
+        <div className=" mt-1 flex flex-col gap-1 ">
+          {flattendTeacher.map((teacher, index) => (
+            <div className=" items-center flex gap-1 " key={index}>
+              <Image
+                src={teacher.profilePhoto}
+                alt=""
+                width={200}
+                height={200}
+                className=" w-[25px] h-[25px] rounded-full  "
+              />
+              <p className=" text-[12px]">{teacher.name}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
