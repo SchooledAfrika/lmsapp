@@ -206,35 +206,36 @@ model Session {
 // student will have many to many relationship with classes
 // since students can have many classes and classes can have many students
 model Classes {
-  id               String             @id @default(auto()) @map("_id") @db.ObjectId
-  subject          Subjects
-  className        String
-  grade            Grade
-  duration         String
-  classStarts      DateTime
-  classEnds        DateTime
-  schedules        ClassDay[]
-  price            Float
-  classBanner      String
-  rating           Float?
-  publicClass      Boolean            @default(true)
-  classTime        String?
+  id                         String                       @id @default(auto()) @map("_id") @db.ObjectId
+  subject                    Subjects
+  className                  String
+  grade                      Grade
+  duration                   String
+  classStarts                DateTime
+  classEnds                  DateTime
+  schedules                  ClassDay[]
+  price                      Float
+  classBanner                String
+  rating                     Float?
+  publicClass                Boolean                      @default(true)
+  classTime                  String?
   // here, there is one to many relationship between classes and teacher
   // a teacher can have many classes
-  teacher          Teacher            @relation(fields: [teacherId], references: [id])
-  teacherId        String             @db.ObjectId
+  teacher                    Teacher                      @relation(fields: [teacherId], references: [id])
+  teacherId                  String                       @db.ObjectId
   // there will be many to many relationship between classes and students
   // classes can have many students
-  studentIDs       String[]           @db.ObjectId
-  students         Student[]          @relation(fields: [studentIDs], references: [id])
-  maxCapacity      Float
-  currentCapacity  Float              @default(0)
+  studentIDs                 String[]                     @db.ObjectId
+  students                   Student[]                    @relation(fields: [studentIDs], references: [id])
+  maxCapacity                Float
+  currentCapacity            Float                        @default(0)
   // this will contain the arrays of the resources the teacher ass
-  resourcesIds     String[]           @default([])
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now())
-  ClassExams       ClassExams[]
-  StudentClassExam StudentClassExam[]
+  resourcesIds               String[]                     @default([])
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @default(now())
+  ClassExams                 ClassExams[]
+  StudentClassExam           StudentClassExam[]
+  AnnouncementByTeacherClass AnnouncementByTeacherClass[]
 
   @@index([teacherId], name: "teachers_class_index")
 }
@@ -379,9 +380,12 @@ model SchoolClass {
   schoolId                  String                      @db.ObjectId
   SchoolClassTeacher        SchoolClassTeacher[]
   SchoolClassStudent        SchoolClassStudent[]
+  AnnouncementBySchoolClass AnnouncementBySchoolClass[]
+  SchoolClassExam           SchoolClassExam[]
+  // this will contain the arrays of the resources the teacher ass
+  resourcesIds              String[]                    @default([])
   createdAt                 DateTime                    @default(now())
   updatedAt                 DateTime                    @default(now())
-  AnnouncementBySchoolClass AnnouncementBySchoolClass[]
 
   @@index([schoolId], name: "school_class")
 }
@@ -392,6 +396,18 @@ model AnnouncementBySchoolClass {
   desc          String
   schoolClass   SchoolClass @relation(fields: [schoolClassId], references: [id])
   schoolClassId String      @db.ObjectId
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+}
+
+model AnnouncementByTeacherClass {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  desc      String
+  class     Classes  @relation(fields: [classesId], references: [id])
+  classesId String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 // creating a model for school class teachers
@@ -478,6 +494,24 @@ model ClassExams {
   updatedAt          DateTime        @default(now())
 
   @@index([classesId], name: "class_exam")
+}
+
+// below is the model that link schoolclass 
+// and the exam being set by teachers
+model SchoolClassExam {
+  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  schoolClass        SchoolClass     @relation(fields: [schoolClassId], references: [id])
+  schoolClassId      String          @db.ObjectId
+  // this array contains the id of student in this class that have aswered this particular exam
+  answeredStudentIds String[]        @db.ObjectId
+  test               ExamQuestions[]
+  duration           String
+  grade              Grade
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @default(now())
+
+  @@index([schoolClassId], name: "class_exam")
 }
 
 model StudentClassExam {

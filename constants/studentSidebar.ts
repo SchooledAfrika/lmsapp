@@ -25,7 +25,6 @@ export const StudentSideBar: StudentSideBarType[] = [
   { path: "", name: "Overview", icon: MdInsertChartOutlined },
   { path: "classroom", name: "Classroom", icon: SiGoogleclassroom },
   { path: "one-on-one-section", name: "1 on 1 Section", icon: GoChecklist },
-  { path: "teachers", name: "Teacher", icon: LiaChalkboardTeacherSolid },
   {
     path: "test-and-resources",
     name: "test & Resources",

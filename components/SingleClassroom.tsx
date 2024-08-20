@@ -48,6 +48,8 @@ export interface IsingleClass {
   subject: string;
   time: string;
   createdAt: string;
+  SchoolClassExam: [];
+  resourcesIds: [];
   SchoolClassTeacher: IouterPart[];
   SchoolClassStudent: IouterStudent[];
   school: {

@@ -15,7 +15,7 @@ import Image from "next/image";
 import { IgetTeachers, Iteacher } from "./AssignDialog";
 
 // component for announcements
-const Announcement: React.FC<{
+export const Announcement: React.FC<{
   info: Iannoucement[];
 }> = ({ info }) => {
   return (
@@ -87,6 +87,59 @@ const ClassDetails: React.FC<{
     </div>
   );
 };
+// this component below shows the exam in the class
+export const Exams: React.FC<{ exams: any[] }> = ({ exams }) => {
+  return (
+    <div className=" flex-1 flex flex-col gap-2 bg-white rounded-md p-5">
+      <p className=" text-slate-500 font-semibold">Exams</p>
+      {exams.length === 0 ? (
+        <div className=" w-full flex items-center justify-center flex-col gap-2">
+          <Image
+            src="/noitem.avif"
+            alt="no-item"
+            width={200}
+            height={200}
+            className=" w-[200px] aspect-square rounded-md"
+          />
+          <p className=" text-slate-500 font-semibold">No exams yet</p>
+        </div>
+      ) : (
+        <div></div>
+      )}
+    </div>
+  );
+};
+// below will handle fetching an displaying the resources
+export const Resources: React.FC<{ resources: any[] }> = ({ resources }) => {
+  return (
+    <div className=" flex-1 flex flex-col gap-2 bg-white rounded-md p-5">
+      <p className=" text-slate-500 font-semibold">Resources</p>
+      {resources.length === 0 ? (
+        <div className=" w-full flex items-center justify-center flex-col gap-2">
+          <Image
+            src="/noitem.avif"
+            alt="no-item"
+            width={200}
+            height={200}
+            className=" w-[200px] aspect-square rounded-md"
+          />
+          <p className=" text-slate-500 font-semibold">No resources yet</p>
+        </div>
+      ) : (
+        <div></div>
+      )}
+    </div>
+  );
+};
+// the shared class heading and backwards
+export const SingleTop = () => {
+  return (
+    <div className=" w-full flex items-center justify-between">
+      <p className=" font-bold text-black">Details</p>
+      <Backwards />
+    </div>
+  );
+};
 // our component base starts here
 const StudentSchoolClass = () => {
   const { id } = useParams();
@@ -109,19 +162,20 @@ const StudentSchoolClass = () => {
   if (isError) {
     return <div>{error.message}</div>;
   }
+
   const items: IsingleClass = data;
   return (
     <div className=" mt-6 flex flex-col gap-3">
-      <div className=" w-full flex items-center justify-between">
-        <p className=" font-bold text-black">Details</p>
-        <Backwards />
-      </div>
+      <SingleTop />
       <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 mt-3">
         <ClassInfo info={items} />
         <Announcement info={items.AnnouncementBySchoolClass} />
         <ClassDetails info={items} />
       </div>
-      <div></div>
+      <div className=" w-full flex flex-col md:flex-row gap-3">
+        <Exams exams={items.SchoolClassExam} />
+        <Resources resources={items.resourcesIds} />
+      </div>
     </div>
   );
 };
