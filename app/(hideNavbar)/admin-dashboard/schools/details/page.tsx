@@ -1,7 +1,12 @@
+import AdminSchoolDetails from "@/components/ui/admin-dashboard/AdminSchoolDetails";
 import React from "react";
 
 const page = () => {
-  return <div>School Details Page</div>;
+  return (
+    <div>
+      <AdminSchoolDetails />
+    </div>
+  );
 };
 
 export default page;
