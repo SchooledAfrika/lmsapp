@@ -45,7 +45,7 @@ export function StudentsChart() {
       <CardHeader>
         <CardTitle className="text-[18px]">Students</CardTitle>
         <CardDescription>
-          Showing total students for the last 6 months
+          Showing total students for the last 12 months
         </CardDescription>
       </CardHeader>
       <CardContent>

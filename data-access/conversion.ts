@@ -62,9 +62,11 @@ export const useConversion = () => {
   };
 
   const getInitials = (fullName: string): string => {
+    if (!fullName) return ''; // Check if fullName is undefined or empty
+
     const nameArray = fullName.split(" ");
-    const firstInitial = nameArray[0].split("")[0];
-    const secondInitial = nameArray[1].split("")[0];
+    const firstInitial = nameArray[0]?.split("")[0] || ""; // Safe check for first initial and fallback
+    const secondInitial = nameArray[1]?.split("")[0] || ""; // Safe check for second initial and fallback
     const fullInitial = `${firstInitial}${secondInitial}`;
     return fullInitial;
   };

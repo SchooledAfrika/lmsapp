@@ -286,9 +286,9 @@ export const AdminNavbar: SchoolNavType[] = [
     path: "parents",
   },
   {
-    title: "Invoice",
+    title: "Sessions",
     description: "",
-    path: "invoice",
+    path: "sessions",
   },
   {
     title: "Admin Profile",
