@@ -1,5 +1,4 @@
 "use client";
-import { Classes } from "@/constants/index";
 import Image from "next/image";
 import Container from "./Container";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
