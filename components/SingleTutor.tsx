@@ -14,8 +14,47 @@ import Container from "./Container";
 import Backwards from "./ui/Backwards";
 import { ISessionShow } from "./AllTutors";
 import { useClasses } from "@/data-access/class";
+import { IoIosStar } from "react-icons/io";
+import { MdShare } from "react-icons/md";
+import { useSession } from "next-auth/react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+// this component contains the dialog box to display ratting
+const ShowRatting: React.FC<{
+  showratting: boolean;
+  setShowratting: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ showratting, setShowratting }) => {
+  return (
+    <Dialog open={showratting} onOpenChange={() => setShowratting(false)}>
+      <DialogTrigger className=" w-full" asChild>
+        <div className="w-full font-bold  py-3 text-green-800 flex justify-center items-center rounded-lg border border-green-800">
+          rate
+        </div>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px]"></DialogContent>
+    </Dialog>
+  );
+};
 
 const ProfileShow: React.FC<{ dp: string; name: string }> = ({ dp, name }) => {
+  const [showRatting, setShowratting] = useState<boolean>(false);
+  const { status } = useSession();
+  const handleRattingShow = () => {
+    if (status === "unauthenticated") {
+      return toast.error("login to rate this tutor");
+    }
+    setShowratting(true);
+  };
   return (
     <div className=" w-full  bg-white flex flex-col gap-4 py-8 items-center rounded-lg">
       <div className=" w-[200px] h-[200px] rounded-lg overflow-hidden">
@@ -39,8 +78,11 @@ const ProfileShow: React.FC<{ dp: string; name: string }> = ({ dp, name }) => {
         <div className=" w-1/3 py-3 bg-green-800 text-white flex items-center justify-center rounded-lg">
           <p>Book a session</p>
         </div>
-        <div className="w-1/3 font-bold  py-3 text-green-800 flex justify-center items-center rounded-lg border border-green-800">
-          <p>Rate </p>
+        <div onClick={handleRattingShow} className=" w-1/3 cursor-pointer">
+          <ShowRatting
+            showratting={showRatting}
+            setShowratting={setShowratting}
+          />
         </div>
       </div>
     </div>
@@ -52,7 +94,8 @@ const Desc: React.FC<{
   desc: string;
   subjects: string[];
   preferences: string[];
-}> = ({ name, desc, subjects, preferences }) => {
+  ratting: any;
+}> = ({ name, desc, subjects, preferences, ratting }) => {
   const { capitalizeString } = useClasses();
   return (
     <div>
@@ -86,6 +129,25 @@ const Desc: React.FC<{
             ))}
           </div>
         </div>
+        <Share ratting={ratting} />
+      </div>
+    </div>
+  );
+};
+
+const Share: React.FC<{ ratting: any }> = ({ ratting }) => {
+  return (
+    <div className=" w-full flex items-center justify-between">
+      <div className=" flex items-center gap-3">
+        <p className=" font-bold text-[20px]">Review</p>
+        <div className=" flex items-center gap-1">
+          <IoIosStar className=" text-orange-500" />
+          {ratting === null ? <p>0</p> : <p>{ratting}</p>}
+        </div>
+      </div>
+      <div className=" flex items-center px-6 py-2 border cursor-pointer border-black w-fit rounded-md gap-1">
+        <MdShare />
+        <p className=" text-[14px]">Share</p>
       </div>
     </div>
   );
@@ -127,10 +189,12 @@ const SingleTutor = () => {
               desc={SingleData.teacher.details}
               subjects={SingleData.subjects}
               preferences={SingleData.preference}
+              ratting={SingleData.teacher.rating}
             />
           </div>
         </div>
       </div>
+      <ToastContainer />
     </Container>
   );
 };
