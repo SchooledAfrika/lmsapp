@@ -10,9 +10,10 @@ import { useInView } from "react-intersection-observer";
 import Container from "./Container";
 import { useConversion } from "@/data-access/conversion";
 import { IoIosStar } from "react-icons/io";
+import { Skeleton } from "@mui/material";
 
 // type for this secion
-interface ISessionShow {
+export interface ISessionShow {
   id: string;
   teacherId: string;
   aboutTutor: string;
@@ -70,7 +71,8 @@ const Desc: React.FC<{
   subjects: string[];
   preference: string[];
   lang: string;
-}> = ({ name, desc, grades, subjects, preference, lang }) => {
+  id: string;
+}> = ({ name, desc, grades, subjects, preference, lang, id }) => {
   const { makeSubstring, joinGrades } = useConversion();
   return (
     <div className=" flex flex-col gap-3 sm:gap-5">
@@ -112,9 +114,12 @@ const Desc: React.FC<{
           </div>
         </div>
         <div>
-          <p className=" text-green-700 underline text-[12px] mt-3 cursor-pointer">
+          <Link
+            href={`/find-tutors/${id}`}
+            className=" text-green-700 underline text-[12px] mt-3 cursor-pointer"
+          >
             View profile
-          </p>
+          </Link>
         </div>
       </div>
       <div className=" flex gap-3 flex-wrap">
@@ -163,10 +168,36 @@ const SingleSession: React.FC<{
           subjects={item.subjects}
           preference={item.preference}
           lang={item.teacher.language}
+          id={item.id}
         />
       </div>
       <PayDetails rating={item.teacher.rating} />
     </div>
+  );
+};
+
+const AllTutorLoading = () => {
+  const dummyArray = new Array(10).fill("");
+  return (
+    <Container>
+      <div className=" w-full flex flex-col gap-4 mt-5">
+        {dummyArray.map((item, index) => (
+          <div
+            className=" w-full h-[300px] rounded-lg bg-slate-300 flex flex-col sm:flex-row px-7 animate-pulse py-4 gap-4"
+            key={index}
+          >
+            <div className=" flex-8 flex gap-6">
+              <div className=" h-[100px] sm:h-[120px] sm:w-1/5 w-2/5 animate-pulse bg-slate-400 rounded-md"></div>
+              <div className=" w-full h-3/4 bg-slate-400 animate-pulse rounded-md"></div>
+            </div>
+            <div className=" flex-2 flex flex-col gap-3">
+              <div className=" w-full h-[60px] sm:h-[50px] bg-slate-400 animate-pulse rounded-md"></div>
+              <div className=" w-full hidden sm:flex h-[50px] bg-slate-400 animate-pulse rounded-md"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Container>
   );
 };
 
@@ -203,7 +234,7 @@ const AllTutors = () => {
   }, [inView, fetchNextPage]);
   // check if is loading
   if (status === "pending") {
-    return <div>loading now</div>;
+    return <AllTutorLoading />;
   }
   if (status === "error") {
     return <div>something went wrong!!!, check your connection</div>;
