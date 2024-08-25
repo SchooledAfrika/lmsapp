@@ -280,14 +280,14 @@ const Desc: React.FC<{
   );
 };
 
-const Share: React.FC<{ ratting: any }> = ({ ratting }) => {
+const Share: React.FC<{ ratting: number }> = ({ ratting }) => {
   return (
     <div className=" w-full flex items-center justify-between">
       <div className=" flex items-center gap-3">
         <p className=" font-bold text-[20px]">Review</p>
         <div className=" flex items-center gap-1">
           <IoIosStar className=" text-orange-500" />
-          {ratting === null ? <p>0</p> : <p>{ratting}</p>}
+          {ratting === null ? <p>0</p> : <p>{ratting.toFixed(2)}</p>}
         </div>
       </div>
       <div className=" flex items-center px-6 py-2 border cursor-pointer border-black w-fit rounded-md gap-1">

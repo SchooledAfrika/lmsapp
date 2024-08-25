@@ -36,7 +36,7 @@ export interface ISessionShow {
     details: string;
     profilePhoto: string;
     language: string;
-    rating: any;
+    rating: number;
     Ratting: Iratter[];
   };
 }
