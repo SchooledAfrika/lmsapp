@@ -21,6 +21,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoClose } from "react-icons/io5";
+import ShareLink from "./Share";
 
 // this is to show that item is not submitted yet
 const BeforeReviewSubmit: React.FC<{
@@ -167,7 +168,7 @@ const ShowRatting: React.FC<{
   return (
     <Dialog open={showratting} onOpenChange={() => setShowratting(false)}>
       <DialogTrigger className=" w-full" asChild>
-        <div className="w-full font-bold  py-3 text-green-800 flex justify-center items-center rounded-lg border border-green-800">
+        <div className="w-full font-bold  py-3 text-green-800 max-md:text-[12px] flex justify-center items-center rounded-lg border border-green-800">
           rate
         </div>
       </DialogTrigger>
@@ -214,12 +215,8 @@ const ProfileShow: React.FC<{
         <p className=" font-bold text-[20px]">{name}</p>
         <MdVerified className=" text-[20px] text-green-800" />
       </div>
-      <div className=" flex flex-col items-center">
-        <p className=" text-green-800 font-bold">$10.00-$20.00</p>
-        <p>per hour</p>
-      </div>
       <div className=" flex flex-col gap-3 items-center w-full">
-        <div className=" w-1/3 py-3 bg-green-800 text-white flex items-center justify-center rounded-lg">
+        <div className=" w-1/3 py-3 bg-green-800 text-white max-md:text-[12px] flex items-center justify-center rounded-lg">
           <p>Book a session</p>
         </div>
         <div onClick={handleRattingShow} className=" w-1/3 cursor-pointer">
@@ -245,10 +242,12 @@ const Desc: React.FC<{
   return (
     <div>
       <div className=" flex flex-col gap-4">
-        <p className=" font-bold text-[20px]">About {name}</p>
+        <p className=" font-bold text-[20px] max-sm:text-[16px]">
+          About {name}
+        </p>
         <p className=" text-slate-600">{desc}</p>
         <div className=" flex flex-col gap-2">
-          <div className=" flex items-center gap-3 font-bold">
+          <div className=" flex flex-wrap items-center gap-3 font-bold">
             <p>Subjects:</p>
             {subjects.map((subject, index) => (
               <div key={index} className=" flex items-center gap-1 ">
@@ -290,10 +289,7 @@ const Share: React.FC<{ ratting: number }> = ({ ratting }) => {
           {ratting === null ? <p>0</p> : <p>{ratting.toFixed(2)}</p>}
         </div>
       </div>
-      <div className=" flex items-center px-6 py-2 border cursor-pointer border-black w-fit rounded-md gap-1">
-        <MdShare />
-        <p className=" text-[14px]">Share</p>
-      </div>
+      <ShareLink />
     </div>
   );
 };
@@ -315,10 +311,10 @@ const Rattings: React.FC<{
         </div>
         <div className=" flex-11">
           <div className=" flex items-center justify-between">
-            <p className=" text-black font-bold text-[20px]">
+            <p className=" text-black font-bold max-sm:text-[14px] text-[20px]">
               {rate.ratter.name}
             </p>
-            <div className=" flex gap-1 items-center">
+            <div className=" flex md:gap-1 items-center max-sm:text-[12px]">
               <IoIosStar className=" text-orange-600" />
               <p>{rate.rateValue}</p>
             </div>
@@ -328,7 +324,7 @@ const Rattings: React.FC<{
       </div>
       <div className=" w-full flex gap-4">
         <div className=" flex-1 aspect-square rounded-sm p-1"></div>
-        <div className=" flex-11">
+        <div className=" flex-11 leading-tight max-sm:text-[12px]">
           <p>{rate.comment}</p>
         </div>
       </div>

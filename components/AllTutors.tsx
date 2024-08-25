@@ -85,25 +85,25 @@ const Desc: React.FC<{
 }> = ({ name, desc, grades, subjects, preference, lang, id }) => {
   const { makeSubstring, joinGrades } = useConversion();
   return (
-    <div className=" flex flex-col gap-3 sm:gap-5">
+    <div className=" flex flex-col md:gap-3 sm:gap-5">
       <div className=" flex items-center gap-2">
-        <p className=" font-bold text-[20px]">{name}</p>
+        <p className=" font-bold text-[20px] max-sm:text-[14px]">{name}</p>
         <MdVerified className=" text-[24px] text-green-800" />
       </div>
       <div>
         <p className=" hidden sm:flex text-[16px] text-slate-700">
           {makeSubstring(desc, 200)}
         </p>
-        <p className="  sm:hidden text-[16px] text-slate-700">
+        <p className="  sm:hidden text-[12px] text-slate-700">
           {makeSubstring(desc, 70)}
         </p>
         <div className=" flex flex-wrap items-center gap-2 w-full">
           <p className="text-[13px] text-black font-bold">
             Speaks:<span className=" ml-1">{lang}</span>
           </p>
-          <div className=" flex items-center text-[13px] text-black font-bold gap-2">
+          <div className=" flex-wrap flex items-center text-[13px] text-black font-bold gap-2">
             <p>Teaches:</p>
-            <div className=" flex items-center gap-1">
+            <div className=" flex-wrap flex items-center gap-1">
               {subjects.map((subject, index) => (
                 <div className=" flex items-center gap-1" key={index}>
                   <Image
@@ -145,7 +145,7 @@ const Desc: React.FC<{
     </div>
   );
 };
-const PayDetails: React.FC<{ rating: any }> = ({ rating }) => {
+const PayDetails: React.FC<{ rating: number }> = ({ rating }) => {
   return (
     <div className=" flex flex-2 flex-col items-center gap-4">
       <div className=" text-white w-full  bg-green-700 rounded-md px-4 py-4 sm:py-4 text-[14px] flex items-center justify-center cursor-pointer">
@@ -154,7 +154,7 @@ const PayDetails: React.FC<{ rating: any }> = ({ rating }) => {
       <div className=" hidden  sm:flex text-[14px] gap-1 items-center font-bold">
         <p>Reviews</p>
         <IoIosStar className=" text-orange-500" />
-        {rating === null ? <p>0</p> : <p>{rating}</p>}
+        {rating === null ? <p>0</p> : <p>{rating.toFixed(2)}</p>}
       </div>
     </div>
   );
