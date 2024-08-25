@@ -12,6 +12,15 @@ import { useConversion } from "@/data-access/conversion";
 import { IoIosStar } from "react-icons/io";
 import { Skeleton } from "@mui/material";
 
+export interface Iratter {
+  comment: string;
+  rateValue: number;
+  ratter: {
+    name: string;
+    profilePhoto: string;
+  };
+}
+
 // type for this secion
 export interface ISessionShow {
   id: string;
@@ -28,6 +37,7 @@ export interface ISessionShow {
     profilePhoto: string;
     language: string;
     rating: any;
+    Ratting: Iratter[];
   };
 }
 

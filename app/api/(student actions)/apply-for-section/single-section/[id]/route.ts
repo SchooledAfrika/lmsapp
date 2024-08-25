@@ -7,7 +7,6 @@ export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
-  console.log("hello");
   try {
     const session = await prisma.oneOnOneSection.findUnique({
       where: { id: params.id },
@@ -19,6 +18,18 @@ export async function GET(
             details: true,
             rating: true,
             language: true,
+            Ratting: {
+              select: {
+                comment: true,
+                rateValue: true,
+                ratter: {
+                  select: {
+                    name: true,
+                    profilePhoto: true,
+                  },
+                },
+              },
+            },
           },
         },
       },

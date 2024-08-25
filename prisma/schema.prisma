@@ -64,6 +64,8 @@ model Teacher {
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @default(now())
   kyc                  Kyc?
+  Ratting              Ratting[]
+  reviewers            String[]             @db.ObjectId
 }
 
 model Kyc {
@@ -104,6 +106,7 @@ model Student {
   CompletedProfile   Boolean              @default(false)
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @default(now())
+  Ratting            Ratting[]
 }
 
 // creating the school model
@@ -162,6 +165,19 @@ model TeachersArticle {
   teacherId  String       @db.ObjectId
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now())
+}
+
+// this model is to show connections between teachers and rattings
+model Ratting {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId String   @db.ObjectId
+  comment   String
+  rateValue Int
+  ratter    Student  @relation(fields: [studentId], references: [id])
+  studentId String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 // once a teacher is registered
