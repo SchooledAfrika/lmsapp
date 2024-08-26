@@ -31,7 +31,7 @@ interface SessionTypes {
   id: number;
   sessionName: string;
   price: number;
-  billingCycle: "monthly" | "yearly";
+  billingCycle: string;
 }
 
 const Scheduling: React.FC<ISessionSub> = ({
@@ -58,9 +58,7 @@ const Scheduling: React.FC<ISessionSub> = ({
   ];
 
   const [days, setDays] = React.useState<string[]>([]);
-  const [sessionTypes, setSessionTypes] = React.useState<SessionTypes | null>(
-    null
-  );
+  const [sessionTypes, setSessionTypes] = React.useState<SessionTypes>();
   const [hours, setHours] = React.useState<number>(1);
   const [length, setLength] = React.useState<"monthly" | "yearly">("monthly");
 
@@ -81,9 +79,10 @@ const Scheduling: React.FC<ISessionSub> = ({
   // Handle session selection
   const handleSessionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const sessionTypeId = Number(event.target.value);
-    const sessionType =
-      SessionTypes.find((s) => s.id === sessionTypeId) || null;
+    const sessionType = SessionTypes.find((s) => s.id === sessionTypeId);
     setSessionTypes(sessionType);
+    if (!sessionType) return;
+    setValue("sessionTypes", sessionType);
     setHours(1); // Reset hours when changing session
   };
 
@@ -177,13 +176,14 @@ const Scheduling: React.FC<ISessionSub> = ({
 
             <select
               id="sessionTypes"
-              {...register("sessionTypes")}
               name="sessionTypes"
               className="p-3 font-medium rounded-md text-[14px]"
               onChange={handleSessionChange}
               value={sessionTypes?.id || ""}
             >
-              <option value="">Select a Session</option>
+              <option value="" selected disabled>
+                Select a Session
+              </option>
               {SessionTypes.map((sessionType) => (
                 <option key={sessionType.id} value={sessionType.id}>
                   {sessionType.sessionName}
@@ -200,13 +200,12 @@ const Scheduling: React.FC<ISessionSub> = ({
 
           {/* Hours input */}
           <div className="bg-white  rounded-md text-[14px] font-medium md:text-center pl-3 py-2 space-x-2">
-            <label htmlFor="hours">Hours per day:</label>
+            <label>Hours per day:</label>
             <input
-              {...register("hours", { valueAsNumber: true })}
+              {...register("hours")}
               name="hours"
               type="number"
               onChange={handleHoursChange}
-              disabled={!sessionTypes || sessionTypes.id === 2}
             />
 
             {errors.hours && (

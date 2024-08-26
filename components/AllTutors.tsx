@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { MdVerified } from "react-icons/md";
 import { Button } from "@/components/ui/button";
@@ -145,12 +145,14 @@ const Desc: React.FC<{
     </div>
   );
 };
-const PayDetails: React.FC<{ rating: number }> = ({ rating }) => {
+const PayDetails: React.FC<{
+  rating: number;
+  setShowBooking: React.Dispatch<React.SetStateAction<boolean>>;
+  showBooking: boolean;
+}> = ({ rating, setShowBooking, showBooking }) => {
   return (
     <div className=" flex flex-2 flex-col items-center gap-4">
-      <div className=" text-white w-full  bg-green-700 rounded-md px-4 py-4 sm:py-4 text-[14px] flex items-center justify-center cursor-pointer">
-        <p>Book Session</p>
-      </div>
+      <BookSession />
       <div className=" hidden  sm:flex text-[14px] gap-1 items-center font-bold">
         <p>Reviews</p>
         <IoIosStar className=" text-orange-500" />
@@ -164,6 +166,7 @@ const PayDetails: React.FC<{ rating: number }> = ({ rating }) => {
 const SingleSession: React.FC<{
   item: ISessionShow;
 }> = ({ item }) => {
+  const [showBooking, setShowBooking] = useState<boolean>(false);
   return (
     <div className=" w-full max-ss:flex-col flex  gap-3 bg-white shadow-md md:px-10 md:py-8 rounded-lg p-4">
       <div className=" flex flex-8 gap-6">
@@ -181,7 +184,11 @@ const SingleSession: React.FC<{
           id={item.id}
         />
       </div>
-      <PayDetails rating={item.teacher.rating} />
+      <PayDetails
+        showBooking={showBooking}
+        setShowBooking={setShowBooking}
+        rating={item.teacher.rating}
+      />
     </div>
   );
 };

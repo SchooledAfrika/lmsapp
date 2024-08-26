@@ -2,7 +2,6 @@
 
 import { z } from "zod";
 
-
 export interface IprogressType {
   name: string;
   field: string[];
@@ -14,12 +13,31 @@ export const BookSessionInfo: IprogressType[] = [
     name: "Personal Details",
     field: ["name", "country", "email"] as const,
   },
-  { name: "Child Details", field: ["childName", "gender", "grade", "subject", "curriculum", "specialNeeds", "goals"] as const, },
-  { name: "Scheduling", field: ["days", "SessionTypes", "hours", "length", "time", "classStarts"] as const, },
-  { name: "Payment", field: ["paystack", "flutterwave"] as const, }
+  {
+    name: "Child Details",
+    field: [
+      "childName",
+      "gender",
+      "grade",
+      "subject",
+      "curriculum",
+      "specialNeeds",
+      "goals",
+    ] as const,
+  },
+  {
+    name: "Scheduling",
+    field: [
+      "days",
+      "SessionTypes",
+      "hours",
+      "length",
+      "time",
+      "classStarts",
+    ] as const,
+  },
+  { name: "Payment", field: ["paystack", "flutterwave"] as const },
 ];
-
-
 
 // the zod types for completing profile information
 //
@@ -35,10 +53,10 @@ const ACCEPTED_IMAGE_TYPES = [
 // below is the zod schema for booking of session with teachers
 //
 export const sessionbookingSchema = z.object({
-  name:z.string().min(3,{ message: "field is required" }),
-  country: z.string().min(3,{ message: "field is required" }),
-  email: z.string().min(3,{ message: "field is required" }),
-  childName: z.string().min(3,{ message: "field is required" }),
+  name: z.string().min(3, { message: "field is required" }),
+  country: z.string().min(3, { message: "field is required" }),
+  email: z.string().min(3, { message: "field is required" }),
+  childName: z.string().min(3, { message: "field is required" }),
   gender: z.enum(["Male", "Female"], { message: "enter your gender" }),
   grade: z.enum(
     [
@@ -59,17 +77,21 @@ export const sessionbookingSchema = z.object({
       message: "you can only enter Grade1 format",
     }
   ),
-  sessionTypes: z.array(z.object({id: z.number(), sessionName: z.string(), price: z.number(), billingCycle: z.string().min(1) })),
-  subject: z.string().min(3,{ message: "field is required" }),
-  curriculum: z.string().min(3,{ message: "field is required" }),
-  specialNeeds: z.string().min(3,{ message: "field is required" }),
-  goals: z.string().min(3,{ message: "field is required" }),
+  sessionTypes: z.object({
+    id: z.number(),
+    sessionName: z.string(),
+    price: z.number(),
+    billingCycle: z.string().min(1),
+  }),
+  subject: z.string().min(3, { message: "field is required" }),
+  curriculum: z.string().min(3, { message: "field is required" }),
+  specialNeeds: z.string().min(3, { message: "field is required" }),
+  goals: z.string().min(3, { message: "field is required" }),
   days: z.array(z.string(), { message: "please select days" }),
-  times: z.string().min(3,{ message: "field is required" }),
-  hours: z.number().optional(),
-  length: z.string().min(3,{ message: "field is required" }),
+  times: z.string().min(3, { message: "field is required" }),
+  hours: z.string().optional(),
+  length: z.string().min(3, { message: "field is required" }),
   classStarts: z.date(),
   paystack: z.boolean({ message: "selection is required" }),
   flutterwave: z.boolean({ message: "selection is required" }),
 });
-

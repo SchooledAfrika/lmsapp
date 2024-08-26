@@ -20,7 +20,7 @@ import ChildDetails from "@/components/ui/book-teacher/ChildDetails";
 import Details from "@/components/ui/book-teacher/Details";
 export type Isession = z.infer<typeof sessionbookingSchema>;
 
-const BookSession: React.FC = () => {
+const BookSession: React.FC<{}> = () => {
   const { data: session, update } = useSession();
   // console.log(session?.user);
   const router = useRouter();
@@ -39,7 +39,7 @@ const BookSession: React.FC = () => {
   });
 
   const runSubmit: SubmitHandler<Isession> = async (data) => {
-    console.log(data)
+    console.log(data);
     // handle file submission to the backend server
     const response = await fetch("#", {
       method: "POST",
@@ -63,7 +63,7 @@ const BookSession: React.FC = () => {
     const fields = BookSessionInfo[currentPage - 1].field as fieldName[];
     const isValid = await trigger(fields, { shouldFocus: true });
     if (!isValid) return;
-    if (currentPage === 3) {
+    if (currentPage === 4) {
       console.log("entered");
       await handleSubmit(runSubmit)();
     } else {
@@ -74,12 +74,12 @@ const BookSession: React.FC = () => {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className=" bg-lightGreen  rounded-lg hover:bg-green-500 text-white text-sm mt-6 px-3 md:w-32 w-[100%]   py-2 text-center lg:block">
+        <div className=" text-white w-full  bg-green-700 rounded-md px-4 py-4 sm:py-4 text-[14px] flex items-center justify-center cursor-pointer">
           Book Session
-        </Button>
+        </div>
       </DialogTrigger>
 
-      <DialogContent className="sm:w-[900px] bg-stone-100 overflow-x-auto    w-full font-subtext">
+      <DialogContent className="sm:w-[900px] bg-stone-100 overflow-x-auto w-full font-subtext">
         <div className="grid gap-4  font-header py-4">
           <ScrollArea className="md:h-[500px] h-[500px]  w-full ">
             <div className=" flex  flex-col md:flex-row gap-3  md:gap-16">
