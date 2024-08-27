@@ -20,11 +20,49 @@ import ChildDetails from "@/components/ui/book-teacher/ChildDetails";
 import Details from "@/components/ui/book-teacher/Details";
 export type Isession = z.infer<typeof sessionbookingSchema>;
 
-const BookSession: React.FC<{}> = () => {
+// component for rendering btn for payment and next page
+const ControlBtn: React.FC<{
+  currentPage: number;
+  handleNextPage: () => void;
+  method: string;
+  sessionId: string;
+}> = ({ currentPage, handleNextPage, method, sessionId }) => {
+  return (
+    <div>
+      {currentPage <= 3 ? (
+        <Button
+          onClick={handleNextPage}
+          type="button"
+          className="px-8 py-3 md:my-2 my-4 flex md:w-28 w-full md:justify-end float-right bg-lightGreen hover:bg-green-700"
+        >
+          Proceed
+        </Button>
+      ) : (
+        <div onClick={() => alert(sessionId)}>
+          {method === "paystack" ? (
+            <div className="px-8 py-3 text-white md:my-2 my-4 flex md:w-28 w-full md:justify-end float-right rounded-md cursor-pointer bg-lightGreen hover:bg-green-700">
+              Paynow
+            </div>
+          ) : (
+            <div className="px-8 py-3 text-white md:my-2 my-4 flex md:w-28 w-full md:justify-end float-right rounded-md cursor-pointer bg-lightGreen hover:bg-green-700">
+              Paynow
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
+
+// then main component appears here
+const BookSession: React.FC<{
+  sessionId: string;
+}> = ({ sessionId }) => {
   const { data: session, update } = useSession();
   // console.log(session?.user);
   const router = useRouter();
   const [currentPage, setcurrentPage] = useState<number>(1);
+  const [method, setMethod] = useState<string>("Paystack");
   const {
     register,
     handleSubmit,
@@ -33,6 +71,7 @@ const BookSession: React.FC<{}> = () => {
     control,
     watch,
     clearErrors,
+    getValues,
     formState: { errors },
   } = useForm<Isession>({
     resolver: zodResolver(sessionbookingSchema),
@@ -98,6 +137,7 @@ const BookSession: React.FC<{}> = () => {
                     control={control}
                     clearErrors={clearErrors}
                     setValue={setValue}
+                    getValues={getValues}
                   />
                 ) : currentPage === 2 ? (
                   <ChildDetails
@@ -107,6 +147,7 @@ const BookSession: React.FC<{}> = () => {
                     control={control}
                     clearErrors={clearErrors}
                     setValue={setValue}
+                    getValues={getValues}
                   />
                 ) : currentPage === 3 ? (
                   <Scheduling
@@ -116,6 +157,7 @@ const BookSession: React.FC<{}> = () => {
                     control={control}
                     clearErrors={clearErrors}
                     setValue={setValue}
+                    getValues={getValues}
                   />
                 ) : (
                   <Payment
@@ -125,15 +167,17 @@ const BookSession: React.FC<{}> = () => {
                     control={control}
                     clearErrors={clearErrors}
                     setValue={setValue}
+                    getValues={getValues}
+                    method={method}
+                    setmethod={setMethod}
                   />
                 )}
-                <Button
-                  onClick={handleNextPage}
-                  type="button"
-                  className="px-8 py-3 md:my-2 my-4 flex md:w-28 w-full md:justify-end float-right bg-lightGreen hover:bg-green-700"
-                >
-                  {currentPage < 3 ? "Proceed" : "Submit"}
-                </Button>
+                <ControlBtn
+                  currentPage={currentPage}
+                  handleNextPage={handleNextPage}
+                  method={method}
+                  sessionId={sessionId}
+                />
               </form>
             </div>
           </ScrollArea>

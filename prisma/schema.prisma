@@ -107,6 +107,7 @@ model Student {
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @default(now())
   Ratting            Ratting[]
+  AdminSectionView   AdminSectionView[]
 }
 
 // creating the school model
@@ -260,18 +261,19 @@ model Classes {
 // this is created by a teacher once and can be edited if need arises
 // there will be one to one relationship between the Teacher and this model
 model OneOnOneSection {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
-  teacher        Teacher          @relation(fields: [teacherId], references: [id])
-  teacherId      String           @unique @db.ObjectId
-  aboutTutor     String
-  subjects       Subjects[]       @default([ENGLISH, MATHEMATICS])
-  grade          Grade[]
-  preference     String[]         @default([])
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  teacher          Teacher            @relation(fields: [teacherId], references: [id])
+  teacherId        String             @unique @db.ObjectId
+  aboutTutor       String
+  subjects         Subjects[]         @default([ENGLISH, MATHEMATICS])
+  grade            Grade[]
+  preference       String[]           @default([])
   // this will contain the list of connection between the student that 
   // applied for one on one sections
-  AppliedSection AppliedSection[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @default(now())
+  AppliedSection   AppliedSection[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+  AdminSectionView AdminSectionView[]
 }
 
 // model below will contain information about students that applied for one on one sections
@@ -295,7 +297,34 @@ model AppliedSection {
   @@index([oneOnOneSectionId, studentId], name: "applied_section")
 }
 
-// 
+// the model below will be displayed in the admin dashbaord.
+// when a student finsih paying for one-on-one-section the information will created containing. 
+// most information about the student and the section profile of the teacher.
+model AdminSectionView {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  // the student info that applied for section
+  student           Student         @relation(fields: [studentId], references: [id])
+  studentId         String          @db.ObjectId
+  // the section profile of the teacher that was selected
+  sectionInfo       OneOnOneSection @relation(fields: [oneOnOneSectionId], references: [id])
+  oneOnOneSectionId String          @db.ObjectId
+  merged            Boolean         @default(false)
+  amt               Int
+  // for show section type, example homeworksupport and private section
+  sectionType       String
+  hoursperday       Int
+  // duration like monthly or yearly
+  duration          String
+  subject           String
+  curriculum        String
+  specialNeed       String?
+  learningGoal      String?
+  learningDays      String[]
+  // time to start or proposed time
+  startTime         DateTime
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @default(now())
+}
 
 // below is the model for get in touch
 // any one can send a message, irrespective if you are registered or not

@@ -149,10 +149,11 @@ const PayDetails: React.FC<{
   rating: number;
   setShowBooking: React.Dispatch<React.SetStateAction<boolean>>;
   showBooking: boolean;
-}> = ({ rating, setShowBooking, showBooking }) => {
+  sessionId: string;
+}> = ({ rating, setShowBooking, showBooking, sessionId }) => {
   return (
     <div className=" flex flex-2 flex-col items-center gap-4">
-      <BookSession />
+      <BookSession sessionId={sessionId} />
       <div className=" hidden  sm:flex text-[14px] gap-1 items-center font-bold">
         <p>Reviews</p>
         <IoIosStar className=" text-orange-500" />
@@ -188,6 +189,7 @@ const SingleSession: React.FC<{
         showBooking={showBooking}
         setShowBooking={setShowBooking}
         rating={item.teacher.rating}
+        sessionId={item.id}
       />
     </div>
   );
