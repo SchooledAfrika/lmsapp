@@ -22,10 +22,6 @@ const ChildDetails: React.FC<ISessionSub> = ({
   clearErrors,
   setValue,
 }) => {
- 
-
- 
-
   const Subject = [
     "CHEMISTRY",
     "PHYSICS",
@@ -39,7 +35,6 @@ const ChildDetails: React.FC<ISessionSub> = ({
 
   const Curriculum = ["MONTESSORI", "BRITISH", "NIGERIAN"];
 
-  
   return (
     <ScrollArea className="min-h-[500px] w-full ">
       <div className="">
@@ -57,20 +52,18 @@ const ChildDetails: React.FC<ISessionSub> = ({
 
         <div className="space-y-4 md:mb-0 mb-8 my-2">
           <div className="border md:ml-8  justify-between px-3 flex flex-col py-2  rounded-md ">
-            <p className="font-bold text-[14px] mb-1">Full Name</p>
-
+            <p className="font-bold text-[14px] mb-1">Child Id</p>
             <input
-              {...register("childName")}
+              {...register("childId")}
               type="text"
               className="py-3 px-6 text-black rounded-md border text-[13px] w-full "
               placeholder="Child Name"
             />
-            {errors.childName && (
-              <small className="text-red-600">{errors.childName.message}</small>
+            {errors.childId && (
+              <small className="text-red-600">{errors.childId.message}</small>
             )}
           </div>
           <div className="flex md:flex-row-reverse flex-col border md:ml-8  justify-between px-3  py-2  rounded-md gap-[10px]">
-           
             <Controller
               control={control}
               name="grade"
@@ -106,44 +99,11 @@ const ChildDetails: React.FC<ISessionSub> = ({
                 </Select>
               )}
             />
-          
+
             {errors.grade && (
               <small className="text-red-600">{errors.grade.message}</small>
-            )} 
-           
-          
-             
-            <Controller
-              control={control}
-              name="gender"
-              render={({ field }) => (
-                <Select
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    clearErrors("gender");
-                  }}
-                >
-                  <SelectTrigger className=" w-full py-6">
-                    <SelectValue placeholder="Gender" />
-                  </SelectTrigger>
-
-                  <SelectContent className=" font-subtext font-medium">
-                    <SelectGroup>
-                      <SelectItem value="Male">Male</SelectItem>
-                      <SelectItem value="Female">Female</SelectItem>
-                    </SelectGroup>
-                  </SelectContent>
-                </Select>
-              )}
-            />
-           
-            {errors.gender && (
-              <small className="text-red-600">{errors.gender.message}</small>
-            )} 
+            )}
           </div>
-
-         
-
           <div className="flex flex-col border md:ml-8  justify-between px-3  py-2  rounded-md gap-[10px]">
             <p className="font-bold text-[14px] mb-1">Select Subject</p>
 

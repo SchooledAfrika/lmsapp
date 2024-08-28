@@ -16,8 +16,7 @@ export const BookSessionInfo: IprogressType[] = [
   {
     name: "Child Details",
     field: [
-      "childName",
-      "gender",
+      "childId",
       "grade",
       "subject",
       "curriculum",
@@ -56,8 +55,7 @@ export const sessionbookingSchema = z.object({
   name: z.string().min(3, { message: "field is required" }),
   country: z.string().min(3, { message: "field is required" }),
   email: z.string().min(3, { message: "field is required" }),
-  childName: z.string().min(3, { message: "field is required" }),
-  gender: z.enum(["Male", "Female"], { message: "enter your gender" }),
+  childId: z.string().min(3, { message: "field is required" }),
   grade: z.enum(
     [
       "Grade1",

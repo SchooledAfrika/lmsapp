@@ -218,7 +218,7 @@ const Checkout: React.FC<Iclass & { enroll: () => void }> = ({
 };
 
 // component to make payment with paystack method
-const PayStackBtn: React.FC<{
+export const PayStackBtn: React.FC<{
   id: string;
   price: number;
   enroll: () => void;
@@ -258,7 +258,7 @@ const PayStackBtn: React.FC<{
   );
 };
 // component to make payment with flutterwave method
-const FlutterWaveBtn: React.FC<{
+export const FlutterWaveBtn: React.FC<{
   id: string;
   price: number;
   studentIDs: string[] | undefined;
