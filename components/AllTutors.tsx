@@ -4,13 +4,14 @@ import Image from "next/image";
 import { MdVerified } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import BookSession from "./BookSession";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { useInView } from "react-intersection-observer";
 import Container from "./Container";
 import { useConversion } from "@/data-access/conversion";
 import { IoIosStar } from "react-icons/io";
-import { Skeleton } from "@mui/material";
+import BookSession from "./BookSession";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export interface Iratter {
   comment: string;
@@ -267,6 +268,7 @@ const AllTutors = () => {
           <SingleSession key={index} item={item} />
         ))}
       </div>
+      <ToastContainer />
     </Container>
   );
 };

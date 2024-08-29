@@ -14,7 +14,7 @@ import {
 import { FaHourglassStart, FaHourglassEnd } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ISessionSub } from "./Details";
+import { ISessionSub } from "./ChildDetails";
 import { Controller } from "react-hook-form";
 
 import {

@@ -1,6 +1,4 @@
 import Image from "next/image";
-import { ISessionSub } from "./Details";
-import { Controller } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { useState } from "react";
@@ -13,15 +11,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  UseFormClearErrors,
+  UseFormRegister,
+  FieldErrors,
+  Control,
+  Controller,
+  UseFormWatch,
+  UseFormSetValue,
+  UseFormGetValues,
+} from "react-hook-form";
+import { Isession } from "@/components/BookSessionByParents";
+import { IoCaretDown } from "react-icons/io5";
+import { IoIosCheckmark } from "react-icons/io";
 
-const ChildDetails: React.FC<ISessionSub> = ({
-  register,
-  errors,
-  control,
-  watch,
-  clearErrors,
-  setValue,
-}) => {
+export interface ISessionSub {
+  register: UseFormRegister<Isession>;
+  errors: FieldErrors<Isession>;
+  control?: Control<Isession>;
+  clearErrors: UseFormClearErrors<Isession>;
+  watch: UseFormWatch<Isession>;
+  setValue: UseFormSetValue<Isession>;
+  getValues: UseFormGetValues<Isession>;
+  setmethod?: React.Dispatch<React.SetStateAction<string>>;
+  method?: string;
+}
+
+// component for selecting multiple subject
+export const MultipleSubject: React.FC<{
+  selectedSubject: string[];
+  handleSelectedSubject: (subject: string) => void;
+}> = ({ selectedSubject, handleSelectedSubject }) => {
+  const [expanded, setExpanded] = useState<boolean>(false);
+  // the available subjects
   const Subject = [
     "CHEMISTRY",
     "PHYSICS",
@@ -32,8 +54,88 @@ const ChildDetails: React.FC<ISessionSub> = ({
     "CRS",
     "MATHEMATICS",
   ];
+  const togleExpand = () => {
+    setExpanded((prev) => !prev);
+  };
+  return (
+    <div className=" w-full flex flex-col gap-2">
+      <div
+        onClick={togleExpand}
+        className=" cursor-pointer w-full flex items-center bg-white border border-slate-500 rounded-md pl-3 py-3"
+      >
+        <div className=" flex-12">
+          {selectedSubject.length === 0 ? (
+            <p>Subject</p>
+          ) : (
+            <div className=" flex w-full gap-1">
+              {selectedSubject.map((subject, index) => (
+                <div
+                  className=" px-2 py-1 rounded-md text-[10px] text-white bg-slate-500"
+                  key={index}
+                >
+                  <p>{subject}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+        <IoCaretDown className=" flex-1 text-[20px] text-green-600 " />
+      </div>
+      {expanded && (
+        <div className=" w-full bg-white px-3 py-3 flex flex-col h-[150px] overflow-y-auto gap-1">
+          {Subject.map((subject, index) => (
+            <div
+              onClick={() => handleSelectedSubject(subject)}
+              className=" flex items-center gap-1 cursor-pointer"
+              key={index}
+            >
+              <div
+                className={` w-[25px] aspect-square rounded-md flex items-center justify-center ${
+                  selectedSubject.includes(subject)
+                    ? "bg-green-800"
+                    : " bg-slate-500"
+                } `}
+              >
+                {selectedSubject.includes(subject) && (
+                  <IoIosCheckmark className=" text-[14px] text-white" />
+                )}
+              </div>
+              <p className=" text-[16px] font-semibold">{subject}</p>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
 
+const ChildDetails: React.FC<ISessionSub> = ({
+  register,
+  errors,
+  control,
+  watch,
+  clearErrors,
+  setValue,
+}) => {
+  const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
   const Curriculum = ["MONTESSORI", "BRITISH", "NIGERIAN"];
+  // function to set or remove the subject selected
+  const handleSelectSubject = (subject: string) => {
+    const aspectSubject = [...selectedSubject];
+    // check if the subject already exists
+    const isSubjectExisting = aspectSubject.includes(subject);
+    if (isSubjectExisting) {
+      const modifiedSubject = aspectSubject.filter((item) => item !== subject);
+      setSelectedSubject(modifiedSubject);
+      setValue("subject", modifiedSubject);
+      clearErrors("subject");
+    } else {
+      const modifiedSubject = [...aspectSubject, subject];
+      setSelectedSubject(modifiedSubject);
+      setValue("subject", modifiedSubject);
+    }
+  };
+  watch("subject");
 
   return (
     <ScrollArea className="min-h-[500px] w-full ">
@@ -55,6 +157,7 @@ const ChildDetails: React.FC<ISessionSub> = ({
             <p className="font-bold text-[14px] mb-1">Child Id</p>
             <input
               {...register("childId")}
+              onChange={() => clearErrors("childId")}
               type="text"
               className="py-3 px-6 text-black rounded-md border text-[13px] w-full "
               placeholder="Child Name"
@@ -63,7 +166,7 @@ const ChildDetails: React.FC<ISessionSub> = ({
               <small className="text-red-600">{errors.childId.message}</small>
             )}
           </div>
-          <div className="flex md:flex-row-reverse flex-col border md:ml-8  justify-between px-3  py-2  rounded-md gap-[10px]">
+          <div className="flex  flex-col border md:ml-8   px-3  py-2  rounded-md gap-1">
             <Controller
               control={control}
               name="grade"
@@ -104,43 +207,18 @@ const ChildDetails: React.FC<ISessionSub> = ({
               <small className="text-red-600">{errors.grade.message}</small>
             )}
           </div>
-          <div className="flex flex-col border md:ml-8  justify-between px-3  py-2  rounded-md gap-[10px]">
+          <div className="flex flex-col border md:ml-8  justify-between px-3  py-2  rounded-md gap-1">
             <p className="font-bold text-[14px] mb-1">Select Subject</p>
-
-            <Controller
-              control={control}
-              name="subject"
-              render={({ field }) => (
-                <Select
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                    clearErrors("subject");
-                  }}
-                >
-                  <SelectTrigger className=" w-full py-6">
-                    <SelectValue placeholder="Subject" />
-                  </SelectTrigger>
-
-                  <SelectContent className=" font-subtext font-medium">
-                    <ScrollArea className="h-[200px] w-full ">
-                      <SelectGroup>
-                        {Subject.map((item, index) => (
-                          <SelectItem key={index} value={item}>
-                            {item}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </ScrollArea>
-                  </SelectContent>
-                </Select>
-              )}
+            <MultipleSubject
+              selectedSubject={selectedSubject}
+              handleSelectedSubject={handleSelectSubject}
             />
             {errors.subject && (
               <small className="text-red-600">{errors.subject.message}</small>
             )}
           </div>
 
-          <div className="flex flex-col border md:ml-8  justify-between px-3  py-2  rounded-md gap-[10px]">
+          <div className="flex flex-col border md:ml-8  justify-between px-3  py-2  rounded-md gap-1">
             <p className="font-bold text-[14px] mb-1">Select Curriculum</p>
 
             <Controller

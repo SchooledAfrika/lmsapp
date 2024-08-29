@@ -10,10 +10,6 @@ export interface IprogressType {
 // progress info for booking session with teachers
 export const BookSessionInfo: IprogressType[] = [
   {
-    name: "Personal Details",
-    field: ["name", "country", "email"] as const,
-  },
-  {
     name: "Child Details",
     field: [
       "childId",
@@ -52,9 +48,6 @@ const ACCEPTED_IMAGE_TYPES = [
 // below is the zod schema for booking of session with teachers
 //
 export const sessionbookingSchema = z.object({
-  name: z.string().min(3, { message: "field is required" }),
-  country: z.string().min(3, { message: "field is required" }),
-  email: z.string().min(3, { message: "field is required" }),
   childId: z.string().min(3, { message: "field is required" }),
   grade: z.enum(
     [
@@ -81,7 +74,7 @@ export const sessionbookingSchema = z.object({
     price: z.number(),
     billingCycle: z.string().min(1),
   }),
-  subject: z.string().min(3, { message: "field is required" }),
+  subject: z.array(z.string(), { message: "select at least one subject" }),
   curriculum: z.string().min(3, { message: "field is required" }),
   specialNeeds: z.string().min(3, { message: "field is required" }),
   goals: z.string().min(3, { message: "field is required" }),
@@ -92,4 +85,36 @@ export const sessionbookingSchema = z.object({
   classStarts: z.date(),
   paystack: z.boolean({ message: "selection is required" }),
   flutterwave: z.boolean({ message: "selection is required" }),
+});
+
+// below is the schema for student that want to book a section
+export const StudentSessionSchema = z.object({
+  grade: z.enum(
+    [
+      "Grade1",
+      "Grade2",
+      "Grade3",
+      "Grade4",
+      "Grade5",
+      "Grade6",
+      "Grade7",
+      "Grade8",
+      "Grade9",
+      "Grade10",
+      "Grade11",
+      "Grade12",
+    ],
+    {
+      message: "you can only enter Grade1 format",
+    }
+  ),
+  subject: z.string().min(3, { message: "field is required" }),
+  curriculum: z.string().min(3, { message: "field is required" }),
+  specialNeeds: z.string().min(3, { message: "field is required" }),
+  goals: z.string().min(3, { message: "field is required" }),
+  days: z.array(z.string(), { message: "please select days" }),
+  times: z.string().min(3, { message: "field is required" }),
+  hours: z.string().optional(),
+  length: z.string().min(3, { message: "field is required" }),
+  classStarts: z.date(),
 });
