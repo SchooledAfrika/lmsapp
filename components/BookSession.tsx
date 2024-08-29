@@ -18,7 +18,7 @@ const BookSession: React.FC<{
   return (
     <div>
       {data?.user.role === "Student" ? (
-        <BookSessionByStudent />
+        <BookSessionByStudent sessionId={sessionId} />
       ) : data?.user.role === "Parents" ? (
         <BookSessionByParents sessionId={sessionId} />
       ) : (

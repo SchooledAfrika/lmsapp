@@ -16,6 +16,7 @@ import ChildDetails from "@/components/ui/book-teacher/ChildDetails";
 import { PaystackButton } from "react-paystack";
 import { closePaymentModal, FlutterWaveButton } from "flutterwave-react-v3";
 import { UseFormGetValues } from "react-hook-form";
+import { IstudentSession } from "./BookSessionByStudent";
 export type Isession = z.infer<typeof sessionbookingSchema>;
 
 // component for rendering btn for payment and next page
@@ -36,7 +37,7 @@ const ControlBtn: React.FC<{
 }) => {
   return (
     <div>
-      {currentPage <= 3 ? (
+      {currentPage <= 2 ? (
         <Button
           onClick={handleNextPage}
           type="button"
@@ -192,7 +193,7 @@ const BookSessionByParents: React.FC<{
         </div>
       </DialogTrigger>
 
-      <DialogContent className="sm:w-[900px] bg-stone-100 overflow-x-auto w-full font-subtext">
+      <DialogContent className="sm:w-4/5 bg-stone-100 overflow-x-auto w-full font-subtext">
         {completed ? (
           <div>
             <p>complted</p>

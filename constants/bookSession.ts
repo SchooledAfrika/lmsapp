@@ -34,17 +34,6 @@ export const BookSessionInfo: IprogressType[] = [
   { name: "Payment", field: ["paystack", "flutterwave"] as const },
 ];
 
-// the zod types for completing profile information
-//
-// below is the zod schema for parents that continues with their registration
-const MAX_FILE_SIZE = 5000000;
-const ACCEPTED_IMAGE_TYPES = [
-  "image/jpeg",
-  "image/jpg",
-  "image/png",
-  "image/webp",
-];
-
 // below is the zod schema for booking of session with teachers
 //
 export const sessionbookingSchema = z.object({
@@ -87,6 +76,26 @@ export const sessionbookingSchema = z.object({
   flutterwave: z.boolean({ message: "selection is required" }),
 });
 
+// progress info for booking session with teachers
+export const BookSessionStudentInfo: IprogressType[] = [
+  {
+    name: "Your Details",
+    field: ["grade", "subject", "curriculum", "specialNeeds", "goals"] as const,
+  },
+  {
+    name: "Scheduling",
+    field: [
+      "days",
+      "SessionTypes",
+      "hours",
+      "length",
+      "time",
+      "classStarts",
+    ] as const,
+  },
+  { name: "Payment", field: ["paystack", "flutterwave"] as const },
+];
+
 // below is the schema for student that want to book a section
 export const StudentSessionSchema = z.object({
   grade: z.enum(
@@ -108,10 +117,11 @@ export const StudentSessionSchema = z.object({
       message: "you can only enter Grade1 format",
     }
   ),
-  subject: z.string().min(3, { message: "field is required" }),
+  subject: z.array(z.string(), { message: "select at least one subject" }),
   curriculum: z.string().min(3, { message: "field is required" }),
   specialNeeds: z.string().min(3, { message: "field is required" }),
   goals: z.string().min(3, { message: "field is required" }),
+  sessionTypes: z.string().min(3, { message: "field is required" }),
   days: z.array(z.string(), { message: "please select days" }),
   times: z.string().min(3, { message: "field is required" }),
   hours: z.string().optional(),
