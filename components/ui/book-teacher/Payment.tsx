@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ISessionSub } from "./Details";
+import { ISessionSub } from "./ChildDetails";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import Link from "next/link";
 import Image from "next/image";
