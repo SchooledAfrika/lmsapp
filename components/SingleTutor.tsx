@@ -22,6 +22,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoClose } from "react-icons/io5";
 import ShareLink from "./Share";
+import { CircularProgress } from "@mui/material";
 
 // this is to show that item is not submitted yet
 const BeforeReviewSubmit: React.FC<{
@@ -332,6 +333,14 @@ const Rattings: React.FC<{
   );
 };
 
+export const FullPageLoading = () => {
+  return (
+    <div className=" w-full h-[calc(100vh-70px)] bg-slate-100 flex items-center justify-center">
+      <CircularProgress size={80} color="success" />
+    </div>
+  );
+};
+
 const SingleTutor = () => {
   const { id } = useParams();
   const { isLoading, data, isError, error } = useQuery({
@@ -345,7 +354,7 @@ const SingleTutor = () => {
     },
   });
   if (isLoading) {
-    return <p>loading...</p>;
+    return <FullPageLoading />;
   }
   const SingleData: ISessionShow = data;
   return (

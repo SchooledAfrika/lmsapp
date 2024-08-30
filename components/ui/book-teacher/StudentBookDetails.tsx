@@ -34,6 +34,10 @@ export interface ISessionStudentSub {
   method?: string;
   setTotalAmt?: React.Dispatch<React.SetStateAction<number | undefined>>;
   totalAmt?: number | undefined;
+  sessionId?: string;
+  tutorName?: string;
+  tutorImg?: string;
+  tutorLang?: string;
 }
 
 // component for selecting multiple subject
@@ -267,7 +271,7 @@ const StudentBookDetails: React.FC<ISessionStudentSub> = ({
               rows={6}
               cols={5}
               className="py-3 px-6 text-black rounded-md border text-[13px] w-full "
-              placeholder="I want my child to improve in his/her grade(s)."
+              placeholder="I want to improve in which area"
             />
             {errors.goals && (
               <small className="text-red-600">{errors.goals.message}</small>

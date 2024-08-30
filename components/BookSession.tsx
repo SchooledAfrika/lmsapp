@@ -6,7 +6,10 @@ import { toast } from "react-toastify";
 
 const BookSession: React.FC<{
   sessionId: string;
-}> = ({ sessionId }) => {
+  tutorName: string;
+  tutorImg: string;
+  tutorLang: string;
+}> = ({ sessionId, tutorImg, tutorLang, tutorName }) => {
   const { data, status } = useSession();
   //   function to return error message if the user is not logged in or not student or parents
   const handleShowError = () => {
@@ -18,9 +21,19 @@ const BookSession: React.FC<{
   return (
     <div>
       {data?.user.role === "Student" ? (
-        <BookSessionByStudent sessionId={sessionId} />
+        <BookSessionByStudent
+          sessionId={sessionId}
+          tutorImg={tutorImg}
+          tutorLang={tutorLang}
+          tutorName={tutorName}
+        />
       ) : data?.user.role === "Parents" ? (
-        <BookSessionByParents sessionId={sessionId} />
+        <BookSessionByParents
+          sessionId={sessionId}
+          tutorImg={tutorImg}
+          tutorLang={tutorLang}
+          tutorName={tutorName}
+        />
       ) : (
         <div
           onClick={handleShowError}

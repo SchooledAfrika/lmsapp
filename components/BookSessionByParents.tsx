@@ -140,7 +140,10 @@ export const FlutterWaveBtn: React.FC<{
 // then main component appears here
 const BookSessionByParents: React.FC<{
   sessionId: string;
-}> = ({ sessionId }) => {
+  tutorName: string;
+  tutorImg: string;
+  tutorLang: string;
+}> = ({ sessionId, tutorImg, tutorLang, tutorName }) => {
   const { data: session, update } = useSession();
   // console.log(session?.user);
   const router = useRouter();
@@ -240,6 +243,9 @@ const BookSessionByParents: React.FC<{
                       getValues={getValues}
                       method={method}
                       setmethod={setMethod}
+                      tutorName={tutorName}
+                      tutorImg={tutorImg}
+                      tutorLang={tutorLang}
                     />
                   )}
                   <ControlBtn

@@ -35,6 +35,9 @@ export interface ISessionSub {
   getValues: UseFormGetValues<Isession>;
   setmethod?: React.Dispatch<React.SetStateAction<string>>;
   method?: string;
+  tutorName?: string;
+  tutorImg?: string;
+  tutorLang?: string;
 }
 
 // component for selecting multiple subject

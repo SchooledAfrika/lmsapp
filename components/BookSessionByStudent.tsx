@@ -55,9 +55,12 @@ const ControlBtn: React.FC<{
     </div>
   );
 };
-const BookSessionByStudent: React.FC<{ sessionId: string }> = ({
-  sessionId,
-}) => {
+const BookSessionByStudent: React.FC<{
+  sessionId: string;
+  tutorName: string;
+  tutorImg: string;
+  tutorLang: string;
+}> = ({ sessionId, tutorImg, tutorLang, tutorName }) => {
   const [completed, setCompleted] = useState<boolean>(false);
   const [currentPage, setcurrentPage] = useState<number>(1);
   const [method, setMethod] = useState<string>("Paystack");
@@ -144,6 +147,10 @@ const BookSessionByStudent: React.FC<{ sessionId: string }> = ({
                       getValues={getValues}
                       method={method}
                       setmethod={setMethod}
+                      totalAmt={totalAmt}
+                      tutorImg={tutorImg}
+                      tutorName={tutorName}
+                      tutorLang={tutorLang}
                     />
                   )}
                   <ControlBtn
