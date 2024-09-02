@@ -75,8 +75,8 @@ const Payment: React.FC<ISessionSub> = ({
                 )}
                 <div className=" flex items-center gap-1">
                   <p>Subjects:</p>
-                  {getValues("subject").map((items) => (
-                    <p>{items}</p>
+                  {getValues("subject").map((items, index) => (
+                    <p key={index}>{items}</p>
                   ))}
                 </div>
                 <p>Tutor&apos;s Language: {tutorLang}</p>
