@@ -14,6 +14,11 @@ const Payment: React.FC<ISessionSub> = ({
   setValue,
   method,
   setmethod,
+  getValues,
+  totalAmt,
+  tutorImg,
+  tutorLang,
+  tutorName,
 }) => {
   return (
     <ScrollArea className="h-[500px] w-full ">
@@ -64,39 +69,42 @@ const Payment: React.FC<ISessionSub> = ({
             <h3 className="font-semibold pb-3 text-[14px]">Summary</h3>
             <div className="flex text-[12.5px] justify-between">
               <div className="flex flex-col space-y-4">
-                <p>1 on 1 Session count: 1 Session(s)</p>
-                <p>Duration: 45 Minutes/per session</p>
-                <p>Subject: Mathematics</p>
-                <p>Tutor&apos;s Language: English</p>
+                <p>1 on 1 Session type: {getValues("sessionTypes")}</p>
+                {getValues("sessionTypes") === "Private Session" && (
+                  <p>Duration: {getValues("hours")}hour/per session</p>
+                )}
+                <div className=" flex items-center gap-1">
+                  <p>Subjects:</p>
+                  {getValues("subject").map((items) => (
+                    <p>{items}</p>
+                  ))}
+                </div>
+                <p>Tutor&apos;s Language: {tutorLang}</p>
               </div>
               <p className="text-lightGreen text-[13px] font-semibold">
-                $10.00
+                {totalAmt?.toFixed(2)}
               </p>
             </div>
 
             <div className="flex py-3 space-x-3 items-center">
               <Image
-                src="/tutors.jpg"
+                src={tutorImg!}
                 alt=""
                 width={100}
                 height={100}
                 className="w-[40px] h-[40px] rounded-md"
               />
               <h3 className="inline  font-bold text-[12px]">
-                David Olushola{" "}
+                {tutorName!}{" "}
                 <MdVerified className="inline text-lightGreen text-[15px]  md:mr-8" />{" "}
               </h3>
-              <Link
-                href=""
-                className="text-[12px]  text-lightGreen font-semibold underline"
-              >
-                View Class Schedule
-              </Link>
             </div>
             <hr className="text-slate-600" />
             <div className="flex justify-between mt-3 font-semibold">
               <p className="text-[17px] font-bold">Total</p>
-              <p className="text-[15px] text-lightGreen">$10.00</p>
+              <p className="text-[15px] text-lightGreen">
+                ${totalAmt?.toFixed(2)}
+              </p>
             </div>
           </div>
         </div>

@@ -24,6 +24,8 @@ import {
 import { Isession } from "@/components/BookSessionByParents";
 import { IoCaretDown } from "react-icons/io5";
 import { IoIosCheckmark } from "react-icons/io";
+import { AllNeeds, AllSubject, MultipleSelect } from "./StudentBookDetails";
+import { toast } from "react-toastify";
 
 export interface ISessionSub {
   register: UseFormRegister<Isession>;
@@ -34,83 +36,13 @@ export interface ISessionSub {
   setValue: UseFormSetValue<Isession>;
   getValues: UseFormGetValues<Isession>;
   setmethod?: React.Dispatch<React.SetStateAction<string>>;
+  setTotalAmt?: React.Dispatch<React.SetStateAction<number | undefined>>;
+  totalAmt?: number | undefined;
   method?: string;
   tutorName?: string;
   tutorImg?: string;
   tutorLang?: string;
 }
-
-// component for selecting multiple subject
-export const MultipleSubject: React.FC<{
-  selectedSubject: string[];
-  handleSelectedSubject: (subject: string) => void;
-}> = ({ selectedSubject, handleSelectedSubject }) => {
-  const [expanded, setExpanded] = useState<boolean>(false);
-  // the available subjects
-  const Subject = [
-    "CHEMISTRY",
-    "PHYSICS",
-    "BIOLOGY",
-    "GOVERNMENT",
-    "ENGLISH",
-    "LITERATURE",
-    "CRS",
-    "MATHEMATICS",
-  ];
-  const togleExpand = () => {
-    setExpanded((prev) => !prev);
-  };
-  return (
-    <div className=" w-full flex flex-col gap-2">
-      <div
-        onClick={togleExpand}
-        className=" cursor-pointer w-full flex items-center bg-white border border-slate-500 rounded-md pl-3 py-3"
-      >
-        <div className=" flex-12">
-          {selectedSubject.length === 0 ? (
-            <p>Subject</p>
-          ) : (
-            <div className=" flex w-full gap-1">
-              {selectedSubject.map((subject, index) => (
-                <div
-                  className=" px-2 py-1 rounded-md text-[10px] text-white bg-slate-500"
-                  key={index}
-                >
-                  <p>{subject}</p>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-        <IoCaretDown className=" flex-1 text-[20px] text-green-600 " />
-      </div>
-      {expanded && (
-        <div className=" w-full bg-white px-3 py-3 flex flex-col h-[150px] overflow-y-auto gap-1">
-          {Subject.map((subject, index) => (
-            <div
-              onClick={() => handleSelectedSubject(subject)}
-              className=" flex items-center gap-1 cursor-pointer"
-              key={index}
-            >
-              <div
-                className={` w-[25px] aspect-square rounded-md flex items-center justify-center ${
-                  selectedSubject.includes(subject)
-                    ? "bg-green-800"
-                    : " bg-slate-500"
-                } `}
-              >
-                {selectedSubject.includes(subject) && (
-                  <IoIosCheckmark className=" text-[14px] text-white" />
-                )}
-              </div>
-              <p className=" text-[16px] font-semibold">{subject}</p>
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-};
 
 const ChildDetails: React.FC<ISessionSub> = ({
   register,
@@ -121,7 +53,8 @@ const ChildDetails: React.FC<ISessionSub> = ({
   setValue,
 }) => {
   const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
-  const Curriculum = ["MONTESSORI", "BRITISH", "NIGERIAN"];
+  const [selectedDisability, setselectedDisability] = useState<string[]>([]);
+  const Curriculum = ["Nigerian", "Canadian", "American", "British"];
   // function to set or remove the subject selected
   const handleSelectSubject = (subject: string) => {
     const aspectSubject = [...selectedSubject];
@@ -133,12 +66,34 @@ const ChildDetails: React.FC<ISessionSub> = ({
       setValue("subject", modifiedSubject);
       clearErrors("subject");
     } else {
+      if (aspectSubject.length === 3) {
+        return toast.error("maximum of 3 subjects is allowed");
+      }
       const modifiedSubject = [...aspectSubject, subject];
       setSelectedSubject(modifiedSubject);
       setValue("subject", modifiedSubject);
     }
   };
+  // function to set or remove the disability selected
+  const handleSelectdisability = (disability: string) => {
+    const aspectDisability = [...selectedDisability];
+    // check if the subject already exists
+    const isDisabilityExisting = aspectDisability.includes(disability);
+    if (isDisabilityExisting) {
+      const modifiedSubject = aspectDisability.filter(
+        (item) => item !== disability
+      );
+      setselectedDisability(modifiedSubject);
+      setValue("specialNeeds", modifiedSubject);
+      clearErrors("specialNeeds");
+    } else {
+      const modifiedDisability = [...aspectDisability, disability];
+      setselectedDisability(modifiedDisability);
+      setValue("specialNeeds", modifiedDisability);
+    }
+  };
   watch("subject");
+  watch("specialNeeds");
 
   return (
     <ScrollArea className="min-h-[500px] w-full ">
@@ -212,9 +167,11 @@ const ChildDetails: React.FC<ISessionSub> = ({
           </div>
           <div className="flex flex-col border md:ml-8  justify-between px-3  py-2  rounded-md gap-1">
             <p className="font-bold text-[14px] mb-1">Select Subject</p>
-            <MultipleSubject
-              selectedSubject={selectedSubject}
-              handleSelectedSubject={handleSelectSubject}
+            <MultipleSelect
+              selectedItem={selectedSubject}
+              handleSelectedItem={handleSelectSubject}
+              itemList={AllSubject}
+              placeholder="Subject"
             />
             {errors.subject && (
               <small className="text-red-600">{errors.subject.message}</small>
@@ -259,14 +216,11 @@ const ChildDetails: React.FC<ISessionSub> = ({
 
           <div className="border md:ml-8  justify-between px-3 flex flex-col py-2  rounded-md ">
             <p className="font-bold text-[14px] mb-1">Special Needs</p>
-
-            <textarea
-              {...register("specialNeeds")}
-              onChange={() => clearErrors("specialNeeds")}
-              rows={6}
-              cols={5}
-              className="py-3 px-6 text-black rounded-md border text-[13px] w-full "
-              placeholder="Dyscalculia, Down syndrome, Autistic disorder, Cerebral plalsy etc."
+            <MultipleSelect
+              selectedItem={selectedDisability}
+              handleSelectedItem={handleSelectdisability}
+              itemList={AllNeeds}
+              placeholder="Special needs"
             />
             {errors.specialNeeds && (
               <small className="text-red-600">

@@ -41,55 +41,32 @@ const Scheduling: React.FC<ISessionSub> = ({
   watch,
   clearErrors,
   setValue,
+  setTotalAmt,
+  totalAmt,
 }) => {
-  const SessionTypes: SessionTypes[] = [
-    {
-      id: 1,
-      sessionName: "Homework Support",
-      price: 240,
-      billingCycle: "yearly",
-    },
-    {
-      id: 2,
-      sessionName: "Private Session",
-      price: 72,
-      billingCycle: "yearly",
-    },
-  ];
+  const SessionTypes: string[] = ["Homework Support", "Private Session"];
 
   const [days, setDays] = React.useState<string[]>([]);
-  const [sessionTypes, setSessionTypes] = React.useState<SessionTypes>();
+  const [sessionTypes, setSessionTypes] = React.useState<string>("");
   const [hours, setHours] = React.useState<number>(1);
   const [length, setLength] = React.useState<"monthly" | "yearly">("monthly");
-
-  // Calculate the monthly price of the selected item
-  const calculateMonthlyPrice = (): number => {
-    if (!sessionTypes) return 0;
-
-    let pricePerMonth = sessionTypes.price;
-
-    // Convert yearly price to monthly if necessary
-    if (sessionTypes.billingCycle === "yearly" && length === "monthly") {
-      pricePerMonth = sessionTypes.price / 12;
-    }
-
-    return pricePerMonth * hours;
-  };
-
   // Handle session selection
   const handleSessionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const sessionTypeId = Number(event.target.value);
-    const sessionType = SessionTypes.find((s) => s.id === sessionTypeId);
+    const sessionType = event.target.value;
     setSessionTypes(sessionType);
-    if (!sessionType) return;
     setValue("sessionTypes", sessionType);
-    setHours(1); // Reset hours when changing session
+    // here we set the initial price based on the type of session selected
+    if (sessionType == "Private Session") {
+      setTotalAmt && setTotalAmt(6);
+    } else {
+      setTotalAmt && setTotalAmt(12);
+    }
   };
 
   // Handle hours change
   const handleHoursChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newHour = Number(event.target.valueAsNumber);
-    setHours(newHour);
+    setTotalAmt && setTotalAmt((prev) => prev! * newHour);
   };
 
   // Handle billing period change
@@ -97,7 +74,11 @@ const Scheduling: React.FC<ISessionSub> = ({
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const newBillingPeriod = event.target.value as "monthly" | "yearly";
-    setLength(newBillingPeriod);
+    if (newBillingPeriod === "monthly") {
+      setTotalAmt && setTotalAmt((prev) => prev! * 1);
+    } else {
+      setTotalAmt && setTotalAmt((prev) => prev! * 12);
+    }
   };
   const Days = [
     "MONDAY",
@@ -134,7 +115,7 @@ const Scheduling: React.FC<ISessionSub> = ({
       <div className="flex space-x-32 md:justify-between">
         <h3 className="text-xl font-bold">Book Session</h3>
       </div>
-      <div className="min-h-[500px] md:w-full flex flex-col gap-1">
+      <ScrollArea className="min-h-[500px] md:w-full ">
         <div className="flex  mt-2 mb-6  flex-col gap-3">
           <p className=" font-semibold text-lightGreen">Scheduling</p>
           <p className="text-[14px] font-semibold">Confirm Class Schedule</p>
@@ -178,14 +159,13 @@ const Scheduling: React.FC<ISessionSub> = ({
                 name="sessionTypes"
                 className="p-3 w-full font-medium rounded-md text-[14px]"
                 onChange={handleSessionChange}
-                value={sessionTypes?.id || ""}
               >
                 <option value="" selected disabled>
                   Select a Session
                 </option>
-                {SessionTypes.map((sessionType) => (
-                  <option key={sessionType.id} value={sessionType.id}>
-                    {sessionType.sessionName}
+                {SessionTypes.map((sessionType, index) => (
+                  <option key={index} value={sessionType}>
+                    {sessionType}
                   </option>
                 ))}
               </select>
@@ -198,21 +178,23 @@ const Scheduling: React.FC<ISessionSub> = ({
             </div>
 
             {/* Hours input */}
-            <div className=" flex flex-col gap-1">
-              <div className=" bg-white w-full text-[14px] py-[10px] items-center px-2 rounded-sm flex gap-2">
-                <label>Hours per day:</label>
-                <input
-                  {...register("hours")}
-                  name="hours"
-                  type="number"
-                  onChange={handleHoursChange}
-                  className=" border"
-                />
+            {sessionTypes === "Private Session" && (
+              <div className=" flex flex-col gap-1">
+                <div className=" bg-white w-full text-[14px] py-[10px] items-center px-2 rounded-sm flex gap-2">
+                  <label>Hours per day:</label>
+                  <input
+                    {...register("hours")}
+                    name="hours"
+                    type="number"
+                    onChange={handleHoursChange}
+                    className=" border"
+                  />
+                </div>
+                {errors.hours && (
+                  <small className="text-red-600">{errors.hours.message}</small>
+                )}
               </div>
-              {errors.hours && (
-                <small className="text-red-600">{errors.hours.message}</small>
-              )}
-            </div>
+            )}
 
             {/* Billing period selection */}
             <div className="bg-white flex flex-col gap-1  rounded-md text-[14px] font-medium  pl-3 ">
@@ -333,11 +315,11 @@ const Scheduling: React.FC<ISessionSub> = ({
           <h2>
             Total Price:{" "}
             <span className="font-bold text-[18px]">
-              ${calculateMonthlyPrice().toFixed(2)}
+              ${totalAmt && totalAmt}
             </span>{" "}
           </h2>
         </div>
-      </div>
+      </ScrollArea>
     </div>
   );
 };

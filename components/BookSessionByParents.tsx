@@ -147,12 +147,10 @@ const BookSessionByParents: React.FC<{
   const { data: session, update } = useSession();
   // console.log(session?.user);
   const router = useRouter();
+  const [completed, setCompleted] = useState<boolean>(false);
   const [currentPage, setcurrentPage] = useState<number>(1);
   const [method, setMethod] = useState<string>("Paystack");
-  const [completed, setCompleted] = useState<boolean>(false);
-  const [totalDay, setTotalDay] = useState<string[]>([]);
-  const [hrPerDay, setHourPerDay] = useState<number>(1);
-  const [billPeriod, setBillPeriod] = useState<string>();
+  const [totalAmt, setTotalAmt] = useState<number | undefined>(undefined);
 
   const {
     register,
@@ -181,11 +179,6 @@ const BookSessionByParents: React.FC<{
     } else {
       setcurrentPage((prev) => prev + 1);
     }
-  };
-  // here we calculate the total the user will pay
-  const totalPayment = () => {
-    const billPeriod = getValues("sessionTypes.billingCycle");
-    const totalDaysSelected = totalDay.length;
   };
 
   return (
@@ -231,6 +224,8 @@ const BookSessionByParents: React.FC<{
                       clearErrors={clearErrors}
                       setValue={setValue}
                       getValues={getValues}
+                      setTotalAmt={setTotalAmt}
+                      totalAmt={totalAmt}
                     />
                   ) : (
                     <Payment
@@ -242,6 +237,7 @@ const BookSessionByParents: React.FC<{
                       setValue={setValue}
                       getValues={getValues}
                       method={method}
+                      totalAmt={totalAmt}
                       setmethod={setMethod}
                       tutorName={tutorName}
                       tutorImg={tutorImg}

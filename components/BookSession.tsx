@@ -21,19 +21,23 @@ const BookSession: React.FC<{
   return (
     <div>
       {data?.user.role === "Student" ? (
-        <BookSessionByStudent
-          sessionId={sessionId}
-          tutorImg={tutorImg}
-          tutorLang={tutorLang}
-          tutorName={tutorName}
-        />
+        <div className=" z-10">
+          <BookSessionByStudent
+            sessionId={sessionId}
+            tutorImg={tutorImg}
+            tutorLang={tutorLang}
+            tutorName={tutorName}
+          />
+        </div>
       ) : data?.user.role === "Parents" ? (
-        <BookSessionByParents
-          sessionId={sessionId}
-          tutorImg={tutorImg}
-          tutorLang={tutorLang}
-          tutorName={tutorName}
-        />
+        <div className=" z-10">
+          <BookSessionByParents
+            sessionId={sessionId}
+            tutorImg={tutorImg}
+            tutorLang={tutorLang}
+            tutorName={tutorName}
+          />
+        </div>
       ) : (
         <div
           onClick={handleShowError}
