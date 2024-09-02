@@ -21,7 +21,7 @@ const Payment: React.FC<ISessionSub> = ({
   tutorName,
 }) => {
   return (
-    <ScrollArea className="h-[500px] w-full ">
+    <div className=" w-full ">
       <div className="">
         <div className="flex justify-between">
           <h3 className="text-xl ml-3 font-bold">Book Session</h3>
@@ -65,7 +65,7 @@ const Payment: React.FC<ISessionSub> = ({
               </div>
             ))}
           </div>
-          <div className="bg-white rounded-md ml-3  mb-12 pt-3 pb-6 px-6">
+          <div className="bg-white rounded-md ml-3  pt-3 pb-6 px-6">
             <h3 className="font-semibold pb-3 text-[14px]">Summary</h3>
             <div className="flex text-[12.5px] justify-between">
               <div className="flex flex-col space-y-4">
@@ -109,7 +109,7 @@ const Payment: React.FC<ISessionSub> = ({
           </div>
         </div>
       </div>
-    </ScrollArea>
+    </div>
   );
 };
 

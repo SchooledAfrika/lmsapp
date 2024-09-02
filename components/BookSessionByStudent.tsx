@@ -14,8 +14,33 @@ import StudentBookSchedule from "./ui/book-teacher/StudentBookSchedule";
 import PaymentByStudentSession from "./ui/book-teacher/PaymentByStudentSession";
 import { Button } from "./ui/button";
 import { FlutterWaveBtn, PayStackBtn } from "./BookSessionByParents";
+import Image from "next/image";
 
 export type IstudentSession = z.infer<typeof StudentSessionSchema>;
+
+// dialog for successful payment in the book session
+export const SuccessfulPayment: React.FC<{
+  onClick?: React.MouseEventHandler<HTMLDivElement>;
+}> = ({ onClick }) => {
+  return (
+    <div
+      onClick={onClick}
+      className=" md:w-2/4  py-5 flex flex-col gap-2 items-center rounded-lg justify-center bg-white text-black"
+    >
+      <Image
+        src="/success.jpg"
+        alt="successful"
+        width={200}
+        height={200}
+        className=" w-[200px] h-[200px]"
+        priority
+      />
+      <p className=" text-green-800 font-bold md:text-[20px]">
+        Payment successful, you will be merged with the teacher!!!
+      </p>
+    </div>
+  );
+};
 
 // component for rendering btn for payment and next page
 const ControlBtn: React.FC<{
@@ -62,7 +87,8 @@ const BookSessionByStudent: React.FC<{
   tutorName: string;
   tutorImg: string;
   tutorLang: string;
-}> = ({ sessionId, tutorImg, tutorLang, tutorName }) => {
+  setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ sessionId, tutorImg, tutorLang, tutorName, setShowDialog }) => {
   const [completed, setCompleted] = useState<boolean>(false);
   const [currentPage, setcurrentPage] = useState<number>(1);
   const [method, setMethod] = useState<string>("Paystack");
@@ -94,20 +120,19 @@ const BookSessionByStudent: React.FC<{
     }
   };
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <div className=" text-white w-full  bg-green-700 rounded-md px-4 py-4 sm:py-4 text-[14px] flex items-center justify-center cursor-pointer">
-          Book Session
-        </div>
-      </DialogTrigger>
-      <DialogContent className="sm:w-4/5 bg-stone-100 overflow-x-auto w-full font-subtext">
+    <div
+      onClick={() => setShowDialog(false)}
+      className=" fixed top-0 left-0 bottom-0 bg-[rgba(0,0,0,0.6)] backdrop-blur-md z-50 h-screen w-full  flex items-center justify-center  "
+    >
+      <div className=" font-subtext w-full flex items-center justify-center">
         {completed ? (
-          <div>
-            <p>complted</p>
-          </div>
+          <SuccessfulPayment onClick={(e) => e.stopPropagation()} />
         ) : (
-          <div className="  font-header py-4">
-            <ScrollArea className="md:h-[500px] h-[500px]  w-full ">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className=" sm:w-4/5 bg-stone-100 overflow-x-auto w-full  font-header py-4"
+          >
+            <ScrollArea className="md:h-[500px] h-[500px] pr-3   w-full ">
               <div className=" flex  flex-col md:flex-row gap-3  md:gap-16">
                 <ProgressLine
                   formArrays={BookSessionStudentInfo}
@@ -168,8 +193,8 @@ const BookSessionByStudent: React.FC<{
             </ScrollArea>
           </div>
         )}
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
 

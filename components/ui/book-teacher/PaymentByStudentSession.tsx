@@ -21,7 +21,7 @@ const PaymentByStudentSession: React.FC<ISessionStudentSub> = ({
   tutorName,
 }) => {
   return (
-    <ScrollArea className="h-[500px] w-full ">
+    <div className=" w-full ">
       <div className="">
         <div className="flex justify-between">
           <h3 className="text-xl ml-3 font-bold">Book Session</h3>
@@ -36,7 +36,7 @@ const PaymentByStudentSession: React.FC<ISessionStudentSub> = ({
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-1 gap-3">
-          <div className="gap-4 md:mb-0 w-full flex flex-col mb-8">
+          <div className="gap-4 md:mb-0 w-full flex flex-col">
             {paymentMethods.map((item, index) => (
               <div
                 onClick={() => setmethod && setmethod(item.title)}
@@ -65,7 +65,7 @@ const PaymentByStudentSession: React.FC<ISessionStudentSub> = ({
               </div>
             ))}
           </div>
-          <div className="bg-white rounded-md ml-3  mb-12 pt-3 pb-6 px-6">
+          <div className="bg-white rounded-md ml-3 mb-2 pt-3 pb-6 px-6">
             <h3 className="font-semibold pb-3 text-[14px]">Summary</h3>
             <div className="flex text-[12.5px] justify-between">
               <div className="flex flex-col space-y-4">
@@ -109,7 +109,7 @@ const PaymentByStudentSession: React.FC<ISessionStudentSub> = ({
           </div>
         </div>
       </div>
-    </ScrollArea>
+    </div>
   );
 };
 

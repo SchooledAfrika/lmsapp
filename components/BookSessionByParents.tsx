@@ -16,7 +16,7 @@ import ChildDetails from "@/components/ui/book-teacher/ChildDetails";
 import { PaystackButton } from "react-paystack";
 import { closePaymentModal, FlutterWaveButton } from "flutterwave-react-v3";
 import { UseFormGetValues } from "react-hook-form";
-import { IstudentSession } from "./BookSessionByStudent";
+import { IstudentSession, SuccessfulPayment } from "./BookSessionByStudent";
 export type Isession = z.infer<typeof sessionbookingSchema>;
 
 // component for rendering btn for payment and next page
@@ -72,9 +72,7 @@ export const PayStackBtn: React.FC<{
     publicKey: process.env.NEXT_PUBLIC_PAYSTACKPUBKEY!,
     text: "Pay now",
     onSuccess: (reference: any) => {
-      setTimeout(() => {
-        enroll();
-      }, 5500);
+      enroll();
     },
     metadata: {
       custom_fields: [
@@ -117,7 +115,10 @@ export const FlutterWaveBtn: React.FC<{
       description: "payment for  enrollment",
       logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
     },
-    onSuccess: () => {},
+    onSuccess: () => {
+      alert("true oooo");
+      enroll();
+    },
   };
   const fwConfig = {
     ...config,
@@ -143,7 +144,8 @@ const BookSessionByParents: React.FC<{
   tutorName: string;
   tutorImg: string;
   tutorLang: string;
-}> = ({ sessionId, tutorImg, tutorLang, tutorName }) => {
+  setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ sessionId, tutorImg, tutorLang, tutorName, setShowDialog }) => {
   const { data: session, update } = useSession();
   // console.log(session?.user);
   const router = useRouter();
@@ -182,21 +184,19 @@ const BookSessionByParents: React.FC<{
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-        <div className=" text-white w-full  bg-green-700 rounded-md px-4 py-4 sm:py-4 text-[14px] flex items-center justify-center cursor-pointer">
-          Book Session
-        </div>
-      </DialogTrigger>
-
-      <DialogContent className="sm:w-4/5 bg-stone-100 overflow-x-auto w-full font-subtext">
+    <div
+      onClick={() => setShowDialog(false)}
+      className=" fixed top-0 left-0 bottom-0 bg-[rgba(0,0,0,0.6)] backdrop-blur-md z-50 h-screen w-full  flex items-center justify-center  "
+    >
+      <div className="font-subtext w-full flex items-center justify-center">
         {completed ? (
-          <div>
-            <p>complted</p>
-          </div>
+          <SuccessfulPayment onClick={(e) => e.preventDefault()} />
         ) : (
-          <div className="  font-header py-4">
-            <ScrollArea className="md:h-[500px] h-[500px]  w-full ">
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="sm:w-4/5 bg-stone-100 overflow-x-auto w-full  font-header py-4"
+          >
+            <ScrollArea className="md:h-[500px] h-[500px] pr-3  w-full ">
               <div className=" flex  flex-col md:flex-row gap-3  md:gap-16">
                 <ProgressLine
                   formArrays={BookSessionInfo}
@@ -257,8 +257,8 @@ const BookSessionByParents: React.FC<{
             </ScrollArea>
           </div>
         )}
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
 
