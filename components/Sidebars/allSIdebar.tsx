@@ -132,7 +132,7 @@ export const AdminSideBarComponent = ({ findpath }: Isidebar) => {
           key={index}
         >
           <div className="text-[20px]">{item.icon && <item.icon />}</div>
-          <p className="text-[16px]">{item.name}</p>
+          <p className="text-[15px]">{item.name}</p>
         </Link>
       ))}
     </div>

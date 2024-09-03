@@ -92,6 +92,16 @@ export function SingleParent() {
                   </p>
                   <p className="text-[14px] font-semibold">2</p>
                 </div>
+                <div className=" flex space-x-12">
+                  <p className="text-[13px] font-medium">Active Plan</p>
+                  <p className="text-[14px] font-semibold">Diamond</p>
+                </div>
+                <div className=" flex space-x-12">
+                  <p className="text-[13px] font-medium">
+                  Plan expires on
+                  </p>
+                  <p className="text-[14px] font-semibold">2nd May 2025</p>
+                </div>
                 {/* <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">
                     Total Courses Taught

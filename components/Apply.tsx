@@ -36,10 +36,10 @@ const ApplyCard = ({ title, result }: Props) => {
 const Apply = () => {
   return (
     <div className="font-subtext bg-stone-100">
-      <div className=" bg-black md:h-[80%] h-full">
-        <div className="relative  h-full  text-white">
+      <div className=" bg-black md:h-[50%] h-full">
+        <div className="relative  h-full text-white">
           <Image
-            className="w-full h-full  z-0 opacity-40   object-cover"
+            className="w-full md:h-[600px]  z-0 opacity-40   object-cover"
             src={"/apply_bg.jpg"}
             alt="background"
             width={200}
@@ -62,7 +62,7 @@ const Apply = () => {
               asChild
               className="hidden bg-lightGreen rounded-lg hover:bg-green-500 text-white text-base mt-3 px-3 w-32  py-2 text-center lg:block"
             >
-              <Link href="/register">Get Started</Link>
+              <Link href="/vacancies">Apply Now</Link>
             </Button>
           </div>
         </div>
@@ -77,20 +77,20 @@ const Apply = () => {
       </div>
 
       <Container>
-        <section className="grid font-subtext  grid-cols-1 sm:px-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 items-center xl:grid-cols-3 gap-6 mt-10">
+        <section className="grid font-header  grid-cols-1 sm:px-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 items-center xl:grid-cols-3 gap-6 mt-10">
           <div className="text-center">
             <Image
               alt=""
-              src={"/apply-1.png"}
-              width={50}
-              height={50}
-              className="w-1/5 mx-auto"
+              src={"/apply-teach.svg"}
+              width={100}
+              height={100}
+              className="w-1/3 mx-auto"
             />
-            <h3 className="text-lg md:text-xl sm:text-xl my-4 font-semibold">
+            <h3 className="text-base md:text-lg sm:text-xl my-4 font-semibold">
               Teach Your Way
             </h3>
 
-            <p className="my-4 text-base">
+            <p className="my-4 text-[14.5px] font-medium">
             Work at your time and pace. You can work anytime and anywhere, fix
             your target teaching hours per day and work from your comfort zone.
 
@@ -99,33 +99,33 @@ const Apply = () => {
           <div className="text-center">
             <Image
               alt=""
-              src={"/apply-2.png"}
-              width={50}
-              height={50}
+              src={"/apply-reward.svg"}
+              width={100}
+              height={100}
               className="w-1/3 mx-auto"
             />
-            <h3 className="md:text-xl text-lg my-4 sm:text-xl font-semibold">
+            <h3 className="md:text-lg text-base my-4 sm:text-xl font-semibold">
               Get Rewarded
             </h3>
 
-            <p className="my-4 text-base">
-            Earn in six figures. Your earnings can be better. Get good pay as a
+            <p className="my-4 text-[14.5px] font-medium">
+            Earn in six figures. Your earnings can be better. With a flexible system of teaching that best suits you, get good pay as a
             teacher.
             </p>
           </div>
           <div className="text-center">
             <Image
-              src={"/apply-3.png"}
-              width={50}
-              height={50}
+              src={"/apply-support.svg"}
+              width={100}
+              height={100}
               alt=""
-              className="w-1/5 mx-auto"
+              className="w-1/3 mx-auto"
             />
-            <h3 className="md:text-xl text-lg my-4 sm:text-xl font-semibold">
+            <h3 className="md:text-lg text-base my-4 sm:text-xl font-semibold">
               Amazing Support
             </h3>
 
-            <p className="my-4 text-base">
+            <p className="my-4 text-[14.5px] font-medium">
             Grow professionally. We help you grow as you stay with us, you
             have access to professional courses that will sharpen your teaching skills and help you
             take more grounds around the world
@@ -133,7 +133,7 @@ const Apply = () => {
           </div>
         </section>
       </Container>
-      <div className="grid mx-auto py-3 shadow-md rounded-md  grid-cols-2 xs:grid-cols-2 sm:grid-cols-2 overflow-hidden bg-lightGreen md:grid-cols-5 items-center lg:grid-cols-5 xl:grid-cols-5  mt-3 lgl:px-10">
+      <div className="grid md:mx-auto py-3 shadow-md   grid-cols-3 xs:grid-cols-2 sm:grid-cols-2 overflow-hidden bg-lightGreen md:grid-cols-5 md:items-center lg:grid-cols-5 xl:grid-cols-5  mt-3 ">
         {Applies.map((apply, index) => (
           <ApplyCard key={apply.id} {...apply} index={index} />
         ))}
@@ -173,6 +173,12 @@ const Apply = () => {
               doing it. Enjoy !{" "}
               </p>
             </div>
+            <Button
+              asChild
+              className=" bg-lightGreen rounded-lg hover:bg-green-500 text-white text-base mt-3 px-3 md:w-32 w-full py-2 text-center lg:block"
+            >
+              <Link href="/vacancies">Apply Now</Link>
+            </Button>
           </div>
 
           <div className="w-full md:w-1/3 lgl:w-1/3 h-80 relative group">

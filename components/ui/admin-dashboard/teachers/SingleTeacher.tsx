@@ -91,6 +91,18 @@ export function SingleTeacher() {
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">
+                    Active Plan
+                  </p>
+                  <p className="text-[14px] font-semibold">Basic</p>
+                </div>
+                <div className=" flex space-x-12">
+                  <p className="text-[13px] font-medium">
+                    Plan expires on
+                  </p>
+                  <p className="text-[14px] font-semibold">20th October 2023</p>
+                </div>
+                <div className=" flex space-x-12">
+                  <p className="text-[13px] font-medium">
                     Total Hours Taught Online
                   </p>
                   <p className="text-[14px] font-semibold">2000Hrs+</p>
@@ -101,6 +113,7 @@ export function SingleTeacher() {
                   </p>
                   <p className="text-[14px] font-semibold">20</p>
                 </div>
+                
               </div>
             </CardContent>
           </Card>
