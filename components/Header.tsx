@@ -45,7 +45,7 @@ const Header = () => {
         </div>
 
         <div className=" flex h-full pt-[30px] ">
-          <div className="flex gap-4 font-header xl:gap-[50px] sm:text-[14px] md:text-[14px] ">
+          <div className="flex gap-8 font-header xl:gap-[50px] sm:text-[14px] md:text-[14px] ">
             {navLinks.map((link) => {
               const isActive = pathname.startsWith(link.href);
               return (
