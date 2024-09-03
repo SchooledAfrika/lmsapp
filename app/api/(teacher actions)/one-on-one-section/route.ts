@@ -11,7 +11,6 @@ export async function POST(req: Request) {
   const teacherId = await serverSessionId();
   const role = await serverSessionRole();
   const payload = await req.json();
-  console.log(payload);
   if (!teacherId) return notAuthenticated();
   if (role !== "Teacher")
     return new Response(
@@ -22,6 +21,16 @@ export async function POST(req: Request) {
     );
   // now, lets proceed and create the section
   try {
+    // lets check if the teacher already have a session profile
+    const checkSession = await prisma.oneOnOneSection.findFirst({
+      where: { teacherId },
+    });
+    if (checkSession) {
+      return new Response(
+        JSON.stringify({ message: "oops!!! session profile already exists" }),
+        { status: 400 }
+      );
+    }
     await prisma.oneOnOneSection.create({
       data: { teacherId: teacherId, ...payload },
     });

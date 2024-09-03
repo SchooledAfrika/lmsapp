@@ -14,6 +14,7 @@ import { useConversion } from "@/data-access/conversion";
 import { AssignDialog, IgetTeachers } from "./AssignDialog";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Skeleton } from "@mui/material";
 
 interface InnerTeacher {
   name: string;
@@ -21,26 +22,44 @@ interface InnerTeacher {
   profilePhoto: string;
   id: string;
 }
-interface IouterPart {
+export interface IouterPart {
   teacher: InnerTeacher;
 }
+interface InnerStudent {
+  name: string;
+  email: string;
+  profilePhoto: string;
+  id: string;
+}
+export interface IouterStudent {
+  createdAt: string;
+  student: InnerStudent;
+}
+export interface Iannoucement {
+  id: string;
+  title: string;
+  desc: string;
+}
 
-interface IsingleClass {
+export interface IsingleClass {
   id: string;
   grade: string;
   name: string;
   subject: string;
   time: string;
   createdAt: string;
+  SchoolClassExam: [];
+  resourcesIds: [];
   SchoolClassTeacher: IouterPart[];
-  SchoolClassStudent: any[];
+  SchoolClassStudent: IouterStudent[];
   school: {
     banner: string;
   };
+  AnnouncementBySchoolClass: Iannoucement[];
 }
 
 // information about the class
-const ClassInfo: React.FC<{ info: IsingleClass }> = ({ info }) => {
+export const ClassInfo: React.FC<{ info: IsingleClass }> = ({ info }) => {
   const { handleDate } = useConversion();
   return (
     <div className=" bg-white w-full rounded-md px-5 py-3 flex flex-col gap-4">
@@ -179,6 +198,42 @@ const NoTeacher: React.FC<{ item: IsingleClass }> = ({ item }) => {
   );
 };
 
+// the loading indicators for the single classroom
+export const SingleClassSkeleton = () => {
+  return (
+    <div className=" w-full flex flex-col gap-4">
+      <div className=" grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <Skeleton
+          className=" w-full rounded-md"
+          height={220}
+          variant="rectangular"
+          animation="wave"
+        />
+        <Skeleton
+          className=" w-full rounded-md"
+          height={220}
+          variant="rectangular"
+          animation="wave"
+        />
+        <Skeleton
+          className=" w-full rounded-md"
+          height={220}
+          variant="rectangular"
+          animation="wave"
+        />
+      </div>
+      <div>
+        <Skeleton
+          className=" w-full rounded-md"
+          height={300}
+          variant="rectangular"
+          animation="wave"
+        />
+      </div>
+    </div>
+  );
+};
+
 const SingleClassroom = () => {
   const { id } = useParams();
   const { isLoading, isError, error, data } = useQuery({
@@ -193,8 +248,8 @@ const SingleClassroom = () => {
   //   if is loading
   if (isLoading) {
     return (
-      <div className="">
-        <p className="my-4 font-bold">loading...</p>
+      <div className=" mt-5">
+        <SingleClassSkeleton />
       </div>
     );
   }
@@ -202,6 +257,7 @@ const SingleClassroom = () => {
   if (isError) {
     return <div className=" flex-1">{error.message}</div>;
   }
+  console.log(data);
   const classData: IsingleClass = data;
   return (
     <div className=" mt-6 max-md:mt-[100px]">
@@ -224,7 +280,7 @@ const SingleClassroom = () => {
             <p>No student in this class</p>
           </div>
         ) : (
-          <SingleClassTable />
+          <SingleClassTable students={classData.SchoolClassStudent} />
         )}
       </div>
       <ToastContainer />

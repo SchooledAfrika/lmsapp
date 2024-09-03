@@ -14,7 +14,7 @@ import {
 import { FaHourglassStart, FaHourglassEnd } from "react-icons/fa";
 import { GoDotFill } from "react-icons/go";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { ISessionSub } from "./Details";
+import { ISessionSub } from "./ChildDetails";
 import { Controller } from "react-hook-form";
 
 import {
@@ -31,7 +31,7 @@ interface SessionTypes {
   id: number;
   sessionName: string;
   price: number;
-  billingCycle: "monthly" | "yearly";
+  billingCycle: string;
 }
 
 const Scheduling: React.FC<ISessionSub> = ({
@@ -41,56 +41,32 @@ const Scheduling: React.FC<ISessionSub> = ({
   watch,
   clearErrors,
   setValue,
+  setTotalAmt,
+  totalAmt,
 }) => {
-  const SessionTypes: SessionTypes[] = [
-    {
-      id: 1,
-      sessionName: "Homework Support",
-      price: 240,
-      billingCycle: "yearly",
-    },
-    {
-      id: 2,
-      sessionName: "Private Session",
-      price: 72,
-      billingCycle: "yearly",
-    },
-  ];
+  const SessionTypes: string[] = ["Homework Support", "Private Session"];
 
   const [days, setDays] = React.useState<string[]>([]);
-  const [sessionTypes, setSessionTypes] = React.useState<SessionTypes | null>(
-    null
-  );
+  const [sessionTypes, setSessionTypes] = React.useState<string>("");
   const [hours, setHours] = React.useState<number>(1);
   const [length, setLength] = React.useState<"monthly" | "yearly">("monthly");
-
-  // Calculate the monthly price of the selected item
-  const calculateMonthlyPrice = (): number => {
-    if (!sessionTypes) return 0;
-
-    let pricePerMonth = sessionTypes.price;
-
-    // Convert yearly price to monthly if necessary
-    if (sessionTypes.billingCycle === "yearly" && length === "monthly") {
-      pricePerMonth = sessionTypes.price / 12;
-    }
-
-    return pricePerMonth * hours;
-  };
-
   // Handle session selection
   const handleSessionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const sessionTypeId = Number(event.target.value);
-    const sessionType =
-      SessionTypes.find((s) => s.id === sessionTypeId) || null;
+    const sessionType = event.target.value;
     setSessionTypes(sessionType);
-    setHours(1); // Reset hours when changing session
+    setValue("sessionTypes", sessionType);
+    // here we set the initial price based on the type of session selected
+    if (sessionType == "Private Session") {
+      setTotalAmt && setTotalAmt(6);
+    } else {
+      setTotalAmt && setTotalAmt(12);
+    }
   };
 
   // Handle hours change
   const handleHoursChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newHour = Number(event.target.valueAsNumber);
-    setHours(newHour);
+    setTotalAmt && setTotalAmt((prev) => prev! * newHour);
   };
 
   // Handle billing period change
@@ -98,7 +74,11 @@ const Scheduling: React.FC<ISessionSub> = ({
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const newBillingPeriod = event.target.value as "monthly" | "yearly";
-    setLength(newBillingPeriod);
+    if (newBillingPeriod === "monthly") {
+      setTotalAmt && setTotalAmt((prev) => prev! * 1);
+    } else {
+      setTotalAmt && setTotalAmt((prev) => prev! * 12);
+    }
   };
   const Days = [
     "MONDAY",
@@ -168,70 +148,74 @@ const Scheduling: React.FC<ISessionSub> = ({
         </div>
 
         {/* Session selection */}
-        <div className="grid md:grid-cols-2 grid-cols-1 gap-x-2 w-full border  px-3  py-2  rounded-md gap-[10px]">
-          <div>
-            <label htmlFor="sessionType" className="font-bold text-[16px]">
-              Select Session:
-            </label>
-            <br />
-
-            <select
-              id="sessionTypes"
-              {...register("sessionTypes")}
-              name="sessionTypes"
-              className="p-3 font-medium rounded-md text-[14px]"
-              onChange={handleSessionChange}
-              value={sessionTypes?.id || ""}
-            >
-              <option value="">Select a Session</option>
-              {SessionTypes.map((sessionType) => (
-                <option key={sessionType.id} value={sessionType.id}>
-                  {sessionType.sessionName}
+        <div className="w-full border  px-3  py-2  rounded-md">
+          <label htmlFor="sessionType" className="font-bold text-[16px]">
+            Select Session:
+          </label>
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-x-2 w-full  gap-[10px]">
+            <div>
+              <select
+                id="sessionTypes"
+                name="sessionTypes"
+                className="p-3 w-full font-medium rounded-md text-[14px]"
+                onChange={handleSessionChange}
+              >
+                <option value="" selected disabled>
+                  Select a Session
                 </option>
-              ))}
-            </select>
-            {/* {console.log(sessionTypes)} */}
-            {errors.sessionTypes && (
-              <small className="text-red-600">
-                {errors.sessionTypes.message}
-              </small>
-            )}
-          </div>
+                {SessionTypes.map((sessionType, index) => (
+                  <option key={index} value={sessionType}>
+                    {sessionType}
+                  </option>
+                ))}
+              </select>
+              {/* {console.log(sessionTypes)} */}
+              {errors.sessionTypes && (
+                <small className="text-red-600">
+                  {errors.sessionTypes.message}
+                </small>
+              )}
+            </div>
 
-          {/* Hours input */}
-          <div className="bg-white  rounded-md text-[14px] font-medium md:text-center pl-3 py-2 space-x-2">
-            <label htmlFor="hours">Hours per day:</label>
-            <input
-              {...register("hours", { valueAsNumber: true })}
-              name="hours"
-              type="number"
-              onChange={handleHoursChange}
-              disabled={!sessionTypes || sessionTypes.id === 2}
-            />
-
-            {errors.hours && (
-              <small className="text-red-600">{errors.hours.message}</small>
+            {/* Hours input */}
+            {sessionTypes === "Private Session" && (
+              <div className=" flex flex-col gap-1">
+                <div className=" bg-white w-full text-[14px] py-[10px] items-center px-2 rounded-sm flex gap-2">
+                  <label>Hours per day:</label>
+                  <input
+                    {...register("hours")}
+                    name="hours"
+                    type="number"
+                    onChange={handleHoursChange}
+                    className=" border"
+                  />
+                </div>
+                {errors.hours && (
+                  <small className="text-red-600">{errors.hours.message}</small>
+                )}
+              </div>
             )}
-          </div>
 
-          {/* Billing period selection */}
-          <div className="bg-white  rounded-md text-[14px] font-medium  pl-3 ">
-            <label htmlFor="length">Billing Period:</label>
-            <select
-              id="length"
-              {...register("length")}
-              name="length"
-              className="p-3 font-medium rounded-md text-[14px]"
-              onChange={handleBillingPeriodChange}
-              value={length}
-            >
-              <option value="monthly">Monthly</option>
-              <option value="yearly">Yearly</option>
-            </select>
-            <br />
-            {errors.length && (
-              <small className="text-red-600">{errors.length.message}</small>
-            )}
+            {/* Billing period selection */}
+            <div className="bg-white flex flex-col gap-1  rounded-md text-[14px] font-medium  pl-3 ">
+              <select
+                id="length"
+                {...register("length")}
+                name="length"
+                className="p-3 font-medium rounded-md text-[14px]"
+                onChange={handleBillingPeriodChange}
+                value={length}
+              >
+                <option selected disabled>
+                  Billing period
+                </option>
+                <option value="monthly">Monthly</option>
+                <option value="yearly">Yearly</option>
+              </select>
+              {errors.length && (
+                <small className="text-red-600">{errors.length.message}</small>
+              )}
+            </div>
           </div>
         </div>
 
@@ -331,7 +315,7 @@ const Scheduling: React.FC<ISessionSub> = ({
           <h2>
             Total Price:{" "}
             <span className="font-bold text-[18px]">
-              ${calculateMonthlyPrice().toFixed(2)}
+              ${totalAmt && totalAmt}
             </span>{" "}
           </h2>
         </div>

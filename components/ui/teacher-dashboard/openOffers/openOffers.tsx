@@ -5,42 +5,217 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import ViewOffer from "./viewOffer";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import React, { useState } from "react";
+import { useConversion } from "@/data-access/conversion";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { IoWarning } from "react-icons/io5";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Skeleton } from "@mui/material";
+import { Noitem } from "@/components/ApplicantsTable";
 
-interface Props {
-  icon: string;
-  title: string;
-  institution: string;
-  grade: string;
-  type: string;
-  location: string;
-  index: number;
+interface ISchoolInfo {
+  name: string;
+  banner: string;
+  schAddress: string;
+  ownerName: string;
+  briefDescription: string | null;
 }
 
-const OfferCard = ({
-  icon,
-  title,
-  institution,
-  grade,
-  type,
-  location,
-}: Props) => {
+interface IOffers {
+  id: string;
+  schoolId: string;
+  teacherId: string;
+  status: string;
+  grades: string[];
+  subjects: string[];
+  createdAt: string;
+  school: ISchoolInfo;
+}
+
+// this dailog handles confirmation
+export const Approval: React.FC<{
+  id: string;
+  action: string;
+  showDialog: boolean;
+  setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
+  setAction: React.Dispatch<React.SetStateAction<string>>;
+  name: string;
+}> = ({ id, action, showDialog, setShowDialog, setAction, name }) => {
+  const queryclient = useQueryClient();
+  // making use of react query to mutate the database
+  const mutation = useMutation({
+    mutationKey: ["approve-offer"],
+    mutationFn: async (item: { id: string; status: string }) => {
+      const response = await fetch("/api/teachers-offer", {
+        method: "PUT",
+        body: JSON.stringify({ offerId: item.id, status: item.status }),
+      });
+      return response;
+    },
+    onSuccess: async (response) => {
+      if (response.ok) {
+        toast.success("you have successfully approve the offer");
+        setTimeout(() => {
+          setShowDialog(false);
+          queryclient.invalidateQueries({
+            queryKey: ["get-offers-for-teacher"],
+          });
+        }, 4000);
+      } else {
+        toast.error("you have successfully declined the offer");
+        setTimeout(() => {
+          setShowDialog(false);
+          queryclient.invalidateQueries({
+            queryKey: ["get-offers-for-teacher"],
+          });
+        }, 4000);
+      }
+    },
+  });
+  // here, we handle approval now
+  const handleApprove = () => {
+    if (action === "approve") {
+      mutation.mutate({ id, status: "ACTIVE" });
+    } else {
+      mutation.mutate({ id, status: "REJECTED" });
+    }
+  };
   return (
-    <div className=" w-full  font-header rounded-lg bg-white p-4 flex flex-col justify-evenly gap-3 hover:-translate-y-2 transition-transform duration-300 group">
-      <div className="flex justify-center items-center">
-        <Image src={`${icon}`} alt="icon" width={50} height={50} />
-      </div>
-      <div>
-        <h2 className="text-[15px] font-titleFont font-bold tracking-wide group-hover:text-textGreen">
-          {institution}
-        </h2>
-        <p className="text-sm font-semibold mt-3">{title}</p>
-        <div className="flex text-[13px] font-medium justify-between">
-          <p className=" mt-3">{grade}</p>
-          <p className=" mt-3 text-end">{type}</p>
+    <Dialog open={showDialog} onOpenChange={() => setShowDialog(false)}>
+      <DialogTrigger>
+        <button
+          className={`px-3 py-2 ${
+            name == "approve" ? "bg-green-800" : "bg-red-700"
+          } rounded-md text-white text-[12px]`}
+        >
+          {name}
+        </button>
+      </DialogTrigger>
+      <DialogContent
+        onClick={(e) => e.stopPropagation()}
+        className=" w-full md:w-1/3 py-4"
+      >
+        <div className=" w-full flex flex-col gap-3 items-center">
+          <IoWarning className=" text-[60px] text-orange-500" />
+          <div className=" flex items-center flex-col gap-1">
+            <p className=" text-black font-bold text-[21px]">
+              This action is not reversible
+            </p>
+            <p className=" text-slate-500 font-semibold">
+              Are you sure you really want to {action} this offer?
+            </p>
+          </div>
+          <div className=" flex flex-col gap-2 w-full">
+            <button
+              onClick={handleApprove}
+              className=" py-3 text-white flex items-center justify-center bg-green-700 rounded-md w-full"
+            >
+              Approve
+            </button>
+            <button
+              onClick={() => setShowDialog(false)}
+              className=" py-3 text-white flex items-center justify-center bg-red-700 rounded-md w-full"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
-        <p className="text-[13px] font-medium mt-3">{location}</p>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const OfferCard: React.FC<{ item: IOffers }> = ({ item }) => {
+  const [showDialog, setShowDialog] = useState<boolean>(false);
+  const [action, setAction] = useState(" ");
+  const { handleDate } = useConversion();
+  return (
+    <div className=" flex rounded-md flex-col overflow-hidden gap-2 bg-white pb-2">
+      <div className=" w-full h-[200px]">
+        <Image
+          src={item.school.banner}
+          alt=""
+          width={200}
+          height={200}
+          className=" w-full h-full"
+        />
       </div>
-      <ViewOffer />
+      <div className=" w-full px-3 flex flex-col gap-3">
+        <div className=" text-black font-semibold">
+          <p>
+            School name:{" "}
+            <span className=" font-normal text-[14px]">{item.school.name}</span>
+          </p>
+          <p>
+            Owner:{" "}
+            <span className=" font-normal text-[14px]">
+              {item.school.ownerName}
+            </span>
+          </p>
+          <p>
+            Address:{" "}
+            <span className=" font-normal text-[14px]">
+              {item.school.schAddress}
+            </span>
+          </p>
+          <p>
+            Request Date:{" "}
+            <span className=" font-normal text-[14px]">
+              {handleDate(item.createdAt)}
+            </span>
+          </p>
+        </div>
+        <div className=" w-full flex gap-2 items-center">
+          <div
+            onClick={() => {
+              setAction("approve");
+              setShowDialog(true);
+            }}
+          >
+            <Approval
+              showDialog={showDialog}
+              setShowDialog={setShowDialog}
+              id={item.id}
+              action={action}
+              name={"approve"}
+              setAction={setAction}
+            />
+          </div>
+          <div
+            onClick={() => {
+              setAction("reject");
+              setShowDialog(true);
+            }}
+          >
+            <Approval
+              showDialog={showDialog}
+              setShowDialog={setShowDialog}
+              id={item.id}
+              action={action}
+              name={"reject"}
+              setAction={setAction}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const ShowSkeleton = () => {
+  const myArray = new Array(6).fill(" ");
+  return (
+    <div className=" w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+      {myArray.map((item, index) => (
+        <Skeleton
+          key={index}
+          className=" w-full rounded-md"
+          height={250}
+          variant="rectangular"
+          animation="wave"
+        />
+      ))}
     </div>
   );
 };
@@ -56,22 +231,32 @@ const OpenOffers = () => {
     },
   });
   if (isFetching) {
-    return <div>loading...</div>;
+    return <ShowSkeleton />;
   }
   if (isError) {
     return <div>{error.message}</div>;
   }
 
-  console.log(data);
   return (
     <section>
       <div className="max-w-full  py-6">
-        <div className="grid  grid-cols-1 xs:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 items-center lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-10 lgl:px-10">
-          {offers.map((offer, index) => (
-            <OfferCard key={offer.id} {...offer} index={index} />
-          ))}
-        </div>
+        {Array.isArray(data) && (
+          <div>
+            {data.length === 0 ? (
+              <div className=" w-full">
+                <Noitem desc="you don't have any open offers" />
+              </div>
+            ) : (
+              <div className="grid  grid-cols-1 xs:grid-cols-2 gap-3  md:grid-cols-3">
+                {data.map((item: IOffers, index) => (
+                  <OfferCard item={item} key={index} />
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
+      <ToastContainer />
     </section>
   );
 };

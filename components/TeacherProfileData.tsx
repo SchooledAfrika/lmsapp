@@ -8,8 +8,10 @@ import {
   Control,
   Controller,
   UseFormWatch,
+  UseFormGetValues,
 } from "react-hook-form";
 import { IteacherOneOnOne } from "./TeacherOneOnOne";
+import { useSession } from "next-auth/react";
 
 export interface IteacherOneOnOneSub {
   register: UseFormRegister<IteacherOneOnOne>;
@@ -17,6 +19,7 @@ export interface IteacherOneOnOneSub {
   watch: UseFormWatch<IteacherOneOnOne>;
   control?: Control<IteacherOneOnOne>;
   clearErrors: UseFormClearErrors<IteacherOneOnOne>;
+  getValues: UseFormGetValues<IteacherOneOnOne>;
 }
 
 const TeacherProfileData: React.FC<IteacherOneOnOneSub> = ({
@@ -26,6 +29,7 @@ const TeacherProfileData: React.FC<IteacherOneOnOneSub> = ({
   control,
   clearErrors,
 }) => {
+  const { data } = useSession();
   watch("aboutTutor");
   return (
     <section>
@@ -33,42 +37,23 @@ const TeacherProfileData: React.FC<IteacherOneOnOneSub> = ({
         <p className="font-bold text-[16px]">Edit Your Teachers Profile !</p>
         <div className="flex items-center gap-3 my-4">
           <Image
-            src="/teacher1.png"
-            width={100}
-            height={100}
-            className="rounded-full"
+            src={data?.user.image!}
+            width={200}
+            height={200}
+            className="rounded-full w-[100px] h-[100px] "
             alt="Teacher Picture"
           />
           <div>
             <span className="text-[16px] font-bold">David Olushola</span>
-            <div className="flex items-center bg-[#FFFFFF] w-fit py-1 pl-2 my-2 rounded">
-              <Image
-                src="/svgs/upload.svg"
-                width={15}
-                height={15}
-                alt="UplaodImage"
-              />
-              <div>
-                <label htmlFor="file-upload" className="cursor-pointer ml-2">
-                  <span className="bg-transparent py-1 pr-2 text-[12px] font-medium">
-                    Upload New Image
-                  </span>
-                </label>
-                <input
-                  type="file"
-                  name="teacherImg"
-                  id="file-upload"
-                  className="hidden"
-                />
-              </div>
-            </div>
           </div>
         </div>
         <textarea
           rows={6}
           {...register("aboutTutor")}
+          onChange={() => clearErrors("aboutTutor")}
           className="p-4 outline-none w-full rounded-[10px]"
           placeholder="About Yourself as a tutor"
+          name="aboutTutor"
         ></textarea>
         {errors.aboutTutor && (
           <small className="text-red-600">{errors.aboutTutor.message}</small>

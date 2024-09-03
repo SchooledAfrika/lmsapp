@@ -159,7 +159,12 @@ export async function GET() {
       include: {
         SchoolClassStudent: {
           select: {
-            studentId: true,
+            student: {
+              select: {
+                name: true,
+                id: true,
+              },
+            },
           },
         },
         SchoolClassTeacher: {
