@@ -175,7 +175,7 @@ model TeachersArticle {
   title      String
   sourceLink String
   type       ResourceType
-  teacher    Teacher      @relation(fields: [teacherId], references: [id])
+  teacher    Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId  String       @db.ObjectId
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now())
@@ -184,7 +184,7 @@ model TeachersArticle {
 // this model is to show connections between teachers and rattings
 model Ratting {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  teacher   Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId String   @db.ObjectId
   comment   String
   rateValue Int
@@ -203,7 +203,7 @@ model Ratting {
 model TeachersSubject {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   subject   Subjects //Subjects enum are defined below
-  teacher   Teacher   @relation(fields: [teacherId], references: [id])
+  teacher   Teacher   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId String    @db.ObjectId
   Session   Session[]
   createdAt DateTime  @default(now())
@@ -251,7 +251,7 @@ model Classes {
   classTime                  String?
   // here, there is one to many relationship between classes and teacher
   // a teacher can have many classes
-  teacher                    Teacher                      @relation(fields: [teacherId], references: [id])
+  teacher                    Teacher                      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId                  String                       @db.ObjectId
   // there will be many to many relationship between classes and students
   // classes can have many students
@@ -275,7 +275,7 @@ model Classes {
 // there will be one to one relationship between the Teacher and this model
 model OneOnOneSection {
   id               String             @id @default(auto()) @map("_id") @db.ObjectId
-  teacher          Teacher            @relation(fields: [teacherId], references: [id])
+  teacher          Teacher            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId        String             @unique @db.ObjectId
   aboutTutor       String
   subjects         Subjects[]         @default([ENGLISH, MATHEMATICS])
@@ -383,7 +383,7 @@ model Vacancy {
 // while an advert can also have one to many relationships witht the vancancy teacher model
 model VacancyTeacher {
   id        String        @id @default(auto()) @map("_id") @db.ObjectId
-  teacher   Teacher       @relation(fields: [teacherId], references: [id])
+  teacher   Teacher       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId String        @db.ObjectId
   vacancy   Vacancy       @relation(fields: [vacancyId], references: [id])
   vacancyId String        @db.ObjectId
@@ -400,7 +400,7 @@ model SchoolTeacher {
   id        String         @id @default(auto()) @map("_id") @db.ObjectId
   school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   schoolId  String         @db.ObjectId
-  teacher   Teacher        @relation(fields: [teacherId], references: [id])
+  teacher   Teacher        @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId String         @db.ObjectId
   status    ContractStatus @default(PENDING)
   grades    Grade[]        @default([])
@@ -474,7 +474,7 @@ model SchoolClassTeacher {
   id            String      @id @default(auto()) @map("_id") @db.ObjectId
   class         SchoolClass @relation(fields: [schoolClassId], references: [id])
   schoolClassId String      @db.ObjectId
-  teacher       Teacher     @relation(fields: [teacherId], references: [id])
+  teacher       Teacher     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId     String      @db.ObjectId
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now())
@@ -502,7 +502,7 @@ model Exams {
   id        String          @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   type      ExamType
-  teacher   Teacher         @relation(fields: [teacherId], references: [id])
+  teacher   Teacher         @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId String          @db.ObjectId
   test      ExamQuestions[]
   duration  String
