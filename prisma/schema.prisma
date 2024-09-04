@@ -66,6 +66,8 @@ model Teacher {
   kyc                  Kyc?
   Ratting              Ratting[]
   reviewers            String[]             @db.ObjectId
+  status               TeacherStatus        @default(Pending)
+  PaymentPlans         PaymentPlans?
 }
 
 model Kyc {
@@ -74,8 +76,19 @@ model Kyc {
   docImg      String
   verifiedImg String
   status      KycStatus @default(PENDING)
-  teacher     Teacher   @relation(fields: [teacherId], references: [id])
+  teacher     Teacher   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId   String    @unique @db.ObjectId
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+}
+
+model PaymentPlans {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  plan      PlansType @default(Free)
+  teacher   Teacher   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  teacherId String    @unique @db.ObjectId
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
 }
 
 // creating the student model
@@ -385,7 +398,7 @@ model VacancyTeacher {
 // this can help us to be able to use pending, active and rejected status
 model SchoolTeacher {
   id        String         @id @default(auto()) @map("_id") @db.ObjectId
-  school    School         @relation(fields: [schoolId], references: [id])
+  school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   schoolId  String         @db.ObjectId
   teacher   Teacher        @relation(fields: [teacherId], references: [id])
   teacherId String         @db.ObjectId
@@ -404,7 +417,7 @@ model SchoolStudent {
   id        String         @id @default(auto()) @map("_id") @db.ObjectId
   student   Student        @relation(fields: [studentId], references: [id])
   studentId String         @db.ObjectId
-  school    School         @relation(fields: [schoolId], references: [id])
+  school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   schoolId  String         @db.ObjectId
   status    ContractStatus @default(PENDING)
   classes   String[]       @default([])
@@ -421,7 +434,7 @@ model SchoolClass {
   name                      String
   subject                   Subjects
   time                      String
-  school                    School                      @relation(fields: [schoolId], references: [id])
+  school                    School                      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   schoolId                  String                      @db.ObjectId
   SchoolClassTeacher        SchoolClassTeacher[]
   SchoolClassStudent        SchoolClassStudent[]
@@ -439,7 +452,7 @@ model AnnouncementBySchoolClass {
   id            String      @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   desc          String
-  schoolClass   SchoolClass @relation(fields: [schoolClassId], references: [id])
+  schoolClass   SchoolClass @relation(fields: [schoolClassId], references: [id], onDelete: Cascade)
   schoolClassId String      @db.ObjectId
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now())
@@ -687,4 +700,19 @@ enum ExamType {
 enum ResourceType {
   LINK
   DOCS
+}
+
+enum TeacherStatus {
+  Active
+  Suspended
+  Pending
+}
+
+enum PlansType {
+  Basic
+  Gold
+  Silver
+  Diamond
+  Bronze
+  Free
 }

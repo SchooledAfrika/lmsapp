@@ -8,3 +8,10 @@ export const notAuthenticated = () => {
     { status: 400 }
   );
 };
+
+// only admin restriction error message
+export const onlyAdmin = () => {
+  return new Response(JSON.stringify({ message: "only admin is allowed" }), {
+    status: 404,
+  });
+};

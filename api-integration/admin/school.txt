@@ -1,0 +1,21 @@
+================================================================================================================
+endpoint for admin to get all the schools 
+================================================================================================================
+enpoint=> http://localhost:3000/api/schools
+method=> GET
+comment===> this returns information about the school, together with arrays containing id for students, classes and teachers
+in the school, so you can get the numbers from the array lenght.
+
+================================================================================================================
+endpoint for admin to get a particular school
+================================================================================================================
+enpoint=> http://localhost:3000/api/schools/:id
+method=> GET
+comment===> replace the :id with the id of the school you want to get all their details
+
+================================================================================================================
+endpoint for admin to delete a particular school
+================================================================================================================
+enpoint=> http://localhost:3000/api/schools/:id
+method=> DELETE
+comment===> replace the :id with the id of the school you want to delete

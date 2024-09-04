@@ -1,0 +1,7 @@
+================================================================================================================
+endpoint for admin to get all the teachers
+================================================================================================================
+enpoint=> http://localhost:3000/api/teachers
+method=> GET
+comment===> due to the addition of paymentplans recently in the database, you will see null in the plan field,
+also condiionaly render the null to free plan.
