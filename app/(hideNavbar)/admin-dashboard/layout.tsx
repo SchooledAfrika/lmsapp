@@ -6,6 +6,9 @@ import MobileSideBar from "@/components/ui/admin-dashboard/sidebar/MobileSidebar
 import AdminDashboardContext from "@/providers/Admincontext";
 import Navbar from "@/components/ui/admin-dashboard/navbar/navbar";
 import PricingLayout from "@/components/ui/Pricing-layout";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/nextAuth";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Admin",
@@ -17,6 +20,10 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // here, we get the session, used the session to regulate the flow of users
+  // if the users role is  not equal to Admin, we redirect the user to home page
+  const session = await getServerSession(authOptions);
+  if (session?.user.role !== "Admin") return redirect("/");
   return (
     <AdminDashboardContext>
       <main className="bg-stone-100 flex flex-col sm:flex-row font-header">
