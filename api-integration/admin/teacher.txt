@@ -1,0 +1,36 @@
+================================================================================================================
+endpoint for admin to get all the teachers
+================================================================================================================
+enpoint=> /api/teachers
+method=> GET
+comment===> due to the addition of paymentplans recently in the database, you will see null in the plan field,
+also condiionaly render the null to free plan.
+
+================================================================================================================
+endpoint for admin to get one teacher
+================================================================================================================
+enpoint=> /api/teachers/:id
+method=> GET
+comment====> where :id is the teachers id, this returns everything your need, the basic teachers information together with he created 
+
+================================================================================================================
+endpoint for admin to delete one teacher
+================================================================================================================
+enpoint=> /api/teachers/:id
+method=> DELETE
+comment====> :id is the id of the teacher you want to delete.
+
+================================================================================================================
+endpoint for admin to suspend or activate teacher
+================================================================================================================
+enpoint=> /api/teachers/:id
+method=> PUT
+payload=> {status:string}, //the status string should be an Enum of (Active, Suspended, Pending);
+comment===> if you pass wrong status enum error must occur and also :id is the id of the teacher
+
+================================================================================================================
+endpoint for admin to make another teacher an admin
+================================================================================================================
+endpoint=> /api/teachers/make-admin
+method=> PUT
+payload=> {id:string} // the id is the id of the teacher to make an admin 
