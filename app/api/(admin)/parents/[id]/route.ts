@@ -84,6 +84,11 @@ export async function DELETE(
   req: Request,
   { params }: { params: { id: string } }
 ) {
+  // perform authentication to check if is admin and authenticated
+  const id = await serverSessionId();
+  const role = await serverSessionRole();
+  if (!id) return notAuthenticated();
+  if (role !== "Admin") return onlyAdmin();
   try {
     // check if parents exists before trying to delete the account
     const parentExists = await prisma.parents.findUnique({
