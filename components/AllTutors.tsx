@@ -1,217 +1,294 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { MdVerified } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import BookSession from "@/app/(showNavbar)/find-tutors/book-session/page";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
+import { useInView } from "react-intersection-observer";
+import Container from "./Container";
+import { useConversion } from "@/data-access/conversion";
+import { IoIosStar } from "react-icons/io";
+import BookSession from "./BookSession";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+export interface Iratter {
+  comment: string;
+  rateValue: number;
+  ratter: {
+    name: string;
+    profilePhoto: string;
+  };
+}
+
+// type for this secion
+export interface ISessionShow {
+  id: string;
+  teacherId: string;
+  aboutTutor: string;
+  subjects: string[];
+  grade: string[];
+  preference: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  teacher: {
+    name: string;
+    details: string;
+    profilePhoto: string;
+    language: string;
+    rating: number;
+    Ratting: Iratter[];
+  };
+}
+
+// this shows the profile picture
+const ProfileShow: React.FC<{
+  profilePix: string;
+  rating: any;
+}> = ({ profilePix, rating }) => {
+  return (
+    <div className=" flex flex-col gap-2 sm:gap-4 items-center">
+      <div className="w-[100px] h-[100px] sm:w-[120px] sm:h-[100px] lg:w-[170px] lg:h-[150px] ">
+        <Image
+          src={profilePix}
+          alt=""
+          width={200}
+          height={200}
+          className=" w-full h-full  object-cover rounded-md"
+        />
+      </div>
+      <div>
+        <div className=" flex flex-col sm:flex-row items-center gap-1 text-[10px] sm:text-[14px]">
+          <p> 0 Sessions</p>
+          <div className=" h-[25px] border border-slate-500 hidden sm:flex "></div>
+          <p>0 Students</p>
+        </div>
+        <div className=" sm:hidden flex text-[10px] gap-1 items-center font-semibold">
+          <p>Reviews</p>
+          <IoIosStar className=" text-orange-500" />
+          {rating === null ? <p>0</p> : <p>{rating}</p>}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// this shows the description of the teachers
+const Desc: React.FC<{
+  name: string;
+  desc: string;
+  grades: string[];
+  subjects: string[];
+  preference: string[];
+  lang: string;
+  id: string;
+}> = ({ name, desc, grades, subjects, preference, lang, id }) => {
+  const { makeSubstring, joinGrades } = useConversion();
+  return (
+    <div className=" flex flex-col md:gap-3 sm:gap-5">
+      <div className=" flex items-center gap-2">
+        <p className=" font-bold text-[20px] max-sm:text-[14px]">{name}</p>
+        <MdVerified className=" text-[24px] text-green-800" />
+      </div>
+      <div>
+        <p className=" hidden sm:flex text-[16px] text-slate-700">
+          {makeSubstring(desc, 200)}
+        </p>
+        <p className="  sm:hidden text-[12px] text-slate-700">
+          {makeSubstring(desc, 70)}
+        </p>
+        <div className=" flex flex-wrap items-center gap-2 w-full">
+          <p className="text-[13px] text-black font-bold">
+            Speaks:<span className=" ml-1">{lang}</span>
+          </p>
+          <div className=" flex-wrap flex items-center text-[13px] text-black font-bold gap-2">
+            <p>Teaches:</p>
+            <div className=" flex-wrap flex items-center gap-1">
+              {subjects.map((subject, index) => (
+                <div className=" flex items-center gap-1" key={index}>
+                  <Image
+                    src={`/${subject.toLowerCase()}.png`}
+                    alt="subjects"
+                    width={100}
+                    height={100}
+                    className=" w-[12px] aspect-square"
+                  />
+                  <p>{subject}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className=" flex items-center gap-1 text-[13px] text-black font-bold">
+            <p>Grade:</p>
+            <p>{joinGrades(grades)}</p>
+          </div>
+        </div>
+        <div>
+          <Link
+            href={`/find-tutors/${id}`}
+            className=" text-green-700 underline text-[12px] mt-3 cursor-pointer"
+          >
+            View profile
+          </Link>
+        </div>
+      </div>
+      <div className=" flex gap-3 flex-wrap">
+        {preference.map((preference, index) => (
+          <div
+            key={index}
+            className=" px-2 sm:px-4 py-2 rounded-md border border-orange-500 bg-orange-200 text-[8px] sm:text-[12px] text-black"
+          >
+            <p>{preference}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+const PayDetails: React.FC<{
+  rating: number;
+  setShowBooking: React.Dispatch<React.SetStateAction<boolean>>;
+  showBooking: boolean;
+  sessionId: string;
+  tutorName: string;
+  tutorImg: string;
+  tutorLang: string;
+}> = ({
+  rating,
+  setShowBooking,
+  showBooking,
+  sessionId,
+  tutorImg,
+  tutorLang,
+  tutorName,
+}) => {
+  return (
+    <div className=" flex flex-2 flex-col items-center gap-4">
+      <BookSession
+        sessionId={sessionId}
+        tutorImg={tutorImg}
+        tutorLang={tutorLang}
+        tutorName={tutorName}
+      />
+      <div className=" hidden  sm:flex text-[14px] gap-1 items-center font-bold">
+        <p>Reviews</p>
+        <IoIosStar className=" text-orange-500" />
+        {rating === null ? <p>0</p> : <p>{rating.toFixed(2)}</p>}
+      </div>
+    </div>
+  );
+};
+
+// single section here
+const SingleSession: React.FC<{
+  item: ISessionShow;
+}> = ({ item }) => {
+  const [showBooking, setShowBooking] = useState<boolean>(false);
+  return (
+    <div className=" w-full max-ss:flex-col flex  gap-3 bg-white shadow-md md:px-10 md:py-8 rounded-lg p-4">
+      <div className=" flex flex-8 gap-6">
+        <ProfileShow
+          rating={item.teacher.rating}
+          profilePix={item.teacher.profilePhoto}
+        />
+        <Desc
+          name={item.teacher.name}
+          desc={item.teacher.details}
+          grades={item.grade}
+          subjects={item.subjects}
+          preference={item.preference}
+          lang={item.teacher.language}
+          id={item.id}
+        />
+      </div>
+      <PayDetails
+        showBooking={showBooking}
+        setShowBooking={setShowBooking}
+        rating={item.teacher.rating}
+        sessionId={item.id}
+        tutorName={item.teacher.name}
+        tutorImg={item.teacher.profilePhoto}
+        tutorLang={item.teacher.language}
+      />
+    </div>
+  );
+};
+
+const AllTutorLoading = () => {
+  const dummyArray = new Array(10).fill("");
+  return (
+    <Container>
+      <div className=" w-full flex flex-col gap-4 mt-5">
+        {dummyArray.map((item, index) => (
+          <div
+            className=" w-full h-[300px] rounded-lg bg-slate-300 flex flex-col sm:flex-row px-7 animate-pulse py-4 gap-4"
+            key={index}
+          >
+            <div className=" flex-8 flex gap-6">
+              <div className=" h-[100px] sm:h-[120px] sm:w-1/5 w-2/5 animate-pulse bg-slate-400 rounded-md"></div>
+              <div className=" w-full h-3/4 bg-slate-400 animate-pulse rounded-md"></div>
+            </div>
+            <div className=" flex-2 flex flex-col gap-3">
+              <div className=" w-full h-[60px] sm:h-[50px] bg-slate-400 animate-pulse rounded-md"></div>
+              <div className=" w-full hidden sm:flex h-[50px] bg-slate-400 animate-pulse rounded-md"></div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </Container>
+  );
+};
 
 const AllTutors = () => {
-  // const fetchDetails = async () => {
-  //   const response = await fetch("/api/one-on-one-section");
-  //   console.log(response);
-  //   const result = await response.json();
-  //   return result;
-  // };
+  // creating our useref for watching the button when displayed
+  const { ref, inView } = useInView();
+  // function that is called at each step to get the classes based on parameter
+  const getItems = async ({ pageParam }: { pageParam: number }) => {
+    const response = await fetch(`/api/apply-for-section?page=${pageParam}`);
+    return response.json();
+  };
 
-  // const { isLoading, isError, error, data } = useQuery({
-  //   queryKey: ["fetchDetails"],
-  //   queryFn: fetchDetails,
-  // });
-
-  // console.log(data);
-
-  // if (isLoading) {
-  //   return (
-  //     <div>
-  //       <p className="my-4 font-bold">Loading...</p>
-  //     </div>
-  //   );
-  // }
-
-  // Handle error state
-  // if (isError) {
-  //   return <div className="flex-1">{error.message}</div>;
-  // }
-
+  const {
+    data,
+    status,
+    error,
+    isError,
+    fetchNextPage,
+    isFetchingNextPage,
+    hasNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["infiniteSession"],
+    queryFn: getItems,
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, allPage) => {
+      const nextPage = lastPage.length !== 0 ? allPage.length + 1 : undefined;
+      return nextPage;
+    },
+  });
+  useEffect(() => {
+    if (inView) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage]);
+  // check if is loading
+  if (status === "pending") {
+    return <AllTutorLoading />;
+  }
+  if (status === "error") {
+    return <div>something went wrong!!!, check your connection</div>;
+  }
+  // flaten the data gotten here
+  const queryData: ISessionShow[] = data?.pages.flat();
   return (
-    <div className="mx-3 font-header font-semibold">
-     
-        <>
-          {/* Desktop view */}
-          <div className="hidden md:flex md:w-[95%] mx-auto my-20 rounded-2xl shadow-md bg-white h-full">
-            {/* First flex section */}
-            <div className="flex flex-col px-3">
-              <Image
-                src={"/tutors.jpg"}
-                alt="tutor"
-                width={150}
-                height={150}
-                className="w-full rounded-xl ml-6 mt-6"
-              />
-              <div className="flex space-x-2 text-center text-[13px] p-3">
-                <p className="">25 Sessions</p>
-                <p className="border-l-2 border-slate-700"></p>
-                
-                <p className="">38 Students</p>
-              </div>
-              <div className="hidden md:flex font-header text-[14px] font-semibold mb-2 p-2">
-                <h3 className="text-[13px]">Online</h3>
-                <div className="w-[10px] h-[10px] mt-1 rounded-full ml-3 bg-lightGreen"></div>
-              </div>
-            </div>
-
-            {/* Second flex section */}
-            <div className="flex flex-col w-full p-6">
-              <h3 className="font-bold text-lg mb-3">
-                David Olushola <MdVerified className="inline text-lightGreen" />
-              </h3>
-              <p className="hidden font-medium md:block">
-                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-                commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-                penatibus et magnis dis parturient montes, nascetur ridiculus
-                mus...
-              </p>
-              <p className="text-[14px] mt-2">Total Hours Taught Online: <span className="font-bold">2000hrs+</span> </p>
-              <ul className="flex flex-col md:flex-row  my-2 text-[13px] font-bold items-center">
-                <li className="md:mr-4 py-1">Speaks: English</li>
-                <li className="md:mr-4 py-1">
-                  Teaches:{" "}
-                  <Image
-                    src={"/maths.png"}
-                    alt="Mathematics"
-                    width={20}
-                    height={20}
-                    className="inline"
-                  />{" "}
-                  Mathematics
-                </li>
-                <li className="md:mr-2 py-1">Grade: 10, 11 & 12</li>
-              </ul>
-              <Link
-                className="text-lightGreen font-semibold underline text-[13px] mb-2"
-                href="/find-tutors/test"
-              >
-                View Profile
-              </Link>
-              <div className="flex flex-wrap my-3">
-                <Button className="bg-dimYellow border border-red-400 rounded-lg hover:bg-gold text-black text-[13px] mt-3 px-3 mr-2 py-2">
-                  1 on 1 sessions
-                </Button>
-                <Button className="bg-dimYellow border border-red-400 rounded-lg hover:bg-gold text-black text-[13px] mt-3 px-3 mr-2 py-2">
-                  Homework Support
-                </Button>
-                <Button className="bg-dimYellow border border-red-400 rounded-lg hover:bg-gold text-black text-[13px] mt-3 px-3 mr-2 py-2">
-                  Open to Jobs
-                </Button>
-                <Button className="bg-dimYellow border border-red-400 rounded-lg hover:bg-gold text-black text-[13px] mt-3 px-3 mr-2 py-2">
-                  Group sessions
-                </Button>
-              </div>
-            </div>
-
-            {/* Third flex section */}
-            <div className="flex flex-col items-end p-6">
-             
-             
-             
-              <div className="flex flex-col items-end mt-3">
-                <BookSession />
-               
-                {/* <Button
-                  asChild
-                  variant="outline"
-                  className="bg-white border-lightGreen hover:bg-lightGreen text-lightGreen hover:text-white text-sm mt-3 px-3 w-32 py-2"
-                >
-                  <Link href="/register">Contact</Link>
-                </Button> */}
-              </div>
-              <div className="flex items-end mt-6">
-                <Link className="text-sm underline font-bold" href="/">
-                  Reviews
-                </Link>
-                <p> ⭐ 4.7/5</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Mobile view */}
-          <div className="md:hidden pr-3 pl-1 w-[80%] mx-3 sm:mx-auto py-6 my-12 grid grid-cols-1 gap-6">
-            <div className="flex space-x-3">
-              <Image
-                src={"/tutors.jpg"}
-                alt="tutor"
-                width={100}
-                height={100}
-                className="w-[100px] h-[100px] rounded-xl"
-              />
-              <div className="flex flex-col">
-                <h3 className="font-bold text-lg mb-2">
-                  David Olushola{" "}
-                  <MdVerified className="inline text-xl text-lightGreen" />
-                </h3>
-                <div className="flex text-[13px]">
-                  <Link className="underline font-bold mr-2" href="/">
-                    Reviews
-                  </Link>
-                  <p> ⭐ 4.7/5</p>
-                </div>
-                <div className="flex font-header text-[14px] font-semibold pt-2">
-                  <h3>Online</h3>
-                  <div className="w-[13px] h-[13px] mt-1 rounded-full ml-3 bg-lightGreen"></div>
-                </div>
-                <Link
-                  className="text-lightGreen font-semibold underline text-[13px] mt-3 mb-2"
-                  href="/find-tutors/test"
-                >
-                  View Profile
-                </Link>
-              </div>
-            </div>
-            <div className="flex space-x-3 text-[13.5px]">
-              <p>
-                <span className="font-semibold text-[14px]">Speaks:</span>{" "}
-                English
-              </p>
-              <p>
-                <span className="font-semibold text-[14px]">Grade(s):</span> 10,
-                11, 12
-              </p>
-            </div>
-            <p className="overflow-x-auto text-[13.5px]">
-              <span className="font-semibold text-[14px]">Teaches:</span>{" "}
-              Mathematics, English, Government
-            </p>
-            <p className="text-[14px] mt-2">Total Hours Taught Online: <span className="font-bold">2000hrs+</span> </p>
-            <div className="flex overflow-x-auto">
-              <Button className="bg-dimYellow border border-red-400 rounded-lg hover:bg-gold text-black text-[13px] mt-3 px-2 mr-2 py-1">
-                1 on 1 sessions
-              </Button>
-              <Button className="bg-dimYellow border border-red-400 rounded-lg hover:bg-gold text-black text-[13px] mt-3 px-3 mr-2 py-2">
-                Homework Support
-              </Button>
-              <Button className="bg-dimYellow border border-red-400 rounded-lg hover:bg-gold text-black text-[13px] mt-3 px-3 mr-2 py-2">
-                Open to Jobs
-              </Button>
-              <Button className="bg-dimYellow border border-red-400 rounded-lg hover:bg-gold text-black text-[13px] mt-3 px-3 mr-2 py-2">
-                Group sessions
-              </Button>
-            </div>
-            <div className="">
-              <BookSession />
-              {/* <Button
-                asChild
-                variant="outline"
-                className="bg-white border-lightGreen hover:bg-lightGreen text-lightGreen hover:text-white text-sm mt-3 px-3 w-28 mr-2 py-2"
-              >
-                <Link href="/register">Contact</Link>
-              </Button> */}
-            </div>
-          </div>
-        </>
-     
-    </div>
+    <Container>
+      <div className=" w-full flex flex-col gap-3 mt-5">
+        {queryData.map((item, index) => (
+          <SingleSession key={index} item={item} />
+        ))}
+      </div>
+      <ToastContainer />
+    </Container>
   );
 };
 

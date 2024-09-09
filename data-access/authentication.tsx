@@ -26,6 +26,9 @@ export const useAuth = () => {
     if (data?.user.role === "Student") {
       router.push(`${process.env.NEXT_PUBLIC_HOMEPAGE}/student-dashboard`);
     }
+    if (data?.user.role === "Admin") {
+      router.push(`${process.env.NEXT_PUBLIC_HOMEPAGE}/admin-dashboard`);
+    }
   }, [status, data]);
   //   this function handles registration of users using the credentials provider
   const handleCredentialReg = async (email: string, password: string) => {

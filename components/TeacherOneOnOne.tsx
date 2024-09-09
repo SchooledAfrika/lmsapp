@@ -2,10 +2,8 @@
 import React, { useState } from "react";
 import TeacherSubject from "./TeacherSubject";
 import TeacherProfileData from "./TeacherProfileData";
-import TeacherPrice from "./TeacherPrice";
 import ProgressLine from "./ui/PrograssLine";
 import { Button } from "./ui/button";
-import Image from "next/image";
 import Link from "next/link";
 import {
   oneOnOneSectionSchema,
@@ -17,15 +15,15 @@ import { z } from "zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useCloudinary } from "@/data-access/cloudinary";
+import { useRouter } from "next/navigation";
+import Backwards from "./ui/Backwards";
 
 export type IteacherOneOnOne = z.infer<typeof oneOnOneSectionSchema>;
 
 export const TeacherOneOnOne: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const { imageUpload } = useCloudinary();
-
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -35,6 +33,7 @@ export const TeacherOneOnOne: React.FC = () => {
     reset,
     clearErrors,
     formState: { errors },
+    getValues,
   } = useForm<IteacherOneOnOne>({
     resolver: zodResolver(oneOnOneSectionSchema),
   });
@@ -47,20 +46,22 @@ export const TeacherOneOnOne: React.FC = () => {
         method: "POST",
         body: JSON.stringify({
           ...data,
-          minPrice: Number(data.minPrice),
-          maxPrice: Number(data.maxPrice),
         }),
       });
       return result;
     },
     onSuccess: async (result) => {
+      const info = await result.json();
       setLoading(false);
       queryClient.invalidateQueries({ queryKey: ["teacherProfile"] });
       if (result.ok) {
         reset();
         toast.success("Session profile edited successfully");
+        setTimeout(() => {
+          router.push("/teacher-dashboard/one-on-one-section");
+        }, 4000);
       } else {
-        toast.error("Error editing session profile");
+        toast.error(info.message);
       }
     },
   });
@@ -75,7 +76,7 @@ export const TeacherOneOnOne: React.FC = () => {
     const fields = TeacherOneOnOneSection[currentPage - 1].field as fieldName[];
     const isValid = await trigger(fields, { shouldFocus: true });
     if (!isValid) return;
-    if (currentPage === 3) {
+    if (currentPage === 2) {
       await handleSubmit(runSubmit)();
     } else {
       setCurrentPage((prev) => prev + 1);
@@ -91,7 +92,7 @@ export const TeacherOneOnOne: React.FC = () => {
           href="/teacher-dashboard/one-on-one-section"
           className="cursor-pointer"
         >
-          <Image src="/closeAlt.svg" alt="cancel" width={15} height={15} />
+          <Backwards />
         </Link>
       </div>
       <div className="flex flex-col md:flex-row gap-[60px]">
@@ -108,36 +109,28 @@ export const TeacherOneOnOne: React.FC = () => {
               register={register}
               control={control}
               clearErrors={clearErrors}
+              getValues={getValues}
             />
-          ) : currentPage === 2 ? (
+          ) : (
             <TeacherSubject
               errors={errors}
               watch={watch}
               register={register}
               control={control}
               clearErrors={clearErrors}
-            />
-          ) : (
-            <TeacherPrice
-              errors={errors}
-              watch={watch}
-              register={register}
-              control={control}
-              clearErrors={clearErrors}
+              getValues={getValues}
             />
           )}
           <div>
             <Button
               onClick={handleNextPage}
               type="button"
-              className={`bg-secondary text-white text-[16px] py-7 my-3 ${
-                currentPage < 3 ? "w-full" : "w-1/2"
-              }`}
+              className={`bg-secondary text-white text-[16px] py-7 my-3 w-full`}
               disabled={loading}
             >
               {loading
                 ? "Submitting..."
-                : currentPage < 3
+                : currentPage < 2
                 ? "Proceed"
                 : "Submit"}
             </Button>

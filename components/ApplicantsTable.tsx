@@ -249,7 +249,7 @@ const OneTeacher: React.FC<{ applicant: IVacancyTeacher; vacancy: string }> = ({
   );
 };
 // no item here
-const Noitem: React.FC<{ desc: string }> = ({ desc }) => {
+export const Noitem: React.FC<{ desc: string }> = ({ desc }) => {
   return (
     <div className=" mt-32 md:mt-20 w-full flex flex-col items-center justify-center gap-2">
       <Image

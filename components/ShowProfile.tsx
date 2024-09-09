@@ -13,7 +13,7 @@ const ShowProfile = () => {
       router.push("/teacher-dashboard");
     } else if (data?.user.role === "Student") {
       router.push("/student-dashboard");
-    } else if (data?.user.role === "admin") {
+    } else if (data?.user.role === "Admin") {
       router.push("/admin-dashboard");
     } else if (data?.user.role === "School") {
       router.push("/school-dashboard");

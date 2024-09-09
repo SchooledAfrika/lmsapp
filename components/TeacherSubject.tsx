@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Controller } from "react-hook-form";
+import React, { useEffect, useState } from "react";
+import { Controller, ControllerRenderProps } from "react-hook-form";
 import {
   Select,
   SelectContent,
@@ -12,17 +12,52 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Preferences, Subject, Grade } from "@/constants/teacherOneOnOne"; // Ensure these imports match your actual structure
 import { IteacherOneOnOneSub } from "./TeacherProfileData";
 
+type Isubject = ControllerRenderProps<
+  {
+    aboutTutor: string;
+    subjects: string[];
+    grade: string[];
+    preference: string[];
+  },
+  "subjects"
+>;
 const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
   errors,
   control,
   clearErrors,
+  getValues,
 }) => {
-  const [subjects, setSubjects] = useState<string[]>([]);
-  const [grades, setGrades] = useState<string[]>([]);
-  const [preference, setPreference] = useState<string[]>([]);
+  const [subjects, setSubjects] = useState<string[]>(() => {
+    const selectedSubject = getValues("subjects");
+    return selectedSubject ?? [];
+  });
+  const [grades, setGrades] = useState<string[]>(() => {
+    const selectedGrades = getValues("grade");
+    return selectedGrades ?? [];
+  });
+  const [preference, setPreference] = useState<string[]>(() => {
+    const selectedPreference = getValues("preference");
+    return selectedPreference ?? [];
+  });
 
-  const handleAddSubject = (value: string, field: any) => {
-    if (!subjects.includes(value)) {
+  // run a useEffect that will monitor changes on the above state
+  useEffect(() => {
+    const selectedSubject = getValues("subjects") as string[];
+    const selectedGrade = getValues("grade") as string[];
+    const selectedPreference = getValues("preference") as string[];
+    if (selectedSubject) {
+      setSubjects(selectedSubject);
+    }
+    if (selectedGrade) {
+      setGrades(selectedGrade);
+    }
+    if (selectedPreference) {
+      setPreference(selectedPreference);
+    }
+  }, [getValues]);
+
+  const handleAddSubject = (value: string, field: Isubject) => {
+    if (!subjects?.includes(value)) {
       const updatedSubjects = [...subjects, value];
       setSubjects(updatedSubjects);
       field.onChange(updatedSubjects);
@@ -93,7 +128,7 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
                                 <div className="flex items-center">
                                   <input
                                     type="checkbox"
-                                    checked={subjects.includes(item)}
+                                    checked={subjects?.includes(item)}
                                     readOnly
                                     className="mr-2"
                                   />
@@ -106,7 +141,7 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
                       </SelectContent>
                     </Select>
                     <div className="mt-4">
-                      {subjects.map((subject, index) => (
+                      {subjects?.map((subject, index) => (
                         <div key={index} className="flex items-center mb-2">
                           <input
                             type="text"
@@ -152,7 +187,7 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
                               <div className="flex items-center">
                                 <input
                                   type="checkbox"
-                                  checked={grades.includes(item)}
+                                  checked={grades?.includes(item)}
                                   readOnly
                                   className="mr-2"
                                 />
@@ -165,7 +200,7 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
                     </SelectContent>
                   </Select>
                   <div className="mt-4">
-                    {grades.map((grade, index) => (
+                    {grades?.map((grade, index) => (
                       <div key={index} className="flex items-center mb-2">
                         <input
                           type="text"
@@ -210,7 +245,7 @@ const TeacherSubject: React.FC<IteacherOneOnOneSub> = ({
                         type="checkbox"
                         name="preference"
                         value={item}
-                        checked={preference.includes(item)}
+                        checked={preference?.includes(item)}
                         readOnly
                         className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-green-600 checked:border-transparent focus:outline-none"
                       />

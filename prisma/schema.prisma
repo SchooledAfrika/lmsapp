@@ -64,6 +64,10 @@ model Teacher {
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @default(now())
   kyc                  Kyc?
+  Ratting              Ratting[]
+  reviewers            String[]             @db.ObjectId
+  status               TeacherStatus        @default(Pending)
+  PaymentPlans         PaymentPlans?
 }
 
 model Kyc {
@@ -72,8 +76,19 @@ model Kyc {
   docImg      String
   verifiedImg String
   status      KycStatus @default(PENDING)
-  teacher     Teacher   @relation(fields: [teacherId], references: [id])
+  teacher     Teacher   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId   String    @unique @db.ObjectId
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @default(now())
+}
+
+model PaymentPlans {
+  id        String    @id @default(auto()) @map("_id") @db.ObjectId
+  plan      PlansType @default(Free)
+  teacher   Teacher   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  teacherId String    @unique @db.ObjectId
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @default(now())
 }
 
 // creating the student model
@@ -104,6 +119,8 @@ model Student {
   CompletedProfile   Boolean              @default(false)
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @default(now())
+  Ratting            Ratting[]
+  AdminSectionView   AdminSectionView[]
 }
 
 // creating the school model
@@ -158,10 +175,23 @@ model TeachersArticle {
   title      String
   sourceLink String
   type       ResourceType
-  teacher    Teacher      @relation(fields: [teacherId], references: [id])
+  teacher    Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId  String       @db.ObjectId
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @default(now())
+}
+
+// this model is to show connections between teachers and rattings
+model Ratting {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  teacher   Teacher  @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  teacherId String   @db.ObjectId
+  comment   String
+  rateValue Int
+  ratter    Student  @relation(fields: [studentId], references: [id])
+  studentId String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 // once a teacher is registered
@@ -173,7 +203,7 @@ model TeachersArticle {
 model TeachersSubject {
   id        String    @id @default(auto()) @map("_id") @db.ObjectId
   subject   Subjects //Subjects enum are defined below
-  teacher   Teacher   @relation(fields: [teacherId], references: [id])
+  teacher   Teacher   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId String    @db.ObjectId
   Session   Session[]
   createdAt DateTime  @default(now())
@@ -206,35 +236,36 @@ model Session {
 // student will have many to many relationship with classes
 // since students can have many classes and classes can have many students
 model Classes {
-  id               String             @id @default(auto()) @map("_id") @db.ObjectId
-  subject          Subjects
-  className        String
-  grade            Grade
-  duration         String
-  classStarts      DateTime
-  classEnds        DateTime
-  schedules        ClassDay[]
-  price            Float
-  classBanner      String
-  rating           Float?
-  publicClass      Boolean            @default(true)
-  classTime        String?
+  id                         String                       @id @default(auto()) @map("_id") @db.ObjectId
+  subject                    Subjects
+  className                  String
+  grade                      Grade
+  duration                   String
+  classStarts                DateTime
+  classEnds                  DateTime
+  schedules                  ClassDay[]
+  price                      Float
+  classBanner                String
+  rating                     Float?
+  publicClass                Boolean                      @default(true)
+  classTime                  String?
   // here, there is one to many relationship between classes and teacher
   // a teacher can have many classes
-  teacher          Teacher            @relation(fields: [teacherId], references: [id])
-  teacherId        String             @db.ObjectId
+  teacher                    Teacher                      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  teacherId                  String                       @db.ObjectId
   // there will be many to many relationship between classes and students
   // classes can have many students
-  studentIDs       String[]           @db.ObjectId
-  students         Student[]          @relation(fields: [studentIDs], references: [id])
-  maxCapacity      Float
-  currentCapacity  Float              @default(0)
+  studentIDs                 String[]                     @db.ObjectId
+  students                   Student[]                    @relation(fields: [studentIDs], references: [id])
+  maxCapacity                Float
+  currentCapacity            Float                        @default(0)
   // this will contain the arrays of the resources the teacher ass
-  resourcesIds     String[]           @default([])
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now())
-  ClassExams       ClassExams[]
-  StudentClassExam StudentClassExam[]
+  resourcesIds               String[]                     @default([])
+  createdAt                  DateTime                     @default(now())
+  updatedAt                  DateTime                     @default(now())
+  ClassExams                 ClassExams[]
+  StudentClassExam           StudentClassExam[]
+  AnnouncementByTeacherClass AnnouncementByTeacherClass[]
 
   @@index([teacherId], name: "teachers_class_index")
 }
@@ -243,20 +274,19 @@ model Classes {
 // this is created by a teacher once and can be edited if need arises
 // there will be one to one relationship between the Teacher and this model
 model OneOnOneSection {
-  id             String           @id @default(auto()) @map("_id") @db.ObjectId
-  teacher        Teacher          @relation(fields: [teacherId], references: [id])
-  teacherId      String           @unique @db.ObjectId
-  aboutTutor     String
-  subjects       Subjects[]       @default([ENGLISH, MATHEMATICS])
-  grade          Grade[]
-  preference     PreferSection[]  @default([oneOnOneSection])
-  minPrice       Float
-  maxPrice       Float
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  teacher          Teacher            @relation(fields: [teacherId], references: [id], onDelete: Cascade)
+  teacherId        String             @unique @db.ObjectId
+  aboutTutor       String
+  subjects         Subjects[]         @default([ENGLISH, MATHEMATICS])
+  grade            Grade[]
+  preference       String[]           @default([])
   // this will contain the list of connection between the student that 
   // applied for one on one sections
-  AppliedSection AppliedSection[]
-  createdAt      DateTime         @default(now())
-  updatedAt      DateTime         @default(now())
+  AppliedSection   AppliedSection[]
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+  AdminSectionView AdminSectionView[]
 }
 
 // model below will contain information about students that applied for one on one sections
@@ -280,7 +310,34 @@ model AppliedSection {
   @@index([oneOnOneSectionId, studentId], name: "applied_section")
 }
 
-// 
+// the model below will be displayed in the admin dashbaord.
+// when a student finsih paying for one-on-one-section the information will created containing. 
+// most information about the student and the section profile of the teacher.
+model AdminSectionView {
+  id                String          @id @default(auto()) @map("_id") @db.ObjectId
+  // the student info that applied for section
+  student           Student         @relation(fields: [studentId], references: [id])
+  studentId         String          @db.ObjectId
+  // the section profile of the teacher that was selected
+  sectionInfo       OneOnOneSection @relation(fields: [oneOnOneSectionId], references: [id])
+  oneOnOneSectionId String          @db.ObjectId
+  merged            Boolean         @default(false)
+  amt               Int
+  // for show section type, example homeworksupport and private section
+  sectionType       String
+  hoursperday       Int
+  // duration like monthly or yearly
+  duration          String
+  subject           String
+  curriculum        String
+  specialNeed       String?
+  learningGoal      String?
+  learningDays      String[]
+  // time to start or proposed time
+  startTime         DateTime
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @default(now())
+}
 
 // below is the model for get in touch
 // any one can send a message, irrespective if you are registered or not
@@ -326,7 +383,7 @@ model Vacancy {
 // while an advert can also have one to many relationships witht the vancancy teacher model
 model VacancyTeacher {
   id        String        @id @default(auto()) @map("_id") @db.ObjectId
-  teacher   Teacher       @relation(fields: [teacherId], references: [id])
+  teacher   Teacher       @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId String        @db.ObjectId
   vacancy   Vacancy       @relation(fields: [vacancyId], references: [id])
   vacancyId String        @db.ObjectId
@@ -341,9 +398,9 @@ model VacancyTeacher {
 // this can help us to be able to use pending, active and rejected status
 model SchoolTeacher {
   id        String         @id @default(auto()) @map("_id") @db.ObjectId
-  school    School         @relation(fields: [schoolId], references: [id])
+  school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   schoolId  String         @db.ObjectId
-  teacher   Teacher        @relation(fields: [teacherId], references: [id])
+  teacher   Teacher        @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId String         @db.ObjectId
   status    ContractStatus @default(PENDING)
   grades    Grade[]        @default([])
@@ -360,7 +417,7 @@ model SchoolStudent {
   id        String         @id @default(auto()) @map("_id") @db.ObjectId
   student   Student        @relation(fields: [studentId], references: [id])
   studentId String         @db.ObjectId
-  school    School         @relation(fields: [schoolId], references: [id])
+  school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   schoolId  String         @db.ObjectId
   status    ContractStatus @default(PENDING)
   classes   String[]       @default([])
@@ -377,13 +434,16 @@ model SchoolClass {
   name                      String
   subject                   Subjects
   time                      String
-  school                    School                      @relation(fields: [schoolId], references: [id])
+  school                    School                      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
   schoolId                  String                      @db.ObjectId
   SchoolClassTeacher        SchoolClassTeacher[]
   SchoolClassStudent        SchoolClassStudent[]
+  AnnouncementBySchoolClass AnnouncementBySchoolClass[]
+  SchoolClassExam           SchoolClassExam[]
+  // this will contain the arrays of the resources the teacher ass
+  resourcesIds              String[]                    @default([])
   createdAt                 DateTime                    @default(now())
   updatedAt                 DateTime                    @default(now())
-  AnnouncementBySchoolClass AnnouncementBySchoolClass[]
 
   @@index([schoolId], name: "school_class")
 }
@@ -392,8 +452,20 @@ model AnnouncementBySchoolClass {
   id            String      @id @default(auto()) @map("_id") @db.ObjectId
   title         String
   desc          String
-  schoolClass   SchoolClass @relation(fields: [schoolClassId], references: [id])
+  schoolClass   SchoolClass @relation(fields: [schoolClassId], references: [id], onDelete: Cascade)
   schoolClassId String      @db.ObjectId
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @default(now())
+}
+
+model AnnouncementByTeacherClass {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title     String
+  desc      String
+  class     Classes  @relation(fields: [classesId], references: [id])
+  classesId String   @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 // creating a model for school class teachers
@@ -402,7 +474,7 @@ model SchoolClassTeacher {
   id            String      @id @default(auto()) @map("_id") @db.ObjectId
   class         SchoolClass @relation(fields: [schoolClassId], references: [id])
   schoolClassId String      @db.ObjectId
-  teacher       Teacher     @relation(fields: [teacherId], references: [id])
+  teacher       Teacher     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId     String      @db.ObjectId
   createdAt     DateTime    @default(now())
   updatedAt     DateTime    @default(now())
@@ -430,7 +502,7 @@ model Exams {
   id        String          @id @default(auto()) @map("_id") @db.ObjectId
   title     String
   type      ExamType
-  teacher   Teacher         @relation(fields: [teacherId], references: [id])
+  teacher   Teacher         @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId String          @db.ObjectId
   test      ExamQuestions[]
   duration  String
@@ -480,6 +552,24 @@ model ClassExams {
   updatedAt          DateTime        @default(now())
 
   @@index([classesId], name: "class_exam")
+}
+
+// below is the model that link schoolclass 
+// and the exam being set by teachers
+model SchoolClassExam {
+  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
+  title              String
+  schoolClass        SchoolClass     @relation(fields: [schoolClassId], references: [id])
+  schoolClassId      String          @db.ObjectId
+  // this array contains the id of student in this class that have aswered this particular exam
+  answeredStudentIds String[]        @db.ObjectId
+  test               ExamQuestions[]
+  duration           String
+  grade              Grade
+  createdAt          DateTime        @default(now())
+  updatedAt          DateTime        @default(now())
+
+  @@index([schoolClassId], name: "class_exam")
 }
 
 model StudentClassExam {
@@ -610,4 +700,19 @@ enum ExamType {
 enum ResourceType {
   LINK
   DOCS
+}
+
+enum TeacherStatus {
+  Active
+  Suspended
+  Pending
+}
+
+enum PlansType {
+  Basic
+  Gold
+  Silver
+  Diamond
+  Bronze
+  Free
 }

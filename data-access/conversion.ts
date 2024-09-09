@@ -74,6 +74,13 @@ export const useConversion = () => {
     const arrayItem = item.join(", ");
     return arrayItem.toLocaleLowerCase();
   };
+  const joinGrades = (item: string[]): string => {
+    const newArray = item.map((subItem) =>
+      subItem.substring(5, subItem.length)
+    );
+    let joined = newArray.join(",");
+    return joined;
+  };
   return {
     getTimeAgo,
     handleTime,
@@ -83,6 +90,7 @@ export const useConversion = () => {
     downloadDoc,
     getInitials,
     joinByComma,
+    joinGrades,
   };
 };
 

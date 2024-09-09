@@ -1,21 +1,59 @@
 import { Button } from "@/components/ui/button";
-
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
 import { FaEllipsisH } from "react-icons/fa";
 import Link from "next/link";
 import { ListCollapse } from "lucide-react";
 import RemoveClass from "./RemoveClass";
+import { AssignStudent } from "./AssignStudent";
+import { IstudentClass } from "./Tables";
+import { useQuery } from "@tanstack/react-query";
 
-interface Idelete {
-  classId: string;
+export interface IActiveStudent {
+  createdAt: string;
+  student: {
+    name: string;
+    email: string;
+    profilePhoto: string;
+    id: string;
+  };
 }
 
-const OptionsDialog: React.FC<Idelete> = ({ classId }) => {
+interface Iinfo {
+  classId: string;
+  setShowStudent: React.Dispatch<React.SetStateAction<boolean>>;
+  subject: string;
+  SchoolClassStudent: IstudentClass[];
+  showStudent: boolean;
+}
+
+const OptionsDialog: React.FC<Iinfo> = ({
+  classId,
+  setShowStudent,
+  subject,
+  SchoolClassStudent,
+  showStudent,
+}) => {
+  const { data, isFetching, isError, error } = useQuery({
+    queryKey: ["active-students"],
+    queryFn: async () => {
+      const response = await fetch("/api/class-student");
+      const result = await response.json();
+      return result;
+    },
+  });
+  if (isFetching) {
+    <div>
+      <p>Loading...</p>
+    </div>;
+  }
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
+  const activeStudent: IActiveStudent[] = data;
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -39,6 +77,20 @@ const OptionsDialog: React.FC<Idelete> = ({ classId }) => {
               <RemoveClass classId={classId} />
             </div>
             <hr className="bg-black" />
+            <div
+              onClick={() => {
+                setShowStudent(true);
+              }}
+            >
+              <AssignStudent
+                subject={subject}
+                showStudent={showStudent}
+                setShowStudent={setShowStudent}
+                activeStudent={activeStudent}
+                SchoolClassStudent={SchoolClassStudent}
+                classId={classId}
+              />
+            </div>
           </div>
         </div>
       </PopoverContent>

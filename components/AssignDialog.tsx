@@ -14,11 +14,7 @@ import React, { useState } from "react";
 import { IteacherClass } from "./Tables";
 import { IoCaretDownSharp } from "react-icons/io5";
 import { BiSolidUpArrow } from "react-icons/bi";
-import {
-  QueryClient,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { IoIosCheckmark } from "react-icons/io";
 import { toast } from "react-toastify";
 

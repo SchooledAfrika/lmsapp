@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState } from "react";
 import { MdVerified } from "react-icons/md";
 import { FaShareAlt } from "react-icons/fa";
 import { Button } from "@/components/ui/button";
@@ -8,261 +8,387 @@ import Link from "next/link";
 import { Calendar } from "@/components/ui/calendar";
 import { DialogButton } from "./Dialog";
 import { ShareButton } from "./ShareButton";
-import BookSession from "./BookSession";
+import { useParams } from "next/navigation";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import Container from "./Container";
+import Backwards from "./ui/Backwards";
+import { Iratter, ISessionShow } from "./AllTutors";
+import { useClasses } from "@/data-access/class";
+import { IoIosStar } from "react-icons/io";
+import { MdShare } from "react-icons/md";
+import { useSession } from "next-auth/react";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { IoClose } from "react-icons/io5";
+import ShareLink from "./Share";
+import { CircularProgress } from "@mui/material";
 
-const SingleTutor = () => {
-  const [date, setDate] = useState<Date | undefined>(new Date());
+// this is to show that item is not submitted yet
+const BeforeReviewSubmit: React.FC<{
+  setShowratting: React.Dispatch<React.SetStateAction<boolean>>;
+  teacherId: string;
+  setSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setShowratting, teacherId, setSubmitted }) => {
+  const starArray = [1, 2, 3, 4, 5];
+  const [comment, setcomment] = useState<string | undefined>(undefined);
+  const [rateValue, setRateValue] = useState<number>(0);
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const queryclient = useQueryClient();
+  const { data } = useSession();
+  // the function that handles review
+  const handleReview = (index: number) => {
+    setRateValue(index);
+  };
+  const mutation = useMutation({
+    mutationKey: ["make-review"],
+    mutationFn: async () => {
+      const response = await fetch("/api/make-review", {
+        method: "POST",
+        body: JSON.stringify({
+          comment,
+          rateValue,
+          teacherId,
+        }),
+      });
+      return response;
+    },
+    onSuccess: async (response) => {
+      const result = await response.json();
+      if (response.ok) {
+        setSubmitted(true);
+        queryclient.invalidateQueries({ queryKey: ["get-one-session"] });
+      } else {
+        return toast.error(result.message);
+      }
+    },
+  });
+  // make submit to handle review
+  const handleSubmitReview = () => {
+    if (comment === undefined || rateValue < 1) {
+      return toast.error("Both comment and the rating is required");
+    }
+    if (data?.user.role !== "Student") {
+      return toast.error("Only student are allowed to review");
+    }
+    setSubmitting(true);
+    mutation.mutate();
+  };
+
   return (
-    <div className="">
-      <div className="flex md:mt-6 mb-12 mt-24 mx-6   justify-between ml-[0] md:mx-[80px]">
-        <p className="font-bold text-lg">Details</p>
-        <Link href="/find-tutors" className="cursor-pointer">
-          <Image
-            src="/closeAlt.svg"
-            alt="cancel"
-            width={100}
-            height={100}
-            className="w-[20px] h-[20px]"
-          />
-        </Link>
+    <div className=" w-full flex flex-col gap-3 items-center">
+      <div className=" w-[100px] aspect-square rounded-full border flex items-center justify-center border-orange-500 p-4">
+        <Image
+          src="/like.jpg"
+          alt="like"
+          width={200}
+          height={200}
+          className=" w-[80px]"
+        />
       </div>
-
-      <div className="w-[90%] my-6 h-full overflow-hidden flex md:flex-row flex-col">
-        <div className="flex  flex-col">
-          <div className="bg-white w-[90%]   rounded-xl md:w-[300px] md:h-[400px] h-[300px] text-center sm:mx-16 mx-10 my-6 ">
-            <Image
-              src={"/tutors.jpg"}
-              alt="tutor"
-              width={100}
-              height={100}
-              className="mx-auto mt-3 py-3 w-[150px] h-[150px] rounded-lg"
+      <div className=" flex flex-col items-center -space-y-2 font-semibold">
+        <p>How would you rate this tutor?</p>
+        <p>your review is important</p>
+      </div>
+      <div className=" w-4/5 px-2 py-2 border border-orange-500 rounded-md flex flex-col gap-2">
+        <textarea
+          onChange={(e) => setcomment(e.target.value)}
+          className=" w-full h-[100px] focus:outline-none text-black border-0"
+          placeholder="make a review comment..."
+        />
+      </div>
+      <div className=" items-center flex">
+        <div className=" flex items-center gap-2">
+          {starArray.map((star, index) => (
+            <IoIosStar
+              onClick={() => handleReview(star)}
+              className={` text-[27px] cursor-pointer ${
+                star <= rateValue ? "text-orange-500" : " text-slate-600"
+              } `}
+              key={index}
             />
-            <h3 className="inline   text-center font-bold text-base font-subtext">
-              David Olushola <MdVerified className="inline text-lightGreen" />{" "}
-            </h3>
-
-            <div className="flex md:flex-col mx-10 justify-center   items-center md:mx-1  flex-row ">
-              <BookSession />
-              {/* <Button
-                asChild
-                className=" bg-lightGreen rounded-lg hover:bg-green-500 text-white text-sm px-3 w-28 mr-2 mt-3  py-2 text-center lg:block"
-              >
-                <Link href="/register">Book a Session</Link>
-              </Button> */}
-
-              {/* <DialogButton /> */}
-            </div>
-          </div>
-          <div className="flex  my-6 items-start flex-col">
-            <h3 className="inline md:hidden  mx-auto md:mx-1 font-bold text-lg font-subtext">
-              About David Olushola
-            </h3>
-            <p className="flex md:hidden ml-10 sm:ml-16 justify-center items-center">
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-              commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-              penatibus et magnis dis parturient montes, nascetur ridiculus
-              mus...Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-              Aenean commodo ligula eget dolor. Aenean massa. 
-            </p>
-            <p className="text-[14px] ml-10 sm:ml-16 md:hidden mt-2">
-              Total Hours Taught Online:{" "}
-              <span className="font-bold">2000hrs+</span>{" "}
-            </p>
-
-            <ul className="flex md:hidden sm:flex-row flex-col font-header mx-auto md:mx-1 justify-between my-2 font-bold text-sm items-center ">
-              <li className="md:mr-4 py-1">
-                Government
-                <Image
-                  src={"/govt.png"}
-                  alt=""
-                  width={100}
-                  height={100}
-                  className="w-[20px] mx-2 inline"
-                />{" "}
-              </li>
-              <li className="md:mr-4 py-1">
-                Literature
-                <Image
-                  src={"/lit.png"}
-                  alt=""
-                  width={100}
-                  height={100}
-                  className="w-[20px] mx-2 inline"
-                />{" "}
-              </li>
-
-              <li className="md:mr-4 py-1">
-                English
-                <Image
-                  src={"/english.png"}
-                  alt=""
-                  width={100}
-                  height={100}
-                  className="w-[20px] mx-2 inline"
-                />{" "}
-              </li>
-            </ul>
-
-            <div className="flex md:hidden sm:ml-24 mx-10  justify-between sm:my-8 mt-3 md:items-start">
-              <p className="mr-2 sm:mr-6 sm:border-2 sm:bg-dimYellow rounded-xl sm:p-3 ">
-                {" "}
-                1 on 1 sessions
-              </p>
-              <p className="mr-2 sm:mr-6 sm:border-2 sm:bg-dimYellow rounded-xl sm:p-3 ">
-                {" "}
-                Homework Support
-              </p>
-              <p className="sm:border-2 sm:bg-dimYellow rounded-xl sm:p-3">
-                {" "}
-                Open to Jobs
-              </p>
-            </div>
-
-            <div className="bg-white w-[90%] flex md:mx-16    rounded-xl md:w-[300px] md:h-[400px] h-[300px] text-center mx-10 my-3 ">
-              <Calendar
-                mode="single"
-                selected={date}
-                onSelect={setDate}
-                className="rounded-xl "
-              />
-            </div>
-          </div>
+          ))}
         </div>
-
-        <div className="md:flex  my-6 items-start flex-col">
-          <h3 className="md:inline hidden mx-auto md:mx-1 font-bold text-lg font-subtext">
-            About David Olushola
-          </h3>
-          <p className="hidden w-[70%] md:block">
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-            commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-            penatibus et magnis dis parturient montes, nascetur ridiculus
-            mus...Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-            Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-            penatibus et magnis dis parturient montes, nascetur ridiculus mus
-            Lorem ipsum dolor sit amet, consectetuer adipiscing elit mus..
-          </p>
-          <p className="text-[14px] hidden md:block mt-2">
-            Total Hours Taught Online:{" "}
-            <span className="font-bold">2000hrs+</span>{" "}
-          </p>
-          <ul className="md:flex hidden md:flex-row flex-col font-header mx-auto md:mx-1 justify-between my-2 font-bold text-sm items-center ">
-            <li className="md:mr-4 py-1">
-              Government
-              <Image
-                src={"/govt.png"}
-                alt=""
-                width={100}
-                height={100}
-                className="w-[20px] ml-2 inline"
-              />{" "}
-            </li>
-            <li className="md:mr-4 py-1">
-              Literature
-              <Image
-                src={"/lit.png"}
-                alt=""
-                width={100}
-                height={100}
-                className="w-[20px] ml-2 inline"
-              />{" "}
-            </li>
-
-            <li className="md:mr-4 py-1">
-              English
-              <Image
-                src={"/english.png"}
-                alt=""
-                width={100}
-                height={100}
-                className="w-[20px] ml-2 inline"
-              />{" "}
-            </li>
-          </ul>
-
-          <div className="md:flex hidden md:mx-1 mx-auto justify-between mt-3 md:items-start">
-            <Button className="bg-dimYellow bg-none rounded-lg hover:bg-gold  text-white text-sm mt-3 px-3 md:w-32 w-36 mr-2 py-2 text-start lg:block">
-              1 on 1 sessions
-            </Button>
-            <Button className=" bg-dimYellow rounded-lg hover:bg-gold text-white text-sm mt-3 px-3 w-36 mr-2  py-2 text-start lg:block">
-              Homework Support
-            </Button>
-
-            <Button className=" bg-dimYellow rounded-lg hover:bg-gold text-white text-sm mt-3 px-3 w-28 mr-2  py-2 text-center lg:block">
-              Open to Jobs
-            </Button>
-          </div>
-          <div className="flex mt-3 mx-16 md:mx-1 pt-8   md:pb-6 ">
-            <Link className=" mr-2 font-bold" href="/">
-              Reviews
-            </Link>
-
-            <p className="text-sm"> ⭐ 4.7/5</p>
-
-            {/* <Link className=" md:ml-[28rem] sm:ml-[20rem] ml-3 p-3 w-28 text-center items-center justify-center  rounded-xl text-black flex bg-white  font-bold" href="/">
-          <FaShareAlt className="mr-2" /> Share
-          </Link> */}
-          </div>
-          <div className="flex flex-col w-full mx-3 my-6 justify-between ">
-            <div className="md:w-[800px] mx-auto w-[90%] my-5 bg-white md:h-[200px] h-full p-3 rounded-xl">
-              <div className="flex md:flex-row flex-col justify-between">
-                <p className="bg-dimYellow md:ml-5 ml-2 mt-5  font-header w-[50px] rounded-md text-center py-3 font-bold h-[50px]">
-                  SA
-                </p>
-                <div className="md:flex-1">
-                  <h3 className="mt-5 md:ml-5 ml-2 font-bold">
-                    Samuel Adenike
-                  </h3>
-                  <p className="md:w-4/5 w-full mt-3 ml-2 md:ml-5">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-                    natoque penatibus et magnis dis parturient montes, nascetur
-                    ridiculus mus...
-                  </p>
-                </div>
-                <p className="text-sm mr-3 mt-2"> ⭐ 5</p>
-              </div>
-            </div>
-            <div className="md:w-[800px] w-[90%] mx-auto my-5 bg-white md:h-[200px] h-full p-3  rounded-xl">
-              <div className="flex md:flex-row flex-col justify-between">
-                <p className="bg-dimYellow md:ml-5 ml-2 mt-5 font-header w-[50px] rounded-md text-center py-3 font-bold h-[50px]">
-                  AR
-                </p>
-                <div className="flex-1">
-                  <h3 className="mt-5 md:ml-5 ml-2 font-bold">
-                    Amanda Richards
-                  </h3>
-                  <p className="md:w-4/5 w-full mt-3 md:ml-5 ml-2">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-                    natoque penatibus et magnis dis parturient montes, nascetur
-                    ridiculus mus...
-                  </p>
-                </div>
-                <p className="text-sm mr-3 mt-2"> ⭐ 4.6</p>
-              </div>
-            </div>
-            <div className="md:w-[800px] p-3 w-[90%] mx-auto my-5 bg-white md:h-[200px] h-full  rounded-xl">
-              <div className="flex md:flex-row flex-col justify-between">
-                <p className="bg-dimYellow md:ml-5 ml-2 mt-5 font-header w-[50px] rounded-md text-center py-3 font-bold h-[50px]">
-                  UD
-                </p>
-                <div className="flex-1">
-                  <h3 className="mt-5 md:ml-5 ml-2 font-bold">Utiga Daniel</h3>
-                  <p className="md:w-4/5 w-full mt-3 md:ml-5 ml-2">
-                    Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    Aenean commodo ligula eget dolor. Aenean massa. Cum sociis
-                    natoque penatibus et magnis dis parturient montes, nascetur
-                    ridiculus mus...
-                  </p>
-                </div>
-                <p className="text-sm mr-3 mt-2"> ⭐ 5</p>
-              </div>
-            </div>
-          </div>
+      </div>
+      <div className=" w-3/4 flex flex-col gap-2">
+        <button
+          disabled={submitting}
+          onClick={handleSubmitReview}
+          className=" cursor-pointer w-full bg-green-800 py-3 rounded-2xl flex items-center justify-center text-white"
+        >
+          {submitting ? <p>Submitting...</p> : <p>Submit</p>}
+        </button>
+        <div
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowratting(false);
+          }}
+          className=" w-full items-center justify-center py-2 flex text-[16px] cursor-pointer text-slate-500 "
+        >
+          <p>No thanks</p>
         </div>
       </div>
     </div>
+  );
+};
+// this is the component to show after review submission
+const AfterReviewSubmit: React.FC<{
+  setShowratting: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ setShowratting }) => {
+  return (
+    <div className=" w-full py-10 items-center flex justify-center flex-col relative">
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+          setShowratting(false);
+        }}
+        className=" absolute top-0 right-0 text-[25px] cursor-pointer"
+      >
+        <IoClose />
+      </div>
+      <Image
+        src="/success.jpg"
+        alt="successful"
+        width={200}
+        height={200}
+        className=" w-[150px]"
+      />
+      <p className=" font-bold text-green-800 text-[20px]">successful!!!</p>
+    </div>
+  );
+};
+
+// this component contains the dialog box to display ratting
+const ShowRatting: React.FC<{
+  showratting: boolean;
+  setShowratting: React.Dispatch<React.SetStateAction<boolean>>;
+  teacherId: string;
+}> = ({ showratting, setShowratting, teacherId }) => {
+  // this state tuggles to show successfully review
+  const [submitted, setSubmitted] = useState<boolean>(false);
+  return (
+    <Dialog open={showratting} onOpenChange={() => setShowratting(false)}>
+      <DialogTrigger className=" w-full" asChild>
+        <div className="w-full font-bold  py-3 text-green-800 max-md:text-[12px] flex justify-center items-center rounded-lg border border-green-800">
+          rate
+        </div>
+      </DialogTrigger>
+      <DialogContent className="sm:max-w-[425px] ">
+        {submitted ? (
+          <AfterReviewSubmit setShowratting={setShowratting} />
+        ) : (
+          <BeforeReviewSubmit
+            setShowratting={setShowratting}
+            teacherId={teacherId}
+            setSubmitted={setSubmitted}
+          />
+        )}
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const ProfileShow: React.FC<{
+  dp: string;
+  name: string;
+  teacherId: string;
+}> = ({ dp, name, teacherId }) => {
+  const [showRatting, setShowratting] = useState<boolean>(false);
+  const { status } = useSession();
+  const handleRattingShow = () => {
+    if (status === "unauthenticated") {
+      return toast.error("login to rate this tutor");
+    }
+    setShowratting(true);
+  };
+  return (
+    <div className=" w-full  bg-white flex flex-col gap-4 py-8 items-center rounded-lg">
+      <div className=" w-[200px] h-[200px] rounded-lg overflow-hidden">
+        <Image
+          src={dp}
+          width={200}
+          height={200}
+          alt=""
+          className=" w-full h-full object-cover"
+        />
+      </div>
+      <div className=" flex items-center gap-2">
+        <p className=" font-bold text-[20px]">{name}</p>
+        <MdVerified className=" text-[20px] text-green-800" />
+      </div>
+      <div className=" flex flex-col gap-3 items-center w-full">
+        <div className=" w-1/3 py-3 bg-green-800 text-white max-md:text-[12px] flex items-center justify-center rounded-lg">
+          <p>Book a session</p>
+        </div>
+        <div onClick={handleRattingShow} className=" w-1/3 cursor-pointer">
+          <ShowRatting
+            showratting={showRatting}
+            setShowratting={setShowratting}
+            teacherId={teacherId}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Desc: React.FC<{
+  name: string;
+  desc: string;
+  subjects: string[];
+  preferences: string[];
+  ratting: any;
+}> = ({ name, desc, subjects, preferences, ratting }) => {
+  const { capitalizeString } = useClasses();
+  return (
+    <div>
+      <div className=" flex flex-col gap-4">
+        <p className=" font-bold text-[20px] max-sm:text-[16px]">
+          About {name}
+        </p>
+        <p className=" text-slate-600">{desc}</p>
+        <div className=" flex flex-col gap-2">
+          <div className=" flex flex-wrap items-center gap-3 font-bold">
+            <p>Subjects:</p>
+            {subjects.map((subject, index) => (
+              <div key={index} className=" flex items-center gap-1 ">
+                <Image
+                  src={`/${subject.toLowerCase()}.png`}
+                  alt=""
+                  width={200}
+                  height={200}
+                  className=" w-[20px] aspect-square"
+                />
+                <p>{capitalizeString(subject)}</p>
+              </div>
+            ))}
+          </div>
+          <div className=" flex items-center gap-3">
+            {preferences.map((preference, index) => (
+              <div
+                className=" text-[12px] px-3 py-2 bg-orange-200 rounded-lg border border-orange-600 text-black"
+                key={index}
+              >
+                <p>{preference}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+        <Share ratting={ratting} />
+      </div>
+    </div>
+  );
+};
+
+const Share: React.FC<{ ratting: number }> = ({ ratting }) => {
+  return (
+    <div className=" w-full flex items-center justify-between">
+      <div className=" flex items-center gap-3">
+        <p className=" font-bold text-[20px]">Review</p>
+        <div className=" flex items-center gap-1">
+          <IoIosStar className=" text-orange-500" />
+          {ratting === null ? <p>0</p> : <p>{ratting.toFixed(2)}</p>}
+        </div>
+      </div>
+      <ShareLink />
+    </div>
+  );
+};
+
+const Rattings: React.FC<{
+  rate: Iratter;
+}> = ({ rate }) => {
+  return (
+    <div className=" flex flex-col w-full px-5 py-2 bg-white rounded-md ">
+      <div className=" w-full flex gap-4 items-center">
+        <div className=" flex-1 aspect-square border border-orange-600 rounded-sm p-1">
+          <Image
+            src={rate.ratter.profilePhoto}
+            alt="dp"
+            width={200}
+            height={200}
+            className=" w-full h-full"
+          />
+        </div>
+        <div className=" flex-11">
+          <div className=" flex items-center justify-between">
+            <p className=" text-black font-bold max-sm:text-[14px] text-[20px]">
+              {rate.ratter.name}
+            </p>
+            <div className=" flex md:gap-1 items-center max-sm:text-[12px]">
+              <IoIosStar className=" text-orange-600" />
+              <p>{rate.rateValue}</p>
+            </div>
+          </div>
+          <div></div>
+        </div>
+      </div>
+      <div className=" w-full flex gap-4">
+        <div className=" flex-1 aspect-square rounded-sm p-1"></div>
+        <div className=" flex-11 leading-tight max-sm:text-[12px]">
+          <p>{rate.comment}</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export const FullPageLoading = () => {
+  return (
+    <div className=" w-full h-[calc(100vh-70px)] bg-slate-100 flex items-center justify-center">
+      <CircularProgress size={80} color="success" />
+    </div>
+  );
+};
+
+const SingleTutor = () => {
+  const { id } = useParams();
+  const { isLoading, data, isError, error } = useQuery({
+    queryKey: ["get-one-session"],
+    queryFn: async () => {
+      const response = await fetch(
+        `/api/apply-for-section/single-section/${id}`
+      );
+      const result = await response.json();
+      return result;
+    },
+  });
+  if (isLoading) {
+    return <FullPageLoading />;
+  }
+  const SingleData: ISessionShow = data;
+  return (
+    <Container>
+      <div className=" w-full mt-16">
+        <div className=" w-full flex items-end justify-end">
+          <Backwards />
+        </div>
+        <div className=" flex mt-4 gap-10 sm:flex-row flex-col">
+          <div className=" flex-4">
+            <ProfileShow
+              dp={SingleData.teacher.profilePhoto}
+              name={SingleData.teacher.name}
+              teacherId={SingleData.teacherId}
+            />
+          </div>
+          <div className=" flex-6 flex flex-col gap-4">
+            <Desc
+              name={SingleData.teacher.name}
+              desc={SingleData.teacher.details}
+              subjects={SingleData.subjects}
+              preferences={SingleData.preference}
+              ratting={SingleData.teacher.rating}
+            />
+            <div className=" w-full flex flex-col gap-2">
+              {SingleData.teacher.Ratting?.map((rate, index) => (
+                <Rattings key={index} rate={rate} />
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+      <ToastContainer />
+    </Container>
   );
 };
 

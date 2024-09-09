@@ -46,10 +46,6 @@ export const TeacherOneOnOneSection: oneOnOneSection[] = [
     name: "Subject and Preferences",
     field: ["subjects", "grade", "preference"],
   },
-  {
-    name: "Pricing Details",
-    field: ["minPrice", "maxPrice"],
-  },
 ];
 
 export const oneOnOneSectionSchema = z.object({
@@ -57,6 +53,4 @@ export const oneOnOneSectionSchema = z.object({
   subjects: z.array(z.string(), { message: "please enter subject" }),
   grade: z.array(z.string(), { message: "please enter grade" }),
   preference: z.array(z.string(), { message: "please enter preferences" }),
-  minPrice: z.number({ message: "please enter minimum price" }),
-  maxPrice: z.number({ message: "please enter maximum price" }),
 });
