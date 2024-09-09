@@ -27,7 +27,7 @@ export const RegisterType: Iregister[] = [
       link: "/student-account",
       linkText: "Student Account ",
       descriptionEnd:
-      "with Schooled Afrika and access all you need for a better digital learning. You are one click away from your academic success dream. ",
+      "with Schooled Afrika and access all you need for a better digital learning. ",
     tickIcon: "/svgs/tick.svg",
     coloredTick: "/svgs/colored-tick.svg",
   },
@@ -63,7 +63,7 @@ export const RegisterType: Iregister[] = [
     link: "/parent-account",
     linkText: "Parent Account ",
     descriptionEnd:
-      "with Schooled Afrika. Join us on a journey of exploration and discovery as we shape the next generation of lifelong learners.",
+      "with Schooled Afrika. Join us as we shape the next generation of lifelong learners.",
     tickIcon: "/svgs/tick.svg",
     coloredTick: "/svgs/colored-tick.svg",
   },

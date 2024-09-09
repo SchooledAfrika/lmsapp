@@ -93,6 +93,7 @@ const Header = () => {
           <div className="flex gap-[50px] text-[16px] items-center select-none">
             <Link href="/">
               <Image
+                 onClick={closeMenu}
                 src={"/logo.png"}
                 alt="logo"
                 width={100}
@@ -109,6 +110,7 @@ const Header = () => {
               />
             ) : (
               <Image
+              
                 src={Menu}
                 alt="logo"
                 className="cursor-pointer animate-in fade-in zoom-in"
@@ -144,6 +146,7 @@ const Header = () => {
               {status === "unauthenticated" ? (
                 <div className="flex flex-col  items-center mr-2 gap-6">
                   <Button
+                   onClick={closeMenu}
                     asChild
                     className=" bg-secondary w-full items-center hover:bg-green-600 text-white   text-[16.5px] px-6 py-2 lg:block"
                   >
@@ -151,6 +154,7 @@ const Header = () => {
                   </Button>
 
                   <Button
+                   onClick={closeMenu}
                     asChild
                     className=" bg-dimOrange w-full hover:bg-orange-600 text-white  text-[16.5px] px-6 py-2 lg:block"
                   >
