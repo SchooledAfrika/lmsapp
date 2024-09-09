@@ -8,12 +8,13 @@ import Link from "next/link";
 import { Calendar } from "@/components/ui/calendar";
 import { DialogButton } from "./Dialog";
 import { ShareButton } from "./ShareButton";
+import BookSession from "./BookSession";
 
 const SingleTutor = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   return (
-    <div>
-      <div className="flex md:mt-6 mb-12 mt-24  justify-between ml-[0] md:mx-[80px]">
+    <div className="">
+      <div className="flex md:mt-6 mb-12 mt-24 mx-6   justify-between ml-[0] md:mx-[80px]">
         <p className="font-bold text-lg">Details</p>
         <Link href="/find-tutors" className="cursor-pointer">
           <Image
@@ -27,7 +28,7 @@ const SingleTutor = () => {
       </div>
 
       <div className="w-[90%] my-6 h-full overflow-hidden flex md:flex-row flex-col">
-        <div className="flex flex-col">
+        <div className="flex  flex-col">
           <div className="bg-white w-[90%]   rounded-xl md:w-[300px] md:h-[400px] h-[300px] text-center sm:mx-16 mx-10 my-6 ">
             <Image
               src={"/tutors.jpg"}
@@ -39,19 +40,17 @@ const SingleTutor = () => {
             <h3 className="inline   text-center font-bold text-base font-subtext">
               David Olushola <MdVerified className="inline text-lightGreen" />{" "}
             </h3>
-            <p className=" text-lightGreen font-bold text-base font-subtext">
-              $10.00 - $25.00
-            </p>
-            <p className=" text-sm">Per Hour</p>
+
             <div className="flex md:flex-col mx-10 justify-center   items-center md:mx-1  flex-row ">
-              <Button
+              <BookSession />
+              {/* <Button
                 asChild
                 className=" bg-lightGreen rounded-lg hover:bg-green-500 text-white text-sm px-3 w-28 mr-2 mt-3  py-2 text-center lg:block"
               >
-                <Link href="/register">Book a Lesson</Link>
-              </Button>
+                <Link href="/register">Book a Session</Link>
+              </Button> */}
 
-              <DialogButton />
+              {/* <DialogButton /> */}
             </div>
           </div>
           <div className="flex  my-6 items-start flex-col">
@@ -63,10 +62,13 @@ const SingleTutor = () => {
               commodo ligula eget dolor. Aenean massa. Cum sociis natoque
               penatibus et magnis dis parturient montes, nascetur ridiculus
               mus...Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-              Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque
-              penatibus et magnis dis parturient montes, nascetur ridiculus mus
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit mus..
+              Aenean commodo ligula eget dolor. Aenean massa. 
             </p>
+            <p className="text-[14px] ml-10 sm:ml-16 md:hidden mt-2">
+              Total Hours Taught Online:{" "}
+              <span className="font-bold">2000hrs+</span>{" "}
+            </p>
+
             <ul className="flex md:hidden sm:flex-row flex-col font-header mx-auto md:mx-1 justify-between my-2 font-bold text-sm items-center ">
               <li className="md:mr-4 py-1">
                 Government
@@ -100,6 +102,7 @@ const SingleTutor = () => {
                 />{" "}
               </li>
             </ul>
+
             <div className="flex md:hidden sm:ml-24 mx-10  justify-between sm:my-8 mt-3 md:items-start">
               <p className="mr-2 sm:mr-6 sm:border-2 sm:bg-dimYellow rounded-xl sm:p-3 ">
                 {" "}
@@ -138,6 +141,10 @@ const SingleTutor = () => {
             Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque
             penatibus et magnis dis parturient montes, nascetur ridiculus mus
             Lorem ipsum dolor sit amet, consectetuer adipiscing elit mus..
+          </p>
+          <p className="text-[14px] hidden md:block mt-2">
+            Total Hours Taught Online:{" "}
+            <span className="font-bold">2000hrs+</span>{" "}
           </p>
           <ul className="md:flex hidden md:flex-row flex-col font-header mx-auto md:mx-1 justify-between my-2 font-bold text-sm items-center ">
             <li className="md:mr-4 py-1">
@@ -191,7 +198,7 @@ const SingleTutor = () => {
             </Link>
 
             <p className="text-sm"> ⭐ 4.7/5</p>
-            <ShareButton />
+
             {/* <Link className=" md:ml-[28rem] sm:ml-[20rem] ml-3 p-3 w-28 text-center items-center justify-center  rounded-xl text-black flex bg-white  font-bold" href="/">
           <FaShareAlt className="mr-2" /> Share
           </Link> */}

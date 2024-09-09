@@ -23,6 +23,9 @@ const Header = () => {
   const toggleMenu = () => {
     setMenu(!menu);
   };
+  const closeMenu = () => {
+    setMenu(false);
+  };
   const pathname = usePathname();
   const { status, data } = useSession();
 
@@ -117,12 +120,25 @@ const Header = () => {
         {menu ? (
           <div className="my-8 select-none animate-in slide-in-from-right ">
             <div className="flex flex-col gap-8 mt-8 mx-4 ">
-              <div className="flex gap-[20px] xl:gap-[50px] text-[16px] flex-col select-none ">
-                <Link href="/find-tutors">Find Tutors</Link>
-                <Link href="/find-classes">Classes</Link>
-                <Link href="/apply-to-teach">Apply to teach</Link>
-                <Link href="/vacancies">Vacancies</Link>
-                <Link href="/contact">Contact Us</Link>
+              <div className="flex gap-[20px] font-header xl:gap-[50px] text-[16px] flex-col select-none ">
+              {navLinks.map((link) => {
+              const isActive = pathname.startsWith(link.href);
+              return (
+                <Link
+                onClick={closeMenu}
+                  href={link.href}
+                  key={link.name}
+                  className={
+                    isActive
+                      ? "font-bold text-lightGreen "
+                      : "font-semibold"
+                  }
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+               
               </div>
 
               {status === "unauthenticated" ? (

@@ -73,6 +73,7 @@ const AllTutors = () => {
                 penatibus et magnis dis parturient montes, nascetur ridiculus
                 mus...
               </p>
+              <p className="text-[14px] mt-2">Total Hours Taught Online: <span className="font-bold">2000hrs+</span> </p>
               <ul className="flex flex-col md:flex-row  my-2 text-[13px] font-bold items-center">
                 <li className="md:mr-4 py-1">Speaks: English</li>
                 <li className="md:mr-4 py-1">
@@ -114,8 +115,10 @@ const AllTutors = () => {
             <div className="flex flex-col items-end p-6">
              
              
+             
               <div className="flex flex-col items-end mt-3">
                 <BookSession />
+               
                 {/* <Button
                   asChild
                   variant="outline"
@@ -180,9 +183,7 @@ const AllTutors = () => {
               <span className="font-semibold text-[14px]">Teaches:</span>{" "}
               Mathematics, English, Government
             </p>
-            <h3 className="text-lightGreen font-bold text-lg">
-              $10.00 - $25.00
-            </h3>
+            <p className="text-[14px] mt-2">Total Hours Taught Online: <span className="font-bold">2000hrs+</span> </p>
             <div className="flex overflow-x-auto">
               <Button className="bg-dimYellow border border-red-400 rounded-lg hover:bg-gold text-black text-[13px] mt-3 px-2 mr-2 py-1">
                 1 on 1 sessions
