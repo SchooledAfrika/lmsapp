@@ -8,7 +8,7 @@ const HeroLeft = () => {
     <div className="font-subtext flex-1 md:pr-5 flex flex-col gap-6">
       <div className=" flex gap-2 items-end">
         <p className=" text-dimYellow font-header text-lg font-bold">
-          Introducing Schooled Afrika
+          TRUSTED BY 2000+ PARENTS
         </p>
         <Image
           className=" w-16"
@@ -21,14 +21,18 @@ const HeroLeft = () => {
       </div>
       <div>
         <p className=" text-black text-3xl font-bold">
-        Best choice for{" "}
-          <span className=" text-green-600">online</span> classes.
+        Get The Right{" "}
+          <span className=" text-green-600">Tutor</span> For Your Child.
         </p>
       </div>
       <div>
         <p>
-        Let's be a part of your child's academic success, empower them with the best tools for a great
-        future, build their confidence,and encourage learning in a seamless and convenient way.
+          We help you find the perfect tutor that your child needs.
+        
+        </p>
+        <p>
+          Get Personalized home tutoring that is designed to guide your children towards exam success, boost their confidence, and get better school grades.
+        
         </p>
       </div>
       <div>

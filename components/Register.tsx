@@ -91,7 +91,7 @@ const Register: FC = () => {
                   width={200}
                   height={200}
                   alt="School Account"
-                  className="w-[70px]"
+                  className="w-[80px]"
                 />
               </div>
               <div>

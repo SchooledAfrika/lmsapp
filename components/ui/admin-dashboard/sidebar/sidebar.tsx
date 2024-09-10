@@ -10,6 +10,12 @@ import { AdminDashboardContext } from "@/providers/Admincontext";
 const Sidebar = ({ dashboard }: { dashboard: string }) => {
   const { showSideBar, setShowSideBar } = useContext(AdminDashboardContext);
   const router = useRouter();
+   // function to signout users
+   const signOutUser = async () => {
+    const logOutData = await signOut({ redirect: false, callbackUrl: "/" });
+    router.push(logOutData.url);
+  };
+   // manipulating the path values
   const path = usePathname().split("/");
   let findpath: string;
   if (path.length === 2) {
@@ -49,6 +55,7 @@ const Sidebar = ({ dashboard }: { dashboard: string }) => {
       
       </div>
       <div
+       onClick={signOutUser}
        
         className=" text-white mb-6 flex gap-1 items-center text-[12px] cursor-pointer"
       >
