@@ -259,14 +259,14 @@ const Apply = () => {
     You can earn six figures in two weeks depending on your periods per day
     </AccordionContent>
   </AccordionItem>
-  <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-1">
+  <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-2">
   
   <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> How many periods can I have per day?</AccordionTrigger>
     <AccordionContent>
     This totally depends on your availability and strength .
     </AccordionContent>
   </AccordionItem>
-  <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-1">
+  <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-3">
   
   <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> What do i need to be a teacher with schooled Afrika?</AccordionTrigger>
     <AccordionContent>
@@ -276,7 +276,7 @@ Good internet connection
 A good phone or laptop
     </AccordionContent>
   </AccordionItem>
-  <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-1">
+  <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-4">
   
   <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> When do I get paid?</AccordionTrigger>
     <AccordionContent>
@@ -284,7 +284,7 @@ A good phone or laptop
 
     </AccordionContent>
   </AccordionItem>
-  <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-1">
+  <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-5">
   
   <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> Will I be invited for an interview before I am accepted?</AccordionTrigger>
     <AccordionContent>

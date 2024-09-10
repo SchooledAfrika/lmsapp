@@ -40,10 +40,10 @@ model Teacher {
   gender               Gender?
   address              String?
   resume               String?
-  language             String?
+  language             String[]
   // remember to change this subject later to arrays of subjects
-  subject              String?
-  grade                String?
+  subject              String[]
+  grade                String[]
   sessionPrice         String?
   homeWorkPrice        String?
   bankName             String?

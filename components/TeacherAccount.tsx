@@ -18,6 +18,8 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { useToast } from "./ui/use-toast";
 import { useCloudinary } from "@/data-access/cloudinary";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export type Iteacher = z.infer<typeof teacherSchema>;
 const TeacherAccount = () => {
@@ -172,6 +174,7 @@ const TeacherAccount = () => {
       <Container>
         <Footer />
       </Container>
+      <ToastContainer />
     </section>
   );
 };

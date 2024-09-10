@@ -7,6 +7,38 @@ export interface IprogressType {
   field: string[];
 }
 
+// list of students grade below
+export const gradeList: string[] = [
+  "KG",
+  "Grade1",
+  "Grade2",
+  "Grade3",
+  "Grade4",
+  "Grade5",
+  "Grade6",
+  "Grade7",
+  "Grade8",
+  "Grade9",
+  "Grade10",
+  "Grade11",
+  "Grade12",
+];
+// the preference array
+export const preferences = [
+  "HomeWork Support",
+  "1 on 1 Sessions",
+  "Open to Jobs",
+  "Group Sessions",
+];
+// the language array
+export const teacherLang: string[] = [
+  "English",
+  "French",
+  "Igbo",
+  "Yoruba",
+  "Hausa",
+  "Spanish",
+];
 // progress info for students
 export const StudentMoreInfo: IprogressType[] = [
   {
@@ -24,7 +56,7 @@ export const TeacherMoreInfo: IprogressType[] = [
   { name: "Resume & Qualification", field: ["resume", "details"] },
   {
     name: "Subject & preference",
-    field: ["language", "subject", "grade", "homeWorkPrice", "sessionPrice"],
+    field: ["language", "subject", "grade"],
   },
   {
     name: "Payments Details",
@@ -183,11 +215,13 @@ export const teacherSchema = z.object({
       message: `Max file size is 5MB.`,
     }),
   details: z.string().min(10, { message: "description is needed" }),
-  language: z.string().min(3, { message: "enter your prefered language" }),
-  subject: z.string({ message: "enter your prefered subject" }),
-  grade: z.string({ message: "select your grade" }),
-  sessionPrice: z.string().min(1, { message: "add your session price" }),
-  homeWorkPrice: z.string().min(1, { message: "add your homework price" }),
+  language: z
+    .array(z.string())
+    .min(1, { message: "select at least one language" }),
+  subject: z
+    .array(z.string())
+    .min(1, { message: "select at least one subject" }),
+  grade: z.array(z.string()).min(1, { message: "select at least one grade" }),
   bankName: z.string({ message: "enter your bank name" }),
   accountNo: z.string().min(9, { message: "enter a valid account number" }),
   accountName: z.string().min(5, { message: "enter valid bank name" }),

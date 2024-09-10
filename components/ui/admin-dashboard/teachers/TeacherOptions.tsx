@@ -19,7 +19,12 @@ import { ListCollapse } from "lucide-react";
 import { FaUserSlash } from "react-icons/fa6";
 import RemoveTeacher from "./RemoveTeacher";
 
-const TeacherOptions = () => {
+interface ITeacher {
+  dataId: string;
+}
+
+
+  const TeacherOptions: React.FC<ITeacher> = ({ dataId }) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -31,7 +36,7 @@ const TeacherOptions = () => {
         <div className="grid gap-4 font-header">
           <div className="grid gap-2">
             <div className="flex justify-start">
-              <Link href={`/admin-dashboard/teachers/test`}>
+              <Link href={`/admin-dashboard/teachers/${dataId}`}>
                 <p className="inline text-[13px]  font-semibold">
                   <FaRegEye className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
                   View
