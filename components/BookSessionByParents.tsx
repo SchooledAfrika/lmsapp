@@ -143,7 +143,7 @@ const BookSessionByParents: React.FC<{
   sessionId: string;
   tutorName: string;
   tutorImg: string;
-  tutorLang: string;
+  tutorLang: string[];
   setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ sessionId, tutorImg, tutorLang, tutorName, setShowDialog }) => {
   const { data: session, update } = useSession();

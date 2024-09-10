@@ -86,7 +86,7 @@ const BookSessionByStudent: React.FC<{
   sessionId: string;
   tutorName: string;
   tutorImg: string;
-  tutorLang: string;
+  tutorLang: string[];
   setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ sessionId, tutorImg, tutorLang, tutorName, setShowDialog }) => {
   const [completed, setCompleted] = useState<boolean>(false);

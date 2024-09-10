@@ -41,7 +41,7 @@ export interface ISessionSub {
   method?: string;
   tutorName?: string;
   tutorImg?: string;
-  tutorLang?: string;
+  tutorLang?: string[];
 }
 
 const ChildDetails: React.FC<ISessionSub> = ({

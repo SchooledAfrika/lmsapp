@@ -56,7 +56,7 @@ export const TeacherMoreInfo: IprogressType[] = [
   { name: "Resume & Qualification", field: ["resume", "details"] },
   {
     name: "Subject & preference",
-    field: ["language", "subject", "grade"],
+    field: ["language", "subject", "grade", "hours"],
   },
   {
     name: "Payments Details",
@@ -222,6 +222,7 @@ export const teacherSchema = z.object({
     .array(z.string())
     .min(1, { message: "select at least one subject" }),
   grade: z.array(z.string()).min(1, { message: "select at least one grade" }),
+  hours: z.string().min(1, { message: "enter hours taught online" }),
   bankName: z.string({ message: "enter your bank name" }),
   accountNo: z.string().min(9, { message: "enter a valid account number" }),
   accountName: z.string().min(5, { message: "enter valid bank name" }),

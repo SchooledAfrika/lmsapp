@@ -155,6 +155,16 @@ const TeacherPaymentDetails: React.FC<ITeacherSub> = ({
       {errors.grade && (
         <small className=" text-red-600">{errors.grade.message}</small>
       )}
+      <input
+        {...register("hours")}
+        onChange={() => clearErrors("hours")}
+        placeholder="hours of experience"
+        type="number"
+        className=" py-3 px-2 border border-black focus:outline-none rounded-md"
+      />
+      {errors.hours && (
+        <small className=" text-red-600">{errors.hours.message}</small>
+      )}
       <div>
         <label className="font-bold text-[16px]">Preferences</label>
         <div className="grid grid-cols-2 gap-x-2 w-full">
