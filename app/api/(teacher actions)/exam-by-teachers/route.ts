@@ -36,7 +36,12 @@ export async function POST(req: Request) {
 // returning based on the teacherId
 export async function GET(req: Request) {
   const teacherId = await serverSessionId();
+  const role = await serverSessionRole();
   if (!teacherId) return notAuthenticated();
+  if (role !== "Teacher")
+    return new Response(
+      JSON.stringify({ message: "only teachers are allowed to create exams" })
+    );
   try {
     const allExams = await prisma.exams.findMany({
       where: { teacherId },

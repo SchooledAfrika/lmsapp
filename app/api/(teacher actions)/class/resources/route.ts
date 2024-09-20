@@ -1,12 +1,20 @@
 // here, a teacher will add his resources to the class for students to use;
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // add resources to class
 export async function POST(req: Request) {
   // TODO: change this teacherId to nextauth id
-  const { teacherId, classId, resourceId } = await req.json();
+  const { classId, resourceId } = await req.json();
+  const teacherId = await serverSessionId();
+  const role = await serverSessionRole();
   if (!teacherId) return notAuthenticated();
+  if (role !== "Teacher")
+    return new Response(
+      JSON.stringify({ message: "only teachers can add resources" }),
+      { status: 400 }
+    );
   // lets get the class from the classId, and make sure is actually the teacher that owns it
   const getClass = await prisma.classes.findUnique({
     where: {

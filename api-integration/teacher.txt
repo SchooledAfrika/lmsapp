@@ -157,3 +157,48 @@ payload:{
 }
 comment: teachers will use this endpoint to create or submit their kyc, at submission the kyc will be pendind waiting for approval or rejection from the admin
 
+
+
+
+NEW ENDPOINTS
+date: 9/20/2024 
+================================================================================================================
+endpoint to get all the exam by teacher
+================================================================================================================
+====> teacher getting all their exam
+route:/api/exam-by-teachers
+method: GET
+comment: this enpoint will return all the exams a teacher set before, this is so you can be able to get exam for a particular
+class or for a one on one section.
+
+================================================================================================================
+endpoint to get all the resources by teacher
+================================================================================================================
+=====> teacher getting all their resources
+route: /api/manage-resources
+method: GET
+comment: this enpoint is for teachers to get all their resources, so that they can set it for a particular class or one on one section
+
+================================================================================================================
+endpoint for a teacher to set exam for the class
+================================================================================================================
+====> teacher setting exam for a class
+route: /api/class/exams
+method: POST
+payload:{
+    classId: String,
+    examId:String
+}
+comment: while creating exams for a class, we just need the classId which you want to add the exam to and the examId, every other things will be handled in the backend
+
+================================================================================================================
+endpoint for a teacher to add a resouces for a class
+================================================================================================================
+====> teacher adding resources to a particular class
+route: /api/class/resources
+method: POST
+payload:{
+    classId: String,
+    resourceId:String,
+}
+comment:passing the classId and the resourceId through the above route will handle creating a resource for the class

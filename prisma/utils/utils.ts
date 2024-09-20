@@ -40,3 +40,10 @@ export const serverSessionRole = async (): Promise<string | undefined> => {
   const role = session?.user.role;
   return role;
 };
+
+// custome function for returning a query based on the name
+export const getQuery = (url: string, queryKey: string): string => {
+  const newUrl = new URL(url);
+  const queryName = newUrl.searchParams.get(queryKey);
+  return queryName as string;
+};
