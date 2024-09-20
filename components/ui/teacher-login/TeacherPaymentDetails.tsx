@@ -11,6 +11,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { subjects } from "@/constants/index";
+import { MultipleSelect } from "../book-teacher/StudentBookDetails";
+import { gradeList, preferences, teacherLang } from "@/constants/completeReg";
+import { toast } from "react-toastify";
+import { AllSubject } from "../book-teacher/StudentBookDetails";
+
 const TeacherPaymentDetails: React.FC<ITeacherSub> = ({
   register,
   errors,
@@ -20,22 +25,84 @@ const TeacherPaymentDetails: React.FC<ITeacherSub> = ({
   setValue,
 }) => {
   const [allPreference, setPreference] = useState<string[]>([]);
-  // the preference array
-  const preferences = [
-    "HomeWork Support",
-    "1 on 1 Sessions",
-    "Open to Jobs",
-    "Group Sessions",
-  ];
-  // the language array
-  const teacherLang: string[] = [
-    "English",
-    "French",
-    "Igbo",
-    "Yoruba",
-    "Hausa",
-    "Spanish",
-  ];
+  const [selectedGrade, setSelectedGrade] = useState<string[]>([]);
+  const [selectedSubject, setSelectedSubject] = useState<string[]>([]);
+  const [selectedLang, setSelectedLang] = useState<string[]>([]);
+
+  // function to set or remove the grades selected
+  const handleSelectGrade = (grade: string) => {
+    const aspectGrade = [...selectedGrade];
+    // check if the subject already exists
+    const isGradeExist = aspectGrade.includes(grade);
+    if (isGradeExist) {
+      const modifiedGrade = aspectGrade.filter((item) => item !== grade);
+      setSelectedGrade(modifiedGrade);
+      if (setValue) {
+        setValue("grade", modifiedGrade);
+      }
+      clearErrors("grade");
+    } else {
+      if (aspectGrade.length === 5) {
+        return toast.error("maximum of 5 grades is allowed");
+      }
+      const modifiedGrade = [...aspectGrade, grade];
+      setSelectedGrade(modifiedGrade);
+      if (setValue) {
+        setValue("grade", modifiedGrade);
+      }
+      clearErrors("grade");
+    }
+  };
+
+  // function to handle selected subjects
+  const handleSelectSubject = (subject: string) => {
+    const aspectSubject = [...selectedSubject];
+    // check if the subject already exists
+    const isSubjectExisting = aspectSubject.includes(subject);
+    if (isSubjectExisting) {
+      const modifiedSubject = aspectSubject.filter((item) => item !== subject);
+      setSelectedSubject(modifiedSubject);
+      if (setValue) {
+        setValue("subject", modifiedSubject);
+      }
+      clearErrors("subject");
+    } else {
+      if (aspectSubject.length === 4) {
+        return toast.error("maximum of 4 subjects is allowed");
+      }
+      const modifiedSubject = [...aspectSubject, subject];
+      setSelectedSubject(modifiedSubject);
+      if (setValue) {
+        setValue("subject", modifiedSubject);
+      }
+      clearErrors("subject");
+    }
+  };
+  // function to handle selected language a teacher can speak
+  const handleSelectLang = (language: string) => {
+    const aspectLang = [...selectedLang];
+    // check if the subject already exists
+    const isSubjectExisting = aspectLang.includes(language);
+    if (isSubjectExisting) {
+      const modifiedLang = aspectLang.filter((item) => item !== language);
+      setSelectedLang(modifiedLang);
+      if (setValue) {
+        setValue("language", modifiedLang);
+      }
+      clearErrors("language");
+    } else {
+      if (aspectLang.length === 5) {
+        return toast.error("maximum of 5 languages is allowed");
+      }
+      const modifiedLang = [...aspectLang, language];
+      setSelectedLang(modifiedLang);
+      if (setValue) {
+        setValue("language", modifiedLang);
+      }
+      clearErrors("language");
+    }
+  };
+
   // this function below handle preference selection
   const handlePreference = (item: string) => {
     // checking if the preference is already in the array
@@ -55,150 +122,48 @@ const TeacherPaymentDetails: React.FC<ITeacherSub> = ({
   watch("subject");
   watch("grade");
   watch("language");
-  watch("homeWorkPrice");
-  watch("sessionPrice");
   watch("preference");
   return (
     <div className="flex flex-col w-full md:w-[55%] gap-2">
       <label className="font-bold text-[16px] pb-2">Subject & Language</label>
-      <Controller
-        control={control}
-        name="language"
-        render={({ field }) => (
-          <Select
-            onValueChange={(value) => {
-              field.onChange(value);
-              clearErrors("language");
-            }}
-          >
-            <SelectTrigger className=" py-[27px]">
-              <SelectValue
-                placeholder={`${
-                  field.value ? field.value : "Language I speak"
-                }`}
-              />
-            </SelectTrigger>
-            <SelectContent>
-              {teacherLang.map((value, index) => (
-                <SelectItem key={index} value={value}>
-                  {value}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+      <MultipleSelect
+        placeholder="select language"
+        itemList={teacherLang}
+        selectedItem={selectedLang}
+        handleSelectedItem={handleSelectLang}
       />
       {errors.language && (
         <small className=" text-red-600">{errors.language.message}</small>
       )}
-      <Controller
-        control={control}
-        name="subject"
-        render={({ field }) => (
-          <Select
-            onValueChange={(value) => {
-              field.onChange(value);
-              clearErrors("subject");
-            }}
-          >
-            <SelectTrigger className=" py-[27px]">
-              <SelectValue
-                placeholder={`${
-                  field.value ? field.value : "Language I speak"
-                }`}
-              />
-            </SelectTrigger>
-            <SelectContent>
-              {subjects.map((value, index) => (
-                <SelectItem key={index} value={value.title}>
-                  <div className=" flex gap-2">
-                    <Image src={value.icon} alt="icon" width={20} height={20} />
-                    {value.title}
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        )}
+      {/* this is for the subject a teacher can teach */}
+      <MultipleSelect
+        placeholder="select subjects"
+        itemList={AllSubject}
+        selectedItem={selectedSubject}
+        handleSelectedItem={handleSelectSubject}
       />
       {errors.subject && (
         <small className=" text-red-600">{errors.subject.message}</small>
       )}
-      <Controller
-        control={control}
-        name="grade"
-        render={({ field }) => (
-          <Select
-            onValueChange={(value) => {
-              field.onChange(value);
-              clearErrors("grade");
-            }}
-          >
-            <SelectTrigger className="w-full  py-[27px] focus:outline-none">
-              <SelectValue
-                placeholder={`${
-                  field.value ? field.value : "Select grade you will teach"
-                }`}
-              />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectGroup>
-                <SelectItem value="Grade1">Grade1</SelectItem>
-                <SelectItem value="Grade2">Grade2</SelectItem>
-                <SelectItem value="Grade3">Grade3</SelectItem>
-                <SelectItem value="Grade4">Grade4</SelectItem>
-                <SelectItem value="Grade5">Grade5</SelectItem>
-                <SelectItem value="Grade6">Grade6</SelectItem>
-                <SelectItem value="Grade7">Grade7</SelectItem>
-                <SelectItem value="Grade8">Grade8</SelectItem>
-                <SelectItem value="Grade9">Grade9</SelectItem>
-                <SelectItem value="Grade10">Grade10</SelectItem>
-                <SelectItem value="Grade11">Grade11</SelectItem>
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        )}
+      {/* select box for the grades below here */}
+      <MultipleSelect
+        placeholder="select grades"
+        itemList={gradeList}
+        selectedItem={selectedGrade}
+        handleSelectedItem={handleSelectGrade}
       />
       {errors.grade && (
         <small className=" text-red-600">{errors.grade.message}</small>
       )}
-      <label className="font-bold text-[16px] pt-3">Pricing</label>
-      <span className="text-[14px] font-medium py-2">
-        Please note that the minimum duration for a session is 45 minutes and
-        the maximum duration is 2 hours. Your price range should account for
-        that.
-      </span>
-      <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] bg-white">
-        <input
-          {...register("sessionPrice")}
-          type="number"
-          name="sessionPrice"
-          placeholder="Session Price Range"
-          className="outline-none w-full pr-4"
-        />
-        <div className="flex items-center gap-1">
-          <Image src="/svgs/usaLogo.svg" width={18} height={18} alt="Lock" />
-          <span className="font-bold text-[16px]">USD</span>
-        </div>
-      </div>
-      {errors.sessionPrice && (
-        <small className=" text-red-600">{errors.sessionPrice.message}</small>
-      )}
-      <div className="flex justify-between items-center my-2 p-4 outline-none rounded-[8px] bg-white">
-        <input
-          {...register("homeWorkPrice")}
-          type="number"
-          name="homeWorkPrice"
-          placeholder="Homework Support Price Range"
-          className="outline-none w-full pr-4"
-        />
-        <div className="flex items-center gap-1">
-          <Image src="/svgs/usaLogo.svg" width={18} height={18} alt="Lock" />
-          <span className="font-bold text-[16px]">USD</span>
-        </div>
-      </div>
-      {errors.homeWorkPrice && (
-        <small className=" text-red-600">{errors.homeWorkPrice.message}</small>
+      <input
+        {...register("hours")}
+        onChange={() => clearErrors("hours")}
+        placeholder="hours of experience"
+        type="number"
+        className=" py-3 px-2 border border-black focus:outline-none rounded-md"
+      />
+      {errors.hours && (
+        <small className=" text-red-600">{errors.hours.message}</small>
       )}
       <div>
         <label className="font-bold text-[16px]">Preferences</label>

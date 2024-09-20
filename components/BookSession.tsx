@@ -8,7 +8,7 @@ const BookSession: React.FC<{
   sessionId: string;
   tutorName: string;
   tutorImg: string;
-  tutorLang: string;
+  tutorLang: string[];
 }> = ({ sessionId, tutorImg, tutorLang, tutorName }) => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const { data, status } = useSession();

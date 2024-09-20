@@ -40,10 +40,10 @@ model Teacher {
   gender               Gender?
   address              String?
   resume               String?
-  language             String?
+  language             String[]
   // remember to change this subject later to arrays of subjects
-  subject              String?
-  grade                String?
+  subject              String[]
+  grade                String[]
   sessionPrice         String?
   homeWorkPrice        String?
   bankName             String?
@@ -51,6 +51,7 @@ model Teacher {
   accountName          String?
   preference           String[]
   details              String?
+  hours                String?
   // creating the many to many relationship between student and teacher
   studentIDs           String[]             @db.ObjectId
   students             Student[]            @relation(fields: [studentIDs], references: [id])
@@ -119,8 +120,14 @@ model Student {
   CompletedProfile   Boolean              @default(false)
   createdAt          DateTime             @default(now())
   updatedAt          DateTime             @default(now())
+  birthDate          DateTime? //the birthday of the student
+  lastLogin          DateTime? // the last time the user loggged in
   Ratting            Ratting[]
   AdminSectionView   AdminSectionView[]
+  status             StudentStatus        @default(Active)
+  country            String?
+  parent             Parents?             @relation(fields: [parentsId], references: [id], onDelete: Cascade)
+  parentsId          String?              @db.ObjectId
 }
 
 // creating the school model
@@ -150,19 +157,21 @@ model School {
 
 // creating the model for parents
 model Parents {
-  id               String   @id @default(auto()) @map("_id") @db.ObjectId
+  id               String        @id @default(auto()) @map("_id") @db.ObjectId
   name             String?
-  email            String   @unique
+  email            String        @unique
   password         String?
   profilePhoto     String?
   role             Role
   gender           Gender?
-  wards            String[] @db.ObjectId
   phoneNo          String?
   address          String?
-  CompletedProfile Boolean  @default(false)
-  createdAt        DateTime @default(now())
-  updatedAt        DateTime @default(now())
+  CompletedProfile Boolean       @default(false)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @default(now())
+  wards            Student[]
+  status           StudentStatus @default(Active) //for showing active or resctricted status
+  country          String?
 }
 
 // here we created the model where teachers can upload article
@@ -706,6 +715,11 @@ enum TeacherStatus {
   Active
   Suspended
   Pending
+}
+
+enum StudentStatus {
+  Active
+  Suspended
 }
 
 enum PlansType {

@@ -374,7 +374,7 @@ const SingleTutor = () => {
           <div className=" flex-6 flex flex-col gap-4">
             <Desc
               name={SingleData.teacher.name}
-              desc={SingleData.teacher.details}
+              desc={SingleData.aboutTutor}
               subjects={SingleData.subjects}
               preferences={SingleData.preference}
               ratting={SingleData.teacher.rating}

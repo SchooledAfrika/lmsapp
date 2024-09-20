@@ -36,7 +36,7 @@ export interface ISessionShow {
     name: string;
     details: string;
     profilePhoto: string;
-    language: string;
+    language: string[];
     rating: number;
     Ratting: Iratter[];
   };
@@ -81,7 +81,7 @@ const Desc: React.FC<{
   grades: string[];
   subjects: string[];
   preference: string[];
-  lang: string;
+  lang: string[];
   id: string;
 }> = ({ name, desc, grades, subjects, preference, lang, id }) => {
   const { makeSubstring, joinGrades } = useConversion();
@@ -99,9 +99,14 @@ const Desc: React.FC<{
           {makeSubstring(desc, 70)}
         </p>
         <div className=" flex flex-wrap items-center gap-2 w-full">
-          <p className="text-[13px] text-black font-bold">
-            Speaks:<span className=" ml-1">{lang}</span>
-          </p>
+          <div className="text-[13px] text-black font-bold flex items-center gap-1">
+            <p>Speaks:</p>
+            <div className=" flex items-center">
+              {lang.map((language, index) => (
+                <p key={index}>{language},</p>
+              ))}
+            </div>
+          </div>
           <div className=" flex-wrap flex items-center text-[13px] text-black font-bold gap-2">
             <p>Teaches:</p>
             <div className=" flex-wrap flex items-center gap-1">
@@ -153,7 +158,7 @@ const PayDetails: React.FC<{
   sessionId: string;
   tutorName: string;
   tutorImg: string;
-  tutorLang: string;
+  tutorLang: string[];
 }> = ({
   rating,
   setShowBooking,
@@ -194,7 +199,7 @@ const SingleSession: React.FC<{
         />
         <Desc
           name={item.teacher.name}
-          desc={item.teacher.details}
+          desc={item.aboutTutor}
           grades={item.grade}
           subjects={item.subjects}
           preference={item.preference}

@@ -4,32 +4,31 @@
 // handles registering new child and encrypting the password,
 // then adding the id of the child to the student
 import prisma from "@/prisma/prismaConnect";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "@/lib/nextAuth";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
-  console.log("ehhhhh");
   const { wardId, wardEmail, password, ...others } = await req.json();
   // check if the user is already logged in,
   // respond with error if not logged in,
-  const session = await getServerSession(authOptions);
-  const userId = session?.user.id;
-  console.log(userId);
+  const userId = await serverSessionId();
+  const role = await serverSessionRole();
   if (!userId) return notAuthenticated();
-  console.log(userId);
-  console.log(others);
+  if (role !== "Parents")
+    return new Response(
+      JSON.stringify({
+        message: "only parents are allowed to make this request",
+      })
+    );
   try {
     // here, we proceed to check if the user passed the wardId
-    // if the wardid is passed then we add it to the array of wards
+    // if the wardid is passed then we add the parents id to the student
     if (wardId) {
-      await prisma.parents.update({
-        where: { id: userId },
+      await prisma.student.update({
+        where: { id: wardId },
         data: {
-          wards: {
-            push: wardId,
-          },
+          parentsId: userId,
         },
       });
     }
@@ -43,19 +42,17 @@ export async function POST(req: Request) {
           email: wardEmail,
           password: hashPassword,
           role: "Student",
-          disable: Boolean(others.disable),
           details: others.details,
           profilePhoto: others.childImg,
           CompletedProfile: true,
+          parentsId: userId,
+          name: others.name,
+          gender: others.gender,
+          grade: others.grade,
         },
         select: {
           id: true,
         },
-      });
-      //   then update the parents with the id of the student that was created
-      await prisma.parents.update({
-        where: { id: userId },
-        data: { wards: { push: ward.id } },
       });
     }
     // below here, we finally update the parent information
@@ -78,9 +75,4 @@ export async function POST(req: Request) {
     console.log(error);
     return serverError();
   }
-}
-
-export async function GET() {
-  console.log("hello");
-  return new Response(JSON.stringify({ message: "hello" }));
 }

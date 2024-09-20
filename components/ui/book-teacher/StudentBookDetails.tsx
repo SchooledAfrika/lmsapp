@@ -38,7 +38,7 @@ export interface ISessionStudentSub {
   sessionId?: string;
   tutorName?: string;
   tutorImg?: string;
-  tutorLang?: string;
+  tutorLang?: string[];
 }
 
 // the available subjects

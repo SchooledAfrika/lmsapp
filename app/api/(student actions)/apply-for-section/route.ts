@@ -58,6 +58,7 @@ export async function GET(req: Request) {
     });
     return new Response(JSON.stringify(oneToOne), { status: 200 });
   } catch (error) {
+    console.log(error);
     return serverError();
   }
 }

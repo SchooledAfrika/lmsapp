@@ -1,0 +1,28 @@
+================================================================================================================
+endpoint for admin to get all the parents
+================================================================================================================
+enpoint=> /api/parents
+method=> GET
+comment=> this returns all the parents, and the id of the wards in an array just for you to be able to get the lenght of the wards
+
+================================================================================================================
+endpoint for admin to get a particular parents
+================================================================================================================
+enpoint=> /api/parents/:id
+method=> GET
+comment===> replace the :id with the id of the parents you want to get all their details
+
+================================================================================================================
+endpoint for admin to delete a particular parents
+================================================================================================================
+enpoint=> /api/parents/:id
+method=> DELETE
+comment===> replace the :id with the id of the parents you want to delete
+
+================================================================================================================
+endpoint for admin to suspend or activate a parents
+================================================================================================================
+enpoint=> /api/parents/:id
+method=> PUT
+payload=> {status:string}, //the status string should be an Enum of (Active, Suspended);
+comment===> if you pass wrong status enum error must occur and also :id is the id of the parents

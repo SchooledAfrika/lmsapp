@@ -1,0 +1,29 @@
+================================================================================================================
+endpoint for admin to get all the student
+================================================================================================================
+enpoint=> /api/students
+method=> GET
+
+================================================================================================================
+endpoint for admin to get one student
+================================================================================================================
+enpoint=> /api/students/:id
+method=> GET
+comment=> replace the :id with the id of the student you want to get a particular information
+this will return many information, check the one you will be needing and use.
+
+================================================================================================================
+endpoint for admin to suspend student or reactivate student
+================================================================================================================
+enpoint=> /api/students/:id
+method=> PUT
+payload={status:string} NB the status should be an Enum of ("Active" or "Suspended")
+comment=> :id is the id of the student you wish to suspend or activate, remember the backend is expecting only
+the above named Enum
+
+================================================================================================================
+endpoint for admin to delete student account
+================================================================================================================
+enpoint=> /api/students/:id
+method=> DELETE
+comment=> :id is the id of the student you wish to delete
