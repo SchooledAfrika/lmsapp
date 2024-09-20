@@ -21,7 +21,7 @@ import Image from "next/image";
 
 export function Teachers() {
   const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["getTeachers"],
+    queryKey: ["AdminGetTeacher"],
     queryFn: async () => {
       const response = await fetch("/api/teachers");
       const result = await response.json();

@@ -91,9 +91,9 @@ const SingleTeacherPaymentComplete = () => {
               <TableCell className="text-[13px]  font-semibold p-2">
                 {payment.paymentDate}
               </TableCell>
-              <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
+              {/* <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
                 <TeacherOptions/>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           ))}
       </TableBody>

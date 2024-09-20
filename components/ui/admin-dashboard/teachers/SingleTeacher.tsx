@@ -11,8 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import Image from "next/image";
@@ -26,17 +24,20 @@ import SingleTeacherClasses from "./SingleTeacherClasses";
 import SingleTeacherPaymentComplete from "./SingleTeacherPaymentComplete";
 import SingleTeacherPaymentPending from "./SingleTeacherPaymentPending";
 
-export function SingleTeacher() {
+const SingleTeacher = () => {
   const { id } = useParams();
-
+  console.log(id)
   const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["getTeacher"],
+    queryKey: ["SingleTeacher"],
     queryFn: async () => {
       const response = await fetch(`/api/teachers/${id}`);
+     
       const result = await response.json();
       return result;
     },
+    
   });
+  
   console.log(data)
 
   //   if is loading
@@ -45,7 +46,7 @@ export function SingleTeacher() {
       <div className="">
         <p className="my-4 font-bold">loading...</p>
 
-        
+       
       </div>
     );
   }
@@ -57,7 +58,7 @@ export function SingleTeacher() {
     <div>
         {data && (
    
-    <div  key={data.id} className="font-header md:my-12 mt-24 mb-12">
+    <div key={data.id}   className="font-header md:my-12 mt-24 mb-12">
       <div className="flex md:my-12 mt-24 mb-12 justify-between">
         <p className="font-bold text-lg">Teacher Details</p>
         <Link href="/admin-dashboard/teachers" className="cursor-pointer">
@@ -99,56 +100,56 @@ export function SingleTeacher() {
               <div className="grid md:grid-cols-2 grid-cols-1 space-y-3">
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Name</p>
-                  <p className="text-[14px] font-semibold">{data?.name}</p>
+                  <p className="text-[14px] font-semibold"></p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Phone Number</p>
-                  <p className="text-[14px] font-semibold">{data?.phoneNo}</p>
+                  <p className="text-[14px] font-semibold"></p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Gender</p>
                   <p className="text-[14px] font-semibold">
-                    {data?.gender}
+                    
                   </p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Email</p>
                   <p className="text-[14px] font-semibold">
-                    {data?.email}
+                    
                   </p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Preferred Grade(s)</p>
                   <p className="text-[14px] font-semibold">
-                    {data?.grade}
+                    
                   </p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Language(s)</p>
                   <p className="text-[14px] font-semibold">
-                    {data?.language}
+                    
                   </p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Details</p>
                   <p className="text-[14px] font-semibold">
-                    {data?.details}
+                    
                   </p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Email</p>
                   <p className="text-[14px] font-semibold">
                  
-                    {data.preference}
+                    
                   </p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Joined On</p>
-                  <p className="text-[14px] font-semibold">{data?.createdAt}</p>
+                  <p className="text-[14px] font-semibold"></p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Address</p>
-                  <p className="text-[14px] font-semibold">{data?.address}</p>
+                  <p className="text-[14px] font-semibold"></p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Country</p>
@@ -253,7 +254,9 @@ export function SingleTeacher() {
         </TabsContent>
       </Tabs>
     </div>
-     )}
+      )} 
     </div>
   );
 }
+
+export default SingleTeacher
