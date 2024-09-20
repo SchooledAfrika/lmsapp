@@ -9,7 +9,6 @@ import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
-  console.log("ehhhhh");
   const { wardId, wardEmail, password, ...others } = await req.json();
   // check if the user is already logged in,
   // respond with error if not logged in,
@@ -22,8 +21,6 @@ export async function POST(req: Request) {
         message: "only parents are allowed to make this request",
       })
     );
-  console.log(userId);
-  console.log(others);
   try {
     // here, we proceed to check if the user passed the wardId
     // if the wardid is passed then we add the parents id to the student
@@ -78,9 +75,4 @@ export async function POST(req: Request) {
     console.log(error);
     return serverError();
   }
-}
-
-export async function GET() {
-  console.log("hello");
-  return new Response(JSON.stringify({ message: "hello" }));
 }

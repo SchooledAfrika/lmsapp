@@ -1,4 +1,5 @@
-import { SingleTeacher } from '@/components/ui/admin-dashboard/teachers/SingleTeacher'
+
+import SingleTeacher from '@/components/ui/admin-dashboard/teachers/SingleTeacher'
 import React from 'react'
 
 const page = () => {
