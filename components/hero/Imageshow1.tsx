@@ -8,7 +8,7 @@ const Imageshow1 = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6, type: "spring" }}
-      className=" pb-8 flex items-end justify-center md:w-80 w-2/3  aspect-square bg-[tomato] rounded-full absolute -bottom-8  lg:translate-x-1/2"
+      className=" pb-8 flex items-end justify-center md:w-80 w-2/3  aspect-square bg-[tomato] rounded-full absolute md:-bottom-8 -bottom-20  lg:translate-x-1/2"
     >
       <motion.div
         initial={{ translateY: -100, translateX: -100 }}
@@ -20,8 +20,8 @@ const Imageshow1 = () => {
           className=" w-[250px]"
           src={"/heroboy.png"}
           alt="heroboy"
-          width={100}
-          height={100}
+          width={200}
+          height={200}
         />
       </motion.div>
     </motion.div>

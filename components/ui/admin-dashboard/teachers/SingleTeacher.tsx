@@ -119,53 +119,60 @@ const SingleTeacher = () => {
                       <p className="text-[13px] font-medium">
                         Preferred Grade(s)
                       </p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data?.grade[0]}, {data?.grade[1]}, {data?.grade[2]}, {data?.grade[3]}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Language(s)</p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data?.language[0]}, {data?.language[1]}, {data?.language[2]}, {data?.language[3]}, {data?.language[4]}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Details</p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data.details}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Email</p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data.email}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Joined On</p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data.createdAt}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Address</p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data.address}</p>
                     </div>
                     <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Country</p>
-                      <p className="text-[14px] font-semibold">Nigeria</p>
+                      <p className="text-[13px] font-medium">Subject(s)</p>
+                      <p className="text-[14px] font-semibold">{data.subject[0]}, {data?.subject[1]}, {data?.subject[2]}, {data?.subject[3]}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Active Plan</p>
-                      <p className="text-[14px] font-semibold">Basic</p>
+                      <p className="text-[14px] font-semibold">{data?.subscriped}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Plan expires on</p>
                       <p className="text-[14px] font-semibold">
-                        20th October 2023
+                        
+                        {data?.subscriptionDuration}
                       </p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">
                         Total Hours Taught Online
                       </p>
-                      <p className="text-[14px] font-semibold">2000Hrs+</p>
+                      <p className="text-[14px] font-semibold">{data.hours} hours</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">
-                        Total Courses Taught
+                        Teaching Role
                       </p>
-                      <p className="text-[14px] font-semibold">20</p>
+                      <p className="text-[14px] font-semibold">{data.teachingRole}</p>
+                    </div>
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">
+                        Teaching Role
+                      </p>
+                      <p className="text-[14px] font-semibold">{data.role}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -180,7 +187,7 @@ const SingleTeacher = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <SingleTeacherClasses />
+                  <SingleTeacherClasses dataId={data.id} classes={data.Classes} />
                 </CardContent>
                 <CardFooter>
                   <DashboardPagination />

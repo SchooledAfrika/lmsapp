@@ -13,12 +13,16 @@ const dashboard = () => {
     <AdminChartDialog/>
 
     <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-3">
-    <StudentsChart/>
-    <TeachersChart/>
-    <SchoolsChart/>
+     <StudentsChart/>
     <ParentsChart/>
-
+     
     </div>
+   <div className="">
+    <TeachersChart/>
+   </div>
+   
+
+   
    
   </div>
 

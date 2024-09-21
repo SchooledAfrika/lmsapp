@@ -40,7 +40,6 @@ export const SchoolSideBar: SchoolSideBarType[] = [
 export const AdminSideBar: AdminSideBarType[] = [
   { path: "", name: "Dashboard", icon: MdInsertChartOutlined },
   { path: "courses", name: "Courses", icon: SiGoogleclassroom },
-  { path: "schools", name: "Schools", icon: RiSchoolLine },
   { path: "teachers", name: "Teachers", icon: LiaChalkboardTeacherSolid },
   {path: "students", name: "Students", icon: LiaGraduationCapSolid },
   { path: "parents", name: "Parents", icon: RiParentLine },
