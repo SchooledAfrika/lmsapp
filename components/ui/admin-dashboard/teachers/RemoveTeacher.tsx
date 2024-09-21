@@ -10,62 +10,57 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Image from "next/image";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Trash2 } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
 
-// interface Idelete {
-//   dataId: string;
-// }
-
-const RemoveTeacher = () => {
+interface Idelete {
+  dataId: string;
+}
+const RemoveTeacher: React.FC<Idelete> = ({ dataId }) => {
   const [loading, setloading] = useState<boolean>(false);
 
   //   instance of client
   const queryClient = useQueryClient();
   //   creating a delete using mutation to the backend
-//   const { mutate } = useMutation({
-//     mutationFn: async (id: string) => {
-//       const result = await fetch(`/api/class`, {
-//         method: "DELETE",
-//         body: JSON.stringify({
-//           id: dataId,
-//         }),
-//       });
-//       return result;
-//       console.log(dataId);
-//     },
+  const { mutate } = useMutation({
+    mutationFn: async (id: string) => {
+      const result = await fetch(`/api/teachers/${dataId}`, {
+        method: "DELETE",
+        body: JSON.stringify({
+          id: dataId,
+        }),
+      });
+      return result;
+    },
 
-//     onSuccess: async (result) => {
-//       queryClient.invalidateQueries({ queryKey: ["add"] });
-//       if (result.ok) {
-//         setloading(false);
-//         return toast.success("Class Successfully Deleted");
-//       } else {
-//         setloading(false);
-//         return toast.error("error deleting class");
-//       }
-//     },
-//     onError: (error) => {
-//       console.error("Error deleting data:", error);
-//       setloading(false);
-
-//       // Handle error as needed
-//     },
-//   });
-//   const handleDelete = () => {
-//     setloading(true);
-//     mutate(dataId);
-//     console.log(dataId);
-//   };
-
+    onSuccess: async (result) => {
+      queryClient.invalidateQueries({ queryKey: ["removeTeacher"] });
+      if (result.ok) {
+        setloading(false);
+        return toast.success("Teacher Successfully Deleted");
+      } else {
+        setloading(false);
+        return toast.error("error deleting teacher");
+      }
+    },
+    onError: (error) => {
+      console.error("Error deleting data:", error);
+      setloading(false);
+    },
+  });
+  const handleDelete = () => {
+    setloading(true);
+    mutate(dataId);
+  };
   return (
     <Dialog>
       <DialogTrigger asChild>
         <p className="inline text-[13px] cursor-pointer  font-semibold">
           <Trash2 className="inline w-4 h-4 mr-2 ml-0 text-lightGreen " />
-          Remove 
+          Remove
         </p>
       </DialogTrigger>
       <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
@@ -94,12 +89,12 @@ const RemoveTeacher = () => {
         </div>
         <DialogFooter className="">
           <Button
-            // onClick={handleDelete}
+            onClick={handleDelete}
             disabled={loading}
             type="submit"
             className="w-full py-8 text-lg bg-lightGreen hover:bg-green-700"
           >
-            {loading ? "Deleting Class..." : "Delete Class"}
+            {loading ? "Deleting Teacher..." : "Delete Teacher"}
           </Button>
         </DialogFooter>
       </DialogContent>

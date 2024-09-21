@@ -43,17 +43,12 @@ export const data = {
       backgroundColor: '#ff0000',
     },
     {
-      label: 'Schools',
+      label: 'Teachers',
       data: labels.map(() => faker.number.int({ min: 0, max: 500 })),
       borderColor: '#F7080D',
       backgroundColor: '#DC3B23',
     },
-    {
-        label: 'Teachers',
-        data: labels.map(() => faker.number.int({ min: 0, max: 1000 })),
-        borderColor: '#F6D409',
-        backgroundColor: '#FDA21A',
-      },
+    
     {
         label: 'Students',
         data: labels.map(() => faker.number.int({ min: 0, max: 500 })),

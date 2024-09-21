@@ -41,14 +41,14 @@ const chartConfig = {
 
 export function ParentsChart() {
   return (
-    <Card className=" mb-6">
+    <Card className="mt-12 mb-6">
       <CardHeader>
         <CardTitle className="text-[18px]">Parents</CardTitle>
         <CardDescription>
           Showing total parents for the last 12 months
         </CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="">
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer

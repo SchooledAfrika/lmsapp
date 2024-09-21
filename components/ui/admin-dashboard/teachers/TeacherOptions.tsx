@@ -18,6 +18,7 @@ import { FaTableList } from "react-icons/fa6";
 import { ListCollapse } from "lucide-react";
 import { FaUserSlash } from "react-icons/fa6";
 import RemoveTeacher from "./RemoveTeacher";
+import UpdateTeacherStatus from "./UpdateTeacherStatus";
 
 interface ITeacher {
   dataId: string;
@@ -58,6 +59,10 @@ interface ITeacher {
               </p>
             </div>
             <hr className="bg-black" />
+            <div className="flex justify-start">
+              <UpdateTeacherStatus dataId={dataId} />
+            </div>
+            <hr className="bg-black" /> 
             {/* <div className="flex justify-start">
               <p className="inline text-[13px]  font-semibold">
                 <FaUserSlash className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
@@ -66,7 +71,7 @@ interface ITeacher {
             </div>
             <hr className="bg-black" /> */}
             <div className="flex justify-start">
-              <RemoveTeacher />
+              <RemoveTeacher dataId={dataId} />
             </div>
             <hr className="bg-black" />
           </div>
