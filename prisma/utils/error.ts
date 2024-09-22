@@ -15,3 +15,9 @@ export const onlyAdmin = () => {
     status: 404,
   });
 };
+// only admin restriction error message
+export const onlyParents = () => {
+  return new Response(JSON.stringify({ message: "only Parents is allowed" }), {
+    status: 404,
+  });
+};

@@ -67,7 +67,6 @@ export async function DELETE(req: Request) {
 export async function GET(req: Request) {
   const teacherId = await serverSessionId();
   const role = await serverSessionRole();
-
   if (!teacherId) return notAuthenticated();
   if (role !== "Teacher") {
     return new Response(
