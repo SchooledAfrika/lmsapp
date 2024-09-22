@@ -1,4 +1,6 @@
 // here we will be able to get some information about the parents that is logged in
+// just informations about the wards that is registered
+// like their names, id, profile photo and stutus
 import prisma from "@/prisma/prismaConnect";
 import {
   notAuthenticated,

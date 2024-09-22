@@ -17,7 +17,17 @@ export async function GET(
     const oneTeacher = await prisma.teacher.findUnique({
       where: { id: params.id },
       include: {
-        Classes: true,
+        Classes: {
+          include: {
+            students: {
+              select: {
+                id: true,
+                name: true,
+                profilePhoto: true,
+              },
+            },
+          },
+        },
       },
     });
     return new Response(JSON.stringify(oneTeacher), { status: 200 });

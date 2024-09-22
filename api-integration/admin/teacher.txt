@@ -34,3 +34,17 @@ endpoint for admin to make another teacher an admin
 endpoint=> /api/teachers/make-admin
 method=> PUT
 payload=> {id:string} // the id is the id of the teacher to make an admin 
+
+
+new endpoint
+21/09/2024
+================================================================================================================
+endpoint for admin to  change teacherRole from external to internal or internal back to external
+================================================================================================================
+enpoint==> /api/teachers/change-teacher-type
+method==> PUT
+payload==>{
+    teacherId:string,
+    type:string
+}
+comment===> teacherId is the id of the teacher then type is an enum of either "INTERNAL" or "EXTERNAL"
