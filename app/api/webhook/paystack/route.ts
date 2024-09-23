@@ -22,7 +22,7 @@ export async function POST(req: Request) {
     });
   // lets return a webhook response before we proceed to doing other things
   new Response(JSON.stringify({ message: "received" }), { status: 200 });
-
+  console.log(body);
   //   get important things for updating transaction on this web-hook
   const fields = body.data.metadata.custom_fields[0];
   const studentId = fields.display_name;
@@ -32,6 +32,12 @@ export async function POST(req: Request) {
   const paymentFor = typePayArray[1];
   //   lets get the class first so that we can be able to push the new id
   if (paymentFor === "class") {
-    await payForClass(classId, studentId);
+    return await payForClass(classId, studentId);
+  }
+  // here we make payment for session for the parents and also child
+  if (paymentFor === "session") {
+    const show = crypto.randomUUID();
+    console.log(show);
+    console.log(body);
   }
 }
