@@ -1,13 +1,20 @@
 // here, the teacher can add the exams he previously created to the classroom
-
 import prisma from "@/prisma/prismaConnect";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
 // here we add exam to the class
 // and only the teacher that created the class can add this exam to the class
 export async function POST(req: Request) {
   // TODO: remember to change the teacher id here to nextauth id
-  const { teachersId, examId, classId } = await req.json();
+  const { examId, classId } = await req.json();
+  const teachersId = await serverSessionId();
+  const role = await serverSessionRole();
   if (!teachersId) return notAuthenticated();
+  if (role !== "Teacher")
+    return new Response(
+      JSON.stringify({ message: "only teachers can set exams for classes" }),
+      { status: 400 }
+    );
   //   first lets get the class and check if the teacher is the owner of the class
   const getclass = await prisma.classes.findUnique({
     where: {
