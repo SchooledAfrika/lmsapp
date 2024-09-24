@@ -12,146 +12,76 @@ import {
 import StudentPopover from "./students/studentPopover";
 import Link from "next/link";
 import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import { TableSkeleton } from "@/components/TableSkeleton";
 
 const StudentTable = () => {
-  const data = [
-    {
-      id: "m5gr84i9",
-      studentImg: "/avatar-1.jpg",
-      user: "Maurice Augustine",
-      enrolledCourse: "Web Development",
-      phone: "+9373473873",
-      country: "Uganda",
-      payment: "Cancelled",
-      status: "Inactive",
-      options: "...",
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["Students"],
+    queryFn: async () => {
+      const response = await fetch("/api/students");
+      const result = await response.json();
+      return result;
     },
-    {
-      id: "3u1reuv4",
-      studentImg: "/avatar-1.jpg",
-      user: "Maurice Augustine",
-      enrolledCourse: "Web Development",
-      phone: "+9373473873",
-      country: "Uganda",
-      payment: "Due",
-      status: "Active",
-      options: "...",
-    },
-    {
-      id: "derv1ws0",
-      studentImg: "/avatar-1.jpg",
-      user: "Maurice Augustine",
-      enrolledCourse: "Web Development",
-      phone: "+9373473873",
-      country: "Uganda",
-      payment: "Paid",
-      status: "Suspend",
-      options: "...",
-    },
-    {
-      id: "5kma53ae",
-      studentImg: "/avatar-1.jpg",
-      user: "Maurice Augustine",
-      enrolledCourse: "Web Development",
-      phone: "+9373473873",
-      country: "Uganda",
-      payment: "Due",
-      status: "Inactive",
-      options: "",
-    },
-    {
-      id: "dewe10",
-      studentImg: "/avatar-1.jpg",
-      user: "Maurice Augustine",
-      enrolledCourse: "Web Development",
-      phone: "+9373473873",
-      country: "Uganda",
-      payment: "Paid",
-      status: "Active",
-      options: "",
-    },
-    {
-      id: "de10",
-      studentImg: "/avatar-1.jpg",
-      user: "Maurice Augustine",
-      enrolledCourse: "Web Development",
-      phone: "+9373473873",
-      country: "Uganda",
-      payment: "Cancelled",
-      status: "Suspend",
-      options: "",
-    },
-    {
-      id: "dewe",
-      studentImg: "/avatar-1.jpg",
-      user: "Maurice Augustine",
-      enrolledCourse: "Web Development",
-      phone: "+9373473873",
-      country: "Uganda",
-      payment: "Due",
-      status: "Active",
-      options: "",
-    },
-    {
-      id: "5kma53ae",
-      studentImg: "/avatar-1.jpg",
-      user: "Maurice Augustine",
-      enrolledCourse: "Web Development",
-      phone: "+9373473873",
-      country: "Uganda",
-      payment: "Paid",
-      status: "Inactive",
-      options: "",
-    },
-  ];
+  });
+  console.log(data);
+
+  if (isLoading) {
+    return (
+      <div className="">
+        <p className="my-4 font-bold">loading...</p>
+        <TableSkeleton />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <div className="flex-1">{error.message}</div>;
+  }
 
   return (
     <Table className="bg-white overflow-x-auto rounded-md my-6">
       <TableHeader>
-        <TableRow className="text-[14px]">
-          <TableHead className="">User</TableHead>
-          <TableHead className="">Enrolled Course</TableHead>
+        <TableRow className="text-[14px] p-0">
+          <TableHead className="!pl-10">User</TableHead>
           <TableHead className="">Phone</TableHead>
           <TableHead className="">Country</TableHead>
-          <TableHead className="">Payment</TableHead>
+          {/* <TableHead className="">Payment</TableHead> */}
           <TableHead className="">Status</TableHead>
-          <TableHead className="">Options</TableHead>
+          <TableHead className="pl-3">Options</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {data.map((student, index) => (
-          <TableRow key={index} className="">
-            <TableCell className="font-bold text-[15px]">
+        {data.map((student: any) => (
+          <TableRow key={student.id} className="">
+            <TableCell className="font-bold !pl-9 text-[15px]">
               <Link
                 className="flex items-center gap-4"
-                href={"/admin-dashboard/students/details"}
+                href={`/admin-dashboard/students/${student.id}`}
               >
                 <Image
-                  src={student.studentImg}
+                  src={student.profilePhoto}
                   alt="Student Image"
                   width={50}
                   height={10}
                   className="rounded-[100%] h-[50px]"
                 />
                 <div className="leading-none">
-                  {student.user} <br />
+                  {student.name} <br />
                   <span className="text-[12px] text-gray-400">
-                    mauriceodo@gmail.com
+                    {student.email}
                   </span>
                 </div>
               </Link>
             </TableCell>
 
             <TableCell className="text-[12px] font-semibold">
-              {student.enrolledCourse}
-            </TableCell>
-            <TableCell className="text-[12px] font-semibold">
-              {student.phone}
+              {student.phoneNo}
             </TableCell>
             <TableCell className="text-[12px] font-semibold">
               {student.country}
             </TableCell>
-            <TableCell
+            {/* <TableCell
               className={`${
                 student.payment === "Paid"
                   ? "text-green-500"
@@ -161,7 +91,7 @@ const StudentTable = () => {
               } text-[12px] font-semibold`}
             >
               {student.payment}
-            </TableCell>
+            </TableCell> */}
             <TableCell
               className={`${
                 student.status === "Active"
@@ -174,7 +104,7 @@ const StudentTable = () => {
               {student.status}
             </TableCell>
             <TableCell className="text-[16px] text-lightGreen cursor-pointer text-center p-2">
-              <StudentPopover />
+              <StudentPopover studentId={student.id} />
             </TableCell>
           </TableRow>
         ))}
