@@ -82,10 +82,7 @@ const SingleTeacher = () => {
                 <IoBookOutline className="mr-2 w-5 h-5" />
                 Courses
               </TabsTrigger>
-              <TabsTrigger value="payments">
-                {" "}
-                <MdOutlinePayments className="mr-2 w-5 h-5" /> Payments
-              </TabsTrigger>
+             
             </TabsList>
             <TabsContent value="personal-information">
               <Card>
@@ -194,60 +191,7 @@ const SingleTeacher = () => {
                 </CardFooter>
               </Card>
             </TabsContent>
-            <TabsContent value="payments">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-[18px]">Payments</CardTitle>
-                  <CardDescription>Keep track of all payments.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Tabs defaultValue="complete-payment" className=" w-full">
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="complete-payment">
-                        Completed
-                      </TabsTrigger>
-                      <TabsTrigger value="pending-payment">Pending</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="complete-payment">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-[16px]">
-                            Complete Payment
-                          </CardTitle>
-                          <CardDescription>
-                            View all completed payment information.
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          <SingleTeacherPaymentComplete />
-                        </CardContent>
-                        <CardFooter>
-                          <DashboardPagination />
-                        </CardFooter>
-                      </Card>
-                    </TabsContent>
-                    <TabsContent value="pending-payment">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-[16px]">
-                            Pending Payment
-                          </CardTitle>
-                          <CardDescription>
-                            View all pending payment information.
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          <SingleTeacherPaymentPending />
-                        </CardContent>
-                        <CardFooter>
-                          <DashboardPagination />
-                        </CardFooter>
-                      </Card>
-                    </TabsContent>
-                  </Tabs>
-                </CardContent>
-              </Card>
-            </TabsContent>
+            
           </Tabs>
         </div>
       )}

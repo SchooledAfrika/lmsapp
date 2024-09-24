@@ -1,4 +1,7 @@
-import React from 'react'
+"use client";
+import React from "react";
+
+import { useQuery, useQueries } from "@tanstack/react-query";
 import {
     Table,
     TableBody,
@@ -11,42 +14,23 @@ import {
 import Link from "next/link"
 import PaymentOptions from './PaymentOptions';
 
-const SinglePaymentType = [
-    {
-      id: "1",
-      icon: "/noavatar.png",
-      name:"Maurice Odo",
-      email: "odo@gmail.com",
-      accountNo: "3067459507",
-      bank: "Firstbank",
-      amount: "$7000",
-     
-      
-    },
-    {
-      id: "2",
-      icon: "/noavatar.png",
-      name:"David Augustine",
-      email: "david@gmail.com",
-      accountNo: "106379507",
-      bank: "Fidelity",
-      amount: "$4000",
-     
-    },
-    {
-        id: "3",
-        icon: "/noavatar.png",
-        name:"Sarah Adebayor",
-        email: "sarah@gmail.com",
-        accountNo: "2133446773",
-        bank: "UBA",
-        amount: "$3000",
-       
-      },
-  ];
+interface Ipending{
+  dataId: string;
+  name: string;
+  email: string;
+  bankName : string;
+  photo: string;
+  accountName: string;
+  accountNo : string;
+}
+
+
   
 
-const SingleTeacherPaymentPending = () => {
+const SingleTeacherPaymentPending: React.FC<Ipending> = ({dataId, photo, name, email, bankName, accountName, accountNo}) => {
+  
+
+  console.log(dataId);
   return (
     <div>
         <Table className="bg-white overflow-x-auto rounded-md mt-12">
@@ -60,37 +44,36 @@ const SingleTeacherPaymentPending = () => {
         </TableRow>
       </TableHeader>
       <TableBody>
-      {SinglePaymentType.map((payment) => (
-            <TableRow key={payment.id}>
+            <TableRow>
               <TableCell className="text-[13px] md:w-[250px]  w-[150px] font-bold  flex items-center gap-2">
                 <Image
-                  src={payment.icon}
+                  src={photo}
                   alt="icon"
                   width={25}
                   height={25}
-                  className="w-[25px] h-[25px]"
+                  className="w-[25px] h-[25px] rounded-md"
                 />
                 <div className='flex flex-col space-y-1'>
-                  <p>{payment.name}</p>
-                  <p className='font-normal'>{payment.email}</p>
+                  <p>{name}</p>
+                  <p className='font-normal'>{email}</p>
                 </div>
                 
               </TableCell>
               <TableCell className="text-[12px]  font-semibold p-2">
-                {payment.accountNo}
+                {bankName}
               </TableCell>
              
               <TableCell className="text-[12px] font-semibold p-2">
-                {payment.bank}
+                {accountName}
               </TableCell>
               <TableCell className="text-[13px]  font-semibold p-2">
-                {payment.amount}
+                {accountNo}
               </TableCell>
               <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
                 <PaymentOptions/>
               </TableCell>
             </TableRow>
-          ))}
+         
       </TableBody>
     </Table>
     </div>
