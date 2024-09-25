@@ -149,6 +149,21 @@ export const FlutterWaveBtn: React.FC<{
   isByStudent: boolean;
 }> = ({ id, price, enroll, studentValue, parentsValue, isByStudent }) => {
   const { data } = useSession();
+  const byparents = {
+    name: "mesoma",
+    age: "ezeme",
+    birth: "sjjsjsjjs",
+    joy: "sjsjsjsjjs",
+    type: "parents",
+  };
+  const byStudents = {
+    name: "mesoma",
+    age: "ezeme",
+    birth: "sjjsjsjjs",
+    joy: "sjsjsjsjjs",
+    type: "students",
+  };
+
   const config = {
     public_key: process.env.NEXT_PUBLIC_FLUTTERPUBKEY!,
     tx_ref: Date.now().toString(),
@@ -168,12 +183,7 @@ export const FlutterWaveBtn: React.FC<{
       description: "payment for  enrollment",
       logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
     },
-    meta: {
-      name: "joy",
-      isjoy: "yes",
-      howfar: "true one",
-      again: "true true",
-    },
+    meta: isByStudent ? byStudents : byparents,
     onSuccess: () => {
       alert("true oooo");
       enroll();
