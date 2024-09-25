@@ -81,7 +81,13 @@ const ControlBtn: React.FC<{
               />
             </div>
           ) : (
-            <FlutterWaveBtn id={sessionId} price={200} enroll={enroll} />
+            <FlutterWaveBtn
+              isByStudent={true}
+              studentValue={getValues}
+              id={sessionId}
+              price={200}
+              enroll={enroll}
+            />
           )}
         </div>
       )}

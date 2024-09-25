@@ -3,7 +3,7 @@
 // TODO: remember to check or add the auth header for the keys given by this webhooks payment platform
 import prisma from "@/prisma/prismaConnect";
 import { serverError } from "@/prisma/utils/error";
-import { payForClass } from "@/prisma/utils/payment";
+import { payForClass, sessionPayment } from "@/prisma/utils/payment";
 import crypto from "crypto";
 
 // add student to the class after making payment
@@ -39,5 +39,6 @@ export async function POST(req: Request) {
     const show = crypto.randomUUID();
     console.log(show);
     console.log(body);
+    return await sessionPayment(body.plans);
   }
 }

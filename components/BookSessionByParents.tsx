@@ -56,7 +56,13 @@ const ControlBtn: React.FC<{
               isByStudent={false}
             />
           ) : (
-            <FlutterWaveBtn id={sessionId} price={200} enroll={enroll} />
+            <FlutterWaveBtn
+              isByStudent={false}
+              parentsValue={getValues}
+              id={sessionId}
+              price={200}
+              enroll={enroll}
+            />
           )}
         </div>
       )}
@@ -138,7 +144,10 @@ export const FlutterWaveBtn: React.FC<{
   id: string;
   price: number;
   enroll: () => void;
-}> = ({ id, price, enroll }) => {
+  studentValue?: UseFormGetValues<IstudentSession>;
+  parentsValue?: UseFormGetValues<Isession>;
+  isByStudent: boolean;
+}> = ({ id, price, enroll, studentValue, parentsValue, isByStudent }) => {
   const { data } = useSession();
   const config = {
     public_key: process.env.NEXT_PUBLIC_FLUTTERPUBKEY!,
@@ -149,7 +158,7 @@ export const FlutterWaveBtn: React.FC<{
     customer: {
       email: data?.user.email as string,
       phone_number: data?.user.id as string, //id of the student or user that want to make payment,
-      name: `${id}-class`, // field for id of the class and the payment type
+      name: `${id}-session`, // field for id of the class and the payment type
       names: "calcs",
       bestshows: "this is me",
       wow: "trying now ooo",
@@ -160,10 +169,31 @@ export const FlutterWaveBtn: React.FC<{
       logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
     },
     meta: {
-      consumer_id: 23,
-      consumer_mac: "92a3-912ba-1192a",
-      consumer_secret: "david now",
-      fucking: "david one",
+      studentId: isByStudent ? data?.user.id : parentsValue!("childId"),
+      grade: isByStudent ? studentValue!("grade") : parentsValue!("grade"),
+      sessionType: isByStudent
+        ? studentValue!("sessionTypes")
+        : parentsValue!("sessionTypes"),
+      subjects: isByStudent
+        ? studentValue!("subject")
+        : parentsValue!("subject"),
+      curriculum: isByStudent
+        ? studentValue!("curriculum")
+        : parentsValue!("curriculum"),
+      specialNeeds: isByStudent
+        ? studentValue!("specialNeeds")
+        : parentsValue!("specialNeeds"),
+      goals: isByStudent ? studentValue!("goals") : parentsValue!("goals"),
+      days: isByStudent ? studentValue!("days") : parentsValue!("days"),
+      times: isByStudent ? studentValue!("times") : parentsValue!("times"),
+      hours: isByStudent ? studentValue!("hours") : parentsValue!("hours"),
+      length: isByStudent ? studentValue!("length") : parentsValue!("length"),
+      classStart: isByStudent
+        ? studentValue!("classStarts")
+        : parentsValue!("classStarts"),
+      price,
+      selectedTeacher: id,
+      byparents: isByStudent ? false : true,
     },
     onSuccess: () => {
       alert("true oooo");

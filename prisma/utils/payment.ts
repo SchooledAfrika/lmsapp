@@ -1,6 +1,7 @@
 import prisma from "../prismaConnect";
 import { serverError } from "./error";
 
+// here we make payment for classes
 export const payForClass = async (classId: string, studentId: string) => {
   const theclass = await prisma.classes.findUnique({
     where: { id: classId },
@@ -43,6 +44,35 @@ export const payForClass = async (classId: string, studentId: string) => {
       }),
       { status: 200 }
     );
+  } catch (error) {
+    return serverError();
+  }
+};
+
+// here we make payment for session
+export const sessionPayment = async (paymentInfo: any) => {
+  console.log(paymentInfo);
+  try {
+    await prisma.adminSectionView.create({
+      data: {
+        studentId: paymentInfo.studentId,
+        oneOnOneSectionId: paymentInfo.id,
+        merged: false,
+        amt: paymentInfo.price,
+        sectionType: paymentInfo.sessionType,
+        hoursperday: paymentInfo.hours,
+        duration: paymentInfo.length,
+        subject: paymentInfo.subjects,
+        curriculum: paymentInfo.curriculum,
+        specialNeed: paymentInfo.specialNeeds,
+        learningGoal: paymentInfo.goals,
+        learningDays: paymentInfo.days,
+        startTime: paymentInfo.classStart,
+      },
+    });
+    return new Response(JSON.stringify({ message: "successful" }), {
+      status: 200,
+    });
   } catch (error) {
     return serverError();
   }

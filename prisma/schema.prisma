@@ -337,9 +337,9 @@ model AdminSectionView {
   hoursperday       Int
   // duration like monthly or yearly
   duration          String
-  subject           String
+  subject           String[]
   curriculum        String
-  specialNeed       String?
+  specialNeed       String[]
   learningGoal      String?
   learningDays      String[]
   // time to start or proposed time

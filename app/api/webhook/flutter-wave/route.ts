@@ -3,7 +3,7 @@
 // TODO: remember to check or add the auth header for the keys given by this webhooks payment platform
 import prisma from "@/prisma/prismaConnect";
 import { serverError } from "@/prisma/utils/error";
-import { payForClass } from "@/prisma/utils/payment";
+import { payForClass, sessionPayment } from "@/prisma/utils/payment";
 
 // add student to the class after making payment
 export async function POST(req: Request) {
@@ -17,6 +17,7 @@ export async function POST(req: Request) {
   // we get the whole body and verify if the webhook is actually coming from the flutterwave
   // then check the payment type
   const body = await req.json();
+  console.log(body);
   const data = body.data;
   const studentId = data.customer.phone_number;
   const classArray = data.customer.name.split("-");
@@ -24,7 +25,12 @@ export async function POST(req: Request) {
   const paymentFor = classArray[1];
   // check for the payment type and run it accordingly
   if (paymentFor == "class ") {
-    await payForClass(classId, studentId);
+    return await payForClass(classId, studentId);
+  }
+  // pay for session if is type if session
+  if (paymentFor === "session") {
+    console.log("here now");
+    return await sessionPayment(data.meta);
   }
   return new Response(JSON.stringify({ m: "successful" }), { status: 200 });
 }
