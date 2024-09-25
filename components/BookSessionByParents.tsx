@@ -169,31 +169,10 @@ export const FlutterWaveBtn: React.FC<{
       logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
     },
     meta: {
-      studentId: isByStudent ? data?.user.id : parentsValue!("childId"),
-      grade: isByStudent ? studentValue!("grade") : parentsValue!("grade"),
-      sessionType: isByStudent
-        ? studentValue!("sessionTypes")
-        : parentsValue!("sessionTypes"),
-      subjects: isByStudent
-        ? studentValue!("subject")
-        : parentsValue!("subject"),
-      curriculum: isByStudent
-        ? studentValue!("curriculum")
-        : parentsValue!("curriculum"),
-      specialNeeds: isByStudent
-        ? studentValue!("specialNeeds")
-        : parentsValue!("specialNeeds"),
-      goals: isByStudent ? studentValue!("goals") : parentsValue!("goals"),
-      days: isByStudent ? studentValue!("days") : parentsValue!("days"),
-      times: isByStudent ? studentValue!("times") : parentsValue!("times"),
-      hours: isByStudent ? studentValue!("hours") : parentsValue!("hours"),
-      length: isByStudent ? studentValue!("length") : parentsValue!("length"),
-      classStart: isByStudent
-        ? studentValue!("classStarts")
-        : parentsValue!("classStarts"),
-      price,
-      selectedTeacher: id,
-      byparents: isByStudent ? false : true,
+      name: "joy",
+      isjoy: "yes",
+      howfar: "true one",
+      again: "true true",
     },
     onSuccess: () => {
       alert("true oooo");
