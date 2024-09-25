@@ -39,6 +39,6 @@ export async function POST(req: Request) {
     const show = crypto.randomUUID();
     console.log(show);
     console.log(body);
-    return await sessionPayment(body.plans);
+    return await sessionPayment(body.plan);
   }
 }

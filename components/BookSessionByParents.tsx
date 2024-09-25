@@ -150,18 +150,39 @@ export const FlutterWaveBtn: React.FC<{
 }> = ({ id, price, enroll, studentValue, parentsValue, isByStudent }) => {
   const { data } = useSession();
   const byparents = {
-    name: "mesoma",
-    age: "ezeme",
-    birth: "sjjsjsjjs",
-    joy: "sjsjsjsjjs",
-    type: "parents",
+    studentId: parentsValue!("childId"),
+    grade: parentsValue!("grade"),
+    sessionType: parentsValue!("sessionTypes"),
+    subjects: parentsValue!("subject"),
+    curriculum: parentsValue!("curriculum"),
+    specialNeeds: parentsValue!("specialNeeds"),
+    goals: parentsValue!("goals"),
+    days: parentsValue!("days"),
+    times: parentsValue!("times"),
+    hours: parentsValue!("hours"),
+    length: parentsValue!("length"),
+    classStart: parentsValue!("classStarts"),
+    price,
+    selectedTeacher: id,
+    byparents: true,
   };
   const byStudents = {
-    name: "mesoma",
-    age: "ezeme",
-    birth: "sjjsjsjjs",
-    joy: "sjsjsjsjjs",
-    type: "students",
+    studentId: data?.user.id,
+    grade: studentValue!("grade"),
+    sessionType: studentValue!("sessionTypes"),
+
+    subjects: studentValue!("subject"),
+    curriculum: studentValue!("curriculum"),
+    specialNeeds: studentValue!("specialNeeds"),
+    goals: studentValue!("goals"),
+    days: studentValue!("days"),
+    times: studentValue!("times"),
+    hours: studentValue!("hours"),
+    length: studentValue!("length"),
+    classStart: studentValue!("classStarts"),
+    price,
+    selectedTeacher: id,
+    byparents: false,
   };
 
   const config = {
