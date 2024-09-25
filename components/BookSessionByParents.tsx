@@ -149,41 +149,23 @@ export const FlutterWaveBtn: React.FC<{
   isByStudent: boolean;
 }> = ({ id, price, enroll, studentValue, parentsValue, isByStudent }) => {
   const { data } = useSession();
-  const byparents = {
-    studentId: parentsValue!("childId"),
-    grade: parentsValue!("grade"),
-    sessionType: parentsValue!("sessionTypes"),
-    subjects: parentsValue!("subject"),
-    curriculum: parentsValue!("curriculum"),
-    specialNeeds: parentsValue!("specialNeeds"),
-    goals: parentsValue!("goals"),
-    days: parentsValue!("days"),
-    times: parentsValue!("times"),
-    hours: parentsValue!("hours"),
-    length: parentsValue!("length"),
-    classStart: parentsValue!("classStarts"),
-    price,
-    selectedTeacher: id,
-    byparents: true,
-  };
-  const byStudents = {
-    studentId: data?.user.id,
-    grade: studentValue!("grade"),
-    sessionType: studentValue!("sessionTypes"),
-
-    subjects: studentValue!("subject"),
-    curriculum: studentValue!("curriculum"),
-    specialNeeds: studentValue!("specialNeeds"),
-    goals: studentValue!("goals"),
-    days: studentValue!("days"),
-    times: studentValue!("times"),
-    hours: studentValue!("hours"),
-    length: studentValue!("length"),
-    classStart: studentValue!("classStarts"),
-    price,
-    selectedTeacher: id,
-    byparents: false,
-  };
+  // const byparents = {
+  //   studentId: parentsValue!("childId"),
+  //   grade: parentsValue!("grade"),
+  //   sessionType: parentsValue!("sessionTypes"),
+  //   subjects: parentsValue!("subject"),
+  //   curriculum: parentsValue!("curriculum"),
+  //   specialNeeds: parentsValue!("specialNeeds"),
+  //   goals: parentsValue!("goals"),
+  //   days: parentsValue!("days"),
+  //   times: parentsValue!("times"),
+  //   hours: parentsValue!("hours"),
+  //   length: parentsValue!("length"),
+  //   classStart: parentsValue!("classStarts"),
+  //   price,
+  //   selectedTeacher: id,
+  //   byparents: true,
+  // };
 
   const config = {
     public_key: process.env.NEXT_PUBLIC_FLUTTERPUBKEY!,
@@ -204,7 +186,24 @@ export const FlutterWaveBtn: React.FC<{
       description: "payment for  enrollment",
       logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
     },
-    meta: isByStudent ? byStudents : byparents,
+    meta: {
+      studentId: data?.user.id,
+      grade: studentValue!("grade"),
+      sessionType: studentValue!("sessionTypes"),
+
+      subjects: studentValue!("subject"),
+      curriculum: studentValue!("curriculum"),
+      specialNeeds: studentValue!("specialNeeds"),
+      goals: studentValue!("goals"),
+      days: studentValue!("days"),
+      times: studentValue!("times"),
+      hours: studentValue!("hours"),
+      length: studentValue!("length"),
+      classStart: studentValue!("classStarts"),
+      price,
+      selectedTeacher: id,
+      byparents: false,
+    },
     onSuccess: () => {
       alert("true oooo");
       enroll();
