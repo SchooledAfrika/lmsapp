@@ -2,11 +2,16 @@
 // admins will be able to get all the sessions that have not been merged
 // and also be able to merge a particular teacher to a particular session
 import prisma from "@/prisma/prismaConnect";
-import { serverError } from "@/prisma/utils/error";
+import { notAuthenticated, onlyAdmin, serverError } from "@/prisma/utils/error";
 import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // here we get all the adminsessionview
 export async function GET(req: Request) {
+  const id = await serverSessionId();
+  const role = await serverSessionRole();
+  // restriction if the user is not admin
+  if (!id) return notAuthenticated();
+  if (role !== "Admin") return onlyAdmin();
   try {
     const allSessions = await prisma.adminSectionView.findMany({
       where: { merged: false },
@@ -19,6 +24,11 @@ export async function GET(req: Request) {
 
 // here we merge a student to a particular teacher session
 export async function PUT(req: Request) {
+  const id = await serverSessionId();
+  const role = await serverSessionRole();
+  // restriction if the user is not admin
+  if (!id) return notAuthenticated();
+  if (role !== "Admin") return onlyAdmin();
   // here we get the id of the teacher we want to merge
   // and also get the id of the adminSession that the student or parents created while making
   // a request for one on one session
