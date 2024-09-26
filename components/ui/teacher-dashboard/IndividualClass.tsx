@@ -14,6 +14,7 @@ import { BookOpenCheck } from "lucide-react";
 import RemoveClass from "./RemoveClass";
 import { FaTableList } from "react-icons/fa6";
 import { ListCollapse } from "lucide-react";
+import AddTest from "./AddTest";
 
 interface Idelete {
   dataId: string;
@@ -47,10 +48,7 @@ const IndividualClass: React.FC<Idelete> = ({ dataId }) => {
             </div>
             <hr className="bg-black" />
             <div className="flex justify-start">
-              <p className="inline text-[13px]  font-semibold">
-                <BookOpenCheck className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
-                Add Test
-              </p>
+              <AddTest classId={dataId}/>
             </div>
             <hr className="bg-black" />
             <div className="flex justify-start">

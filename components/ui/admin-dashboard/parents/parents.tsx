@@ -1,35 +1,11 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import React, { useState } from "react";
+import { useQuery} from "@tanstack/react-query";
 
-import { RxCaretSort } from "react-icons/rx";
-import { IoChevronDown } from "react-icons/io5";
-import { HiOutlineDotsHorizontal } from "react-icons/hi";
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-} from "@tanstack/react-table"
 
-import { Button } from "@/components/ui/button"
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Input } from "@/components/ui/input"
+
+
 import {
   Table,
   TableBody,
@@ -37,305 +13,95 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/components/ui/table";
+
+import { TableSkeleton } from "@/components/TableSkeleton";
+
+import Image from "next/image";
 import ParentOptions from "./ParentOptions";
 
 
 
-const data: Parents[] = [
-  {
-    id: "m5gr84i9",
-    parent: "Parent Odo",
-    phone: "+2349130893924",
-    state: "Enugu",
-    status: "active",
-    plan: "Basic",
-    email: "ken99@yahoo.com",
-    wards: "2",
-    options: "..."
-  },
-  {
-    id: "3u1reuv4",
-    parent: "Parent Augustine",
-    phone: "+2349130893924",
-    state: "Abia",
-    status: "suspended",
-    plan: "Bronze",
-    email: "ken99@yahoo.com",
-    wards: "1",
-    options: "..."
-  },
-  {
-    id: "derv1ws0",
-    parent: "Parent Adebayor",
-    phone: "+2349130893924",
-    state: "Lagos",
-    status: "active",
-    plan: "Silver",
-    email: "Monserrat44@gmail.com",
-    wards: "2",
-     options: "..."
-  },
-  {
-    id: "5kma53ae",
-    parent: "Parent Odo",
-    phone: "+2349130893924",
-    state: "Enugu",
-    status: "suspended",
-    plan: "Gold",
-    wards: "2",
-    email: "Silas22@gmail.com",
-     options: ""
-  },
 
-  {
-    id: "dewe10",
-    parent: "Parent Adebayor",
-    phone: "+2349130893924",
-    state: "Ibadan",
-    status: "dismissed",
-    plan: "Diamond",
-    email: "Monserrat44@gmail.com",
-    wards: "4",
-     options: "..."
-  },
- 
-]
 
-export type Parents = {
-  id: string
-  parent: string
-  phone: string
-  state: string
-  status: "active" | "passive" | "suspended" | "dismissed"
-   plan: "Basic" | "Bronze" | "Silver" | "Gold" | "Diamond"
-  email: string
-  wards: string
-  options: string
-}
-
-export const columns: ColumnDef<Parents>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        className="accent-lightGreen"
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-        className="accent-lightGreen"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  
-  {
-    accessorKey: "parent",
-    header: "Parent",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("parent")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <RxCaretSort className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "wards",
-    header: "Wards",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("wards")}</div>
-    ),
-  },
-  {
-    accessorKey: "plan",
-    header: "Plan",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("plan")}</div>
-    ),
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const Parents = row.original
-
-      return (
-        <div className="text-right">
-             <ParentOptions/>
-        </div>
-       
-       
-       
-      )
-    },
-  },
-]
 
 const Parents = () => {
-  const [sorting, setSorting] = React.useState<SortingState>([])
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  )
-  const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({})
-  const [rowSelection, setRowSelection] = React.useState({})
-
-  const table = useReactTable({
-    data,
-    columns,
-    onSortingChange: setSorting,
-    onColumnFiltersChange: setColumnFilters,
-    getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    onColumnVisibilityChange: setColumnVisibility,
-    onRowSelectionChange: setRowSelection,
-    state: {
-      sorting,
-      columnFilters,
-      columnVisibility,
-      rowSelection,
+  
+  
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["AdminGetParents"],
+    queryFn: async () => {
+      const response = await fetch("/api/parents");
+      const result = await response.json();
+      return result;
     },
-  })
+  });
+  console.log(data);
+
+  // If loading
+  if (isLoading) {
+    return (
+      <div className="">
+        <p className="my-4 font-bold">loading...</p>
+        <TableSkeleton />
+      </div>
+    );
+  }
+
+  // If error
+  if (isError) {
+    return <div className="flex-1">{error.message}</div>;
+  }
 
   return (
     <div className="w-full font-header">
-      <div className="flex items-center py-4">
-        
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto ">
-              Filter <IoChevronDown className="ml-2 h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="font-header text-[12px]" align="end">
-            {table
-              .getAllColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => {
-                return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
-              })}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
-      <div className="rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                    </TableHead>
-                  )
-                })}
-              </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="text-[12px] font-semibold">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext()
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
+      <Table className="bg-white overflow-x-auto rounded-md mt-12">
+        <TableHeader>
+          <TableRow>
+            <TableHead className="text-[12px] w-[100px] text-left p-2">
+              Name
+            </TableHead>
+            <TableHead className="text-[12px] text-left p-2">Email</TableHead>
+            <TableHead className="text-[12px] text-left p-2">Status</TableHead>
+            <TableHead className="text-[12px] text-left p-2">Wards</TableHead>
+            <TableHead className="text-[12px] text-left p-2">Plan</TableHead>
+            <TableHead className="text-[12px] text-right p-2">
+              Options
+            </TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {Array.isArray(data) &&
+            data.map((item: any) => (
+              <TableRow key={item.id}>
+                <TableCell className="text-[13px] md:w-[250px]  w-[150px] font-bold  flex items-center gap-2">
+                  {item.name}
+                </TableCell>
+
+                <TableCell className="text-[12px] font-semibold p-2">
+                  {item.email}
+                </TableCell>
+                <TableCell className="text-[12px] font-semibold p-2">
+                 
+                  {item.status}
+                </TableCell>
+                <TableCell className="text-[12px] font-semibold p-2">
+                 
+                 {item.wards.length}
+               </TableCell>
+
+                <TableCell className="text-[13px]  font-semibold p-2">
+                  {item.PaymentPlans ? item.PaymentPlans : "Basic"}
+                </TableCell>
+                <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
+                  <ParentOptions dataId={item.id} />
                 </TableCell>
               </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
-      <div className="flex items-center justify-end space-x-2 py-4">
-        <div className="flex-1 text-sm text-muted-foreground">
-          {table.getFilteredSelectedRowModel().rows.length} of{" "}
-          {table.getFilteredRowModel().rows.length} row(s) selected.
-        </div>
-        <div className="space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
+            ))}
+        </TableBody>
+      </Table>
     </div>
-  )
-}
+  );
+};
 
-export default Parents
+export default Parents;
