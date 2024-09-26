@@ -67,6 +67,7 @@ export const sessionPaymentFlutter = async (paymentInfo: any) => {
         learningGoal: paymentInfo.goals,
         learningDays: paymentInfo.days.split("-"),
         startTime: paymentInfo.classStart,
+        grade: paymentInfo.grade,
       },
     });
     return new Response(JSON.stringify({ message: "successful" }), {
@@ -93,6 +94,7 @@ export const sessionPaymentPaystack = async (paymentInfo: any) => {
         learningGoal: paymentInfo.goals,
         learningDays: paymentInfo.days,
         startTime: paymentInfo.classStart,
+        grade: paymentInfo.grade,
       },
     });
     return new Response(JSON.stringify({ message: "successful" }), {

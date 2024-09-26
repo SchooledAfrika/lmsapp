@@ -307,11 +307,18 @@ model AppliedSection {
   oneOnOneSectionId String          @db.ObjectId
   student           Student         @relation(fields: [studentId], references: [id])
   studentId         String          @db.ObjectId
-  subject           Subjects
-  grade             Grade
-  type              PreferSection
-  duration          DateTime
+  subject           String[]
+  grade             String
+  sectionType       String
   classStart        DateTime
+  specialNeed       String[]
+  learningGoal      String?
+  learningDays      String[]
+  hoursperday       Int
+  // duration like monthly or yearly
+  duration          String
+  // time to start or proposed time
+  startTime         DateTime
   // this will contain the id of the resources that the teacher will push here
   resources         String[]        @default([])
   StudentExam       StudentExam[]
@@ -344,6 +351,7 @@ model AdminSectionView {
   learningDays      String[]
   // time to start or proposed time
   startTime         DateTime
+  grade             String
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @default(now())
 }
