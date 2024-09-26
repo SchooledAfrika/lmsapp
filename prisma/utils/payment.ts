@@ -50,23 +50,48 @@ export const payForClass = async (classId: string, studentId: string) => {
 };
 
 // here we make payment for session
-export const sessionPayment = async (paymentInfo: any) => {
-  console.log(paymentInfo);
+export const sessionPaymentFlutter = async (paymentInfo: any) => {
   try {
     await prisma.adminSectionView.create({
       data: {
         studentId: paymentInfo.studentId,
-        oneOnOneSectionId: paymentInfo.id,
+        oneOnOneSectionId: paymentInfo.selectedTeacher,
         merged: false,
-        amt: paymentInfo.price,
+        amt: Number(paymentInfo.price),
         sectionType: paymentInfo.sessionType,
-        hoursperday: paymentInfo.hours,
+        hoursperday: paymentInfo.hours ? paymentInfo.hours : 2,
         duration: paymentInfo.length,
         subject: paymentInfo.subjects.split("-"),
         curriculum: paymentInfo.curriculum,
         specialNeed: paymentInfo.specialNeeds.split("-"),
         learningGoal: paymentInfo.goals,
         learningDays: paymentInfo.days.split("-"),
+        startTime: paymentInfo.classStart,
+      },
+    });
+    return new Response(JSON.stringify({ message: "successful" }), {
+      status: 200,
+    });
+  } catch (error) {
+    return serverError();
+  }
+};
+export const sessionPaymentPaystack = async (paymentInfo: any) => {
+  try {
+    await prisma.adminSectionView.create({
+      data: {
+        studentId: paymentInfo.studentId,
+        oneOnOneSectionId: paymentInfo.selectedTeacher,
+        merged: false,
+        amt: Number(paymentInfo.price),
+        sectionType: paymentInfo.sessionType,
+        hoursperday: paymentInfo.hours ? paymentInfo.hours : 2,
+        duration: paymentInfo.length,
+        subject: paymentInfo.subjects,
+        curriculum: paymentInfo.curriculum,
+        specialNeed: paymentInfo.specialNeeds,
+        learningGoal: paymentInfo.goals,
+        learningDays: paymentInfo.days,
         startTime: paymentInfo.classStart,
       },
     });

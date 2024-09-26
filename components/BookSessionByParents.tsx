@@ -149,6 +149,7 @@ export const FlutterWaveBtn: React.FC<{
   isByStudent: boolean;
 }> = ({ id, price, enroll, studentValue, parentsValue, isByStudent }) => {
   const { data } = useSession();
+  console.log(studentValue);
   // const byparents = {
   //   studentId: parentsValue!("childId"),
   //   grade: parentsValue!("grade"),
