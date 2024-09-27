@@ -39,14 +39,14 @@ export const data = {
     {
       label: 'Parents',
       data: labels.map(() => faker.number.int({ min: 0, max: 400 })),
-      borderColor: '#FF6634',
-      backgroundColor: '#ff0000',
+      borderColor: '#ff0000',
+      backgroundColor: '#E1341E',
     },
     {
       label: 'Teachers',
       data: labels.map(() => faker.number.int({ min: 0, max: 500 })),
-      borderColor: '#F7080D',
-      backgroundColor: '#DC3B23',
+      borderColor: '#FF6634',
+      backgroundColor: '#D53500',
     },
     
     {

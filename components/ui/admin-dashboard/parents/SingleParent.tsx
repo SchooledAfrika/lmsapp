@@ -1,3 +1,6 @@
+"use client";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,13 +17,44 @@ import Link from "next/link";
 import { FaRegEye } from "react-icons/fa";
 import { IoBookOutline } from "react-icons/io5";
 import { MdOutlinePayments } from "react-icons/md";
+import { useParams } from "next/navigation";
 import DashboardPagination from "@/components/DashboardPagination";
 import SingleParentCourses from "./SingleParentCourses";
 import Payments from "./Payments";
+import WardOptions from "./WardInfo";
+import WardInfo from "./WardInfo";
 
-export function SingleParent() {
+const  SingleParent = () => {
+  const { id } = useParams();
+  console.log(id);
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["SingleParent"],
+    queryFn: async () => {
+      const response = await fetch(`/api/parents/${id}`);
+
+      const result = await response.json();
+      return result;
+    },
+  });
+
+  console.log(data);
+
+  //   if is loading
+  if (isLoading) {
+    return (
+      <div className="">
+        <p className="my-4 font-bold">loading...</p>
+      </div>
+    );
+  }
+  // if is error
+  if (isError) {
+    return <div className=" flex-1">{error.message}</div>;
+  }
   return (
-    <div className="font-header md:my-12 mt-24 mb-12">
+    <div>
+      {data && (
+    <div key={data.id} className="font-header md:my-12 mt-24 mb-12">
       <div className="flex md:my-12 mt-24 mb-12 justify-between">
         <p className="font-bold text-lg">Parent Details</p>
         <Link href="/admin-dashboard/parents" className="cursor-pointer">
@@ -40,11 +74,7 @@ export function SingleParent() {
             {" "}
             <FaRegEye className="mr-2 w-5 h-5" /> Personal Data
           </TabsTrigger>
-          <TabsTrigger value="courses">
-            {" "}
-            <IoBookOutline className="mr-2 w-5 h-5" />
-            Courses
-          </TabsTrigger>
+         
           <TabsTrigger value="payments">
             {" "}
             <MdOutlinePayments className="mr-2 w-5 h-5" /> Payments
@@ -60,74 +90,58 @@ export function SingleParent() {
             </CardHeader>
             <CardContent className="space-y-2">
               <div className="grid md:grid-cols-2 grid-cols-1 space-y-3">
+              {/* <div className=" flex space-x-12">
+                  <p className="text-[13px] font-medium">Profile Picture</p>
+                  <p className="text-[14px] font-semibold">{data.profilePhoto}</p>
+                </div> */}
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Name</p>
-                  <p className="text-[14px] font-semibold">Okechukwu Okorie</p>
+                  <p className="text-[14px] font-semibold">{data.name}</p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Phone Number</p>
-                  <p className="text-[14px] font-semibold">+2349130893924</p>
+                  <p className="text-[14px] font-semibold">{data.phoneNo}</p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Email</p>
                   <p className="text-[14px] font-semibold">
-                    odomaurice501@gmail.com
+                    {data.email}
                   </p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Joined On</p>
-                  <p className="text-[14px] font-semibold">14th June 2024</p>
+                  <p className="text-[14px] font-semibold">{data.createdAt}</p>
                 </div>
                 <div className=" flex space-x-12">
-                  <p className="text-[13px] font-medium">State</p>
-                  <p className="text-[14px] font-semibold">Enugu</p>
+                  <p className="text-[13px] font-medium">Address</p>
+                  <p className="text-[14px] font-semibold">{data.address}</p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Country</p>
-                  <p className="text-[14px] font-semibold">Nigeria</p>
+                  <p className="text-[14px] font-semibold">{data.country}</p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">
                   Total Wards
                   </p>
-                  <p className="text-[14px] font-semibold">2</p>
+                  <WardInfo dataId={data.id} wards={data.wards}/>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Active Plan</p>
-                  <p className="text-[14px] font-semibold">Diamond</p>
+                  <p className="text-[14px] font-semibold">{data.plan}</p>
                 </div>
                 <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">
                   Plan expires on
                   </p>
-                  <p className="text-[14px] font-semibold">2nd May 2025</p>
+                  <p className="text-[14px] font-semibold"></p>
                 </div>
-                {/* <div className=" flex space-x-12">
-                  <p className="text-[13px] font-medium">
-                    Total Courses Taught
-                  </p>
-                  <p className="text-[14px] font-semibold">20</p>
-                </div> */}
+                
               </div>
             </CardContent>
           </Card>
         </TabsContent>
-        <TabsContent value="courses">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-[18px]">Courses</CardTitle>
-              <CardDescription>
-                All courses enrolled in.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <SingleParentCourses />
-            </CardContent>
-            <CardFooter>
-              <DashboardPagination />
-            </CardFooter>
-          </Card>
-        </TabsContent>
+        
         <TabsContent value="payments">
           <Card>
             <CardHeader>
@@ -142,5 +156,9 @@ export function SingleParent() {
         </TabsContent>
       </Tabs>
     </div>
+    )}
+    </div>
   );
 }
+
+export default SingleParent

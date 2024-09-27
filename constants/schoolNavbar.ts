@@ -268,6 +268,11 @@ export const AdminNavbar: SchoolNavType[] = [
     },
   },
   {
+    title: "Payments",
+    description: "",
+    path: "payments",
+  },
+  {
     title: "Students",
     description: "",
     path: "students",

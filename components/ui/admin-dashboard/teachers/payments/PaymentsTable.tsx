@@ -18,20 +18,20 @@ import {
 import { TableSkeleton } from "@/components/TableSkeleton";
 
 import Image from "next/image";
-import ParentOptions from "./ParentOptions";
+import Payments from "./Payments";
 
 
 
 
 
 
-const Parents = () => {
+const PaymentsTable = () => {
   
   
   const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["AdminGetParents"],
+    queryKey: ["AdminGetTeacher"],
     queryFn: async () => {
-      const response = await fetch("/api/parents");
+      const response = await fetch("/api/teachers");
       const result = await response.json();
       return result;
     },
@@ -63,7 +63,6 @@ const Parents = () => {
             </TableHead>
             <TableHead className="text-[12px] text-left p-2">Email</TableHead>
             <TableHead className="text-[12px] text-left p-2">Status</TableHead>
-            <TableHead className="text-[12px] text-left p-2">Wards</TableHead>
             <TableHead className="text-[12px] text-left p-2">Plan</TableHead>
             <TableHead className="text-[12px] text-right p-2">
               Options
@@ -85,17 +84,13 @@ const Parents = () => {
                  
                   {item.status}
                 </TableCell>
-                <TableCell className="text-[12px] font-semibold p-2">
-                 
-                 {item.wards.length}
-               </TableCell>
 
                 <TableCell className="text-[13px]  font-semibold p-2">
                   {item.PaymentPlans ? item.PaymentPlans : "Basic"}
                 </TableCell>
-                <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
-                  <ParentOptions dataId={item.id} />
-                </TableCell>
+                {/* <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
+                  <Payments dataId={item.id} />
+                </TableCell> */}
               </TableRow>
             ))}
         </TableBody>
@@ -104,4 +99,4 @@ const Parents = () => {
   );
 };
 
-export default Parents;
+export default PaymentsTable;

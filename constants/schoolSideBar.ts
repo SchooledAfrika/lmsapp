@@ -5,7 +5,7 @@ import {
   MdOutlineSettings,
   MdOutlineDisplaySettings
 } from "react-icons/md";
-import { RiParentLine, RiAdminLine, RiSchoolLine } from "react-icons/ri";
+import { RiParentLine, RiAdminLine, RiSecurePaymentLine } from "react-icons/ri";
 import {
   LiaChalkboardTeacherSolid,
   LiaGraduationCapSolid,
@@ -41,6 +41,7 @@ export const AdminSideBar: AdminSideBarType[] = [
   { path: "", name: "Dashboard", icon: MdInsertChartOutlined },
   { path: "courses", name: "Courses", icon: SiGoogleclassroom },
   { path: "teachers", name: "Teachers", icon: LiaChalkboardTeacherSolid },
+  { path: "payments", name: "Payments", icon: RiSecurePaymentLine },
   {path: "students", name: "Students", icon: LiaGraduationCapSolid },
   { path: "parents", name: "Parents", icon: RiParentLine },
   { path: "sessions", name: "Sessions", icon: IoRadioOutline },

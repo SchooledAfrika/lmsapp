@@ -23,6 +23,7 @@ import DashboardPagination from "@/components/DashboardPagination";
 import SingleTeacherClasses from "./SingleTeacherClasses";
 import SingleTeacherPaymentComplete from "./SingleTeacherPaymentComplete";
 import SingleTeacherPaymentPending from "./SingleTeacherPaymentPending";
+import MakeAdmin from "./MakeAdmin";
 
 const SingleTeacher = () => {
   const { id } = useParams();
@@ -82,18 +83,19 @@ const SingleTeacher = () => {
                 <IoBookOutline className="mr-2 w-5 h-5" />
                 Courses
               </TabsTrigger>
-              <TabsTrigger value="payments">
-                {" "}
-                <MdOutlinePayments className="mr-2 w-5 h-5" /> Payments
-              </TabsTrigger>
+             
             </TabsList>
             <TabsContent value="personal-information">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-[18px]">Personal Data</CardTitle>
-                  {/* <CardDescription>
-              Make changes to your account here. Click save when you're done.
-            </CardDescription> */}
+                  <CardDescription className="md:hidden block">
+                  <div className=" flex justify-end">
+                      
+                     
+                      <p className="text-[14px] font-semibold">{data.teachingRole === "INTERNAL" ? <MakeAdmin dataId={data.id}/> : ""}</p>
+                    </div>
+            </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <div className="grid md:grid-cols-2 grid-cols-1 space-y-3">
@@ -170,9 +172,14 @@ const SingleTeacher = () => {
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">
-                        Teaching Role
+                        Role
                       </p>
                       <p className="text-[14px] font-semibold">{data.role}</p>
+                    </div>
+                    <div className="hidden md:flex space-x-12">
+                      
+                     
+                      <p className="text-[14px] font-semibold">{data.teachingRole === "INTERNAL" ? <MakeAdmin dataId={data.id}/> : ""}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -194,60 +201,7 @@ const SingleTeacher = () => {
                 </CardFooter>
               </Card>
             </TabsContent>
-            <TabsContent value="payments">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-[18px]">Payments</CardTitle>
-                  <CardDescription>Keep track of all payments.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Tabs defaultValue="complete-payment" className=" w-full">
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="complete-payment">
-                        Completed
-                      </TabsTrigger>
-                      <TabsTrigger value="pending-payment">Pending</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="complete-payment">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-[16px]">
-                            Complete Payment
-                          </CardTitle>
-                          <CardDescription>
-                            View all completed payment information.
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          <SingleTeacherPaymentComplete />
-                        </CardContent>
-                        <CardFooter>
-                          <DashboardPagination />
-                        </CardFooter>
-                      </Card>
-                    </TabsContent>
-                    <TabsContent value="pending-payment">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-[16px]">
-                            Pending Payment
-                          </CardTitle>
-                          <CardDescription>
-                            View all pending payment information.
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          <SingleTeacherPaymentPending />
-                        </CardContent>
-                        <CardFooter>
-                          <DashboardPagination />
-                        </CardFooter>
-                      </Card>
-                    </TabsContent>
-                  </Tabs>
-                </CardContent>
-              </Card>
-            </TabsContent>
+            
           </Tabs>
         </div>
       )}
