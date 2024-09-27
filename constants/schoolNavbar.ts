@@ -257,15 +257,7 @@ export const AdminNavbar: SchoolNavType[] = [
       description: "",
     },
   },
-  {
-    title: "Schools",
-    description: "",
-    path: "schools",
-    subDetails: {
-      title: "",
-      description: "",
-    },
-  },
+ 
   {
     title: "Teachers",
     description: "",
@@ -274,6 +266,11 @@ export const AdminNavbar: SchoolNavType[] = [
       title: "",
       description: "",
     },
+  },
+  {
+    title: "Payments",
+    description: "",
+    path: "payments",
   },
   {
     title: "Students",

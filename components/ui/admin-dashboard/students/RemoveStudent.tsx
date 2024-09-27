@@ -10,40 +10,37 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Trash2 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 
 interface Idelete {
-  dataId: string;
+  studentId: string;
 }
-const RemoveTeacher: React.FC<Idelete> = ({ dataId }) => {
+const RemoveStudent: React.FC<Idelete> = ({ studentId }) => {
   const [loading, setloading] = useState<boolean>(false);
 
-  //   instance of client
   const queryClient = useQueryClient();
-  //   creating a delete using mutation to the backend
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
-      const result = await fetch(`/api/teachers/${dataId}`, {
+      const result = await fetch(`/api/students/${studentId}`, {
         method: "DELETE",
         body: JSON.stringify({
-          id: dataId,
+          id: studentId,
         }),
       });
       return result;
     },
 
     onSuccess: async (result) => {
-      queryClient.invalidateQueries({ queryKey: ["removeTeacher"] });
+      queryClient.invalidateQueries({ queryKey: ["removestudent"] });
       if (result.ok) {
         setloading(false);
-        return toast.success("Teacher Successfully Deleted");
+        return toast.success("Student Successfully Deleted");
       } else {
         setloading(false);
-        return toast.error("error deleting teacher");
+        return toast.error("error deleting student");
       }
     },
     onError: (error) => {
@@ -53,7 +50,7 @@ const RemoveTeacher: React.FC<Idelete> = ({ dataId }) => {
   });
   const handleDelete = () => {
     setloading(true);
-    mutate(dataId);
+    mutate(studentId);
   };
   return (
     <Dialog>
@@ -79,7 +76,7 @@ const RemoveTeacher: React.FC<Idelete> = ({ dataId }) => {
           </div>
           <div className="grid  items-center font-header gap-4">
             <p className="font-bold text-[20px]  ">
-              Are you sure you want to remove Teacher?
+              Are you sure you want to remove Student?
             </p>
             <p className="text-sm">
               This action can not be reversed, be sure you want to remove before
@@ -94,13 +91,12 @@ const RemoveTeacher: React.FC<Idelete> = ({ dataId }) => {
             type="submit"
             className="w-full py-8 text-lg bg-lightGreen hover:bg-green-700"
           >
-            {loading ? "Deleting Teacher..." : "Delete Teacher"}
+            {loading ? "Deleting Student..." : "Delete Student"}
           </Button>
         </DialogFooter>
       </DialogContent>
-      <ToastContainer/>
     </Dialog>
   );
 };
 
-export default RemoveTeacher;
+export default RemoveStudent;

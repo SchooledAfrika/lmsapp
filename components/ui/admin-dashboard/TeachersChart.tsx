@@ -65,8 +65,8 @@ export function TeachersChart() {
               cursor={false}
               content={<ChartTooltipContent indicator="dashed" />}
             />
-            <Bar dataKey="active" fill="green" radius={4} />
-            <Bar dataKey="passive" fill="red" radius={4} />
+            <Bar dataKey="active" fill="Green" radius={4} />
+            <Bar dataKey="passive" fill="Red" radius={4} />
           </BarChart>
         </ChartContainer>
       </CardContent>

@@ -2,7 +2,6 @@
 import { useState, FC } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import Career from "@/images/careers.png";
 import { RegisterType } from "@/constants/registerType";
 import { Button } from "./ui/button";
 import Cookies from "js-cookie";
@@ -64,7 +63,7 @@ const Register: FC = () => {
           tools they need to thrive in the digital age. Join us in shaping the future of education, one click at
           a time.
           </p>
-          <Image src={Career} alt="career" className="hidden sm:block" />
+          <Image src={"/careers.svg"} alt="career" width={200} height={200} className="hidden w-[400px] sm:block" />
         </div>
         <div className="sm:w-full md:w-[45%]">
           <div className="flex justify-end mb-[50px]">

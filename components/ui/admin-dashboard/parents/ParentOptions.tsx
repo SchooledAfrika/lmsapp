@@ -18,10 +18,13 @@ import { FaTableList } from "react-icons/fa6";
 import { ListCollapse } from "lucide-react";
 import { FaUserSlash } from "react-icons/fa6";
 import RemoveParent from "./RemoveParent";
+import UpdateParentStatus from "./UpdateParentStatus";
 
+interface Iparent {
+  dataId: string;
+}
 
-
-const ParentOptions = () => {
+const ParentOptions: React.FC<Iparent> = ({dataId}) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -33,7 +36,7 @@ const ParentOptions = () => {
         <div className="grid gap-4 font-header">
           <div className="grid gap-2">
             <div className="flex justify-start">
-              <Link href={`/admin-dashboard/parents/test`}>
+              <Link href={`/admin-dashboard/parents/${dataId}`}>
                 <p className="inline text-[13px]  font-semibold">
                   <FaRegEye className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
                   View
@@ -56,14 +59,11 @@ const ParentOptions = () => {
             </div>
             <hr className="bg-black" /> */}
             <div className="flex justify-start">
-              <p className="inline text-[13px]  font-semibold">
-                <FaUserSlash className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
-                 Suspend
-              </p>
+              <UpdateParentStatus dataId={dataId}/>
             </div>
             <hr className="bg-black" />
             <div className="flex justify-start">
-              <RemoveParent />
+              <RemoveParent dataId={dataId} />
             </div>
             <hr className="bg-black" />
           </div>

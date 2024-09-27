@@ -9,7 +9,21 @@ import {
 } from "@/components/ui/table";
 import EditStudentDetails from "@/components/ui/admin-dashboard/students/editStudentDetails/editStudentDetails";
 
-const IndividualStudentTable = () => {
+interface InfoStudent {
+  studentData: {
+    name: string;
+    email: string;
+    phoneNo: string;
+    birthDate: string;
+    country: string;
+    address: string;
+    classes: {
+      subject: string;
+    };
+  };
+}
+
+const IndividualStudentTable: React.FC<InfoStudent> = ({ studentData }) => {
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -27,33 +41,32 @@ const IndividualStudentTable = () => {
         <TableHeader>
           <TableRow className="text-[14px]">
             <TableHead className="">Full Name</TableHead>
-            <TableCell className="font-bold">Abu Bin Maurice</TableCell>
+            <TableCell className="font-bold">{studentData.name}</TableCell>
           </TableRow>
           <TableRow className="text-[14px]">
             <TableHead className="">Email</TableHead>
-            <TableCell className="font-bold">info@gmail.com</TableCell>
+            <TableCell className="font-bold">{studentData.email}</TableCell>
           </TableRow>
           <TableRow className="text-[14px]">
             <TableHead className="">Course</TableHead>
+            {studentData.classes.subject}
             <TableCell className="font-bold">UI/UX Adobe</TableCell>
           </TableRow>
           <TableRow className="text-[14px]">
             <TableHead className="">Phone Number</TableHead>
-            <TableCell className="font-bold">+2283628352</TableCell>
+            <TableCell className="font-bold">{studentData.phoneNo}</TableCell>
           </TableRow>
           <TableRow className="text-[14px]">
             <TableHead className="">Date of Birth</TableHead>
-            <TableCell className="font-bold">29th Feb, 1999</TableCell>
+            <TableCell className="font-bold">{studentData.birthDate}</TableCell>
           </TableRow>
           <TableRow className="text-[14px]">
             <TableHead className="">Nationality</TableHead>
-            <TableCell className="font-bold">German</TableCell>
+            <TableCell className="font-bold">{studentData.country}</TableCell>
           </TableRow>
           <TableRow className="text-[14px]">
             <TableHead className="">Address</TableHead>
-            <TableCell className="font-bold">
-              Allen Ajegunle Ikeja, Enugu Canada
-            </TableCell>
+            <TableCell className="font-bold">{studentData.address}</TableCell>
           </TableRow>
         </TableHeader>
       </Table>

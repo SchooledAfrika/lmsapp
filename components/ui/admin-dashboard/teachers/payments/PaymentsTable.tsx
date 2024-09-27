@@ -14,17 +14,18 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import TeacherOptions from "./TeacherOptions";
+
 import { TableSkeleton } from "@/components/TableSkeleton";
 
 import Image from "next/image";
+import Payments from "./Payments";
 
 
 
 
 
 
-const Teachers = () => {
+const PaymentsTable = () => {
   
   
   const { isLoading, isError, error, data } = useQuery({
@@ -87,9 +88,9 @@ const Teachers = () => {
                 <TableCell className="text-[13px]  font-semibold p-2">
                   {item.PaymentPlans ? item.PaymentPlans : "Basic"}
                 </TableCell>
-                <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
-                  <TeacherOptions dataId={item.id} />
-                </TableCell>
+                {/* <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
+                  <Payments dataId={item.id} />
+                </TableCell> */}
               </TableRow>
             ))}
         </TableBody>
@@ -98,4 +99,4 @@ const Teachers = () => {
   );
 };
 
-export default Teachers;
+export default PaymentsTable;

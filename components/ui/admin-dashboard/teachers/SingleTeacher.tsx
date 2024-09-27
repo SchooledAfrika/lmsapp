@@ -23,6 +23,7 @@ import DashboardPagination from "@/components/DashboardPagination";
 import SingleTeacherClasses from "./SingleTeacherClasses";
 import SingleTeacherPaymentComplete from "./SingleTeacherPaymentComplete";
 import SingleTeacherPaymentPending from "./SingleTeacherPaymentPending";
+import MakeAdmin from "./MakeAdmin";
 
 const SingleTeacher = () => {
   const { id } = useParams();
@@ -82,18 +83,19 @@ const SingleTeacher = () => {
                 <IoBookOutline className="mr-2 w-5 h-5" />
                 Courses
               </TabsTrigger>
-              <TabsTrigger value="payments">
-                {" "}
-                <MdOutlinePayments className="mr-2 w-5 h-5" /> Payments
-              </TabsTrigger>
+             
             </TabsList>
             <TabsContent value="personal-information">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-[18px]">Personal Data</CardTitle>
-                  {/* <CardDescription>
-              Make changes to your account here. Click save when you're done.
-            </CardDescription> */}
+                  <CardDescription className="md:hidden block">
+                  <div className=" flex justify-end">
+                      
+                     
+                      <p className="text-[14px] font-semibold">{data.teachingRole === "INTERNAL" ? <MakeAdmin dataId={data.id}/> : ""}</p>
+                    </div>
+            </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   <div className="grid md:grid-cols-2 grid-cols-1 space-y-3">
@@ -119,53 +121,65 @@ const SingleTeacher = () => {
                       <p className="text-[13px] font-medium">
                         Preferred Grade(s)
                       </p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data?.grade[0]}, {data?.grade[1]}, {data?.grade[2]}, {data?.grade[3]}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Language(s)</p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data?.language[0]}, {data?.language[1]}, {data?.language[2]}, {data?.language[3]}, {data?.language[4]}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Details</p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data.details}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Email</p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data.email}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Joined On</p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data.createdAt}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Address</p>
-                      <p className="text-[14px] font-semibold"></p>
+                      <p className="text-[14px] font-semibold">{data.address}</p>
                     </div>
                     <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Country</p>
-                      <p className="text-[14px] font-semibold">Nigeria</p>
+                      <p className="text-[13px] font-medium">Subject(s)</p>
+                      <p className="text-[14px] font-semibold">{data.subject[0]}, {data?.subject[1]}, {data?.subject[2]}, {data?.subject[3]}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Active Plan</p>
-                      <p className="text-[14px] font-semibold">Basic</p>
+                      <p className="text-[14px] font-semibold">{data?.subscriped}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Plan expires on</p>
                       <p className="text-[14px] font-semibold">
-                        20th October 2023
+                        
+                        {data?.subscriptionDuration}
                       </p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">
                         Total Hours Taught Online
                       </p>
-                      <p className="text-[14px] font-semibold">2000Hrs+</p>
+                      <p className="text-[14px] font-semibold">{data.hours} hours</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">
-                        Total Courses Taught
+                        Teaching Role
                       </p>
-                      <p className="text-[14px] font-semibold">20</p>
+                      <p className="text-[14px] font-semibold">{data.teachingRole}</p>
+                    </div>
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">
+                        Role
+                      </p>
+                      <p className="text-[14px] font-semibold">{data.role}</p>
+                    </div>
+                    <div className="hidden md:flex space-x-12">
+                      
+                     
+                      <p className="text-[14px] font-semibold">{data.teachingRole === "INTERNAL" ? <MakeAdmin dataId={data.id}/> : ""}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -180,67 +194,14 @@ const SingleTeacher = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <SingleTeacherClasses />
+                  <SingleTeacherClasses dataId={data.id} classes={data.Classes} />
                 </CardContent>
                 <CardFooter>
                   <DashboardPagination />
                 </CardFooter>
               </Card>
             </TabsContent>
-            <TabsContent value="payments">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-[18px]">Payments</CardTitle>
-                  <CardDescription>Keep track of all payments.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <Tabs defaultValue="complete-payment" className=" w-full">
-                    <TabsList className="grid w-full grid-cols-2">
-                      <TabsTrigger value="complete-payment">
-                        Completed
-                      </TabsTrigger>
-                      <TabsTrigger value="pending-payment">Pending</TabsTrigger>
-                    </TabsList>
-                    <TabsContent value="complete-payment">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-[16px]">
-                            Complete Payment
-                          </CardTitle>
-                          <CardDescription>
-                            View all completed payment information.
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          <SingleTeacherPaymentComplete />
-                        </CardContent>
-                        <CardFooter>
-                          <DashboardPagination />
-                        </CardFooter>
-                      </Card>
-                    </TabsContent>
-                    <TabsContent value="pending-payment">
-                      <Card>
-                        <CardHeader>
-                          <CardTitle className="text-[16px]">
-                            Pending Payment
-                          </CardTitle>
-                          <CardDescription>
-                            View all pending payment information.
-                          </CardDescription>
-                        </CardHeader>
-                        <CardContent className="space-y-2">
-                          <SingleTeacherPaymentPending />
-                        </CardContent>
-                        <CardFooter>
-                          <DashboardPagination />
-                        </CardFooter>
-                      </Card>
-                    </TabsContent>
-                  </Tabs>
-                </CardContent>
-              </Card>
-            </TabsContent>
+            
           </Tabs>
         </div>
       )}
