@@ -72,10 +72,22 @@ const ControlBtn: React.FC<{
         <div>
           {method === "Paystack" ? (
             <div className=" z-[99999]">
-              <PayStackBtn id={sessionId} price={200} enroll={enroll} />
+              <PayStackBtn
+                studentValue={getValues}
+                id={sessionId}
+                price={200}
+                enroll={enroll}
+                isByStudent={true}
+              />
             </div>
           ) : (
-            <FlutterWaveBtn id={sessionId} price={200} enroll={enroll} />
+            <FlutterWaveBtn
+              isByStudent={true}
+              studentValue={getValues}
+              id={sessionId}
+              price={200}
+              enroll={enroll}
+            />
           )}
         </div>
       )}

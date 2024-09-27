@@ -48,9 +48,21 @@ const ControlBtn: React.FC<{
       ) : (
         <div>
           {method === "Paystack" ? (
-            <PayStackBtn id={sessionId} price={200} enroll={enroll} />
+            <PayStackBtn
+              parentsValue={getValues}
+              id={sessionId}
+              price={200}
+              enroll={enroll}
+              isByStudent={false}
+            />
           ) : (
-            <FlutterWaveBtn id={sessionId} price={200} enroll={enroll} />
+            <FlutterWaveBtn
+              isByStudent={false}
+              parentsValue={getValues}
+              id={sessionId}
+              price={200}
+              enroll={enroll}
+            />
           )}
         </div>
       )}
@@ -63,7 +75,10 @@ export const PayStackBtn: React.FC<{
   id: string;
   price: number;
   enroll: () => void;
-}> = ({ id, price, enroll }) => {
+  studentValue?: UseFormGetValues<IstudentSession>;
+  parentsValue?: UseFormGetValues<Isession>;
+  isByStudent: boolean;
+}> = ({ id, price, enroll, parentsValue, studentValue, isByStudent }) => {
   const { data } = useSession();
   const componentProps = {
     reference: new Date().getTime().toString(),
@@ -78,10 +93,42 @@ export const PayStackBtn: React.FC<{
       custom_fields: [
         {
           display_name: data?.user.id as string, //students id
-          variable_name: id, //class id
-          value: `${price}-class`, //for the price and class specified payment
+          variable_name: id, //sessionId id
+          value: `${price}-session`, //for the price and class specified payment
+        },
+        {
+          display_name: "random second", //students id
+          variable_name: "random second", //sessionId id
+          value: `random second`, //for the price and class specified payment
         },
       ],
+      plan: {
+        studentId: isByStudent ? data?.user.id : parentsValue!("childId"),
+        grade: isByStudent ? studentValue!("grade") : parentsValue!("grade"),
+        sessionType: isByStudent
+          ? studentValue!("sessionTypes")
+          : parentsValue!("sessionTypes"),
+        subjects: isByStudent
+          ? studentValue!("subject")
+          : parentsValue!("subject"),
+        curriculum: isByStudent
+          ? studentValue!("curriculum")
+          : parentsValue!("curriculum"),
+        specialNeeds: isByStudent
+          ? studentValue!("specialNeeds")
+          : parentsValue!("specialNeeds"),
+        goals: isByStudent ? studentValue!("goals") : parentsValue!("goals"),
+        days: isByStudent ? studentValue!("days") : parentsValue!("days"),
+        times: isByStudent ? studentValue!("times") : parentsValue!("times"),
+        hours: isByStudent ? studentValue!("hours") : parentsValue!("hours"),
+        length: isByStudent ? studentValue!("length") : parentsValue!("length"),
+        classStart: isByStudent
+          ? studentValue!("classStarts")
+          : parentsValue!("classStarts"),
+        price,
+        selectedTeacher: id,
+        byparents: isByStudent ? false : true,
+      },
     },
   };
   return (
@@ -97,8 +144,30 @@ export const FlutterWaveBtn: React.FC<{
   id: string;
   price: number;
   enroll: () => void;
-}> = ({ id, price, enroll }) => {
+  studentValue?: UseFormGetValues<IstudentSession>;
+  parentsValue?: UseFormGetValues<Isession>;
+  isByStudent: boolean;
+}> = ({ id, price, enroll, studentValue, parentsValue, isByStudent }) => {
   const { data } = useSession();
+  console.log(studentValue);
+  // const byparents = {
+  //   studentId: parentsValue!("childId"),
+  //   grade: parentsValue!("grade"),
+  //   sessionType: parentsValue!("sessionTypes"),
+  //   subjects: parentsValue!("subject"),
+  //   curriculum: parentsValue!("curriculum"),
+  //   specialNeeds: parentsValue!("specialNeeds"),
+  //   goals: parentsValue!("goals"),
+  //   days: parentsValue!("days"),
+  //   times: parentsValue!("times"),
+  //   hours: parentsValue!("hours"),
+  //   length: parentsValue!("length"),
+  //   classStart: parentsValue!("classStarts"),
+  //   price,
+  //   selectedTeacher: id,
+  //   byparents: true,
+  // };
+
   const config = {
     public_key: process.env.NEXT_PUBLIC_FLUTTERPUBKEY!,
     tx_ref: Date.now().toString(),
@@ -108,12 +177,33 @@ export const FlutterWaveBtn: React.FC<{
     customer: {
       email: data?.user.email as string,
       phone_number: data?.user.id as string, //id of the student or user that want to make payment,
-      name: `${id}-class`, // field for id of the class and the payment type
+      name: `${id}-session`, // field for id of the class and the payment type
+      names: "calcs",
+      bestshows: "this is me",
+      wow: "trying now ooo",
     },
     customizations: {
       title: "school afrika",
       description: "payment for  enrollment",
       logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
+    },
+    meta: {
+      studentId: data?.user.id,
+      grade: studentValue!("grade"),
+      sessionType: studentValue!("sessionTypes"),
+
+      subjects: studentValue!("subject").join("-"),
+      curriculum: studentValue!("curriculum"),
+      specialNeeds: studentValue!("specialNeeds")?.join("-"),
+      goals: studentValue!("goals"),
+      days: studentValue!("days").join("-"),
+      times: studentValue!("times"),
+      hours: studentValue!("hours"),
+      length: studentValue!("length"),
+      classStart: studentValue!("classStarts"),
+      price,
+      selectedTeacher: id,
+      byparents: false,
     },
     onSuccess: () => {
       alert("true oooo");
@@ -124,7 +214,8 @@ export const FlutterWaveBtn: React.FC<{
     ...config,
     text: "Pay now",
     callback: () => {
-      closePaymentModal(); // this will close the modal programmatically
+      closePaymentModal();
+      enroll();
     },
     onClose: () => {},
   };

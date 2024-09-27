@@ -1,9 +1,7 @@
 // in this route, we focus on allowing student to add their id to the backend after making payment
 // this part is only accessible by the webhooks we have setup for payments
 // TODO: remember to check or add the auth header for the keys given by this webhooks payment platform
-import prisma from "@/prisma/prismaConnect";
-import { serverError } from "@/prisma/utils/error";
-import { payForClass } from "@/prisma/utils/payment";
+import { payForClass, sessionPaymentFlutter } from "@/prisma/utils/payment";
 
 // add student to the class after making payment
 export async function POST(req: Request) {
@@ -24,7 +22,11 @@ export async function POST(req: Request) {
   const paymentFor = classArray[1];
   // check for the payment type and run it accordingly
   if (paymentFor == "class ") {
-    await payForClass(classId, studentId);
+    return await payForClass(classId, studentId);
+  }
+  // pay for session if is type if session
+  if (paymentFor == "session ") {
+    return await sessionPaymentFlutter(body.meta_data);
   }
   return new Response(JSON.stringify({ m: "successful" }), { status: 200 });
 }

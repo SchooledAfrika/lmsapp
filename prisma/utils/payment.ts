@@ -1,6 +1,7 @@
 import prisma from "../prismaConnect";
 import { serverError } from "./error";
 
+// here we make payment for classes
 export const payForClass = async (classId: string, studentId: string) => {
   const theclass = await prisma.classes.findUnique({
     where: { id: classId },
@@ -43,6 +44,64 @@ export const payForClass = async (classId: string, studentId: string) => {
       }),
       { status: 200 }
     );
+  } catch (error) {
+    return serverError();
+  }
+};
+
+// here we make payment for session
+export const sessionPaymentFlutter = async (paymentInfo: any) => {
+  console.log(paymentInfo);
+  try {
+    await prisma.adminSectionView.create({
+      data: {
+        studentId: paymentInfo.studentId,
+        oneOnOneSectionId: paymentInfo.selectedTeacher,
+        merged: false,
+        amt: Number(paymentInfo.price),
+        sectionType: paymentInfo.sessionType,
+        hoursperday: paymentInfo.hours ? paymentInfo.hours : 2,
+        duration: paymentInfo.length,
+        subject: paymentInfo.subjects.split("-"),
+        curriculum: paymentInfo.curriculum,
+        specialNeed: paymentInfo.specialNeeds.split("-"),
+        learningGoal: paymentInfo.goals,
+        learningDays: paymentInfo.days.split("-"),
+        startTime: paymentInfo.classStart,
+        grade: paymentInfo.grade,
+      },
+    });
+    return new Response(JSON.stringify({ message: "successful" }), {
+      status: 200,
+    });
+  } catch (error) {
+    console.log(error);
+    return serverError();
+  }
+};
+export const sessionPaymentPaystack = async (paymentInfo: any) => {
+  try {
+    await prisma.adminSectionView.create({
+      data: {
+        studentId: paymentInfo.studentId,
+        oneOnOneSectionId: paymentInfo.selectedTeacher,
+        merged: false,
+        amt: Number(paymentInfo.price),
+        sectionType: paymentInfo.sessionType,
+        hoursperday: paymentInfo.hours ? paymentInfo.hours : 2,
+        duration: paymentInfo.length,
+        subject: paymentInfo.subjects,
+        curriculum: paymentInfo.curriculum,
+        specialNeed: paymentInfo.specialNeeds,
+        learningGoal: paymentInfo.goals,
+        learningDays: paymentInfo.days,
+        startTime: paymentInfo.classStart,
+        grade: paymentInfo.grade,
+      },
+    });
+    return new Response(JSON.stringify({ message: "successful" }), {
+      status: 200,
+    });
   } catch (error) {
     return serverError();
   }

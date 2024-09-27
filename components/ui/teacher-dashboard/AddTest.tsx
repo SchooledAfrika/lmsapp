@@ -29,7 +29,7 @@ interface Iadd {
 
 const AddTest: React.FC<Iadd> = ({ classId }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [examId, setExamId] = useState<string | null>(null);
+  const [selectedExamId, setselectedExamId] = useState<string>();
 
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["addTest"],
@@ -45,12 +45,13 @@ const AddTest: React.FC<Iadd> = ({ classId }) => {
 
   // Mutation to handle the addition of test/exam
   const mutation = useMutation({
-    mutationFn: async (examId: string) => {
+    mutationFn: async () => {
+      console.log(classId, selectedExamId);
       const result = await fetch(`/api/class/exams`, {
         method: "POST",
         body: JSON.stringify({
           classId: classId,
-          examId: examId,
+          examId: selectedExamId,
         }),
       });
       return result;
@@ -72,15 +73,28 @@ const AddTest: React.FC<Iadd> = ({ classId }) => {
     },
   });
 
-  const handleAdd = () => {
-    if (examId) {
-      setLoading(true);
-      mutation.mutate(examId);
-      console.log(examId)
-    } else {
-      toast.error("Please select an exam.");
+  // handle submit or triger mutation function to run
+  const handleSubmit = () => {
+    if (!selectedExamId) {
+      return toast.error("please select an exam");
     }
+    setLoading(true);
+    mutation.mutate();
   };
+
+  // loading message here
+  if (isLoading) {
+    return <p>loading...</p>;
+  }
+
+  // return a div telling the teacher to create an exam if there is no exam
+  if (data.length == 0) {
+    return (
+      <div>
+        <p>No exam here, set exam please</p>
+      </div>
+    );
+  }
 
   return (
     <Dialog>
@@ -93,7 +107,9 @@ const AddTest: React.FC<Iadd> = ({ classId }) => {
 
       <DialogContent className="sm:w-[600px] w-[380px] font-subtext">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold">Add Test(Exam)</DialogTitle>
+          <DialogTitle className="text-3xl font-bold">
+            Add Test(Exam)
+          </DialogTitle>
         </DialogHeader>
 
         <div className="grid gap-4 font-header py-4">
@@ -103,22 +119,19 @@ const AddTest: React.FC<Iadd> = ({ classId }) => {
             </p>
 
             <div className="flex flex-col">
-              <Select onValueChange={setExamId}>
+              <Select onValueChange={(value) => setselectedExamId(value)}>
                 <SelectTrigger className="w-full py-6">
                   <SelectValue placeholder="Select Test(Exam)" />
                 </SelectTrigger>
-
                 <SelectContent className="font-header font-medium">
-                  <ScrollArea className="h-[200px] w-full">
-                    <SelectGroup>
-                      {Array.isArray(data) &&
-                        data.map((item: any) => (
-                          <SelectItem key={item.id} value={item.id}>
-                            {item.title}
-                          </SelectItem>
-                        ))}
-                    </SelectGroup>
-                  </ScrollArea>
+                  <SelectGroup>
+                    {Array.isArray(data) &&
+                      data.map((item: any) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.title}
+                        </SelectItem>
+                      ))}
+                  </SelectGroup>
                 </SelectContent>
               </Select>
             </div>
@@ -127,7 +140,7 @@ const AddTest: React.FC<Iadd> = ({ classId }) => {
 
         <DialogFooter>
           <Button
-            onClick={handleAdd}
+            onClick={handleSubmit}
             disabled={loading}
             type="submit"
             className="w-full py-8 text-lg bg-lightGreen hover:bg-green-700"
@@ -136,8 +149,6 @@ const AddTest: React.FC<Iadd> = ({ classId }) => {
           </Button>
         </DialogFooter>
       </DialogContent>
-
-      <ToastContainer />
     </Dialog>
   );
 };
