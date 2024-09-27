@@ -51,6 +51,7 @@ export const payForClass = async (classId: string, studentId: string) => {
 
 // here we make payment for session
 export const sessionPaymentFlutter = async (paymentInfo: any) => {
+  console.log(paymentInfo);
   try {
     await prisma.adminSectionView.create({
       data: {
@@ -74,6 +75,7 @@ export const sessionPaymentFlutter = async (paymentInfo: any) => {
       status: 200,
     });
   } catch (error) {
+    console.log(error);
     return serverError();
   }
 };
