@@ -7,6 +7,7 @@ import { notAuthenticated, serverError } from "@/prisma/utils/error";
 export async function POST(req: Request) {
   // TODO: remember to change the teacher id here to nextauth id
   const { examId, classId } = await req.json();
+  console.log(examId, classId);
   const teachersId = await serverSessionId();
   const role = await serverSessionRole();
   if (!teachersId) return notAuthenticated();
@@ -43,7 +44,9 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   // then lets filter the fields we need to be displayed in the classExams model
-  const { createdAt, updatedAt, teacherId, ...others } = getTeachersExam;
+  const { createdAt, updatedAt, teacherId, id, type, ...others } =
+    getTeachersExam;
+
   try {
     await prisma.classExams.create({
       data: {
