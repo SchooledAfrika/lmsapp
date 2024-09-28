@@ -21,3 +21,8 @@ export const onlyParents = () => {
     status: 404,
   });
 };
+export const onlyStudent = () => {
+  return new Response(JSON.stringify({ message: "only Student is allowed" }), {
+    status: 404,
+  });
+};
