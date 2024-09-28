@@ -12,8 +12,8 @@ import {
 
 export async function GET(req: Request) {
   // check for authentication first
-  const parentsId = await serverSessionId();
   const childId = getQuery(req.url, "childId");
+  const parentsId = await serverSessionId();
   if (!parentsId) return notAuthenticated();
   try {
     // first lets get all the exams that has been answered so far by student in the one to one section
