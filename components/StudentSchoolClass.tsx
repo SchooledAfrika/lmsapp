@@ -13,6 +13,7 @@ import {
 import { info } from "console";
 import Image from "next/image";
 import { IgetTeachers, Iteacher } from "./AssignDialog";
+import { IExam } from "./StudentGroupClass";
 
 // component for announcements
 export const Announcement: React.FC<{
@@ -104,7 +105,9 @@ export const Exams: React.FC<{ exams: any[] }> = ({ exams }) => {
           <p className=" text-slate-500 font-semibold">No exams yet</p>
         </div>
       ) : (
-        <div></div>
+        <div className=" w-full flex flex-col gap-2 px-5">
+          <p>hello</p>
+        </div>
       )}
     </div>
   );

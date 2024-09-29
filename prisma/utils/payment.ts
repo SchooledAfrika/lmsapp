@@ -60,7 +60,7 @@ export const sessionPaymentFlutter = async (paymentInfo: any) => {
         merged: false,
         amt: Number(paymentInfo.price),
         sectionType: paymentInfo.sessionType,
-        hoursperday: paymentInfo.hours ? paymentInfo.hours : 2,
+        hoursperday: paymentInfo.hours ? Number(paymentInfo.hours) : 2,
         duration: paymentInfo.length,
         subject: paymentInfo.subjects.split("-"),
         curriculum: paymentInfo.curriculum,

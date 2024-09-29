@@ -1,21 +1,60 @@
-// here, the student answers there class exam,
+// here, the student get and answers there class exam,
 // then pushes there id into the array showing that they have finished the exam.
 
 import prisma from "@/prisma/prismaConnect";
-import { notAuthenticated, serverError } from "@/prisma/utils/error";
-import { markExams, successFullMessage } from "@/prisma/utils/utils";
+import {
+  notAuthenticated,
+  onlyAdmin,
+  onlyStudent,
+  serverError,
+} from "@/prisma/utils/error";
+import {
+  getQuery,
+  markExams,
+  serverSessionId,
+  serverSessionRole,
+  successFullMessage,
+} from "@/prisma/utils/utils";
+
+// get the single class exam
+export async function GET(req: Request) {
+  const userId = await serverSessionId();
+  if (!userId) return notAuthenticated();
+  const singleExam = getQuery(req.url, "examId");
+  try {
+    const exam = await prisma.classExams.findUnique({
+      where: {
+        id: singleExam,
+      },
+    });
+    return new Response(JSON.stringify(exam), { status: 200 });
+  } catch (error) {
+    return serverError();
+  }
+}
 
 export async function POST(req: Request) {
-  // TODO: remember to remove the studentId to the nextauth id
-  const { studentId, examId, classId, answeredExam } = await req.json();
+  const { examId, answeredExam } = await req.json();
+  const studentId = await serverSessionId();
+  const role = await serverSessionRole();
   // check if the student is logged in already
   if (!studentId) return notAuthenticated();
+  if (role !== "Student") return onlyStudent();
+  // lets get the exam first
+  // so that we can get the id of the class that is associated with it
+  const classExam = await prisma.classExams.findUnique({
+    where: { id: examId },
+    select: {
+      classesId: true,
+    },
+  });
+
   //   lets get the class and check the ids in the list of students in the class
   // if the list does not contain the studentsId
   // we should return with an error
   const getClass = await prisma.classes.findUnique({
     where: {
-      id: classId,
+      id: classExam?.classesId,
     },
     select: {
       studentIDs: true,
@@ -62,7 +101,7 @@ export async function POST(req: Request) {
         grade: getExam?.grade!,
         mainExamId: examId,
         studentId,
-        classesId: classId,
+        classesId: classExam?.classesId!,
       },
     });
     return successFullMessage(`${correctAnswer}`);

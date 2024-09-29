@@ -41,7 +41,8 @@ export async function GET(req: Request) {
         },
       },
     });
-    return new Response(JSON.stringify(childClass), { status: 200 });
+    const allTeachers = childClass?.classes;
+    return new Response(JSON.stringify(allTeachers), { status: 200 });
   } catch (error) {
     return serverError();
   }
