@@ -37,3 +37,17 @@ endpoint ===> /api/parents-gets-ward-sessions?childId=id
 method ===> GET
 comment ===> replace the id for childId query params with the child id selected, this endpoint will return all the 
 sessions that the ward is currently enrolled in
+
+================================================================================================================
+endpoint for parents to get all the assessments written by the ward
+================================================================================================================
+endpoint ===> /api/wards-all-assessment?childId=id
+method ===> GET
+comment ===> replace the id for childId query params with the child id selected
+
+================================================================================================================
+endpoint for parents to get single assessments written by the ward
+================================================================================================================
+endpoint ===> /api/wards-all-assessment/:id
+method ===> GET
+comment ===> replace the :id with the single examid 
