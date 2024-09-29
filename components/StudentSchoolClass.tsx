@@ -106,9 +106,7 @@ export const Exams: React.FC<{ exams: any[] }> = ({ exams }) => {
         </div>
       ) : (
         <div className=" w-full flex flex-col gap-2 px-5">
-          {exams.map((exam) => (
-            <div className=" px-3 py-3 rounded-lg"></div>
-          ))}
+          <p>hello</p>
         </div>
       )}
     </div>
