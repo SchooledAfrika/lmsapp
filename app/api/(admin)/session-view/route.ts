@@ -47,13 +47,20 @@ export async function PUT(req: Request) {
     );
   }
 
+  if (adminSessionView.merged) {
+    return new Response(
+      JSON.stringify({ message: "this session is already merged" }),
+      { status: 400 }
+    );
+  }
+
   try {
     // now lets  merge a teacher to a student
     // by creating a new session model for them
     await prisma.appliedSection.create({
       data: {
-        oneOnOneSectionId: adminSessionView.oneOnOneSectionId,
-        studentId: teacherSessionId,
+        oneOnOneSectionId: teacherSessionId,
+        studentId: adminSessionView.studentId,
         subject: adminSessionView.subject,
         grade: adminSessionView.grade,
         sectionType: adminSessionView.sectionType,

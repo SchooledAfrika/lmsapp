@@ -268,7 +268,7 @@ model Classes {
   students                   Student[]                    @relation(fields: [studentIDs], references: [id])
   maxCapacity                Float
   currentCapacity            Float                        @default(0)
-  // this will contain the arrays of the resources the teacher ass
+  // this will contain the arrays of the resources the teacher add
   resourcesIds               String[]                     @default([])
   createdAt                  DateTime                     @default(now())
   updatedAt                  DateTime                     @default(now())

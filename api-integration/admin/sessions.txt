@@ -1,0 +1,17 @@
+================================================================================================================
+endpoint for admin to get all the unmerged sessions
+================================================================================================================
+enpoint ==> /api/session-view
+method ==> GET
+comment ==> this return all the session that have not been merged yet
+
+================================================================================================================
+endpoint for admin to merge a particular session to a teacher
+================================================================================================================
+enpoint ==> /api/session-view
+method ==> PUT
+payload ==> {
+    adminSessionId:String,
+    teacherSessionId:String
+}
+comment ==> the adminSessionId is the id of the session while teacherSessionId is the sessionId of the teacher

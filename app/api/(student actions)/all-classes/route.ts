@@ -19,22 +19,6 @@ export async function GET(req: Request) {
   }
   //   now we try getting the both type of class and merge the two arrays gotten
   try {
-    // get all the school classes the student is among or added in
-    const schoolClass = await prisma.schoolClassStudent.findMany({
-      where: { studentId },
-      select: {
-        class: {
-          select: {
-            name: true,
-            subject: true,
-            id: true,
-            grade: true,
-            schoolId: true,
-            createdAt: true,
-          },
-        },
-      },
-    });
     // get all the normal group classes the students is already subscribed to
     const groupClasses = await prisma.classes.findMany({
       select: {
@@ -60,14 +44,6 @@ export async function GET(req: Request) {
         grade: gc.grade,
         createdAt: gc.createdAt,
         type: "group-class",
-      })),
-      ...schoolClass.map((sc) => ({
-        id: sc.class.id,
-        name: sc.class.name,
-        subjects: sc.class.subject,
-        grade: sc.class.grade,
-        createdAt: sc.class.createdAt,
-        type: "school-class",
       })),
     ];
     // forming new Array by sorting the time in which the class was created

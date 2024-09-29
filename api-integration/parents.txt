@@ -1,0 +1,53 @@
+this enpoint is for those card in the overview displaying some basic information of a particular student
+================================================================================================================
+endpoint for parents overview card with total class for child
+================================================================================================================
+enpoint ===> /api/parent-info/parents-child-overview/total-classes?childId=id
+method ===> GET
+comment ===> replace the id for childId query params with the child id selected
+
+================================================================================================================
+endpoint for parents overview card with total teacher for child
+================================================================================================================
+endpoint ===> /api/parent-info/parents-child-overview/total-teacher?childId=id
+method ===> GET
+comment ===> replace the id for childId query params with the child id selected
+
+================================================================================================================
+endpoint for parents overview card with total exams and average score for child
+================================================================================================================
+endpoint ===> /api/parent-info/parents-child-overview/total-exams?childId=id
+method ===> GET
+comment ===> replace the id for childId query params with the child id selected, this will return both the total 
+exams written by the student, together with the average score in information
+
+
+page for parents to get all the teachers
+================================================================================================================
+endpoint for parents to get all the teachers teaching the child
+================================================================================================================
+endpoint ===> /api/parents-gets-wards-teachers?childId=id
+method ===> GET
+comment ===> replace the id for childId query params with the child id selected
+
+================================================================================================================
+endpoint for parents to get all the sessions the child is currently enrolled in
+================================================================================================================
+endpoint ===> /api/parents-gets-ward-sessions?childId=id
+method ===> GET
+comment ===> replace the id for childId query params with the child id selected, this endpoint will return all the 
+sessions that the ward is currently enrolled in
+
+================================================================================================================
+endpoint for parents to get all the assessments written by the ward
+================================================================================================================
+endpoint ===> /api/wards-all-assessment?childId=id
+method ===> GET
+comment ===> replace the id for childId query params with the child id selected
+
+================================================================================================================
+endpoint for parents to get single assessments written by the ward
+================================================================================================================
+endpoint ===> /api/wards-all-assessment/:id
+method ===> GET
+comment ===> replace the :id with the single examid 

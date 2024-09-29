@@ -1,0 +1,26 @@
+================================================================================================================
+endpoint for student to get a single exam and write
+================================================================================================================
+route ==> /api/class-exam?examId=String
+method ==> GET
+comment ===> in the url the query parameter examId is compulsory and this is the id of the exam you want to get
+
+================================================================================================================
+endpoint for student to submit their exams
+================================================================================================================
+route ==> /api/class-examId
+method ==> POST
+payload ==>{
+    examId:String,
+    answeredExam:[
+        {
+            question:String,
+            answer:String,
+            studentAnswer:String,
+            option:string[]
+        }
+    ]
+}
+
+comment: in the payload, examId is the id of the exam, answeredExam is an array containing the answered question
+NB: this only field that is different from this answeredExam and the normal exams before answering is the studentAnswer field

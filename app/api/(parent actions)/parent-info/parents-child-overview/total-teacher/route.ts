@@ -6,8 +6,8 @@ import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import { getQuery, serverSessionId } from "@/prisma/utils/utils";
 
 export async function GET(req: Request) {
-  const parentsId = await serverSessionId();
   const childId = getQuery(req.url, "childId");
+  const parentsId = await serverSessionId();
   if (!parentsId) return notAuthenticated();
   try {
     // first, lets get all the classess the child is in
