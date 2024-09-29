@@ -84,8 +84,11 @@ export const Exams: React.FC<{ exams: IExam[] }> = ({ exams }) => {
         </div>
       ) : (
         <div className=" w-full flex flex-col gap-2">
-          {exams.map((exam) => (
-            <div className=" px-3 py-3 rounded-lg flex items-center justify-between  border ">
+          {exams.map((exam, index) => (
+            <div
+              key={index}
+              className=" px-3 py-3 rounded-lg flex items-center justify-between  border "
+            >
               <div className=" flex flex-col">
                 <p className=" text-black font-bold text-[14px] md:text-[18px]">
                   {exam.title}
