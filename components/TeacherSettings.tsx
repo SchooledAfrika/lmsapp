@@ -1,17 +1,18 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { teacherProfileSettingsSchema } from "@/constants/teacherProfileSettings";
 import { teacherPasswordUpdateSchema } from "@/constants/teacherPasswordUpdate";
-import Link from "next/link";
 import Image from "next/image";
 import { Button } from "./ui/button";
 import { toast, ToastContainer } from "react-toastify";
-import { Eye } from 'lucide-react';
-import { EyeOff } from 'lucide-react';
+import { Eye } from "lucide-react";
+import { EyeOff } from "lucide-react";
+import { CommonDashboardContext } from "@/providers/Statecontext";
+
 import "react-toastify/dist/ReactToastify.css";
 
 export type IupdatingTeacher = z.infer<typeof teacherProfileSettingsSchema>;
@@ -196,49 +197,53 @@ const UpdatePassword = () => {
       <hr className="my-4" />
       <label className="font-bold text-[#9F9F9F] my-4">Security</label>
       <div className="relative">
-      <input
-        id="name"
-        {...register("oldPassword")}
-        name="oldPassword"
-        type={showPassword ? 'text' : 'password'}
-        className="outline-none p-3 my-4 rounded-[5px] border-2 w-full"
-        placeholder="Current Password"
-      />
-      {errors.oldPassword && (
-        <small className="text-red-600">{errors.oldPassword.message}</small>
-      )}
-       <button
-        type="button"
-        onClick={togglePasswordVisibility}
-        className="absolute top-8 right-4 border-none bg-transparent cursor-pointer"
-        
-      >
-        {showPassword ? <EyeOff className="text-lightGreen"/> : <Eye className="text-lightGreen"/>}
-      </button>
-
-
+        <input
+          id="name"
+          {...register("oldPassword")}
+          name="oldPassword"
+          type={showPassword ? "text" : "password"}
+          className="outline-none p-3 my-4 rounded-[5px] border-2 w-full"
+          placeholder="Current Password"
+        />
+        {errors.oldPassword && (
+          <small className="text-red-600">{errors.oldPassword.message}</small>
+        )}
+        <button
+          type="button"
+          onClick={togglePasswordVisibility}
+          className="absolute top-8 right-4 border-none bg-transparent cursor-pointer"
+        >
+          {showPassword ? (
+            <EyeOff className="text-lightGreen" />
+          ) : (
+            <Eye className="text-lightGreen" />
+          )}
+        </button>
       </div>
       <div className="relative">
-      <input
-        id="newPassword"
-        {...register("newPassword")}
-        name="newPassword"
-        type={showPassword ? 'text' : 'password'}
-        className="outline-none p-3 mb-4 rounded-[5px] border-2 w-full"
-        placeholder="New Password"
-      />
-      {errors.newPassword && (
-        <small className="text-red-600">{errors.newPassword.message}</small>
-      )}
-       <button
-        type="button"
-        onClick={togglePasswordVisibility}
-        className="absolute top-4 right-4 border-none bg-transparent cursor-pointer"
-        
-      >
-        {showPassword ? <EyeOff className="text-lightGreen"/> : <Eye className="text-lightGreen"/>}
-      </button>
-     </div>
+        <input
+          id="newPassword"
+          {...register("newPassword")}
+          name="newPassword"
+          type={showPassword ? "text" : "password"}
+          className="outline-none p-3 mb-4 rounded-[5px] border-2 w-full"
+          placeholder="New Password"
+        />
+        {errors.newPassword && (
+          <small className="text-red-600">{errors.newPassword.message}</small>
+        )}
+        <button
+          type="button"
+          onClick={togglePasswordVisibility}
+          className="absolute top-4 right-4 border-none bg-transparent cursor-pointer"
+        >
+          {showPassword ? (
+            <EyeOff className="text-lightGreen" />
+          ) : (
+            <Eye className="text-lightGreen" />
+          )}
+        </button>
+      </div>
       <Button
         type="submit"
         className="bg-secondary w-full text-white text-[16px] py-7 my-3"
@@ -246,12 +251,12 @@ const UpdatePassword = () => {
       >
         {loading ? "changing password..." : "Change Password"}
       </Button>
-    
     </form>
   );
 };
 
 const TeacherSettings = () => {
+  const { setShowPricing } = useContext(CommonDashboardContext);
   return (
     <section className="flex flex-col md:flex-row mt-[100px] md:mt-[30px] gap-4">
       <div className="flex-5 bg-[#FFFFFF] rounded-[5px] p-5 h-[100vh] overflow-y-scroll scrollbar-hide">
@@ -280,7 +285,10 @@ const TeacherSettings = () => {
                 Expires May 24, 2024
               </span>
             </div>
-            <Button className="bg-[#359C71] font-bold px-5">
+            <Button
+              onClick={() => setShowPricing(true)}
+              className="bg-[#359C71] font-bold px-5"
+            >
               <Image
                 src="/svgs/cash-plan.svg"
                 width={20}

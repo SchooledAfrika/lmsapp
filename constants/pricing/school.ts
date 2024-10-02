@@ -2,9 +2,69 @@ export interface eachPrice {
   planName: string;
   amt: number;
   details: string[];
-  key?: number;
+  duration?: string;
 }
-
+// this is the current plans for the eacher
+// for monthly plans
+export const teacherMonthlyPlan: eachPrice[] = [
+  {
+    planName: "Basic",
+    amt: 3500,
+    details: ["5 class maximum", "session profile"],
+    duration: "Monthly",
+  },
+  {
+    planName: "PRO",
+    amt: 10000,
+    details: [
+      "Infinite class",
+      "Session profile",
+      "Can create course",
+      "Access to school afrika course",
+    ],
+    duration: "Monthly",
+  },
+];
+export const teacherSemiAnnualPlan: eachPrice[] = [
+  {
+    planName: "Basic",
+    amt: 17500,
+    details: ["5 class maximum", "session profile"],
+    duration: "Semi-Annual",
+  },
+  {
+    planName: "PRO",
+    amt: 17500,
+    details: [
+      "Infinite class",
+      "Session profile",
+      "Can create course",
+      "Access to school afrika course",
+    ],
+    duration: "Semi-Annual",
+  },
+];
+export const teacherYearlyPlan: eachPrice[] = [
+  {
+    planName: "Basic",
+    amt: 3500,
+    details: ["5 class maximum", "session profile"],
+    duration: "Yearly",
+  },
+  {
+    planName: "PRO",
+    amt: 10000,
+    details: [
+      "Infinite class",
+      "Session profile",
+      "Can create course",
+      "Access to school afrika course",
+    ],
+    duration: "Yearly",
+  },
+];
+// the plan below was used before,
+// and it may be removed later
 export const monthlyPlans: eachPrice[] = [
   {
     planName: "Basic Bundle",
