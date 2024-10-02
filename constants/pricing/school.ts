@@ -34,7 +34,7 @@ export const teacherSemiAnnualPlan: eachPrice[] = [
   },
   {
     planName: "PRO",
-    amt: 17500,
+    amt: 50000,
     details: [
       "Infinite class",
       "Session profile",
@@ -47,13 +47,13 @@ export const teacherSemiAnnualPlan: eachPrice[] = [
 export const teacherYearlyPlan: eachPrice[] = [
   {
     planName: "Basic",
-    amt: 3500,
+    amt: 40000,
     details: ["5 class maximum", "session profile"],
     duration: "Yearly",
   },
   {
     planName: "PRO",
-    amt: 10000,
+    amt: 110000,
     details: [
       "Infinite class",
       "Session profile",
