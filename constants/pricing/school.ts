@@ -3,15 +3,17 @@ export interface eachPrice {
   amt: number;
   details: string[];
   duration?: string;
+  expireIn?: number;
 }
 // this is the current plans for the eacher
 // for monthly plans
 export const teacherMonthlyPlan: eachPrice[] = [
   {
-    planName: "Basic",
+    planName: "BASIC",
     amt: 3500,
     details: ["5 class maximum", "session profile"],
     duration: "Monthly",
+    expireIn: 1,
   },
   {
     planName: "PRO",
@@ -23,14 +25,16 @@ export const teacherMonthlyPlan: eachPrice[] = [
       "Access to school afrika course",
     ],
     duration: "Monthly",
+    expireIn: 1,
   },
 ];
 export const teacherSemiAnnualPlan: eachPrice[] = [
   {
-    planName: "Basic",
+    planName: "BASIC",
     amt: 17500,
     details: ["5 class maximum", "session profile"],
     duration: "Semi-Annual",
+    expireIn: 6,
   },
   {
     planName: "PRO",
@@ -42,6 +46,7 @@ export const teacherSemiAnnualPlan: eachPrice[] = [
       "Access to school afrika course",
     ],
     duration: "Semi-Annual",
+    expireIn: 6,
   },
 ];
 export const teacherYearlyPlan: eachPrice[] = [
@@ -50,6 +55,7 @@ export const teacherYearlyPlan: eachPrice[] = [
     amt: 40000,
     details: ["5 class maximum", "session profile"],
     duration: "Yearly",
+    expireIn: 12,
   },
   {
     planName: "PRO",
@@ -61,6 +67,7 @@ export const teacherYearlyPlan: eachPrice[] = [
       "Access to school afrika course",
     ],
     duration: "Yearly",
+    expireIn: 12,
   },
 ];
 // the plan below was used before,

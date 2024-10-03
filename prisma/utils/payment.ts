@@ -106,3 +106,49 @@ export const sessionPaymentPaystack = async (paymentInfo: any) => {
     return serverError();
   }
 };
+
+enum IPlan {
+  FREE,
+  BASIC,
+  PRO,
+}
+// here we write the function for teacher webhook subscription for flutterwave
+interface Iplans {
+  __CheckoutInitAddress?: string;
+  userId: string;
+  amt: number;
+  duration: string;
+  expireIn: string;
+  plan: any;
+}
+export const teachersPlan = async (payload: Iplans) => {
+  const newDate = new Date();
+  // time to track when plan was created and for crons job to delete based on the unix epoch timestamp
+  const duedate = newDate.getTime(); //epoch time in milliseconds
+  // here we will create an epoch time
+  // this will show the plan expiration date
+  // then converts back to isoDateString
+  const expireTime =
+    newDate.getTime() + 1000 * 60 * 60 * 24 * 31 * Number(payload.expireIn);
+  const expireIn = new Date(expireTime).toISOString();
+  try {
+    // here we can now create the plan based on the teacher that made the payment
+    await prisma.teachersPlans.update({
+      where: {
+        teacherId: payload.userId,
+      },
+      data: {
+        amt: Number(payload.amt),
+        dueDate: duedate,
+        expireDate: expireIn,
+        plan: payload.plan,
+      },
+    });
+    return new Response(
+      JSON.stringify({ message: "subscription was successful" }),
+      { status: 200 }
+    );
+  } catch (error) {
+    return serverError();
+  }
+};

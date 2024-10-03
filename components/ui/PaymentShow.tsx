@@ -18,6 +18,8 @@ export const CheckoutMain: React.FC<Ipayments> = ({
   duration,
   amt,
   planName,
+  expireIn,
+  plan,
 }) => {
   // this state manages the payment method the user has selected
   const [selected, setSelected] = useState<string | undefined>(undefined);
@@ -93,6 +95,8 @@ export const CheckoutMain: React.FC<Ipayments> = ({
                   amt={amt}
                   enroll={enroll}
                   planName={planName}
+                  expireIn={expireIn}
+                  plan={plan}
                 />
               ) : (
                 <FlutterWaveBtn
@@ -100,6 +104,8 @@ export const CheckoutMain: React.FC<Ipayments> = ({
                   amt={amt}
                   enroll={enroll}
                   planName={planName}
+                  expireIn={expireIn}
+                  plan={plan}
                 />
               )}
             </div>
@@ -116,7 +122,9 @@ export const PayStackBtn: React.FC<{
   amt: number;
   enroll: () => void;
   planName: string;
-}> = ({ duration, amt, enroll, planName }) => {
+  expireIn: number;
+  plan: string;
+}> = ({ duration, amt, enroll, planName, expireIn, plan }) => {
   const { data } = useSession();
   const componentProps = {
     reference: new Date().getTime().toString(),
@@ -133,13 +141,15 @@ export const PayStackBtn: React.FC<{
         {
           display_name: data?.user.id as string, //students id
           variable_name: "", //class id
-          value: `${amt}-class`, //for the price and class specified payment
+          value: `${amt}-teacherplan`, //for the price and class specified payment
         },
       ],
       plan: {
         duration,
         amt,
         userId: data?.user.id,
+        expireIn,
+        plan,
       },
     },
   };
@@ -156,7 +166,9 @@ export const FlutterWaveBtn: React.FC<{
   amt: number;
   enroll: () => void;
   planName: string;
-}> = ({ duration, amt, enroll, planName }) => {
+  expireIn: number;
+  plan: string;
+}> = ({ duration, amt, enroll, planName, expireIn, plan }) => {
   const { data } = useSession();
   const config = {
     public_key: process.env.NEXT_PUBLIC_FLUTTERPUBKEY!,
@@ -167,7 +179,7 @@ export const FlutterWaveBtn: React.FC<{
     customer: {
       email: data?.user.email as string,
       phone_number: data?.user.id as string, //id of the student or user that want to make payment,
-      name: `3333-class`, // field for id of the class and the payment type
+      name: `3333-teacherplan`, // field for id of the class and the payment type
     },
     customizations: {
       title: "school afrika",
@@ -178,6 +190,8 @@ export const FlutterWaveBtn: React.FC<{
       userId: data?.user.id,
       amt,
       duration,
+      expireIn,
+      plan,
     },
     //   onSuccess: () => {
     //     toast.success("payment successful, navigate to class in your dashboard");

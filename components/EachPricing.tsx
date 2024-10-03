@@ -7,6 +7,8 @@ export interface IselectedDetails {
   duration: string;
   amt: number;
   planName: string;
+  expireIn: number;
+  plan: string;
 }
 const EachPricing = ({ plan }: { plan: eachPrice }) => {
   const [showPaymentModel, setShowPaymentModel] = useState<boolean>(false);
@@ -56,6 +58,8 @@ const EachPricing = ({ plan }: { plan: eachPrice }) => {
           amt={plan.amt}
           enroll={enroll}
           planName={plan.planName}
+          expireIn={plan.expireIn!}
+          plan={plan.planName}
         />
       )}
     </div>
