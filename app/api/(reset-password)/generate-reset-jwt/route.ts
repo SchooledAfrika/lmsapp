@@ -25,8 +25,14 @@ export async function POST(req: Request) {
         expiresIn: "1hr",
       });
       const link = baseLink + token;
-      //   now send mail to the user
-      ResetPasswordEmail(checkedStudent.name!, link, email);
+      //   now send mail to the deployed server for mailing
+      await fetch("https://email-testing-qiuk.onrender.com/message", {
+        method: "POST",
+        body: JSON.stringify({ name: checkedStudent.name, link, email }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       return new Response(JSON.stringify({ message: "successful" }), {
         status: 200,
       });
@@ -41,7 +47,14 @@ export async function POST(req: Request) {
         expiresIn: "1hr",
       });
       const link = baseLink + token;
-      ResetPasswordEmail(checkedTeacher.name!, link, email);
+      //   now send mail to the deployed server for mailing
+      await fetch("https://email-testing-qiuk.onrender.com/message", {
+        method: "POST",
+        body: JSON.stringify({ name: checkedTeacher.name, link, email }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       return new Response(JSON.stringify({ message: "successful" }), {
         status: 200,
       });
@@ -55,7 +68,14 @@ export async function POST(req: Request) {
         expiresIn: "1hr",
       });
       const link = baseLink + token;
-      ResetPasswordEmail(checkedParents.name!, link, email);
+      //   now send mail to the deployed server for mailing
+      await fetch("https://email-testing-qiuk.onrender.com/message", {
+        method: "POST",
+        body: JSON.stringify({ name: checkedParents.name, link, email }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       return new Response(JSON.stringify({ message: "successful" }), {
         status: 200,
       });
