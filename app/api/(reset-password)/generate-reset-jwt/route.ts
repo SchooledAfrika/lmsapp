@@ -9,7 +9,6 @@ export async function POST(req: Request) {
   // get the email from frontend
   console.log("yes");
   const { email } = await req.json();
-  console.log(email);
   let token;
   let jwtObject: { email?: string; account?: string } = {};
   let baseLink: string = `${process.env.NEXT_PUBLIC_HOMEPAGE!}/handle-reset/`;
@@ -22,7 +21,7 @@ export async function POST(req: Request) {
     if (checkedStudent) {
       jwtObject.email = email;
       jwtObject.account = "student";
-      token = jwt.sign(jwtObject, process.env.NEXT_PUBLIC_JWT!, {
+      token = jwt.sign(jwtObject, process.env.JWT_SECRETE!, {
         expiresIn: "1hr",
       });
       const link = baseLink + token;
@@ -38,7 +37,7 @@ export async function POST(req: Request) {
       console.log("yes");
       jwtObject.email = email;
       jwtObject.account = "teacher";
-      token = jwt.sign(jwtObject, process.env.NEXT_PUBLIC_JWT!, {
+      token = jwt.sign(jwtObject, process.env.JWT_SECRETE!, {
         expiresIn: "1hr",
       });
       const link = baseLink + token;
@@ -52,7 +51,7 @@ export async function POST(req: Request) {
     if (checkedParents) {
       jwtObject.email = email;
       jwtObject.account = "parents";
-      token = jwt.sign(jwtObject, process.env.NEXT_PUBLIC_JWT!, {
+      token = jwt.sign(jwtObject, process.env.JWT_SECRETE!, {
         expiresIn: "1hr",
       });
       const link = baseLink + token;

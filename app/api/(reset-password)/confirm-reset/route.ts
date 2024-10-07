@@ -9,20 +9,16 @@ export async function POST(req: Request) {
   const hashedpassword = bcrypt.hashSync(password, 10);
   const modifyInfos: { email?: string; account?: string } = {};
   // here we check the jwt and verify that it has not expired already
-  jwt.verify(
-    jwtstring,
-    process.env.NEXT_PUBLIC_JWT!,
-    (error: any, info: any) => {
-      if (error) {
-        return new Response(
-          JSON.stringify({ message: "reset password link expired" }),
-          { status: 400 }
-        );
-      }
-      modifyInfos.email = info.email;
-      modifyInfos.account = info.account;
+  jwt.verify(jwtstring, process.env.JWT_SECRETE!, (error: any, info: any) => {
+    if (error) {
+      return new Response(
+        JSON.stringify({ message: "reset password link expired" }),
+        { status: 400 }
+      );
     }
-  );
+    modifyInfos.email = info.email;
+    modifyInfos.account = info.account;
+  });
 
   try {
     // here we will proceed to modify if the account is for student
