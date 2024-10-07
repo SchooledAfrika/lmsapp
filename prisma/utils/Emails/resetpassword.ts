@@ -3,13 +3,11 @@ import nodemailer from "nodemailer";
 import hbs from "nodemailer-express-handlebars";
 import { create } from "express-handlebars";
 
-export const ResetPasswordEmail = (
+export const ResetPasswordEmail = async (
   name: string,
   link: string,
   email: string
 ) => {
-  console.log("entered");
-  console.log(email);
   // create a transport
   const transporter = nodemailer.createTransport({
     service: "gmail",
@@ -43,10 +41,16 @@ export const ResetPasswordEmail = (
     },
   };
   //   now we can send the message here
-  transporter.sendMail(messageObject, (error, info) => {
-    if (error) {
-      console.log(error);
-    }
-    console.log(info);
+
+  await new Promise((resolve, reject) => {
+    // send mail
+    transporter.sendMail(messageObject, (error, info) => {
+      if (error) {
+        console.log(error);
+        return reject(error);
+      } else {
+        return resolve(info);
+      }
+    });
   });
 };
