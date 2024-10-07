@@ -7,7 +7,9 @@ import { ResetPasswordEmail } from "@/prisma/utils/Emails/resetpassword";
 
 export async function POST(req: Request) {
   // get the email from frontend
+  console.log("yes");
   const { email } = await req.json();
+  console.log(email);
   let token;
   let jwtObject: { email?: string; account?: string } = {};
   let baseLink: string = `${process.env.NEXT_PUBLIC_HOMEPAGE!}/handle-reset/`;
@@ -21,7 +23,7 @@ export async function POST(req: Request) {
       jwtObject.email = email;
       jwtObject.account = "student";
       token = jwt.sign(jwtObject, process.env.NEXT_PUBLIC_JWT!, {
-        expiresIn: "3hr",
+        expiresIn: "1hr",
       });
       const link = baseLink + token;
       //   now send mail to the user
@@ -33,12 +35,14 @@ export async function POST(req: Request) {
     // lets check if is a teacher account
     const checkedTeacher = await prisma.teacher.findFirst({ where: { email } });
     if (checkedTeacher) {
+      console.log("yes");
       jwtObject.email = email;
-      jwtObject.account = "Teacher";
+      jwtObject.account = "teacher";
       token = jwt.sign(jwtObject, process.env.NEXT_PUBLIC_JWT!, {
-        expiresIn: "3hr",
+        expiresIn: "1hr",
       });
-
+      const link = baseLink + token;
+      ResetPasswordEmail(checkedTeacher.name!, link, email);
       return new Response(JSON.stringify({ message: "successful" }), {
         status: 200,
       });
@@ -47,11 +51,12 @@ export async function POST(req: Request) {
     const checkedParents = await prisma.parents.findFirst({ where: { email } });
     if (checkedParents) {
       jwtObject.email = email;
-      jwtObject.account = "Parents";
+      jwtObject.account = "parents";
       token = jwt.sign(jwtObject, process.env.NEXT_PUBLIC_JWT!, {
-        expiresIn: "3hr",
+        expiresIn: "1hr",
       });
-
+      const link = baseLink + token;
+      ResetPasswordEmail(checkedParents.name!, link, email);
       return new Response(JSON.stringify({ message: "successful" }), {
         status: 200,
       });

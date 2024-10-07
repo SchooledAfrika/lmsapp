@@ -8,6 +8,8 @@ export const ResetPasswordEmail = (
   link: string,
   email: string
 ) => {
+  console.log("entered");
+  console.log(email);
   // create a transport
   const transporter = nodemailer.createTransport({
     service: "gmail",

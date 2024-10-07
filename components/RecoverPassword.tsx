@@ -23,6 +23,7 @@ export const LeftRecover = () => {
 // the right part of the page
 const RightRecover = () => {
   const [email, setEmail] = useState<string>();
+  const [submitting, setSubmitting] = useState<boolean>(false);
   //   react query to submit the email to backend
   const mutation = useMutation({
     mutationKey: ["resetpassword"],
@@ -34,6 +35,7 @@ const RightRecover = () => {
       return response;
     },
     onSuccess: (response) => {
+      setSubmitting(false);
       if (response.ok) {
         toast.success("Check your email for reset password link");
       } else {
@@ -50,6 +52,7 @@ const RightRecover = () => {
     if (!email) return toast.error("enter your email");
     const isValidEmail = emailRegex.test(email);
     if (!isValidEmail) return toast.error("Please enter a valid email");
+    setSubmitting(true);
     mutation.mutate();
   };
   return (
@@ -70,12 +73,12 @@ const RightRecover = () => {
           </div>
         </div>
         <div className=" flex items-center flex-col mt-3 justify-center gap-1">
-          <div
+          <button
             onClick={handleSend}
             className=" transition-all ease-in-out duration-700 hover:bg-[#40c7c7] cursor-pointer w-3/4 bg-[#29abab] rounded-md flex items-center justify-center py-3 text-white font-bold"
           >
-            <p>Send</p>
-          </div>
+            {submitting ? <p>Sending...</p> : <p>Send</p>}
+          </button>
           <div className=" w-full pl-4">
             <p className=" text-[14px]">
               Schooledafrika is securely protected and the{" "}
