@@ -39,7 +39,7 @@ export const CheckoutMain: React.FC<Ipayments> = ({
         <p className=" font-bold text-green-700">Payment</p>
         <p className=" text-[12px] font-bold mt-2">Select payment method</p>
         <div className=" w-[100px] aspect-square rounded-full border-2 border-green-700 flex items-center justify-center mt-4 mb-3">
-          <p className=" font-bold text-green-700 ">{amt}</p>
+          <p className=" font-bold text-green-700 ">&#36;{amt}</p>
         </div>
         {/* div showing the payment methods */}
         <div className=" mt-3 w-full flex flex-col gap-2">
@@ -132,6 +132,7 @@ export const PayStackBtn: React.FC<{
     amount: amt * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
     publicKey: process.env.NEXT_PUBLIC_PAYSTACKPUBKEY!,
     text: "Pay with paystack",
+    currency: "USD",
     onSuccess: (reference: any) => {
       toast.success(`payment successful for ${duration} ${planName} plan`);
       enroll();
@@ -174,7 +175,7 @@ export const FlutterWaveBtn: React.FC<{
     public_key: process.env.NEXT_PUBLIC_FLUTTERPUBKEY!,
     tx_ref: Date.now().toString(),
     amount: amt,
-    currency: "NGN",
+    currency: "USD",
     payment_options: "card",
     customer: {
       email: data?.user.email as string,

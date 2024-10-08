@@ -10,17 +10,24 @@ export interface eachPrice {
 export const teacherMonthlyPlan: eachPrice[] = [
   {
     planName: "BASIC",
-    amt: 3500,
-    details: ["5 class maximum", "session profile"],
+    amt: 2.5,
+    details: [
+      "unlimitted classes",
+      "session profile",
+      "unlimitted students",
+      "Can't create course",
+      " No access to school afrika course",
+    ],
     duration: "Monthly",
     expireIn: 1,
   },
   {
     planName: "PRO",
-    amt: 10000,
+    amt: 7,
     details: [
-      "Infinite class",
+      "unlimitted class",
       "Session profile",
+      "unlimitted students",
       "Can create course",
       "Access to school afrika course",
     ],
@@ -31,17 +38,24 @@ export const teacherMonthlyPlan: eachPrice[] = [
 export const teacherSemiAnnualPlan: eachPrice[] = [
   {
     planName: "BASIC",
-    amt: 17500,
-    details: ["5 class maximum", "session profile"],
+    amt: 15,
+    details: [
+      "unlimitted classes",
+      "session profile",
+      "unlimitted students",
+      "Can't create course",
+      " No access to school afrika course",
+    ],
     duration: "Semi-Annual",
     expireIn: 6,
   },
   {
     planName: "PRO",
-    amt: 50000,
+    amt: 40,
     details: [
-      "Infinite class",
+      "unlimitted class",
       "Session profile",
+      "unlimitted students",
       "Can create course",
       "Access to school afrika course",
     ],
@@ -52,17 +66,24 @@ export const teacherSemiAnnualPlan: eachPrice[] = [
 export const teacherYearlyPlan: eachPrice[] = [
   {
     planName: "Basic",
-    amt: 40000,
-    details: ["5 class maximum", "session profile"],
+    amt: 25,
+    details: [
+      "unlimitted classes",
+      "session profile",
+      "unlimitted students",
+      "Can't create course",
+      " No access to school afrika course",
+    ],
     duration: "Yearly",
     expireIn: 12,
   },
   {
     planName: "PRO",
-    amt: 110000,
+    amt: 80,
     details: [
-      "Infinite class",
+      "unlimitted class",
       "Session profile",
+      "unlimitted students",
       "Can create course",
       "Access to school afrika course",
     ],

@@ -2,8 +2,6 @@
 import React, { useContext, useState } from "react";
 import PricingBtn from "./PricingBtn";
 import {
-  eachPrice,
-  monthlyPlans,
   teacherMonthlyPlan,
   teacherSemiAnnualPlan,
   teacherYearlyPlan,
