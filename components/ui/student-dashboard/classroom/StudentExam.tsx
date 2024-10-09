@@ -20,7 +20,7 @@ const StudentExam = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const searchParams = useSearchParams();
-  const id = searchParams.get("examId"); // Get examId from query params
+  const id = searchParams.get("examId"); 
 
   //Further check to make sure that the Id of the Exam is not undefined or null.
   if (!id) {
