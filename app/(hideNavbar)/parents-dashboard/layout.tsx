@@ -7,10 +7,11 @@ import CommonDashboardContext from "@/providers/Statecontext";
 import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/nextAuth";
+import React from "react";
 
 export const metadata: Metadata = {
-  title: "School",
-  description: "School dashboard",
+  title: "SchooledAfrika | Parents Dashboard",
+  description: "Parents dashboard",
 };
 
 export default async function RootLayout({

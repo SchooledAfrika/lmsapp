@@ -134,8 +134,8 @@ export const StudentNavbar: SchoolNavType[] = [
     description: "Overview of all your classes.",
     path: "classroom",
     subDetails: {
-      title: " Single class here",
-      description: " this is for single class path",
+      title: " Single class ",
+      description: " this is for single class details and exams",
     },
   },
   {
