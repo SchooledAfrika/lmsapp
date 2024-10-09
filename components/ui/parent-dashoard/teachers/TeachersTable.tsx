@@ -28,7 +28,7 @@ interface TeacherInfo {
 
 const TeachersTable = () => {
 
-  //The wardId is already stored in the localStorage and so we initialize a state for it
+  //The wardId is already stored in the localStorage and so we initialize a state for it 
   const [wardId, setWardId] = useState<string | null>(null);
 
   
