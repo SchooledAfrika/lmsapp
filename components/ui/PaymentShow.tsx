@@ -132,7 +132,6 @@ export const PayStackBtn: React.FC<{
     amount: amt * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
     publicKey: process.env.NEXT_PUBLIC_PAYSTACKPUBKEY!,
     text: "Pay with paystack",
-    currency: "USD",
     onSuccess: (reference: any) => {
       toast.success(`payment successful for ${duration} ${planName} plan`);
       enroll();
