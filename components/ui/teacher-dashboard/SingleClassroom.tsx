@@ -27,7 +27,9 @@ const SingleClassroom = () => {
       const result = await response.json();
       return result;
     },
+    
   });
+  console.log(data)
 
   //   if is loading
   if (isLoading) {

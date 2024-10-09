@@ -1,91 +1,132 @@
-'use client'
-import React, { useState, useEffect } from 'react';
-import dayjs from 'dayjs';
+"use client";
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin, {
+  Draggable,
+  DropArg,
+} from "@fullcalendar/interaction";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import { Fragment, useState } from "react";
+import { Dialog, Transition } from "@headlessui/react";
+import { EventSourceInput } from "@fullcalendar/core/index.js";
+import { CheckCheckIcon } from "lucide-react";
 
 interface Event {
-  date: string; // Format: YYYY-MM-DD
   title: string;
-  description: string;
+  start: Date | string;
+  allDay: boolean;
+  id: number;
 }
 
-// Sample events for demonstration
-const events: Event[] = [
-  { date: '2024-09-01', title: 'Meeting with Bob', description: 'Discuss project status.' },
-  { date: '2024-09-12', title: 'Team lunch', description: 'Lunch with the team at 1 PM.' },
-  { date: '2024-09-21', title: 'Conference', description: 'Attend a tech conference.' },
-  // Add more events here
-];
-
-const Calendar: React.FC = () => {
-  const [currentMonth, setCurrentMonth] = useState(dayjs().startOf('month'));
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
-  const [days, setDays] = useState<number[]>([]);
-
-  // Calculate the days for the selected month
-  // useEffect(() => {
-  //   const daysInMonth = currentMonth.daysInMonth();
-  //   const firstDayOfMonth = currentMonth.startOf('month').day(); // 0 = Sunday, 6 = Saturday
-  //   const daysArray = Array(firstDayOfMonth).fill(null).concat([...Array(daysInMonth).keys()].map(i => i + 1));
-  //   setDays(daysArray);
-  // }, [currentMonth]);
-
-  // Handle day click to preview event
-  const handleDayClick = (day: number | null) => {
-    if (!day) return;
-    const clickedDate = currentMonth.date(day).format('YYYY-MM-DD');
-    const event = events.find(e => e.date === clickedDate);
-    setSelectedEvent(event || null);
+const Calendar = () => {
+  const [allEvents, setAllEvents] = useState<Event[]>([]);
+  const [showModal, setShowModal] = useState(false);
+  //: { date: Date; allDay: boolean }
+  // Function to handle the clicked event and show modal with event information
+  const handleDateClick = (arg:any) => {
+    alert(`Date clicked: ${arg.dateStr}`);
+    console.log(arg.dateStr);
+    setShowModal(true);
   };
 
-  // Go to previous month
-  const goToPreviousMonth = () => {
-    setCurrentMonth(currentMonth.subtract(1, 'month'));
-    setSelectedEvent(null); // Reset selected event on month change
-  };
+  const handleDelete = () => {};
 
-  // Go to next month
-  const goToNextMonth = () => {
-    setCurrentMonth(currentMonth.add(1, 'month'));
-    setSelectedEvent(null);
+  const handleCloseModal = () => {
+    setShowModal(false);
   };
 
   return (
-    <div className="p-2 mx-auto ">
-      {/* Month Header */}
-      <div className="flex justify-between w-[800px] mx-auto items-center mb-4">
-        <button onClick={goToPreviousMonth} className="p-2 text-[14px] bg-lightGreen shadow-xl text-white rounded">Previous Month</button>
-        <h2 className="text-xl font-semibold">{currentMonth.format('MMMM YYYY')}</h2>
-        <button onClick={goToNextMonth} className="p-2 bg-lightGreen shadow-xl text-[14px] text-white rounded">Next Month</button>
-      </div>
-
-      {/* Days of the Week */}
-      <div className="flex overflow-x-auto mx-auto w-[800px] gap-4 text-center">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className="font-semibold">{day}</div>
-        ))}
-      </div>
-
-      {/* Days in Month */}
-      <div className="flex overflow-x-auto mx-auto w-[800px] gap-2 mt-2">
-        {days.map((day, index) => (
-          <div
-            key={index}
-            className={`p-4 border ${day ? 'cursor-pointer ' : ''} ${events.some(e => e.date === currentMonth.date(day).format('YYYY-MM-DD')) ? 'bg-lightGreen text-white font-bold rounded-2xl shadow-xl' : 'rounded-2xl'}`}
-            onClick={() => handleDayClick(day)}
-          >
-            {day || ''}
+    <>
+      <main className="flex min-h-screen font-header  flex-col  p-6">
+        <div className="grid grid-cols-10">
+          <div className="md:col-span-10   col-span-12">
+            <FullCalendar
+              plugins={[dayGridPlugin, interactionPlugin, timeGridPlugin]}
+              headerToolbar={{
+                left: "prev,next today",
+                center: "title",
+                right: "resourceTimelineWeek, dayGridMonth,timeGridWeek",
+              }}
+              events={allEvents as EventSourceInput}
+              nowIndicator={true}
+              editable={true}
+              droppable={true}
+              selectable={true}
+              selectMirror={true}
+              dateClick={handleDateClick}
+              eventClick={(data) => handleDelete()}
+            />
           </div>
-        ))}
-      </div>
-
-      {/* Event Preview */}
-      {selectedEvent && (
-        <div className="mt-4 p-4 bg-gray-100 border border-gray-300">
-          <h3 className="text-xl font-semibold">{selectedEvent.title}</h3>
-          <p>{selectedEvent.description}</p>
         </div>
-      )}
-    </div>
+
+        <Transition.Root show={showModal} as={Fragment}>
+          <Dialog
+            as="div"
+            className="relative z-10 font-header"
+            onClose={setShowModal}
+          >
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0"
+              enterTo="opacity-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+            >
+              <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" />
+            </Transition.Child>
+
+            <div className="fixed inset-0 z-10 overflow-y-auto">
+              <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+                <Transition.Child
+                  as={Fragment}
+                  enter="ease-out duration-300"
+                  enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                  enterTo="opacity-100 translate-y-0 sm:scale-100"
+                  leave="ease-in duration-200"
+                  leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                  leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                >
+                  <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-[500px] sm:p-6">
+                    <div>
+                      <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+                        <CheckCheckIcon
+                          className="h-6 w-6 text-green-600"
+                          aria-hidden="true"
+                        />
+                      </div>
+                      <div className="mt-3 text-center sm:mt-5">
+                        <Dialog.Title
+                          as="h3"
+                          className="text-base font-semibold leading-6 text-gray-900"
+                        >
+                          Event
+                        </Dialog.Title>
+
+                        <div className="mt-2">
+                          <h3>This is your event for today {Date()}</h3>
+                        </div>
+                        <div className="my-3">
+                          <button
+                            type="button"
+                            className=" w-full  rounded-md bg-red-600 px-8 py-3 text-sm 
+                            font-semibold text-white  hover:bg-red-500 sm:ml-3 "
+                            onClick={handleDelete}
+                          >
+                            Delete Event
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </Dialog.Panel>
+                </Transition.Child>
+              </div>
+            </div>
+          </Dialog>
+        </Transition.Root>
+      </main>
+    </>
   );
 };
 

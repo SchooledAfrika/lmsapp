@@ -85,7 +85,7 @@ const Header = () => {
 
       {/* MOBILE */}
       <div
-        className={` block sm:hidden  rounded-xl   fixed top-0 w-full z-[999]   py-6 animate-in fade-in zoom-in  ${
+        className={` block sm:hidden  fixed top-0 w-full z-[999]   py-6 animate-in fade-in zoom-in  ${
           menu ? " bg-white py-2" : "bg-white"
         } `}
       >
