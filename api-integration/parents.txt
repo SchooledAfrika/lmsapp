@@ -51,3 +51,23 @@ endpoint for parents to get single assessments written by the ward
 endpoint ===> /api/wards-all-assessment/:id
 method ===> GET
 comment ===> replace the :id with the single examid 
+
+================================================================================================================
+endpoint for parents to get all the wards
+================================================================================================================
+endpoint ===> /api/more-wards
+method ===> GET
+comment ===> this will return all the wards that belongs to a particular parents
+
+================================================================================================================
+endpoint for parents to add more wards
+================================================================================================================
+endpoint ===> /api/more-wards
+method ===> POST
+payload ===> {
+    email:string,
+    password: string,
+    gender: string of enum type  "Male" or "Female",
+    name:"nwa papa3",
+}
+comment ===> this endpoint creates a child and return a successful message if the email was not existing in our database

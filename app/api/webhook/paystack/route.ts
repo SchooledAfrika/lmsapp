@@ -1,7 +1,11 @@
 // in this route, we focus on allowing student to add their id to the backend after making payment
 // this part is only accessible by the webhooks we have setup for payments
 // TODO: remember to check or add the auth header for the keys given by this webhooks payment platform
-import { payForClass, sessionPaymentPaystack } from "@/prisma/utils/payment";
+import {
+  payForClass,
+  sessionPaymentPaystack,
+  teachersPlan,
+} from "@/prisma/utils/payment";
 import crypto from "crypto";
 
 // add student to the class after making payment
@@ -33,7 +37,10 @@ export async function POST(req: Request) {
   }
   // here we make payment for session for the parents and also child
   if (paymentFor === "session") {
-    const show = crypto.randomUUID();
     return await sessionPaymentPaystack(body.data.metadata.plan);
+  }
+  // payment for teacher to subscribe for a plan
+  if (paymentFor === "teacherplan") {
+    return await teachersPlan(body.data.metadata.plan);
   }
 }
