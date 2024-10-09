@@ -11,7 +11,7 @@ import { authOptions } from "@/lib/nextAuth";
 import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
-  title: "Admin",
+  title: "SchooledAfrika | Admin",
   description: "Admin dashboard",
 };
 

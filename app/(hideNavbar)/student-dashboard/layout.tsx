@@ -8,10 +8,11 @@ import PricingLayout from "@/components/ui/Pricing-layout";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/nextAuth";
 import { redirect } from "next/navigation";
+import React from "react";
 
 export const metadata: Metadata = {
-  title: "School",
-  description: "School dashboard",
+  title: "SchooledAfrika | Student Dashboard",
+  description: "Student dashboard",
 };
 
 export default async function RootLayout({

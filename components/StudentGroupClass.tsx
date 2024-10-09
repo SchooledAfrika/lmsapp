@@ -66,7 +66,7 @@ export const Exams: React.FC<{ exams: IExam[] }> = ({ exams }) => {
   const router = useRouter();
   // lets push to the exam page for student to start exam
   const handleMoveToExam = (id: string) => {
-    router.push(`/student-dashboard/classroom/start-exam?examId=${id}`);
+    router.push(`/student-dashboard/classroom/start-exam/?examId=${id}`);
   };
   return (
     <div className=" flex-1 flex flex-col gap-2 bg-white rounded-md p-5">
