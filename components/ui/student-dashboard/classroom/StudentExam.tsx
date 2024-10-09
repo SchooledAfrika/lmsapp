@@ -16,10 +16,18 @@ import Backwards from "../../Backwards";
 export type IstudentExam = z.infer<typeof studentExamSchema>;
 
 const StudentExam = () => {
+  const queryClient = useQueryClient();
   const [loading, setLoading] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const searchParams = useSearchParams();
   const id = searchParams.get("examId"); // Get examId from query params
+
+  //Further check to make sure that the Id of the Exam is not undefined or null.
+  if (!id) {
+    toast.error("Exam ID is missing.");
+    return;
+  }
+
 
   // react-hook-form setup
   const {
@@ -59,12 +67,7 @@ const StudentExam = () => {
     enabled: !!id, // Ensure the query only runs if id is present
   });
 
-  //Further check to make sure that the Id of the Exam is not undefined or null.
-  if (!id) {
-    toast.error("Exam ID is missing.");
-    return;
-  }
-
+  
   // Update the questions state with the fetched data. This logic is to handle possible errors that may arise from name convention. The getter query object "data.test" has an entry of "options" while the poster object "data.answeredExam" has an entry of "option", this is to transform the options to option so that it doesn't cause conflict in the backend.
   useEffect(() => {
     if (data && Array.isArray(data.test)) {
@@ -130,7 +133,7 @@ const StudentExam = () => {
   };
 
   // Mutation for submitting the exam
-  const queryClient = useQueryClient();
+ 
   const mutation = useMutation({
     mutationKey: ["postStudentExam"],
     mutationFn: async (data: IstudentExam) => {

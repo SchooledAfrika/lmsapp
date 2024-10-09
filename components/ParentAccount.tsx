@@ -59,7 +59,7 @@ const ParentAccount = () => {
     });
     if (response.ok) {
       await update({ CompletedProfile: true });
-      router.push("/parents-dashboard");
+      router.push("/ward-options");
       router.refresh();
     } else {
       setloading(false);
