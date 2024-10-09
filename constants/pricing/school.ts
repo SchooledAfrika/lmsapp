@@ -2,9 +2,97 @@ export interface eachPrice {
   planName: string;
   amt: number;
   details: string[];
-  key?: number;
+  duration?: string;
+  expireIn?: number;
 }
-
+// this is the current plans for the eacher
+// for monthly plans
+export const teacherMonthlyPlan: eachPrice[] = [
+  {
+    planName: "BASIC",
+    amt: 2.5,
+    details: [
+      "unlimitted classes",
+      "session profile",
+      "unlimitted students",
+      "Can't create course",
+      " No access to school afrika course",
+    ],
+    duration: "Monthly",
+    expireIn: 1,
+  },
+  {
+    planName: "PRO",
+    amt: 7,
+    details: [
+      "unlimitted class",
+      "Session profile",
+      "unlimitted students",
+      "Can create course",
+      "Access to school afrika course",
+    ],
+    duration: "Monthly",
+    expireIn: 1,
+  },
+];
+export const teacherSemiAnnualPlan: eachPrice[] = [
+  {
+    planName: "BASIC",
+    amt: 15,
+    details: [
+      "unlimitted classes",
+      "session profile",
+      "unlimitted students",
+      "Can't create course",
+      " No access to school afrika course",
+    ],
+    duration: "Semi-Annual",
+    expireIn: 6,
+  },
+  {
+    planName: "PRO",
+    amt: 40,
+    details: [
+      "unlimitted class",
+      "Session profile",
+      "unlimitted students",
+      "Can create course",
+      "Access to school afrika course",
+    ],
+    duration: "Semi-Annual",
+    expireIn: 6,
+  },
+];
+export const teacherYearlyPlan: eachPrice[] = [
+  {
+    planName: "Basic",
+    amt: 25,
+    details: [
+      "unlimitted classes",
+      "session profile",
+      "unlimitted students",
+      "Can't create course",
+      " No access to school afrika course",
+    ],
+    duration: "Yearly",
+    expireIn: 12,
+  },
+  {
+    planName: "PRO",
+    amt: 80,
+    details: [
+      "unlimitted class",
+      "Session profile",
+      "unlimitted students",
+      "Can create course",
+      "Access to school afrika course",
+    ],
+    duration: "Yearly",
+    expireIn: 12,
+  },
+];
+// the plan below was used before,
+// and it may be removed later
 export const monthlyPlans: eachPrice[] = [
   {
     planName: "Basic Bundle",

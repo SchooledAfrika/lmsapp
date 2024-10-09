@@ -1,7 +1,11 @@
 "use client";
 import React, { useContext, useState } from "react";
 import PricingBtn from "./PricingBtn";
-import { eachPrice, monthlyPlans } from "@/constants/pricing/school";
+import {
+  teacherMonthlyPlan,
+  teacherSemiAnnualPlan,
+  teacherYearlyPlan,
+} from "@/constants/pricing/school";
 import EachPricing from "../EachPricing";
 import { IoCloseSharp } from "react-icons/io5";
 import { CommonDashboardContext } from "@/providers/Statecontext";
@@ -13,10 +17,7 @@ export interface pricingChange {
 const PricingLayout = () => {
   const [currentIndex, setIndex] = useState<number>(0);
   const { showPricing, setShowPricing } = useContext(CommonDashboardContext);
-  const [multiple, setmultiple] = useState<pricingChange>({
-    priceAmt: 1,
-    duration: "Month",
-  });
+
   const closeModel = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     setShowPricing(false);
   };
@@ -29,7 +30,7 @@ const PricingLayout = () => {
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className=" relative scrollbar-hide w-full h-full bg-white rounded-md flex flex-col gap-4 px-6 py-5 overflow-auto"
+        className=" relative scrollbar-hide w-full md:w-3/5 h-full bg-white rounded-md flex flex-col gap-4 px-6 py-5 overflow-auto"
       >
         <div
           onClick={closeModel}
@@ -39,7 +40,6 @@ const PricingLayout = () => {
         </div>
         <div className=" bg-gray-100 w-fit px-4 py-2 rounded-md flex self-center items-center gap-3">
           <PricingBtn
-            setmultiple={setmultiple}
             multipleValue={1}
             duration="Month"
             setIndex={setIndex}
@@ -48,7 +48,6 @@ const PricingLayout = () => {
             index={0}
           />
           <PricingBtn
-            setmultiple={setmultiple}
             duration="Semi year"
             multipleValue={5}
             setIndex={setIndex}
@@ -57,7 +56,6 @@ const PricingLayout = () => {
             index={1}
           />
           <PricingBtn
-            setmultiple={setmultiple}
             duration="Year"
             multipleValue={10}
             setIndex={setIndex}
@@ -82,10 +80,22 @@ const PricingLayout = () => {
             Subscription Bundles
           </p>
         </div>
-        <div className=" grid grid-cols-1 xs:2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 mt-5 gap-3">
-          {monthlyPlans.map((plan, index) => (
-            <EachPricing multiple={multiple} plan={plan} key={index} />
-          ))}
+        <div className=" grid grid-cols-1  sm:grid-cols-2 mt-5 gap-3">
+          {/* render monthly if user selects monthly */}
+          {currentIndex === 0 &&
+            teacherMonthlyPlan.map((plan, index) => (
+              <EachPricing plan={plan} key={index} />
+            ))}
+          {/* render semi yealy if user selects that */}
+          {currentIndex === 1 &&
+            teacherSemiAnnualPlan.map((plan, index) => (
+              <EachPricing plan={plan} key={index} />
+            ))}
+          {/* render for yearly when selected by the user */}
+          {currentIndex === 2 &&
+            teacherYearlyPlan.map((plan, index) => (
+              <EachPricing plan={plan} key={index} />
+            ))}
         </div>
         <div className=" mt-10 text-green-600 flex justify-center text-sm font-bold cursor-pointer hover:underline">
           <div onClick={closeModel}>No Thank You</div>

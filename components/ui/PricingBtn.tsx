@@ -6,7 +6,6 @@ interface btnInterface {
   text: string;
   setIndex: React.Dispatch<React.SetStateAction<number>>;
   currentIndex: number;
-  setmultiple: React.Dispatch<React.SetStateAction<pricingChange>>;
   multipleValue: number;
   duration: string;
 }
@@ -15,7 +14,6 @@ const PricingBtn = ({
   text,
   currentIndex,
   setIndex,
-  setmultiple,
   multipleValue,
   duration,
 }: btnInterface) => {
@@ -23,7 +21,6 @@ const PricingBtn = ({
     <div
       onClick={() => {
         setIndex(index);
-        setmultiple({ priceAmt: multipleValue, duration });
       }}
       className={` md:text-[10px] px-3 text-[8px]   md:px-6 py-1 cursor-pointer  ${
         currentIndex == index

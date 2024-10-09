@@ -52,7 +52,8 @@ const Login: React.FC = () => {
               alt="logo"
               width={100}
               height={100}
-              className="w-[100px] mb-4 "
+              className="w-[100px] h-[50px] mb-4 "
+              priority
             />
           </Link>
           <span className="font-bold text-[22px]">
@@ -124,11 +125,14 @@ const Login: React.FC = () => {
             <Button
               type="submit"
               disabled={loading}
-              className={` bg-secondary hover:bg-secondary w-full text-white text-[16px] px-6 py-7 my-3`}
+              className={` bg-secondary hover:bg-secondary w-full text-white text-[16px] px-6 py-7 mt-3`}
             >
               {loading ? "logging in..." : "login"}
             </Button>
           </form>
+          <Link href={"/recover-password"} className=" underline text-blue-700">
+            forgot password
+          </Link>
           <div className="flex flex-col justify-center">
             <Button
               onClick={() => handleLogin("google")}
@@ -138,16 +142,6 @@ const Login: React.FC = () => {
               <Image
                 src="/svgs/google.svg"
                 alt="Google"
-                width={30}
-                height={30}
-                className="pl-2"
-              />
-            </Button>
-            <Button className="flex items-center bg-white hover:bg-lightGreen text-black w-full text-[16px] px-6 py-7">
-              Sign in with Apple ID{" "}
-              <Image
-                src="/svgs/apple.svg"
-                alt="Apple"
                 width={30}
                 height={30}
                 className="pl-2"

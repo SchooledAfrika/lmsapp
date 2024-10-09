@@ -68,9 +68,10 @@ model Teacher {
   Ratting              Ratting[]
   reviewers            String[]             @db.ObjectId
   status               TeacherStatus        @default(Pending)
-  PaymentPlans         PaymentPlans?
+  TeachersPlans        TeachersPlans?
 }
 
+// kyc for teachers appears below
 model Kyc {
   id          String    @id @default(auto()) @map("_id") @db.ObjectId
   docType     String
@@ -83,13 +84,17 @@ model Kyc {
   updatedAt   DateTime  @default(now())
 }
 
-model PaymentPlans {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  plan      PlansType @default(Free)
-  teacher   Teacher   @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  teacherId String    @unique @db.ObjectId
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @default(now())
+// payment plans for teachers 
+model TeachersPlans {
+  id         String      @id @default(auto()) @map("_id") @db.ObjectId
+  plan       TeacherPlan @default(FREE)
+  teacher    Teacher     @relation(fields: [teacherId], references: [id])
+  teacherId  String      @unique @db.ObjectId
+  amt        Int? //amount paid by the teacher
+  expireDate DateTime? //date that shows when the plan will expire
+  dueDate    Int? //this date will be used to track setting plans back to basic if plans expires
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @default(now())
 }
 
 // creating the student model
@@ -633,6 +638,13 @@ enum ContractStatus {
   PENDING
   ACTIVE
   REJECTED
+}
+
+// enum for teachers payment plans
+enum TeacherPlan {
+  FREE
+  BASIC
+  PRO
 }
 
 enum KycStatus {

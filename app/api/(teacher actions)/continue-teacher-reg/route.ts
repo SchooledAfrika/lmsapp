@@ -11,9 +11,16 @@ export async function POST(req: Request) {
   const userId = session?.user.id;
   if (!userId) return notAuthenticated();
   try {
+    // complete the teachers registration
     await prisma.teacher.update({
       where: { id: userId },
       data: { CompletedProfile: true, ...infos },
+    });
+    // create a basic plan for the teacher
+    await prisma.teachersPlans.create({
+      data: {
+        teacherId: userId,
+      },
     });
     return new Response(JSON.stringify({ message: "Successfully updated" }), {
       status: 200,
