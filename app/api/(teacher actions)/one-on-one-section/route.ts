@@ -3,11 +3,17 @@
 // then students can apply to this one on on section via the appliedSection
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated } from "@/prisma/utils/error";
-import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
+import {
+  checkKyc,
+  checkPlans,
+  serverSessionId,
+  serverSessionRole,
+} from "@/prisma/utils/utils";
 
 // here we first make a post request
 // there for creating the new one to one section
 export async function POST(req: Request) {
+  // check for authentication of the teacher
   const teacherId = await serverSessionId();
   const role = await serverSessionRole();
   const payload = await req.json();
@@ -19,6 +25,22 @@ export async function POST(req: Request) {
       }),
       { status: 401 }
     );
+  // check for the kyc of the teacher here
+  const doneKyc = await checkKyc(teacherId!);
+  if (!doneKyc || doneKyc !== "ACTIVE") {
+    return new Response(
+      JSON.stringify({ message: "no kyc or kyc is not approved" }),
+      { status: 401 }
+    );
+  }
+  // check if the user is in free plan, and prevent him from creating a section profile
+  const teacherPlan = await checkPlans(teacherId!);
+  if (teacherPlan === "FREE") {
+    return new Response(
+      JSON.stringify({ message: "subscribe for a plans, to create a section" }),
+      { status: 402 }
+    );
+  }
   // now, lets proceed and create the section
   try {
     // lets check if the teacher already have a session profile

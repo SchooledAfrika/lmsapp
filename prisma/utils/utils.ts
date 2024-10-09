@@ -1,5 +1,6 @@
 import { authOptions } from "@/lib/nextAuth";
 import { getServerSession } from "next-auth/next";
+import prisma from "../prismaConnect";
 
 export interface IexamType {
   question: String;
@@ -46,4 +47,43 @@ export const getQuery = (url: string, queryKey: string): string => {
   const newUrl = new URL(url);
   const queryName = newUrl.searchParams.get(queryKey);
   return queryName as string;
+};
+
+// function to check for kyc approvals
+export const checkKyc = async (
+  teacherId: string
+): Promise<string | undefined> => {
+  let status: string | undefined;
+  const teacherKyc = await prisma.kyc.findUnique({
+    where: { teacherId },
+    select: { status: true },
+  });
+  status = teacherKyc?.status;
+  return status;
+};
+
+// function to check to total class created by the teacher
+export const checkTotalClass = async (
+  teacherId: string
+): Promise<number | undefined> => {
+  let totalClasses: number | undefined;
+  const getClasses = await prisma.classes.findMany({
+    where: { teacherId },
+    select: { id: true },
+  });
+  totalClasses = getClasses.length;
+  return totalClasses;
+};
+
+// get the plans of the teacher below here
+export const checkPlans = async (
+  teacherId: string
+): Promise<string | undefined> => {
+  let plan: string | undefined;
+  const teachersPlans = await prisma.teachersPlans.findFirst({
+    where: { teacherId },
+    select: { plan: true },
+  });
+  plan = teachersPlans?.plan;
+  return plan;
 };

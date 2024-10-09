@@ -4,17 +4,21 @@
 // then in the applied-class route, the student will be able to be added to the class after making their payments
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
-import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
+import {
+  checkKyc,
+  checkPlans,
+  checkTotalClass,
+  serverSessionId,
+  serverSessionRole,
+} from "@/prisma/utils/utils";
 
 // here, teachers can create a class
 export async function POST(req: Request) {
+  const { duration, classStarts, classEnds, ...others } = await req.json();
   // get informarion about the person that is logged in and there role
   const teacherId = await serverSessionId();
   const userRole = await serverSessionRole();
-
-  const { duration, classStarts, classEnds, ...others } = await req.json();
-  console.log(others);
-  console.log(classStarts, classEnds);
+  // restrict users that is not logged in or not a teacher
   if (!teacherId) {
     return notAuthenticated();
   }
@@ -22,6 +26,32 @@ export async function POST(req: Request) {
     return new Response(
       JSON.stringify({ message: "only teachers are allowed to create class" }),
       { status: 400 }
+    );
+  }
+  // lets check if the kyc is approved first
+  // if is not approved, the send an error message to the user
+  const doneKyc = await checkKyc(teacherId!);
+  console.log(doneKyc);
+  if (!doneKyc || doneKyc !== "APPROVED") {
+    console.log("entered here");
+    return new Response(
+      JSON.stringify({ message: "no kyc or kyc is not approved" }),
+      { status: 401 }
+    );
+  }
+  // now, we should get the class created so far
+  // and also to the kyc of the that belong to the teacher
+  // here we will be able to tackle restrictions based on the class
+  const allClasses = await checkTotalClass(teacherId!);
+  const teacherPlan = await checkPlans(teacherId!);
+  // add class creation restriction to just only one class for free plans
+  // there by making other plans unlimitted
+  if (teacherPlan === "FREE" && allClasses! >= 1) {
+    return new Response(
+      JSON.stringify({
+        message: "You have hit your maximum class for this plan",
+      }),
+      { status: 402 }
     );
   }
   try {

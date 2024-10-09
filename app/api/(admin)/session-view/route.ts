@@ -3,7 +3,11 @@
 // and also be able to merge a particular teacher to a particular session
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, onlyAdmin, serverError } from "@/prisma/utils/error";
-import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
+import {
+  checkKyc,
+  serverSessionId,
+  serverSessionRole,
+} from "@/prisma/utils/utils";
 
 // here we get all the adminsessionview
 export async function GET(req: Request) {
