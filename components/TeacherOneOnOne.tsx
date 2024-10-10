@@ -54,14 +54,17 @@ export const TeacherOneOnOne: React.FC = () => {
       const info = await result.json();
       setLoading(false);
       queryClient.invalidateQueries({ queryKey: ["teacherProfile"] });
+      // if everything was successful
       if (result.ok) {
         reset();
         toast.success("Session profile edited successfully");
         setTimeout(() => {
           router.push("/teacher-dashboard/one-on-one-section");
         }, 4000);
-      } else {
-        toast.error(info.message);
+      }
+      // if there is no kyc
+      if (result.status === 401) {
+        return toast.error(info.message);
       }
     },
   });

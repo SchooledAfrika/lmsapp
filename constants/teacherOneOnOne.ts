@@ -7,12 +7,7 @@ export interface oneOnOneSection {
   field: string[];
 }
 
-export const Preferences = [
-  "Homework Support",
-  "OneOnOne Section",
-  "Open To Jobs",
-  "Group Work",
-];
+export const Preferences = ["Homework Support", "Private Session"];
 
 export const Subject = [
   "CHEMISTRY",

@@ -21,6 +21,8 @@ import {
 import { Layers3 } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IoMdAdd } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 interface IaddResource {
   classId: string;
@@ -29,6 +31,7 @@ interface IaddResource {
 const AddResource: React.FC<IaddResource> = ({ classId }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedResourceId, setselectedResourceId] = useState<string>();
+  const router = useRouter();
 
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["addResource"],
@@ -81,6 +84,10 @@ const AddResource: React.FC<IaddResource> = ({ classId }) => {
     mutation.mutate();
   };
 
+  const handlePush = () => {
+    router.push("/teacher-dashboard/test-and-resources");
+  };
+
   // loading message here
   if (isLoading) {
     return <p>loading...</p>;
@@ -89,8 +96,9 @@ const AddResource: React.FC<IaddResource> = ({ classId }) => {
   // return a div telling the teacher to create a resource if there is no resource
   if (data.length == 0) {
     return (
-      <div>
-        <p>No resource here, set resource please</p>
+      <div onClick={handlePush} className=" flex gap-1">
+        <IoMdAdd className=" text-green-800  text-[20px]" />{" "}
+        <p className=" text-black text-[13px] font-semibold">Add Resources</p>
       </div>
     );
   }

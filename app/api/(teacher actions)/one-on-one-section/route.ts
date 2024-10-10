@@ -27,7 +27,7 @@ export async function POST(req: Request) {
     );
   // check for the kyc of the teacher here
   const doneKyc = await checkKyc(teacherId!);
-  if (!doneKyc || doneKyc !== "ACTIVE") {
+  if (!doneKyc || doneKyc !== "APPROVED") {
     return new Response(
       JSON.stringify({ message: "no kyc or kyc is not approved" }),
       { status: 401 }
