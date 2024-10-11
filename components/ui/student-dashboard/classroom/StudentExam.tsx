@@ -22,12 +22,6 @@ const StudentExam = () => {
   const searchParams = useSearchParams();
   const id = searchParams.get("examId"); 
 
-  //Further check to make sure that the Id of the Exam is not undefined or null.
-  if (!id) {
-    toast.error("Exam ID is missing.");
-    return;
-  }
-
 
   // react-hook-form setup
   const {
@@ -40,6 +34,11 @@ const StudentExam = () => {
   } = useForm<IstudentExam>({
     resolver: zodResolver(studentExamSchema),
   });
+
+ 
+
+
+  
 
   //Create a state instance for the answeredExam Object
   const [questions, setQuestions] = useState(() => {
@@ -66,6 +65,50 @@ const StudentExam = () => {
     },
     enabled: !!id, // Ensure the query only runs if id is present
   });
+
+  // Mutation for submitting the exam
+ 
+  const mutation = useMutation({
+    mutationKey: ["postStudentExam"],
+    mutationFn: async (data: IstudentExam) => {
+      const result = await fetch("/api/class-exam", {
+        method: "POST",
+        body: JSON.stringify({
+          ...data,
+          examId: id,
+          answeredExam: data.answeredExam.map((exam) => ({
+            question: exam.question,
+            answer: exam.answer,
+            studentAnswer: exam.studentAnswer,
+            options: exam.option,
+          })),
+        }),
+      });
+      
+
+      return result;
+    },
+    onSuccess: async (result) => {
+      queryClient.invalidateQueries({ queryKey: ["getStudentExams"] });
+      if (result.ok) {
+        const body = await result.json();
+        //console.log(body);
+        setLoading(false);
+        reset();
+        toast.success("You have successfully submitted exam!!");
+      } else {
+        setLoading(false);
+        toast.error("Error submitting exam.");
+      }
+    },
+  });
+
+  const runSubmit = (data: IstudentExam) => {
+    console.log("Form submission triggered"); // Log to indicate submission attempt
+    console.log("Form data:", data); // Log the data being submitted
+    setLoading(true);
+    mutation.mutate(data);
+  };
 
   
   // Update the questions state with the fetched data. This logic is to handle possible errors that may arise from name convention. The getter query object "data.test" has an entry of "options" while the poster object "data.answeredExam" has an entry of "option", this is to transform the options to option so that it doesn't cause conflict in the backend.
@@ -132,49 +175,13 @@ const StudentExam = () => {
       setCurrentIndex((index) => index + 1);
   };
 
-  // Mutation for submitting the exam
- 
-  const mutation = useMutation({
-    mutationKey: ["postStudentExam"],
-    mutationFn: async (data: IstudentExam) => {
-      const result = await fetch("/api/class-exam", {
-        method: "POST",
-        body: JSON.stringify({
-          ...data,
-          examId: id,
-          answeredExam: data.answeredExam.map((exam) => ({
-            question: exam.question,
-            answer: exam.answer,
-            studentAnswer: exam.studentAnswer,
-            options: exam.option,
-          })),
-        }),
-      });
-      
+  
 
-      return result;
-    },
-    onSuccess: async (result) => {
-      queryClient.invalidateQueries({ queryKey: ["getStudentExams"] });
-      if (result.ok) {
-        const body = await result.json();
-        //console.log(body);
-        setLoading(false);
-        reset();
-        toast.success("You have successfully submitted exam!!");
-      } else {
-        setLoading(false);
-        toast.error("Error submitting exam.");
-      }
-    },
-  });
-
-  const runSubmit = (data: IstudentExam) => {
-    console.log("Form submission triggered"); // Log to indicate submission attempt
-    console.log("Form data:", data); // Log the data being submitted
-    setLoading(true);
-    mutation.mutate(data);
-  };
+   //Further check to make sure that the Id of the Exam is not undefined or null.
+   if (!id) {
+    toast.error("Exam ID is missing.");
+    return;
+  }
 
   return (
     <Container className="">
