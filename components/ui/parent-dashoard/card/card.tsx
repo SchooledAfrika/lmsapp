@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link";
 import { BsPlusSquare } from "react-icons/bs";
 import { FaPlusSquare } from "react-icons/fa";
+import AddWard from "../AddWard/AddWard";
 
 
 const Card = () => {
@@ -15,7 +16,7 @@ const Card = () => {
         
 
         {/* First card */}
-        <div className="flex flex-1   text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
+        <div className="flex flex-2   text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
           <div className="flex flex-col  justify-evenly">
             <h3 className="font-bold text-xl pb-3">2</h3>
 
@@ -34,7 +35,7 @@ const Card = () => {
           />
         </div>
         {/* second card */}
-        <div className="flex flex-1  text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
+        <div className="flex flex-2  text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
           <div className="flex flex-col  justify-evenly">
             <h3 className="font-bold text-xl pb-3">2</h3>
 
@@ -54,7 +55,7 @@ const Card = () => {
         </div>
 
         {/* third card */}
-        <div className="flex flex-1  text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
+        <div className="flex flex-2  text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
           <div className="flex flex-col  justify-evenly">
             <h3 className="font-bold text-xl pb-3">4</h3>
 
@@ -73,7 +74,7 @@ const Card = () => {
           />
         </div>
         {/* fourth card */}
-        <div className="flex flex-1  text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
+        <div className="flex flex-2  text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
           <div className="flex flex-col  justify-evenly">
             <h3 className="font-bold text-xl pb-3">86%</h3>
 
@@ -92,9 +93,10 @@ const Card = () => {
           />
         </div>
         {/* Go Live */}
-        <div className="flex flex-col py-4 px-2 space-y-3 bg-white  ">
-         <Link href="/" className="text-center  mx-auto"><BsPlusSquare className="w-[40px] h-[40px] bg-lightGreen text-white border border-white" /></Link>
-          <p className="text-[12.5px] text-center  font-semibold">Add Another Ward</p>
+        <div className="flex flex-col flex-1 py-4 cursor-pointer px-2 text-center space-y-3 bg-white  ">
+          <AddWard/>
+         {/* <Link href="/" className="text-center  mx-auto"></Link>
+          <p className="text-[12.5px] text-center  font-semibold">Add Another Ward</p> */}
 
         </div>
       </div>

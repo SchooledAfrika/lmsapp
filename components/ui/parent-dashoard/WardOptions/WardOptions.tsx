@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { addWardSchema } from "@/constants/addWard";
 import { Button } from "@/components/ui/button";
-
+import { Eye, EyeOff } from "lucide-react";
 
 import {
   Select,
@@ -26,9 +26,11 @@ import Link from "next/link";
 
 export type IaddWard = z.infer<typeof addWardSchema>;
 const WardOptions = () => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loadingAdd, setLoadingAdd] = useState<boolean>(false); // For the Add Ward button
+  const [loadingProceed, setLoadingProceed] = useState<boolean>(false); // For the Proceed button
   const router = useRouter();
   const [selectedWardId, setSelectedWardId] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState<boolean>(false);
 
   // Retrieve stored ward ID on component mount
   useEffect(() => {
@@ -88,7 +90,8 @@ const WardOptions = () => {
 
     onSuccess: async (result) => {
       queryClient.invalidateQueries({ queryKey: ["getWard"] });
-      setLoading(false);
+      setLoadingAdd(false);
+      setLoadingProceed(false);
 
       if (result.ok) {
         toast.success("Ward successfully added");
@@ -98,7 +101,7 @@ const WardOptions = () => {
     },
     onError: (error) => {
       console.error("Error adding ward:", error);
-      setLoading(false);
+      setLoadingAdd(false);
       toast.error("Error adding ward");
     },
   });
@@ -106,7 +109,7 @@ const WardOptions = () => {
   // here we validate the datas in our form submission
   // only if there is data, before the mutation function is called
   const runSubmit: SubmitHandler<IaddWard> = async (data) => {
-    setLoading(true);
+    setLoadingAdd(true);
     mutation.mutate(data);
   };
 
@@ -116,19 +119,31 @@ const WardOptions = () => {
   }
 
   // return a div telling the teacher to select a ward if ther is none
-  if (data.length == 0) {
-    return (
-      <div>
-        <p>No ward here, choose ward please</p>
-      </div>
-    );
-  }
+  // if (data.length == 0) {
+  //   return (
+  //     <div>
+  //       <p>No ward here, choose ward please</p>
+  //     </div>
+  //   );
+  // }
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
   // Move to Ward Dashboard
-  
+
   const handleMoveToWardDashboard = () => {
     if (selectedWardId) {
+      setLoadingProceed(true); // Start loading for Proceed button
+
+      // Proceed to the dashboard
       router.push(`/parents-dashboard`);
+
+      // Set a timer to reset the loading state after a short delay
+      setTimeout(() => {
+        setLoadingProceed(false); // Stop loading after a delay (simulate navigation completion)
+      }, 1000); // Adjust the timeout duration as necessary
     } else {
       toast.error("Please select a ward before proceeding!");
     }
@@ -170,11 +185,11 @@ const WardOptions = () => {
 
         <Button
           onClick={handleMoveToWardDashboard}
-          disabled={loading}
+          disabled={loadingProceed}
           type="submit"
           className="md:w-[500px] w-full mx-auto mt-3 py-8 text-md bg-lightGreen hover:bg-green-700"
         >
-          {loading ? "Redirecting..." : "Redirect to ward dashboard"}
+          {loadingProceed ? "Redirecting..." : "Redirect to ward dashboard"}
         </Button>
       </div>
 
@@ -191,7 +206,6 @@ const WardOptions = () => {
           <div>
             <input
               {...register("email")}
-              autoFocus
               type="email"
               name="email"
               placeholder="Enter Ward Email Address"
@@ -202,11 +216,10 @@ const WardOptions = () => {
             )}
           </div>
 
-          <div>
+          <div className="relative">
             <input
               {...register("password")}
-              autoFocus
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               placeholder="Enter Ward Password"
               className=" p-4 outline-none rounded-[8px] w-full bg-white"
@@ -214,6 +227,17 @@ const WardOptions = () => {
             {errors.password && (
               <small className=" text-red-600">{errors.password.message}</small>
             )}
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute top-4 right-4 border-none bg-transparent cursor-pointer"
+            >
+              {showPassword ? (
+                <EyeOff className="text-lightGreen" />
+              ) : (
+                <Eye className="text-lightGreen" />
+              )}
+            </button>
           </div>
           <div>
             <Controller
@@ -257,9 +281,9 @@ const WardOptions = () => {
           <Button
             type="submit"
             className="w-full py-6 mb-6 bg-lightGreen hover:bg-green-700"
-            disabled={loading}
+            disabled={loadingAdd}
           >
-            {loading ? "adding ward..." : "Add Ward"}
+            {loadingAdd ? "adding ward..." : "Add Ward"}
           </Button>
         </form>
       </div>

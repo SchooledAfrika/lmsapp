@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Footer from "./Footer";
 import Link from "next/link";
@@ -13,6 +13,7 @@ import { useSearchParams } from "next/navigation";
 import { useToast } from "./ui/use-toast";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { Eye, EyeOff } from "lucide-react";
 // creating a schema for zod
 const loginSchema = z.object({
   email: z.string().email({ message: "provide a valid email address" }),
@@ -22,6 +23,7 @@ const loginSchema = z.object({
 });
 
 const Login: React.FC = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const { handleLogin, loading } = useAuth();
   const params = useSearchParams();
   const newUser = Boolean(params.get("newAccount"));
@@ -41,6 +43,10 @@ const Login: React.FC = () => {
   // handle login with credentials
   const onSubmit = (data: Ilogin) => {
     handleLogin("credentials", data.email, data.password);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
   return (
     <div className="w-full font-subtext">
@@ -108,10 +114,10 @@ const Login: React.FC = () => {
                 <small className=" text-red-600">{errors.email.message}</small>
               )}
             </div>
-            <div>
+            <div className="relative">
               <input
                 {...register("password")}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="Enter Password"
                 className=" p-4  outline-none rounded-[8px] w-full bg-white"
@@ -121,6 +127,17 @@ const Login: React.FC = () => {
                   {errors.password.message}
                 </small>
               )}
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute top-4 right-4 border-none bg-transparent cursor-pointer"
+              >
+                {showPassword ? (
+                  <EyeOff className="text-lightGreen" />
+                ) : (
+                  <Eye className="text-lightGreen" />
+                )}
+              </button>
             </div>
             <Button
               type="submit"
