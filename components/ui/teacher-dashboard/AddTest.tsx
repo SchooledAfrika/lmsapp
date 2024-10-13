@@ -22,6 +22,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { BookOpenCheck } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { IoMdAdd } from "react-icons/io";
+import { useRouter } from "next/navigation";
 
 interface Iadd {
   classId: string;
@@ -30,6 +32,7 @@ interface Iadd {
 const AddTest: React.FC<Iadd> = ({ classId }) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedExamId, setselectedExamId] = useState<string>();
+  const router = useRouter();
 
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["addTest"],
@@ -81,7 +84,9 @@ const AddTest: React.FC<Iadd> = ({ classId }) => {
     setLoading(true);
     mutation.mutate();
   };
-
+  const handlePush = () => {
+    router.push("/teacher-dashboard/test-and-resources");
+  };
   // loading message here
   if (isLoading) {
     return <p>loading...</p>;
@@ -90,8 +95,9 @@ const AddTest: React.FC<Iadd> = ({ classId }) => {
   // return a div telling the teacher to create an exam if there is no exam
   if (data.length == 0) {
     return (
-      <div>
-        <p>No exam here, set exam please</p>
+      <div onClick={handlePush} className=" flex gap-1">
+        <IoMdAdd className=" text-green-800  text-[20px]" />{" "}
+        <p className=" text-black text-[13px] font-semibold">Add Exams</p>
       </div>
     );
   }
