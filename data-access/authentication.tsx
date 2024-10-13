@@ -21,7 +21,7 @@ export const useAuth = () => {
       router.push(`${process.env.NEXT_PUBLIC_HOMEPAGE}/teacher-dashboard`);
     }
     if (data?.user.role === "Parents") {
-      router.push(`${process.env.NEXT_PUBLIC_HOMEPAGE}/ward-options`);
+      router.push(`${process.env.NEXT_PUBLIC_HOMEPAGE}/parents-dashboard`);
     }
     if (data?.user.role === "Student") {
       router.push(`${process.env.NEXT_PUBLIC_HOMEPAGE}/student-dashboard`);
