@@ -70,6 +70,7 @@ export async function POST(req: Request) {
 // while getting our section, we also include the applied sections
 export async function GET(req: Request) {
   const teacherId = await serverSessionId();
+  if (!teacherId) return notAuthenticated();
 
   try {
     const allSections = await prisma.oneOnOneSection.findUnique({
@@ -80,6 +81,7 @@ export async function GET(req: Request) {
         AppliedSection: true,
       },
     });
+    console.log(allSections);
     return new Response(JSON.stringify(allSections), { status: 200 });
   } catch (error) {
     console.log(error);

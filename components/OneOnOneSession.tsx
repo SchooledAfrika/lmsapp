@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -5,24 +7,64 @@ import { Button } from "./ui/button";
 import DashboardPagination from "./DashboardPagination";
 import Container from "./Container";
 import { OneOnOneList } from "@/constants/oneOnOneList";
+import { useQuery } from "@tanstack/react-query";
+import { MdContentCopy } from "react-icons/md";
+import { useCopy } from "@/data-access/copy";
+
+// component to show sessionId or create session btn
+const CreateSession = () => {
+  return (
+    <Link href={"/teacher-dashboard/one-on-one-section/edit-profile"}>
+      <Button className="bg-secondary text-white text-[12px] py-5 my-3 mr-0 md:mr-6">
+        <Image
+          src="/svgs/edit.svg"
+          width={20}
+          height={20}
+          className="mr-2"
+          alt="Create Session Profile"
+        />
+        Create Session Profile
+      </Button>
+    </Link>
+  );
+};
+
+const ShowSessionId: React.FC<{ sessionId: string }> = ({ sessionId }) => {
+  const { copied, copyText } = useCopy();
+  return (
+    <div className=" flex items-center gap-2 ">
+      <p className=" font-bold">{sessionId}</p>
+      <div className=" cursor-pointer">
+        {copied ? (
+          <p className=" text-green-700 text-[12px]">copied</p>
+        ) : (
+          <MdContentCopy onClick={() => copyText(sessionId)} />
+        )}
+      </div>
+    </div>
+  );
+};
 
 const OneOnOne = () => {
+  // here we can now fetch our session
+  const { data, isFetching, isError, error } = useQuery({
+    queryKey: ["getSession"],
+    queryFn: async () => {
+      const response = await fetch("/api/one-on-one-section");
+      const result = await response.json();
+      return result;
+    },
+  });
+  console.log(data);
   return (
     <section className="my-[80px] md:my-4">
       <Container>
         <div className="flex justify-end mb-2">
-          <Link href={"/teacher-dashboard/one-on-one-section/edit-profile"}>
-            <Button className="bg-secondary text-white text-[12px] py-5 my-3 mr-0 md:mr-6">
-              <Image
-                src="/svgs/edit.svg"
-                width={20}
-                height={20}
-                className="mr-2"
-                alt="Create Session Profile"
-              />
-              Create Session Profile
-            </Button>
-          </Link>
+          {data ? (
+            <ShowSessionId sessionId={data?.sessionId} />
+          ) : (
+            <CreateSession />
+          )}
         </div>
 
         <div className="flex flex-wrap gap-3">

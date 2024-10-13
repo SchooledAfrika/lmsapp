@@ -19,6 +19,13 @@ export async function GET(req: Request) {
   try {
     const allSessions = await prisma.adminSectionView.findMany({
       where: { merged: false },
+      include: {
+        sectionInfo: {
+          select: {
+            sessionId: true,
+          },
+        },
+      },
     });
     return new Response(JSON.stringify(allSessions), { status: 200 });
   } catch (error) {
@@ -57,13 +64,20 @@ export async function PUT(req: Request) {
       { status: 400 }
     );
   }
+  // now, lets get the id of the teacher based on the sessionId provided by the admin
+  const selectedTeacher = await prisma.oneOnOneSection.findFirst({
+    where: { sessionId: teacherSessionId },
+    select: {
+      id: true,
+    },
+  });
 
   try {
     // now lets  merge a teacher to a student
     // by creating a new session model for them
     await prisma.appliedSection.create({
       data: {
-        oneOnOneSectionId: teacherSessionId,
+        oneOnOneSectionId: selectedTeacher?.id!,
         studentId: adminSessionView.studentId,
         subject: adminSessionView.subject,
         grade: adminSessionView.grade,
