@@ -8,6 +8,7 @@ import {
   checkPlans,
   serverSessionId,
   serverSessionRole,
+  generateId,
 } from "@/prisma/utils/utils";
 
 // here we first make a post request
@@ -54,7 +55,7 @@ export async function POST(req: Request) {
       );
     }
     await prisma.oneOnOneSection.create({
-      data: { teacherId: teacherId, ...payload },
+      data: { teacherId: teacherId, sessionId: generateId(), ...payload },
     });
     return new Response(
       JSON.stringify({ message: "section created successfully" }),

@@ -87,3 +87,11 @@ export const checkPlans = async (
   plan = teachersPlans?.plan;
   return plan;
 };
+
+export const generateId = (): string => {
+  const randomId = crypto.randomUUID().toString().substring(0, 5);
+  console.log(randomId);
+  const sessionId = `SCLAFK-${randomId}`;
+  console.log(sessionId);
+  return sessionId;
+};

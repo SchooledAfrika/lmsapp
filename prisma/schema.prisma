@@ -295,6 +295,7 @@ model OneOnOneSection {
   subjects         Subjects[]         @default([ENGLISH, MATHEMATICS])
   grade            Grade[]
   preference       String[]           @default([])
+  sessionId        String?
   // this will contain the list of connection between the student that 
   // applied for one on one sections
   AppliedSection   AppliedSection[]
