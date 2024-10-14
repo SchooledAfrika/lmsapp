@@ -23,6 +23,20 @@ export async function GET(req: Request) {
         sectionInfo: {
           select: {
             sessionId: true,
+            teacher: {
+              select: {
+                profilePhoto: true,
+                email: true,
+                name: true,
+              },
+            },
+          },
+        },
+        student: {
+          select: {
+            profilePhoto: true,
+            name: true,
+            email: true,
           },
         },
       },
