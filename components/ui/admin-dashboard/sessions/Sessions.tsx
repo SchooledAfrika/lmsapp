@@ -14,12 +14,13 @@ import { Noitem } from "@/components/ApplicantsTable";
 import { FiPlus } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 
-interface StudentTeacherInfo {
+export interface StudentTeacherInfo {
   name: string;
   profilePhoto: string;
   email: string;
+  rating?: number;
 }
-interface IOffers {
+export interface IOffers {
   id: string;
   studentId: string;
   oneOnOneSectionId: string;
@@ -258,21 +259,26 @@ const Sessions = () => {
   });
   console.log(data);
 
-  // if (isFetching) {
-  //   return <ShowSkeleton />;
-  // }
-  // if (isError) {
-  //   return <div>{error.message}</div>;
-  // }
+  if (isFetching) {
+    return <ShowSkeleton />;
+  }
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
 
   return (
     <section>
-      <div className="max-w-full  py-3">
+      <div className="max-w-full">
+        <div className=" w-full flex items-center justify-center">
+          <p className=" mb-4 text-black font-bold text-[24px]">
+            List of unmerged sessions
+          </p>
+        </div>
         {Array.isArray(data) && (
           <div>
             {data.length === 0 ? (
               <div className=" w-full">
-                <Noitem desc="you don't have any open session" />
+                <Noitem desc="No new session" />
               </div>
             ) : (
               <div className="grid  grid-cols-2 gap-3  md:grid-cols-4">
