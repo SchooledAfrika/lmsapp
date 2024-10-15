@@ -54,6 +54,7 @@ const Footer: React.FC = () => {
               <Link href="/find-tutors">Find Tutors</Link>
               <Link href="/classes">Classes</Link>
               <Link href="/apply-to-teach">Apply to teach </Link>
+              <Link href="/courses">Courses </Link>
               <Link href="/vacancies">Vacancies </Link>
               <Link href="/contact">Contact</Link>
             </div>
@@ -161,6 +162,12 @@ const Footer: React.FC = () => {
                 className="leading-[28px] font-medium"
               >
                 Apply to teach{" "}
+              </Link>
+              <Link
+                href="/courses"
+                className="leading-[28px] font-medium"
+              >
+                Courses{" "}
               </Link>
             </div>
 
