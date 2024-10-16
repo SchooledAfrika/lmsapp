@@ -98,8 +98,9 @@ const ShowAllSessionProfile = () => {
       </div>
       {/* list of the teachers below here */}
       <div className=" flex flex-col gap-1 mt-3">
-        {filteredTeacher(AllTeachers).map((teacher) => (
+        {filteredTeacher(AllTeachers).map((teacher, index) => (
           <div
+            key={index}
             onClick={() => setSelectedId(teacher?.sessionId!)}
             className=" w-full px-2 py-1 flex border rounded-md cursor-pointer hover:bg-slate-300"
           >
