@@ -62,7 +62,7 @@ export const TeacherOneOnOne: React.FC = () => {
           router.push("/teacher-dashboard/one-on-one-section");
         }, 4000);
       }
-      // if there is no kyc
+      // if there is no kyc and nothing else
       if (result.status === 401) {
         return toast.error(info.message);
       }
