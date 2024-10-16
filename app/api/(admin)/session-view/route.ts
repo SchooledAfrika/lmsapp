@@ -11,6 +11,7 @@ import {
 
 // here we get all the adminsessionview
 export async function GET(req: Request) {
+  console.log("entered sessions");
   const id = await serverSessionId();
   const role = await serverSessionRole();
   // restriction if the user is not admin
@@ -57,7 +58,8 @@ export async function PUT(req: Request) {
   // here we get the id of the teacher we want to merge
   // and also get the id of the adminSession that the student or parents created while making
   // a request for one on one session
-  const { adminSessionId, teacherSessionId } = await req.json();
+  const { adminSessionId, teacherSessionId, amt } = await req.json();
+  console.log(adminSessionId, teacherSessionId, amt);
   // now let't get the whole information about the session made by the student
   const adminSessionView = await prisma.adminSectionView.findUnique({
     where: {

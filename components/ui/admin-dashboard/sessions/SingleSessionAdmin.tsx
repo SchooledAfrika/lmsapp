@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { IOffers, StudentTeacherInfo } from "./Sessions";
 import Image from "next/image";
@@ -8,24 +8,115 @@ import { useConversion } from "@/data-access/conversion";
 import { MdStarRate } from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
 import { IoIosCheckmark } from "react-icons/io";
+import { CircularProgress } from "@mui/material";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { TiWarning } from "react-icons/ti";
 
 interface ITeacherInfo {
   teacher: StudentTeacherInfo;
-  sesionId: string | null;
+  sesionId: string;
 }
 
 interface IAllViews {
   id: string;
-  sessionId: string | null;
+  sessionId: string;
   teacher: {
     name: string;
     profilePhoto: string;
     gender: string;
+    ratting?: number;
   };
 }
 
+// the dialog box which will handle merging of teacher to student
+// this dailog handles confirmation
+export const Approval: React.FC<{
+  auto: boolean;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  dialogOpen: boolean;
+  selectedId: string;
+}> = ({ auto, setDialogOpen, dialogOpen, selectedId }) => {
+  const [submitting, setSubmitting] = useState<boolean>(false);
+  const [amt, setAmt] = useState<string | null>(null);
+  const { id } = useParams();
+  const mutation = useMutation({
+    mutationKey: ["merge-session"],
+    mutationFn: async () => {
+      const response = await fetch("/api/session-view", {
+        method: "PUT",
+        body: JSON.stringify({
+          amt,
+          adminSessionId: id,
+          teacherSessionId: selectedId,
+        }),
+      });
+      return response;
+    },
+    onSuccess: async (response) => {
+      const result = await response.json();
+      console.log(result);
+    },
+  });
+  // below here we perform submitting the action to backend
+  const handleApprove = () => {
+    if (submitting) return;
+    if (!amt) return alert("please enter amount to proceed");
+    setSubmitting(true);
+    mutation.mutate();
+  };
+  return (
+    <Dialog open={dialogOpen} onOpenChange={() => setDialogOpen(false)}>
+      <DialogTrigger>
+        <button
+          className={` flex-2 ${
+            auto ? " px-4 py-2" : "px-2 py-1"
+          } bg-green-700 text-white rounded-md text-[12px] `}
+        >
+          Merge
+        </button>
+      </DialogTrigger>
+      <DialogContent
+        className=" w-4/5 md:w-2/5 rounded-lg"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className=" w-full flex flex-col gap-3">
+          <div className=" flex items-center flex-col">
+            <TiWarning className=" text-[60px] text-[tomato]" />
+            <p className=" font-semibold text-[18px] text-slate-600">
+              Are you sure about merging this session
+            </p>
+          </div>
+          <div className=" flex items-center justify-center flex-col">
+            <input
+              onChange={(e) => setAmt(e.target.value)}
+              className=" w-1/2 border py-2 px-2"
+              placeholder="enter amount"
+              type="number"
+            />
+          </div>
+          <div className=" flex flex-col gap-3">
+            <div
+              onClick={handleApprove}
+              className=" w-full py-3 flex items-center justify-center bg-green-700 text-white rounded-md cursor-pointer transition-all duration-700 ease-in-out hover:bg-green-600 "
+            >
+              {submitting ? <p>Merging now...</p> : <p>Aprrove Merge</p>}
+            </div>
+            <div
+              onClick={() => setDialogOpen(false)}
+              className="  w-full py-3 flex items-center justify-center bg-red-700 text-white rounded-md cursor-pointer transition-all duration-700 ease-in-out hover:bg-red-600"
+            >
+              <p>Cancel</p>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 // component to render teacher basic info
 const ShowTeacher: React.FC<{ details: ITeacherInfo }> = ({ details }) => {
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   return (
     <div>
       <div className=" w-full flex items-center justify-center mt-3">
@@ -35,22 +126,27 @@ const ShowTeacher: React.FC<{ details: ITeacherInfo }> = ({ details }) => {
       </div>
       <div className=" w-full mt-5 flex flex-col items-center justify-center">
         <Image
-          src={details.teacher.profilePhoto}
+          src={details?.teacher.profilePhoto}
           alt="teacherDP"
           width={200}
           height={200}
           className=" w-[80px] aspect-square rounded-full"
         />
-        <p className=" text-black font-bold">{details.teacher.email}</p>
-        <p className=" text-black font-bold">{details.teacher.name}</p>
+        <p className=" text-black font-bold">{details?.teacher.email}</p>
+        <p className=" text-black font-bold">{details?.teacher.name}</p>
         <div className=" flex items-center">
           <MdStarRate className=" text-[tomato]" />
-          <p>{details.teacher.rating}</p>
+          <p>{details?.teacher.rating}</p>
         </div>
         <div className=" mt-4">
-          <button className=" px-4 py-2 bg-green-700 rounded text-white font-bold cursor-pointer text-[12px]">
-            Merge Now
-          </button>
+          <div onClick={() => setDialogOpen(true)}>
+            <Approval
+              selectedId={details.sesionId}
+              setDialogOpen={setDialogOpen}
+              dialogOpen={dialogOpen}
+              auto={true}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -61,10 +157,12 @@ const ShowTeacher: React.FC<{ details: ITeacherInfo }> = ({ details }) => {
 const ShowAllSessionProfile = () => {
   const [filterStr, setFilterStr] = useState<string>("");
   const [selectedId, setSelectedId] = useState<string>("");
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+
   //   function to handle filtering here
   const filteredTeacher = (allItem: IAllViews[]): IAllViews[] => {
     const filtered = allItem.filter((item) =>
-      item.teacher.name.toLowerCase().includes(filterStr.toLowerCase())
+      item.sessionId.toLowerCase().includes(filterStr.toLowerCase())
     );
     return filtered;
   };
@@ -78,11 +176,19 @@ const ShowAllSessionProfile = () => {
   });
 
   if (isFetching) {
-    return <p>Loading...</p>;
+    return (
+      <div className=" w-full h-[450px] flex items-center justify-center">
+        <CircularProgress color="success" size={50} />
+      </div>
+    );
+  }
+
+  if (isError) {
+    return <p>{error.message}</p>;
   }
   const AllTeachers: IAllViews[] = data;
   return (
-    <div className=" mt-4">
+    <div className=" mt-4 max-h-[400px] overflow-y-auto w-full">
       <div className=" w-full flex items-center justify-center text-[14px]">
         <p>Merge from list of Session Profiles</p>
       </div>
@@ -97,41 +203,60 @@ const ShowAllSessionProfile = () => {
         />
       </div>
       {/* list of the teachers below here */}
-      <div className=" flex flex-col gap-1 mt-3">
-        {filteredTeacher(AllTeachers).map((teacher, index) => (
-          <div
-            key={index}
-            onClick={() => setSelectedId(teacher?.sessionId!)}
-            className=" w-full px-2 py-1 flex border rounded-md cursor-pointer hover:bg-slate-300"
-          >
-            <div className=" flex-8 flex gap-2 items-center">
-              <div
-                className={` w-[30px] aspect-square rounded-sm flex items-center justify-center ${
-                  selectedId === teacher.sessionId
-                    ? "bg-green-700 text-white"
-                    : " bg-slate-400 text-black"
-                }`}
-              >
-                <IoIosCheckmark />
-              </div>
-              <Image
-                src={teacher.teacher.profilePhoto}
-                alt="profileDp"
-                width={200}
-                height={200}
-                className=" w-[30px] aspect-square rounded-full "
-              />
-              <p className=" text-[14px] font-semibold text-gray-600">
-                {teacher.teacher.name}
-              </p>
-            </div>
-            {selectedId === teacher.sessionId && (
-              <button className=" flex-2 bg-green-700 text-white rounded-md text-[12px] ">
-                Merge
-              </button>
-            )}
+      <div className=" ">
+        {Array.isArray(filteredTeacher(AllTeachers)) && (
+          <div>
+            {
+              filteredTeacher(AllTeachers).length === 0 ? (
+                <div className=" mt-4 flex items-center justify-center">
+                  <p className=" text-slate-500 font-bold">No match found</p>
+                </div>
+              ) : (
+                <div className=" flex flex-col gap-1 mt-3">
+                  {filteredTeacher(AllTeachers).map((teacher, index) => (
+                    <div
+                      key={index}
+                      onClick={() => setSelectedId(teacher?.sessionId!)}
+                      className=" w-full px-2 py-1 flex border rounded-md cursor-pointer hover:bg-slate-300"
+                    >
+                      <div className=" flex-8 flex gap-2 items-center">
+                        <div
+                          className={` w-[30px] aspect-square rounded-sm flex items-center justify-center ${
+                            selectedId === teacher?.sessionId
+                              ? "bg-green-700 text-white"
+                              : " bg-slate-400 text-black"
+                          }`}
+                        >
+                          <IoIosCheckmark />
+                        </div>
+                        <Image
+                          src={teacher?.teacher.profilePhoto}
+                          alt="profileDp"
+                          width={200}
+                          height={200}
+                          className=" w-[30px] aspect-square rounded-full "
+                        />
+                        <p className=" text-[14px] font-semibold text-gray-600">
+                          {teacher?.teacher.name}
+                        </p>
+                      </div>
+                      {selectedId === teacher?.sessionId && (
+                        <div onClick={() => setDialogOpen(true)}>
+                          <Approval
+                            selectedId={selectedId}
+                            dialogOpen={dialogOpen}
+                            setDialogOpen={setDialogOpen}
+                            auto={false}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) //the last div here
+            }
           </div>
-        ))}
+        )}
       </div>
     </div>
   );
@@ -267,9 +392,9 @@ const SingleSessionAdmin = () => {
       return result;
     },
   });
-  // if (isFetching) {
-  //   return <p>Loading...</p>;
-  // }
+  if (isFetching) {
+    return <p>Loading...</p>;
+  }
   const singleSession: IOffers = data;
   return (
     <div>
@@ -281,7 +406,7 @@ const SingleSessionAdmin = () => {
       <div className=" w-full md:px-20">
         <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 border-2 px-4 py-2 rounded-md shadow-md ">
           <StudentInfos infos={singleSession} />
-          <TeachersToMerge infos={singleSession?.sectionInfo} />
+          <TeachersToMerge infos={singleSession.sectionInfo} />
         </div>
       </div>
     </div>

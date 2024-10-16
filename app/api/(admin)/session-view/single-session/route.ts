@@ -41,8 +41,10 @@ export async function GET(req: Request) {
         },
       },
     });
+    console.log(singleSession);
     return new Response(JSON.stringify(singleSession), { status: 200 });
   } catch (error) {
+    console.log(error);
     return serverError();
   }
 }
