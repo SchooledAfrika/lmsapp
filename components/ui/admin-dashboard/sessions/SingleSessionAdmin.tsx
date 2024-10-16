@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useConversion } from "@/data-access/conversion";
 import { MdStarRate } from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
+import { IoIosCheckmark } from "react-icons/io";
 
 interface ITeacherInfo {
   teacher: StudentTeacherInfo;
@@ -59,6 +60,7 @@ const ShowTeacher: React.FC<{ details: ITeacherInfo }> = ({ details }) => {
 // list of all the session profile that can be merged
 const ShowAllSessionProfile = () => {
   const [filterStr, setFilterStr] = useState<string>("");
+  const [selectedId, setSelectedId] = useState<string>("");
   //   function to handle filtering here
   const filteredTeacher = (allItem: IAllViews[]): IAllViews[] => {
     const filtered = allItem.filter((item) =>
@@ -66,7 +68,7 @@ const ShowAllSessionProfile = () => {
     );
     return filtered;
   };
-  const { data } = useQuery({
+  const { data, isFetching, isError, error } = useQuery({
     queryKey: ["get-all-session-profile"],
     queryFn: async () => {
       const response = await fetch("/api/session-view/all-session-profiles");
@@ -74,6 +76,10 @@ const ShowAllSessionProfile = () => {
       return result;
     },
   });
+
+  if (isFetching) {
+    return <p>Loading...</p>;
+  }
   const AllTeachers: IAllViews[] = data;
   return (
     <div className=" mt-4">
@@ -91,9 +97,41 @@ const ShowAllSessionProfile = () => {
         />
       </div>
       {/* list of the teachers below here */}
-      {filteredTeacher(AllTeachers).map((teacher) => (
-        <div>{teacher.teacher.name}</div>
-      ))}
+      <div className=" flex flex-col gap-1 mt-3">
+        {filteredTeacher(AllTeachers).map((teacher) => (
+          <div
+            onClick={() => setSelectedId(teacher?.sessionId!)}
+            className=" w-full px-2 py-1 flex border rounded-md cursor-pointer hover:bg-slate-300"
+          >
+            <div className=" flex-8 flex gap-2 items-center">
+              <div
+                className={` w-[30px] aspect-square rounded-sm flex items-center justify-center ${
+                  selectedId === teacher.sessionId
+                    ? "bg-green-700 text-white"
+                    : " bg-slate-400 text-black"
+                }`}
+              >
+                <IoIosCheckmark />
+              </div>
+              <Image
+                src={teacher.teacher.profilePhoto}
+                alt="profileDp"
+                width={200}
+                height={200}
+                className=" w-[30px] aspect-square rounded-full "
+              />
+              <p className=" text-[14px] font-semibold text-gray-600">
+                {teacher.teacher.name}
+              </p>
+            </div>
+            {selectedId === teacher.sessionId && (
+              <button className=" flex-2 bg-green-700 text-white rounded-md text-[12px] ">
+                Merge
+              </button>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
@@ -156,13 +194,13 @@ const SingleRowWithArray: React.FC<{ name: string; value: string[] }> = ({
   name,
   value,
 }) => {
-  const joined = value.join(",");
+  const joined = value?.join(",");
 
   return (
     <div className=" flex gap-2 items-center text-[14px]">
       <p className=" font-semibold">{name}:</p>
       <p className={`${name == "AMT" && " text-green-800 font-semibold"}`}>
-        {joined.toLowerCase()}
+        {joined?.toLowerCase()}
       </p>
     </div>
   );
@@ -175,41 +213,41 @@ const StudentInfos: React.FC<{ infos: IOffers }> = ({ infos }) => {
     <div className=" bg-white py-3 px-2 rounded-md">
       <div className=" w-full flex items-center flex-col border-b pb-3">
         <Image
-          src={infos.student.profilePhoto}
+          src={infos?.student.profilePhoto}
           alt="studentpic"
           width={200}
           height={200}
           className=" w-[80px] aspect-square rounded-full"
         />
-        <p className=" text-[14px] font-semibold">{infos.student.email}</p>
-        <p className=" text-[14px] font-semibold">{infos.student.name}</p>
+        <p className=" text-[14px] font-semibold">{infos?.student.email}</p>
+        <p className=" text-[14px] font-semibold">{infos?.student.name}</p>
       </div>
       {/* the remaining part of the card below here */}
       <div className=" flex flex-col gap-1 pt-2">
         <div className=" w-full flex items-center justify-center">
           <div className=" px-4 py-2 text-[12px] bg-green-700 text-white rounded-md">
-            <p>{infos.sectionType}</p>
+            <p>{infos?.sectionType}</p>
           </div>
         </div>
-        <SingleRowNoArray name="Curriculum" value={infos.curriculum} />
-        <SingleRowNoArray name="Grade" value={infos.grade} />
+        <SingleRowNoArray name="Curriculum" value={infos?.curriculum} />
+        <SingleRowNoArray name="Grade" value={infos?.grade} />
         <SingleRowNoArray
           name="Hours/day"
-          value={infos.hoursperday + " " + "hours"}
+          value={infos?.hoursperday + " " + "hours"}
         />
         <SingleRowNoArray
           name="Created Date"
-          value={handleDate(infos.createdAt)}
+          value={handleDate(infos?.createdAt)}
         />
         <SingleRowNoArray
           name="Start Time"
-          value={handleDate(infos.startTime)}
+          value={handleDate(infos?.startTime)}
         />
-        <SingleRowNoArray name="Goals" value={infos.learningGoal} />
-        <SingleRowNoArray name="AMT" value={"$" + infos.amt} />
-        <SingleRowNoArray name="Duration" value={infos.duration} />
-        <SingleRowWithArray name="Days" value={infos.learningDays} />
-        <SingleRowWithArray name="SpecialNeed" value={infos.specialNeed} />
+        <SingleRowNoArray name="Goals" value={infos?.learningGoal} />
+        <SingleRowNoArray name="AMT" value={"$" + infos?.amt} />
+        <SingleRowNoArray name="Duration" value={infos?.duration} />
+        <SingleRowWithArray name="Days" value={infos?.learningDays} />
+        <SingleRowWithArray name="SpecialNeed" value={infos?.specialNeed} />
       </div>
     </div>
   );
@@ -218,7 +256,7 @@ const StudentInfos: React.FC<{ infos: IOffers }> = ({ infos }) => {
 // the main component for this single session page
 const SingleSessionAdmin = () => {
   const { id } = useParams();
-  const { data } = useQuery({
+  const { data, isFetching, isError, error } = useQuery({
     queryKey: ["session-single"],
     queryFn: async () => {
       const response = await fetch(
@@ -228,7 +266,9 @@ const SingleSessionAdmin = () => {
       return result;
     },
   });
-  console.log(data);
+  // if (isFetching) {
+  //   return <p>Loading...</p>;
+  // }
   const singleSession: IOffers = data;
   return (
     <div>
@@ -240,7 +280,7 @@ const SingleSessionAdmin = () => {
       <div className=" w-full md:px-20">
         <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 border-2 px-4 py-2 rounded-md shadow-md ">
           <StudentInfos infos={singleSession} />
-          <TeachersToMerge infos={singleSession.sectionInfo} />
+          <TeachersToMerge infos={singleSession?.sectionInfo} />
         </div>
       </div>
     </div>

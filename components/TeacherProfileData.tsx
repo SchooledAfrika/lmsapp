@@ -41,12 +41,12 @@ const TeacherProfileData: React.FC<IteacherOneOnOneSub> = ({
             src={data?.user.image!}
             width={200}
             height={200}
-            className="rounded-full w-[70px]  "
+            className="rounded-full w-[70px] aspect-square  "
             alt="Teacher Picture"
             priority
           />
           <div>
-            <span className="text-[16px] font-bold">{data?.user.name!}</span>
+            <span className="text-[16px] font-bold">{data?.user.name}</span>
           </div>
         </div>
         <textarea
