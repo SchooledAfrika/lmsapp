@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import PricingLayout from "@/components/ui/Pricing-layout";
 import MobileNav from "@/components/ui/school-dashboard/navbar/MobileNav";
 import Navbar from "@/components/ui/school-dashboard/navbar/navbar";
@@ -7,6 +8,12 @@ import { authOptions } from "@/lib/nextAuth";
 import CommonDashboardContext from "@/providers/Statecontext";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
+import React from "react";
+
+export const metadata: Metadata = {
+  title: "SchooledAfrika | Teachers Dashboard",
+  description: "Teacher dashboard",
+};
 
 export default async function RootLayout({
   children,

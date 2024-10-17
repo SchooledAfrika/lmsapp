@@ -14,6 +14,7 @@ const navLinks = [
   { name: "Classes", href: "/find-classes" },
   { name: "Apply to teach", href: "/apply-to-teach" },
   { name: "Vacancies", href: "/vacancies" },
+  { name: "Courses", href: "/courses" },
 
   { name: "Contact Us", href: "/contact" },
 ];

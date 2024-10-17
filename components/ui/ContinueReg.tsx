@@ -1,5 +1,5 @@
 "use client";
-
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "./button";
@@ -12,6 +12,7 @@ import { useAuth } from "@/data-access/authentication";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { signIn } from "next-auth/react";
+import { Eye, EyeOff } from "lucide-react";
 
 // creating our zod schema for registration using credential means
 const CredentialReg = z
@@ -29,6 +30,7 @@ const CredentialReg = z
 
 const ContinueReg: React.FC = () => {
   const router = useRouter();
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const { handleCredentialReg, handleLogin, loading } = useAuth();
   //   creating instance of the hook form
   // lets first get the credentialReg type that we need
@@ -42,6 +44,10 @@ const ContinueReg: React.FC = () => {
   const onSubmit = (data: ICredentials) => {
     const { email, password } = data;
     handleCredentialReg(email, password);
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -113,10 +119,10 @@ const ContinueReg: React.FC = () => {
                 <span className="text-red-500">{errors.email.message}</span>
               )}
             </div>
-            <div>
+            <div className="relative">
               <input
                 {...register("password")}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="password"
                 placeholder="enter Password"
                 className={`mt-3 p-4  outline-none ${
@@ -126,11 +132,22 @@ const ContinueReg: React.FC = () => {
               {errors.password && (
                 <span className="text-red-500">{errors.password.message}</span>
               )}
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute top-6 right-4 border-none bg-transparent cursor-pointer"
+              >
+                {showPassword ? (
+                  <EyeOff className="text-lightGreen" />
+                ) : (
+                  <Eye className="text-lightGreen" />
+                )}
+              </button>
             </div>
-            <div>
+            <div className="relative">
               <input
                 {...register("confirmPassword")}
-                type="password"
+                type={showPassword ? "text" : "password"}
                 name="confirmPassword"
                 placeholder="confirm Password"
                 className={`mt-3 p-4  outline-none ${
@@ -142,6 +159,17 @@ const ContinueReg: React.FC = () => {
                   {errors.confirmPassword.message}
                 </span>
               )}
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute top-6 right-4 border-none bg-transparent cursor-pointer"
+              >
+                {showPassword ? (
+                  <EyeOff className="text-lightGreen" />
+                ) : (
+                  <Eye className="text-lightGreen" />
+                )}
+              </button>
             </div>
             <Button
               type="submit"

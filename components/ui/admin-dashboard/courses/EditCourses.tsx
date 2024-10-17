@@ -1,0 +1,288 @@
+"use client";
+import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { addingCourseSchema } from "@/constants/addCourse";
+export type IaddingCourse = z.infer<typeof addingCourseSchema>;
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Input } from "@/components/ui/input";
+
+
+import { Button } from "@/components/ui/button";
+
+
+
+import Image from "next/image";
+import PreviewItem from "../../PreviewItem";
+import { useCloudinary } from "@/data-access/cloudinary";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { MdOutlineClass } from "react-icons/md";
+
+const EditCourses = () => {
+  const [loading, setloading] = useState<boolean>(false);
+  const [banner, setBanner] = useState<string | undefined>(undefined);
+  const [previewVideo, setPreviewVideo] = React.useState<string | undefined>(
+    undefined
+  );
+  const [courseMainVideo, setCourseMainVideo] = React.useState<
+    string | undefined
+  >(undefined);
+  const { imageUpload } = useCloudinary();
+  // react hook form instance below here
+  const {
+    register,
+    handleSubmit,
+    clearErrors,
+    setValue,
+    reset,
+    formState: { errors },
+  } = useForm<IaddingCourse>({
+    resolver: zodResolver(addingCourseSchema),
+  });
+
+  //   instance of client
+  const queryClient = useQueryClient();
+  //   creating a post using mutation to the backend
+  const mutation = useMutation({
+    mutationKey: ["editCourse"],
+    mutationFn: async (data: IaddingCourse) => {
+      // console.log(data);
+      const result = await fetch("", {
+        method: "PUT",
+        body: JSON.stringify({
+          ...data,
+          price: Number(data.price),
+        }),
+      });
+
+      return result;
+    },
+    onSuccess: async (result) => {
+      queryClient.invalidateQueries({ queryKey: ["getCourse"] });
+      if (result.ok) {
+        const body = await result.json();
+        setloading(false);
+        reset();
+        return toast.success(body.message);
+      } else {
+        setloading(false);
+        return toast.error("error editing course");
+      }
+    },
+  });
+  // here we validate the datas in our form submission
+  // only if there is data, before the mutation function is called
+  const runSubmit: SubmitHandler<IaddingCourse> = async (data) => {
+    setloading(true);
+    // converting the selected image to a blob and uploading to cloudinary
+    // using the useCloudinary custom hook;
+    const bannerImageBlob = new Blob([data.courseBanner[0]]);
+    const bannerImageUrl = await imageUpload(bannerImageBlob);
+    data.courseBanner = bannerImageUrl;
+
+    //Convert the coursePreview Video too
+    const bannerVideoPreviewBlob = new Blob([data.coursePreview[0]]);
+    const bannerVideoPreviewUrl = await imageUpload(bannerVideoPreviewBlob);
+    data.coursePreview = bannerVideoPreviewUrl;
+
+    //Convert the course Video
+    const bannerVideoBlob = new Blob([data.courseVideo[0]]);
+    const bannerVideoUrl = await imageUpload(bannerVideoBlob);
+    data.courseVideo = bannerVideoUrl;
+    mutation.mutate(data);
+  };
+
+  // handles remove image that is already present
+  // if the user decides to remove it
+  const handleRemove = () => {
+    setBanner(undefined);
+    setValue("courseBanner", "");
+  };
+  // the function to generate a url for the picture
+  const handleShowPix = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    setValue("courseBanner", e.target.files);
+    const blob = new Blob([file]);
+    const localUrl = URL.createObjectURL(blob);
+    setBanner(localUrl);
+    clearErrors("courseBanner");
+  };
+
+  // Function to handle video preview for coursePreview
+  const handleShowPreview = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return; // Ensure a file is selected
+
+    const file = e.target.files[0]; // Get the first selected file
+
+    setValue("coursePreview", e.target.files); // Set the file list in the form
+    const localUrl = URL.createObjectURL(file); // Create a local URL for video preview
+    setPreviewVideo(localUrl); // Update the state to show the preview
+    clearErrors("coursePreview"); // Clear any previous errors related to coursePreview
+  };
+
+  // Function to handle video preview for courseVideo
+  const handleShowCourseVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return; // Ensure a file is selected
+
+    const file = e.target.files[0]; // Get the first selected file
+
+    setValue("courseVideo", e.target.files); // Set the file list in the form
+    const localUrl = URL.createObjectURL(file); // Create a local URL for video preview
+    setCourseMainVideo(localUrl); // Update the state to show the preview
+    clearErrors("courseVideo"); // Clear any previous errors related to courseVideo
+  };
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild>
+      <Button className="bg-lightGreen cursor-pointer absolute -translate-y-1/2 left-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block">
+            Edit Course
+          </Button>
+      </DialogTrigger>
+
+      <DialogContent className="sm:w-[500px]  w-[380px] font-subtext">
+        <ScrollArea className="h-[500px] w-full ">
+          <DialogHeader>
+            <DialogTitle className="text-3xl font-bold">Edit Course</DialogTitle>
+          </DialogHeader>
+
+          <div className="w-[96%] mt-2">
+            <form
+              onSubmit={handleSubmit(runSubmit)}
+              className=" flex flex-col gap-2 w-full px-2"
+            >
+              <div className=" flex flex-col">
+                <Input
+                  id="name"
+                  type="text"
+                  {...register("title")}
+                  name="title"
+                  onChange={() => clearErrors("title")}
+                  placeholder="Course Title"
+                  className="col-span-6 w-full"
+                />
+                {errors.title && (
+                  <small className="text-red-600">{errors.title.message}</small>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <textarea
+                  cols={30}
+                  rows={10}
+                  id="name"
+                  {...register("description")}
+                  name="description"
+                  onChange={() => clearErrors("description")}
+                  placeholder="Course Description"
+                  className="col-span-6 p-2 border text-[14px] rounded-md w-full"
+                />
+                {errors.description && (
+                  <small className="text-red-600">
+                    {errors.description.message}
+                  </small>
+                )}
+              </div>
+
+              <div>
+                <div className=" w-full rounded-md h-[60px] font-header border bg-white flex items-center text-black justify-between px-2 ">
+                  <input
+                    {...register("price")}
+                    name="price"
+                    placeholder="Price"
+                    type="number"
+                    className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
+                  />
+
+                  <div className=" w-[50px] cursor-pointer font-bold aspect-square rounded-full flex items-center justify-center">
+                    <Image
+                      src="/usflag.png"
+                      alt="usflag"
+                      width={100}
+                      height={100}
+                      className="w-[40px] h-[40px] rounded-full"
+                    />
+                  </div>
+                </div>
+                {errors.price && (
+                  <small className="text-red-600">{errors.price.message}</small>
+                )}
+              </div>
+
+              {banner === undefined ? (
+                <div className="flex flex-col border p-3 rounded-md">
+                  <label className="text-[15px] font-semibold">
+                    Course Banner
+                  </label>
+                  <input
+                    type="file"
+                    multiple={false}
+                    accept="image/*"
+                    onChange={handleShowPix}
+                    name="courseBanner"
+                    placeholder="Course Banner"
+                    className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
+                  />
+                </div>
+              ) : (
+                <PreviewItem handleRemove={handleRemove} imageItem={banner} />
+              )}
+
+              <div className="flex flex-col border p-3 rounded-md">
+                <label className="text-[15px] font-semibold">
+                  Course Preview Video
+                </label>
+                <input
+                  type="file"
+                  multiple={false}
+                  accept="video/*"
+                  onChange={handleShowPreview}
+                  name="coursePreview"
+                  placeholder="Course Preview"
+                  className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
+                />
+              </div>
+
+              <div className="flex flex-col  border p-3 rounded-md">
+              <label className="text-[15px] font-semibold">
+                  Main Preview Video
+                </label>
+                <input
+                  type="file"
+                  multiple={false}
+                  accept="video/*"
+                  onChange={handleShowCourseVideo}
+                  name="courseVideo"
+                  placeholder="Course Video"
+                  className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
+                />
+              </div>
+
+              <Button
+                type="submit"
+                className="w-full py-6 bg-lightGreen hover:bg-green-700"
+                disabled={loading}
+              >
+                {loading ? "editing course..." : "Edit Course"}
+              </Button>
+            </form>
+          </div>
+        </ScrollArea>
+      </DialogContent>
+      <ToastContainer />
+    </Dialog>
+  );
+};
+
+export default EditCourses;

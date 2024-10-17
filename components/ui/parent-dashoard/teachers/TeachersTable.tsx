@@ -1,3 +1,7 @@
+"use client";
+
+import React, { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import {
   Table,
   TableBody,
@@ -6,83 +10,97 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-
 import Image from "next/image";
-import { BsThreeDots } from "react-icons/bs";
-import Link from "next/link";
-import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 
-const TeachersType = [
-  {
-    id: "1",
-    icon: "/teacher-img.png",
-    name: "Odo Maurice ",
-    className: "Alpha",
-    active: "Active",
-    subject: "Mathematics, English, Accounting",
-    Grade: "Grade 10",
-  },
-  {
-    id: "2",
-    icon: "/tutors.jpg",
-    name: "Augustine David",
-    className: "-",
-    subject: "Mathematics, English, Accounting",
-    Grade: "Grade 12",
-    active: "Active",
-  },
-];
+// Define types for teachers
+interface Teacher {
+  name: string;
+  profilePhoto: string;
+  status: string;
+}
 
-export default function TeachersTable() {
+interface TeacherInfo {
+  className: string;
+  grade: string;
+  subject: string;
+  teacher: Teacher; 
+}
+
+const TeachersTable = () => {
+
+  //The wardId is already stored in the localStorage and so we initialize a state for it 
+  const [wardId, setWardId] = useState<string | null>(null);
+
+  
+  // Retrieve wardId from localStorage
+  useEffect(() => {
+    const storedWardId = localStorage.getItem("selectedWardId");
+    setWardId(storedWardId); // Set wardId from localStorage directly
+  }, []); 
+
+  // Fetch teachers data, only run query if wardId exists
+  const { isLoading, isError, error, data } = useQuery<TeacherInfo[]>({
+    queryKey: ["getTeachersForWard", wardId],
+    queryFn: async () => {
+      if (!wardId) return [];
+      const response = await fetch(
+        `/api/parents-gets-wards-teachers?childId=${wardId}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch teachers");
+      return response.json();
+    },
+    enabled: !!wardId, // The query will only run if wardId exists
+  });
+
+ // console.log(data);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    // console.error(error); // Log the error to see what went wrong
+    return <p>Error: {error?.message}</p>;
+  }
+
+  if (!data || data.length === 0) {
+    return <p>No data available</p>;
+  }
+
   return (
-    <Table className="bg-white overflow-x-auto    rounded-md mt-12">
+    <Table className="bg-white text-black overflow-x-auto rounded-md mt-12">
       <TableHeader>
-        <TableRow>
-          <TableHead className="text-[12px]">Name</TableHead>
-          <TableHead className=" text-[12px] ">Class</TableHead>
-          <TableHead className="text-[12px]">Subject</TableHead>
-          <TableHead className="text-[12px]">Grade</TableHead>
+        <TableRow className="text-[12px]">
+          <TableHead>Name</TableHead>
+          <TableHead>Class</TableHead>
+          <TableHead>Subject</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Grade</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        {TeachersType.map((Teacher) => (
-          <TableRow key={Teacher.id} className="">
-            <TableCell className="font-bold text-[13px] w-[250px]  flex  mr-1">
-              <Image
-                src={Teacher.icon}
-                alt="icon"
-                width={100}
-                height={100}
-                className="w-[60px] h-[60px] rounded-md mr-1"
-              />{" "}
-              <div className="flex ml-1 flex-col">
-                <p>{Teacher.name}</p>
-                <div className="flex  mt-2 justify-between">
-                  <p className="text-[11px] px-[20px] py-[5px] text-center rounded-md mr-3 bg-lightGreen text-white">
-                    {Teacher.active}
-                  </p>
-                </div>
-              </div>
-            </TableCell>
-            <TableCell className="text-[12px]  font-semibold">
-              {Teacher.className}
-            </TableCell>
-            <TableCell className="text-[12px]  font-semibold">
-              {Teacher.subject}
-            </TableCell>
-
-            <TableCell className="text-[12px]  font-semibold">
-              {Teacher.Grade}
-            </TableCell>
-            <TableCell className="  text-[14px]   text-lightGreen cursor-pointer">
-              <Link href="/parents-dashboard/teachers/test">
-                {" "}
-                <BsThreeDots className="text-[25px] ml-6 text-lightGreen" />
-              </Link>
-            </TableCell>
+        {data.map((item) => (
+          <TableRow className="text-[12px] font-semibold" key={item.teacher.name}>
+            {" "}
+            {/* Use a unique key, maybe teacher's name */}
+            <TableCell className="flex items-center  mr-1">
+            <Image
+                  src={item.teacher.profilePhoto}
+                  alt="icon"
+                  width={100}
+                  height={100}
+                  className="w-[40px] h-[40px] rounded-md mr-1"
+                />{" "}
+              {item.teacher.name}</TableCell>
+            <TableCell>{item.className}</TableCell>
+            <TableCell>{item.subject}</TableCell>
+            <TableCell>{item.teacher.status}</TableCell>
+            <TableCell>{item.grade}</TableCell>
           </TableRow>
         ))}
       </TableBody>
     </Table>
   );
-}
+};
+
+export default TeachersTable;

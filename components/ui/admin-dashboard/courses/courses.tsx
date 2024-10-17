@@ -1,62 +1,102 @@
+"use client";
+import * as React from "react";
+import { useClasses } from "@/data-access/class";
 import Image from "next/image";
-import React from "react";
 import { AdminCourses } from "@/constants/adminCourses";
-import AdminCourseInfo from "../AdminCourseInfo";
-import Link from "next/link";
 
-const courses = () => {
+import { Button } from "@/components/ui/button";
+
+import { FaGraduationCap } from "react-icons/fa";
+import { MdVerified } from "react-icons/md";
+import Container from "@/components/Container";
+import Link from "next/link";
+import EditCourses from "./EditCourses";
+import RemoveCourse from "./RemoveCourse";
+
+
+interface Props {
+  index: number;
+  title: string;
+  teacher: string;
+  description: string;
+  courseBanner: string;
+  coursePreview: string;
+  courseVideo: string;
+  price: string;
+}
+
+const CourseCard = ({
+  title,
+  teacher,
+  description,
+  courseBanner,
+  coursePreview,
+  courseVideo,
+  price,
+}: Props) => {
+  const { makeSubString } = useClasses();
   return (
-    <section>
-      <div className="flex flex-wrap justify-center lg:justify-normal gap-5 w-full">
-        {AdminCourses.map((details, index) => (
-          <div
-            key={index}
-            className=" bg-[#FFFFFF] lg:w-[30%] py-7 shadow-lg px-4 rounded-[10px]"
-          >
-            <div className="flex justify-between">
-              <Link href={"/admin-dashboard/courses/details"}>
-                <div className="cursor-pointer flex gap-4">
-                  <Image
-                    src={details.courseImg}
-                    width={50}
-                    height={50}
-                    alt="Teacher Image"
-                  />
-                  <div>
-                    <p className="font-bold">{details.courseName}</p>
-                    <span className="text-[14px]">{details.category}</span>
-                  </div>
-                </div>
-              </Link>
-              <AdminCourseInfo />
+    <>
+      <div className="w-full overflow-hidden     font-header rounded-lg card flex flex-col justify-center gap-3 hover:-translate-y-2 transition-transform duration-300 group">
+        <div className="relative text-white w-full h-[200px]">
+          <Image
+            className="w-full h-full object-cover"
+            src={courseBanner}
+            alt="background"
+            width={200}
+            height={200}
+          />
+
+         {teacher === "SchooledAfrika" ? <EditCourses/> : ""}
+         <RemoveCourse/>
+        </div>
+        <p className="text-right mr-6 font-bold mt-3 text-lightGreen">{price}</p>
+        <div className="flex flex-col gap-3 mb-8 justify-center mx-4 ">
+          <div className=" flex items-center justify-between">
+            <div>
+              <div className=" flex items-center gap-2">
+                <p className="text-[14px] font-bold">{title}</p>
+              </div>
+
+              <div className=" flex items-center pt-1 gap-2">
+                <p className="text-[13px] font-subtext font-medium">
+                  <FaGraduationCap className="inline mr-1 text-lg" />
+                  {makeSubString(teacher)}
+                </p>
+              </div>
             </div>
-            <div className="py-4">
-              <p className="text-gray-500 text-[14px] font-bold">
-                {details.description}
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <p className="text-[10px] bg-green-200 rounded px-3 font-bold text-green-700 py-1">
-                {details.photoshop}
-              </p>
-              <p className="text-[10px] bg-orange-200 rounded px-3 font-bold text-orange-700 py-1">
-                {details.adobe}
-              </p>
-              <p className="text-[10px] bg-blue-200 rounded px-3 font-bold text-blue-700 py-1">
-                {details.design}
-              </p>
-              <p className="text-[10px] bg-purple-200 rounded px-3 font-bold text-purple-700 py-1">
-                {details.drawing}
-              </p>
-              <p className="text-[10px] bg-red-200 rounded px-3 font-bold text-red-700 py-1">
-                {details.figma}
-              </p>
+            <div className=" flex items-center gap-1 bg-green-200 px-2 py-1 rounded-md">
+              <MdVerified className=" text-green-700" />
+              <p className=" text-green-700 text-[10px]">verified</p>
             </div>
           </div>
-        ))}
+        </div>
       </div>
-    </section>
+    
+    </>
   );
 };
 
-export default courses;
+const Courses = () => {
+  return (
+    <Container>
+      <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
+        {AdminCourses.map((course, index) => (
+          <CourseCard
+            index={index}
+            key={course.id}
+            title={course.title}
+            teacher={course.teacher}
+            description={course.description}
+            courseBanner={course.courseBanner}
+            coursePreview={course.coursePreview}
+            courseVideo={course.courseVideo}
+            price={course.price}
+          />
+        ))}
+      </div>
+    </Container>
+  );
+};
+
+export default Courses;
