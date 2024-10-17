@@ -105,6 +105,7 @@ export async function PUT(req: Request) {
         hoursperday: adminSessionView.hoursperday,
         duration: adminSessionView.duration,
         startTime: adminSessionView.startTime,
+        amt: Number(amt),
       },
     });
     // now we can proceed to making the field merge in the adminsessionView to true,

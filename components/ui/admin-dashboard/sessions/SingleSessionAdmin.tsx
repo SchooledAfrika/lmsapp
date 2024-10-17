@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { IOffers, StudentTeacherInfo } from "./Sessions";
 import Image from "next/image";
@@ -8,9 +8,11 @@ import { useConversion } from "@/data-access/conversion";
 import { MdStarRate } from "react-icons/md";
 import { IoSearchSharp } from "react-icons/io5";
 import { IoIosCheckmark } from "react-icons/io";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Skeleton } from "@mui/material";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TiWarning } from "react-icons/ti";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 
 interface ITeacherInfo {
   teacher: StudentTeacherInfo;
@@ -39,6 +41,7 @@ export const Approval: React.FC<{
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [amt, setAmt] = useState<string | null>(null);
   const { id } = useParams();
+  const queryclient = useQueryClient();
   const mutation = useMutation({
     mutationKey: ["merge-session"],
     mutationFn: async () => {
@@ -54,7 +57,16 @@ export const Approval: React.FC<{
     },
     onSuccess: async (response) => {
       const result = await response.json();
-      console.log(result);
+      if (response.status === 200) {
+        toast.success(result.message);
+        setDialogOpen(false);
+        setTimeout(() => {
+          queryclient.invalidateQueries({ queryKey: ["session-single"] });
+        }, 3000);
+        return;
+      }
+      setSubmitting(false);
+      return toast.error(result.message);
     },
   });
   // below here we perform submitting the action to backend
@@ -117,6 +129,7 @@ export const Approval: React.FC<{
 // component to render teacher basic info
 const ShowTeacher: React.FC<{ details: ITeacherInfo }> = ({ details }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  console.log(details.teacher.rating);
   return (
     <div>
       <div className=" w-full flex items-center justify-center mt-3">
@@ -136,7 +149,11 @@ const ShowTeacher: React.FC<{ details: ITeacherInfo }> = ({ details }) => {
         <p className=" text-black font-bold">{details?.teacher.name}</p>
         <div className=" flex items-center">
           <MdStarRate className=" text-[tomato]" />
-          <p>{details?.teacher.rating}</p>
+          {details.teacher.rating === null ? (
+            <p>0</p>
+          ) : (
+            <p>{details?.teacher.rating}</p>
+          )}
         </div>
         <div className=" mt-4">
           <div onClick={() => setDialogOpen(true)}>
@@ -301,31 +318,55 @@ const TeachersToMerge: React.FC<{ infos: ITeacherInfo }> = ({ infos }) => {
 };
 
 // single row without array
-const SingleRowNoArray: React.FC<{ name: string; value: string | number }> = ({
-  name,
-  value,
-}) => {
+const SingleRowNoArray: React.FC<{
+  name: string;
+  value: string | number | boolean;
+  payment?: boolean;
+}> = ({ name, value, payment }) => {
+  return (
+    <div className=" flex gap-2 items-start text-[14px]">
+      <p className=" font-semibold">{name}:</p>
+      <p className={`${name == "AMT" && " text-green-800 font-semibold"} `}>
+        {value}
+      </p>
+    </div>
+  );
+};
+const SingleRowPayment: React.FC<{
+  name: string;
+  value: boolean;
+}> = ({ name, value }) => {
+  console.log("show value here", value);
   return (
     <div className=" flex gap-2 items-center text-[14px]">
       <p className=" font-semibold">{name}:</p>
-      <p className={`${name == "AMT" && " text-green-800 font-semibold"}`}>
-        {value}
+      <p
+        className={`${
+          value ? "text-green-800 font-bold" : " text-red-700 font-bold"
+        } `}
+      >
+        {String(value)}
       </p>
     </div>
   );
 };
 
 // single row with array
-const SingleRowWithArray: React.FC<{ name: string; value: string[] }> = ({
-  name,
-  value,
-}) => {
+const SingleRowWithArray: React.FC<{
+  name: string;
+  value: string[];
+  payment?: boolean;
+}> = ({ name, value, payment }) => {
   const joined = value?.join(",");
 
   return (
-    <div className=" flex gap-2 items-center text-[14px]">
+    <div className=" flex gap-2 items-start text-[14px]">
       <p className=" font-semibold">{name}:</p>
-      <p className={`${name == "AMT" && " text-green-800 font-semibold"}`}>
+      <p
+        className={`${name == "AMT" && " text-green-800 font-semibold"} ${
+          payment && " text-green-800 font-bold"
+        }`}
+      >
         {joined?.toLowerCase()}
       </p>
     </div>
@@ -371,9 +412,37 @@ const StudentInfos: React.FC<{ infos: IOffers }> = ({ infos }) => {
         />
         <SingleRowNoArray name="Goals" value={infos?.learningGoal} />
         <SingleRowNoArray name="AMT" value={"$" + infos?.amt} />
+        <SingleRowPayment name="Merged" value={infos?.merged} />
         <SingleRowNoArray name="Duration" value={infos?.duration} />
         <SingleRowWithArray name="Days" value={infos?.learningDays} />
         <SingleRowWithArray name="SpecialNeed" value={infos?.specialNeed} />
+      </div>
+    </div>
+  );
+};
+
+// loading for the page
+const LoadingSkeleton = () => {
+  return (
+    <div>
+      <div className=" w-full flex items-center justify-center">
+        <p className=" mb-4 text-black font-bold text-[24px]">
+          Single unmerged session
+        </p>
+      </div>
+      <div className=" w-full md:px-20">
+        <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 border-2 px-4 py-2 rounded-md shadow-md ">
+          <Skeleton
+            variant="rectangular"
+            height={400}
+            className=" w-full rounded-md"
+          />
+          <Skeleton
+            variant="rectangular"
+            height={400}
+            className=" w-full rounded-md"
+          />
+        </div>
       </div>
     </div>
   );
@@ -392,8 +461,13 @@ const SingleSessionAdmin = () => {
       return result;
     },
   });
+  // return loading if is loading
   if (isFetching) {
-    return <p>Loading...</p>;
+    return <LoadingSkeleton />;
+  }
+  // return error if is error
+  if (isError) {
+    return <p>{error.message}</p>;
   }
   const singleSession: IOffers = data;
   return (
@@ -409,6 +483,7 @@ const SingleSessionAdmin = () => {
           <TeachersToMerge infos={singleSession.sectionInfo} />
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };
