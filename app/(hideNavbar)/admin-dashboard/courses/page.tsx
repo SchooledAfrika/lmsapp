@@ -1,7 +1,7 @@
 import React from "react";
 import DashboardPagination from "@/components/DashboardPagination";
 import AddCourses from "@/components/ui/admin-dashboard/courses/AddCourses";
-import Courses from "@/components/ui/admin-dashboard/courses/Courses";
+import CoursesAdmin from "@/components/ui/admin-dashboard/courses/courses";
 
 const page = () => {
   return (
@@ -9,8 +9,8 @@ const page = () => {
       <div className="flex justify-end mt-6">
         <AddCourses />
       </div>
-      <Courses />
-      <DashboardPagination/>
+      <CoursesAdmin />
+      <DashboardPagination />
     </div>
   );
 };
