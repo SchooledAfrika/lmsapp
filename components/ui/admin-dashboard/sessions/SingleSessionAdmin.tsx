@@ -13,6 +13,7 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { TiWarning } from "react-icons/ti";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+import { CgProfile } from "react-icons/cg";
 
 interface ITeacherInfo {
   teacher: StudentTeacherInfo;
@@ -139,7 +140,7 @@ const ShowTeacher: React.FC<{ details: ITeacherInfo }> = ({ details }) => {
       </div>
       <div className=" w-full mt-5 flex flex-col items-center justify-center">
         <Image
-          src={details?.teacher.profilePhoto}
+          src={details?.teacher.profilePhoto!}
           alt="teacherDP"
           width={200}
           height={200}
@@ -318,7 +319,7 @@ const TeachersToMerge: React.FC<{ infos: ITeacherInfo }> = ({ infos }) => {
 };
 
 // single row without array
-const SingleRowNoArray: React.FC<{
+export const SingleRowNoArray: React.FC<{
   name: string;
   value: string | number | boolean;
   payment?: boolean;
@@ -332,7 +333,7 @@ const SingleRowNoArray: React.FC<{
     </div>
   );
 };
-const SingleRowPayment: React.FC<{
+export const SingleRowPayment: React.FC<{
   name: string;
   value: boolean;
 }> = ({ name, value }) => {
@@ -352,7 +353,7 @@ const SingleRowPayment: React.FC<{
 };
 
 // single row with array
-const SingleRowWithArray: React.FC<{
+export const SingleRowWithArray: React.FC<{
   name: string;
   value: string[];
   payment?: boolean;
@@ -375,17 +376,24 @@ const SingleRowWithArray: React.FC<{
 
 // component for students info
 const StudentInfos: React.FC<{ infos: IOffers }> = ({ infos }) => {
+  console.log("this is the show", infos.student.profilePhoto);
   const { handleDate } = useConversion();
   return (
     <div className=" bg-white py-3 px-2 rounded-md">
       <div className=" w-full flex items-center flex-col border-b pb-3">
-        <Image
-          src={infos?.student.profilePhoto}
-          alt="studentpic"
-          width={200}
-          height={200}
-          className=" w-[80px] aspect-square rounded-full"
-        />
+        {infos.student.profilePhoto === null ? (
+          <div className=" w-[80px] aspect-square rounded-full border flex items-center justify-center text-[40px]">
+            <CgProfile />
+          </div>
+        ) : (
+          <Image
+            src={infos?.student.profilePhoto!}
+            alt="studentpic"
+            width={200}
+            height={200}
+            className=" w-[80px] aspect-square rounded-full"
+          />
+        )}
         <p className=" text-[14px] font-semibold">{infos?.student.email}</p>
         <p className=" text-[14px] font-semibold">{infos?.student.name}</p>
       </div>

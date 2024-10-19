@@ -10,7 +10,39 @@ import { OneOnOneList } from "@/constants/oneOnOneList";
 import { useQuery } from "@tanstack/react-query";
 import { MdContentCopy } from "react-icons/md";
 import { useCopy } from "@/data-access/copy";
+import { FaRegClock } from "react-icons/fa";
+import { useConversion } from "@/data-access/conversion";
+import { IoIosRadio } from "react-icons/io";
+import { Skeleton } from "@mui/material";
+import { useRouter } from "next/navigation";
 
+interface IstudentOneonOne {
+  name: string;
+  email: string;
+  profilePhoto: string;
+  status: string;
+}
+// interface for the type we are getting from backend
+interface IAppliedSession {
+  amt: number;
+  classStart: string;
+  createdAt: string;
+  duration: string;
+  grade: string;
+  hoursperday: string;
+  id: string;
+  learningDays: string[];
+  learningGoals: string;
+  specialNeeds: string[];
+  student: IstudentOneonOne;
+  subject: string[];
+  sectionType: string;
+}
+
+interface IoneonOne {
+  AppliedSection: IAppliedSession[];
+  sessionId: string;
+}
 // component to show sessionId or create session btn
 const CreateSession = () => {
   return (
@@ -45,6 +77,159 @@ const ShowSessionId: React.FC<{ sessionId: string }> = ({ sessionId }) => {
   );
 };
 
+const ProfileTop: React.FC<{
+  profilePhoto: string;
+  name: string;
+  email: string;
+  status: string;
+  grade: string;
+}> = ({ profilePhoto, name, status, grade, email }) => {
+  console.log("pix here ", profilePhoto);
+  return (
+    <div className=" flex justify-between items-center">
+      <div className=" flex items-start gap-2">
+        <Image
+          src={profilePhoto}
+          alt="ProfileDp"
+          width={200}
+          height={200}
+          className=" w-[50px] h-[60px] rounded-md"
+        />
+        <div className=" flex flex-col -space-y-[3px]">
+          <p className=" text-[14px] ">{name}</p>
+          <div
+            className={` w-fit px-3 py-1 text-[12px] rounded-md ${
+              status === "Active"
+                ? "bg-green-200 text-green-900"
+                : status === "Pending"
+                ? "bg-yellow-200 text-yellow-600"
+                : "bg-red-200 text-red-900"
+            }  font-bold flex items-center justify-center`}
+          >
+            <p>{status}</p>
+          </div>
+        </div>
+      </div>
+      <div className=" bg-green-200 text-green-800 px-2 py-1 font-bold text-[12px] rounded-md">
+        <p>{grade}</p>
+      </div>
+    </div>
+  );
+};
+const StartMeetingDiv: React.FC<{ subjects: string[]; type: string }> = ({
+  subjects,
+  type,
+}) => {
+  return (
+    <div className=" flex flex-col gap-1 items-center">
+      <div className=" flex  text-[12px] items-center gap-1 px-2 py-1 rounded-md bg-[tomato] w-fit text-white">
+        {subjects.map((item, index) => (
+          <p key={index}>
+            {item}
+            {subjects.length !== index + 1 && <span>,</span>}
+          </p>
+        ))}
+      </div>
+      <div className=" px-3 py-1 rounded-md text-[12px] bg-green-700 text-white">
+        <p>{type}</p>
+      </div>
+    </div>
+  );
+};
+
+const TimeShow: React.FC<{
+  duration: string;
+  start: string;
+  hours: string;
+}> = ({ duration, start, hours }) => {
+  const { handleDate } = useConversion();
+  return (
+    <div className=" flex flex-col items-start gap-2 pl-3">
+      <div className=" flex gap-3 items-center">
+        <FaRegClock className=" text-gray-500" />
+        <p className="text-[14px]">Duration: {duration}</p>
+      </div>
+      <div className=" flex gap-3 items-center">
+        <FaRegClock className=" text-gray-500" />
+        <p className="text-[14px]">Class Starts: {handleDate(start)}</p>
+      </div>
+      <div className=" flex gap-3 items-center">
+        <FaRegClock className=" text-gray-500" />
+        <p className="text-[14px]">hours/day: {hours}hours</p>
+      </div>
+    </div>
+  );
+};
+// start meeting btn
+const ViewDetails: React.FC<{ sessionId: string }> = ({ sessionId }) => {
+  const router = useRouter();
+  return (
+    <div className=" w-full flex gap-2 px-3">
+      <div
+        onClick={() =>
+          router.push(`/teacher-dashboard/one-on-one-section/${sessionId}`)
+        }
+        className=" flex-1 py-3 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 "
+      >
+        <p>View Details</p>
+      </div>
+      <div className=" flex-1 flex gap-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 ">
+        <IoIosRadio />
+        <p>Start Session</p>
+      </div>
+    </div>
+  );
+};
+// each session component here
+const EachSession: React.FC<{ item: IAppliedSession }> = ({ item }) => {
+  return (
+    <div className=" py-2 px-2 rounded-md bg-white shadow-md flex flex-col gap-4">
+      <ProfileTop
+        profilePhoto={item.student.profilePhoto}
+        name={item.student.name}
+        email={item.student.email}
+        status={item.student.status}
+        grade={item.grade}
+      />
+      <StartMeetingDiv subjects={item.subject} type={item.sectionType} />
+      <TimeShow
+        start={item.classStart}
+        duration={item.duration}
+        hours={item.hoursperday}
+      />
+      <ViewDetails sessionId={item.id} />
+    </div>
+  );
+};
+
+export const SessionLoadings = () => {
+  const dummyArrays = new Array(6).fill("");
+  return (
+    <div className=" w-full flex flex-col gap-3 max-ss:mt-[90px]">
+      <div className=" w-full flex items-center justify-end">
+        <Skeleton
+          variant="rectangular"
+          animation="wave"
+          height={35}
+          width={150}
+          className=" rounded-xl"
+        />
+      </div>
+      <div className=" gap-2 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+        {dummyArrays.map((dummy, index) => (
+          <Skeleton
+            key={index}
+            animation="wave"
+            variant="rectangular"
+            height={300}
+            className=" rounded-md"
+          />
+        ))}
+      </div>
+    </div>
+  );
+};
+
 const OneOnOne = () => {
   // here we can now fetch our session
   const { data, isFetching, isError, error } = useQuery({
@@ -55,125 +240,44 @@ const OneOnOne = () => {
       return result;
     },
   });
-  console.log(data);
+
+  if (isFetching) return <SessionLoadings />;
+  if (isError)
+    return (
+      <div>
+        <p>{error.message}</p>
+      </div>
+    );
+
+  const oneOneOneData: IoneonOne = data;
+  console.log(oneOneOneData);
   return (
     <section className="my-[80px] md:my-4">
       <Container>
         <div className="flex justify-end mb-2">
           {data ? (
-            <ShowSessionId sessionId={data?.sessionId} />
+            <ShowSessionId sessionId={oneOneOneData.sessionId} />
           ) : (
             <CreateSession />
           )}
         </div>
-
-        <div className="flex flex-wrap gap-3">
-          {OneOnOneList.map((details, index) => (
-            <div
-              key={index}
-              className="w-full lg:w-fit bg-[#FFFFFF] py-[10px] shadow-lg px-4 rounded-[10px]"
-            >
-              <div className="flex justify-between">
+        <div>
+          {Array.isArray(oneOneOneData.AppliedSection) && (
+            <div>
+              {oneOneOneData.AppliedSection.length === 0 ? (
                 <div>
-                  <div className="flex gap-4">
-                    <Image
-                      src={details.teacherImg}
-                      width={50}
-                      height={50}
-                      alt="Teacher Image"
-                    />
-                    <div>
-                      <p className="font-bold text-[12px]">
-                        {details.teacherName}
-                      </p>
-                      <span className="text-[8px] bg-[#359C714D] rounded px-3 font-bold text-green-700 py-1">
-                        {details.active}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex items-center pt-5 pb-3">
-                    <span className="flex gap-1 items-center font-bold border-r-2 pr-4 text-[12px] mr-4">
-                      <Image
-                        src={details.calIcon}
-                        width={20}
-                        height={20}
-                        alt="Teacher Image"
-                      />
-                      {details.subject}
-                    </span>
-                    <span className="font-bold text-[12px]">
-                      {details.grade}
-                    </span>
-                  </div>
-                  <div className="pb-4 pl-6">
-                    <p className="text-green-600 text-[12px] font-bold">
-                      {details.classType}
-                    </p>
-                  </div>
-                  <div>
-                    <div className="flex gap-3">
-                      <Image
-                        src={details.clockIcon}
-                        width={15}
-                        height={15}
-                        alt="Teacher Image"
-                      />
-                      <span className="font-medium text-[12px]">
-                        {details.duration}
-                      </span>
-                    </div>
-                    <div className="flex gap-3 pt-5 pb-3">
-                      <Image
-                        src={details.clockIcon}
-                        width={15}
-                        height={15}
-                        alt="Teacher Image"
-                      />
-                      <span className="font-medium text-[12px]">
-                        {details.time}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex gap-3">
-                    <Link href={"/teacher-dashboard/students/test"}>
-                      <Button className="border bg-[#FFFFFF] border-green-700 font-medium py-5 text-[12px] px-8 my-3 text-green-700">
-                        {details.viewDetails}
-                      </Button>
-                    </Link>
-                    <Link href={"#"} className="block md:hidden">
-                      <Button className="bg-[#FF6634] py-5 text-[10px] text-[#FFFFFF] px-4 my-3">
-                        <Image
-                          src={details.sessionsIcon}
-                          width={15}
-                          height={15}
-                          className="mr-2"
-                          alt="Start Session"
-                        />
-                        {details.startSession}
-                      </Button>
-                    </Link>
-                  </div>
+                  <p>no item here</p>
                 </div>
-                <div>
-                  <Link href={"#"} className="hidden md:block pt-10">
-                    <Button className="bg-[#FF6634] p-2 text-[10px] text-[#FFFFFF] ml-4">
-                      <Image
-                        src="/svgs/session.svg"
-                        width={15}
-                        height={15}
-                        className="mr-2"
-                        alt="Start Session"
-                      />
-                      {details.startSession}
-                    </Button>
-                  </Link>
+              ) : (
+                <div className=" w-full grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
+                  {oneOneOneData.AppliedSection.map((item, index) => (
+                    <EachSession key={index} item={item} />
+                  ))}
                 </div>
-              </div>
+              )}
             </div>
-          ))}
+          )}
         </div>
-
-        <DashboardPagination />
       </Container>
     </section>
   );

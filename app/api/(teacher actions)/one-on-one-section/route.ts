@@ -77,8 +77,20 @@ export async function GET(req: Request) {
       where: {
         teacherId,
       },
-      include: {
-        AppliedSection: true,
+      select: {
+        AppliedSection: {
+          include: {
+            student: {
+              select: {
+                name: true,
+                profilePhoto: true,
+                status: true,
+                email: true,
+              },
+            },
+          },
+        },
+        sessionId: true,
       },
     });
     console.log(allSections);

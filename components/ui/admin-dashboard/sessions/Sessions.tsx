@@ -13,11 +13,12 @@ import { Skeleton } from "@mui/material";
 import { Noitem } from "@/components/ApplicantsTable";
 import { FiPlus } from "react-icons/fi";
 import { useRouter } from "next/navigation";
+import { CgProfile } from "react-icons/cg";
 
 export interface StudentTeacherInfo {
   id: string;
   name: string;
-  profilePhoto: string;
+  profilePhoto: string | null;
   email: string;
   rating?: number;
 }
@@ -76,13 +77,20 @@ const OfferCard: React.FC<{ item: IOffers }> = ({ item }) => {
     <div className=" bg-white p-3 flex flex-col gap-5 shadow-md">
       <div className=" flex items-center gap-2">
         <div>
-          <Image
-            alt=""
-            src={item.student.profilePhoto}
-            width={200}
-            height={200}
-            className=" w-[40px] aspect-square rounded-full"
-          />
+          {item.student.profilePhoto === null ? (
+            <div className=" w-[40px] aspect-square rounded-full border flex items-center justify-center text-[20px]">
+              <CgProfile />
+            </div>
+          ) : (
+            <Image
+              alt=""
+              src={item.student.profilePhoto!}
+              width={200}
+              height={200}
+              className=" w-[40px] aspect-square rounded-full"
+              priority
+            />
+          )}
         </div>
         <div>
           <p className=" text-[12px]">{item.student.email}</p>
