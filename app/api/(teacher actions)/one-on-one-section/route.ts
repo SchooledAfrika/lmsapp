@@ -69,28 +69,52 @@ export async function POST(req: Request) {
 // here, we get our section
 // while getting our section, we also include the applied sections
 export async function GET(req: Request) {
-  const teacherId = await serverSessionId();
-  if (!teacherId) return notAuthenticated();
+  const userId = await serverSessionId();
+  const role = await serverSessionRole();
+  if (!userId) return notAuthenticated();
+  let oneOneOneSectionId: string | undefined;
 
   try {
-    const allSections = await prisma.oneOnOneSection.findUnique({
+    // since we want to use this route for getting session for both teachers as well as student
+    // then we have to conditionally get the oneononesesion id for teachers which we can use to get all the sesssions
+    // that belongs to that particular teacher
+    // then for student, we can easily get it with there Id
+    if (role === "Teacher") {
+      const teacherInfo = await prisma.oneOnOneSection.findFirst({
+        where: { teacherId: userId },
+        select: {
+          id: true,
+        },
+      });
+      oneOneOneSectionId = teacherInfo?.id;
+    }
+    const allSections = await prisma.appliedSection.findMany({
       where: {
-        teacherId,
+        OR: [{ oneOnOneSectionId: oneOneOneSectionId }, { studentId: userId }],
       },
-      select: {
-        AppliedSection: {
-          include: {
-            student: {
+      include: {
+        student: {
+          select: {
+            name: true,
+            profilePhoto: true,
+            status: true,
+            email: true,
+          },
+        },
+        sectionOwner: {
+          select: {
+            teacher: {
               select: {
                 name: true,
-                profilePhoto: true,
-                status: true,
+                details: true,
                 email: true,
+                profilePhoto: true,
+                phoneNo: true,
+                status: true,
               },
             },
           },
         },
-        sessionId: true,
       },
     });
     console.log(allSections);

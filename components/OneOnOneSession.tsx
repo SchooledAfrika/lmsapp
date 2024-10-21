@@ -15,6 +15,7 @@ import { useConversion } from "@/data-access/conversion";
 import { IoIosRadio } from "react-icons/io";
 import { Skeleton } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { Noitem } from "./ApplicantsTable";
 
 interface IstudentOneonOne {
   name: string;
@@ -35,6 +36,9 @@ interface IAppliedSession {
   learningGoals: string;
   specialNeeds: string[];
   student: IstudentOneonOne;
+  sectionOwner: {
+    teacher: IstudentOneonOne;
+  };
   subject: string[];
   sectionType: string;
 }
@@ -161,34 +165,51 @@ const TimeShow: React.FC<{
   );
 };
 // start meeting btn
-const ViewDetails: React.FC<{ sessionId: string }> = ({ sessionId }) => {
+const ViewDetails: React.FC<{ sessionId: string; isTeacher: boolean }> = ({
+  sessionId,
+  isTeacher,
+}) => {
   const router = useRouter();
+  const navigateLink = () => {
+    if (isTeacher) {
+      router.push(`/teacher-dashboard/one-on-one-section/${sessionId}`);
+    } else {
+      router.push(`/student-dashboard/one-on-one-section/${sessionId}`);
+    }
+  };
   return (
     <div className=" w-full flex gap-2 px-3">
       <div
-        onClick={() =>
-          router.push(`/teacher-dashboard/one-on-one-section/${sessionId}`)
-        }
+        onClick={navigateLink}
         className=" flex-1 py-3 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 "
       >
         <p>View Details</p>
       </div>
       <div className=" flex-1 flex gap-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 ">
         <IoIosRadio />
-        <p>Start Session</p>
+        <p>{isTeacher ? "Start Session" : "Join Session"}</p>
       </div>
     </div>
   );
 };
 // each session component here
-const EachSession: React.FC<{ item: IAppliedSession }> = ({ item }) => {
+const EachSession: React.FC<{ item: IAppliedSession; isTeacher: boolean }> = ({
+  item,
+  isTeacher,
+}) => {
   return (
     <div className=" py-2 px-2 rounded-md bg-white shadow-md flex flex-col gap-4">
       <ProfileTop
-        profilePhoto={item.student.profilePhoto}
-        name={item.student.name}
-        email={item.student.email}
-        status={item.student.status}
+        profilePhoto={
+          isTeacher
+            ? item.student.profilePhoto
+            : item.sectionOwner.teacher.profilePhoto
+        }
+        name={isTeacher ? item.student.name : item.sectionOwner.teacher.name}
+        email={isTeacher ? item.student.email : item.sectionOwner.teacher.email}
+        status={
+          isTeacher ? item.student.status : item.sectionOwner.teacher.status
+        }
         grade={item.grade}
       />
       <StartMeetingDiv subjects={item.subject} type={item.sectionType} />
@@ -197,24 +218,28 @@ const EachSession: React.FC<{ item: IAppliedSession }> = ({ item }) => {
         duration={item.duration}
         hours={item.hoursperday}
       />
-      <ViewDetails sessionId={item.id} />
+      <ViewDetails isTeacher={isTeacher} sessionId={item.id} />
     </div>
   );
 };
 
-export const SessionLoadings = () => {
+export const SessionLoadings: React.FC<{ isTeacher: boolean }> = ({
+  isTeacher,
+}) => {
   const dummyArrays = new Array(6).fill("");
   return (
     <div className=" w-full flex flex-col gap-3 max-ss:mt-[90px]">
-      <div className=" w-full flex items-center justify-end">
-        <Skeleton
-          variant="rectangular"
-          animation="wave"
-          height={35}
-          width={150}
-          className=" rounded-xl"
-        />
-      </div>
+      {isTeacher && (
+        <div className=" w-full flex items-center justify-end">
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            height={35}
+            width={150}
+            className=" rounded-xl"
+          />
+        </div>
+      )}
       <div className=" gap-2 w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
         {dummyArrays.map((dummy, index) => (
           <Skeleton
@@ -230,7 +255,31 @@ export const SessionLoadings = () => {
   );
 };
 
-const OneOnOne = () => {
+const ShowSectionId = () => {
+  const { data, isFetching } = useQuery({
+    queryKey: ["get-session-id"],
+    queryFn: async () => {
+      const response = await fetch("/api/teacher-sessionId");
+      const result = await response.json();
+      return result;
+    },
+  });
+  if (isFetching) return;
+  return (
+    <div className="flex justify-end mb-2">
+      {data ? <ShowSessionId sessionId={data.sessionId} /> : <CreateSession />}
+    </div>
+  );
+};
+
+const SessionHeading = () => {
+  return (
+    <div className=" flex w-full items-center justify-center mb-3 font-semibold text-black">
+      <p>List of your Sessions</p>
+    </div>
+  );
+};
+const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
   // here we can now fetch our session
   const { data, isFetching, isError, error } = useQuery({
     queryKey: ["getSession"],
@@ -241,7 +290,7 @@ const OneOnOne = () => {
     },
   });
 
-  if (isFetching) return <SessionLoadings />;
+  if (isFetching) return <SessionLoadings isTeacher={isTeacher} />;
   if (isError)
     return (
       <div>
@@ -249,29 +298,29 @@ const OneOnOne = () => {
       </div>
     );
 
-  const oneOneOneData: IoneonOne = data;
+  const oneOneOneData: IAppliedSession[] = data;
   console.log(oneOneOneData);
+
   return (
     <section className="my-[80px] md:my-4">
       <Container>
-        <div className="flex justify-end mb-2">
-          {data ? (
-            <ShowSessionId sessionId={oneOneOneData.sessionId} />
-          ) : (
-            <CreateSession />
-          )}
-        </div>
+        {isTeacher && <ShowSectionId />}
+        {!isTeacher && <SessionHeading />}
         <div>
-          {Array.isArray(oneOneOneData.AppliedSection) && (
+          {Array.isArray(oneOneOneData) && (
             <div>
-              {oneOneOneData.AppliedSection.length === 0 ? (
+              {oneOneOneData.length === 0 ? (
                 <div>
-                  <p>no item here</p>
+                  <Noitem desc="No Session at the moment" />
                 </div>
               ) : (
                 <div className=" w-full grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
-                  {oneOneOneData.AppliedSection.map((item, index) => (
-                    <EachSession key={index} item={item} />
+                  {oneOneOneData.map((item, index) => (
+                    <EachSession
+                      isTeacher={isTeacher}
+                      key={index}
+                      item={item}
+                    />
                   ))}
                 </div>
               )}

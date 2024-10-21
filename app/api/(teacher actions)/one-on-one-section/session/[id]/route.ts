@@ -41,6 +41,7 @@ export async function GET(
         StudentExam: true,
       },
     });
+    console.log("checking here...");
     console.log(appliedSection);
     if (!appliedSection)
       return new Response(
@@ -51,7 +52,8 @@ export async function GET(
       where: { id: appliedSection?.oneOnOneSectionId },
       select: { id: true, teacherId: true },
     });
-    if (session?.teacherId !== userId || appliedSection.studentId !== userId) {
+    if (session?.teacherId !== userId && appliedSection.studentId !== userId) {
+      console.log(session?.teacherId);
       return new Response(JSON.stringify({ message: "ilegal parameter!!!" }), {
         status: 401,
       });

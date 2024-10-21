@@ -23,12 +23,37 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { IoMdAdd } from "react-icons/io";
 import { useRouter } from "next/navigation";
+import { Iadd } from "./AddTest";
+import { FaBedPulse } from "react-icons/fa6";
 
-interface IaddResource {
-  classId: string;
-}
+// the trigger button for adding resources in session
+const TriggerForSession = () => {
+  return (
+    <div className=" flex items-center gap-1 cursor-pointer">
+      <p className=" text-[14px] font-bold text-green-800">Add</p>
+      <div className=" w-[25px] aspect-square bg-green-700 items-center justify-center flex rounded-full text-white">
+        <IoMdAdd className=" text-[18px] font-bold" />
+      </div>
+    </div>
+  );
+};
 
-const AddResource: React.FC<IaddResource> = ({ classId }) => {
+// the trigger button for adding resources to class
+const TriggerForClass = () => {
+  return (
+    <div className=" text-[13px] flex items-center  font-semibold">
+      <Layers3 className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
+      <p>Add Resource</p>
+    </div>
+  );
+};
+
+const AddResource: React.FC<Iadd> = ({
+  classId,
+  setDialogOpen,
+  isClass,
+  dialogueOpen,
+}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedResourceId, setselectedResourceId] = useState<string>();
   const router = useRouter();
@@ -46,7 +71,7 @@ const AddResource: React.FC<IaddResource> = ({ classId }) => {
   const queryClient = useQueryClient();
 
   // Mutation to handle the addition of resource
-  const mutation = useMutation({
+  const addClassResources = useMutation({
     mutationFn: async () => {
       console.log(classId, selectedResourceId);
       const result = await fetch(`/api/class/resources`, {
@@ -63,6 +88,37 @@ const AddResource: React.FC<IaddResource> = ({ classId }) => {
       queryClient.invalidateQueries({ queryKey: ["addResource"] });
       setLoading(false);
       if (result.ok) {
+        setDialogOpen(false);
+        toast.success("Resource successfully added");
+      } else {
+        toast.error("Error adding resource");
+      }
+    },
+    onError: (error) => {
+      console.error("Error adding resource:", error);
+      setLoading(false);
+      toast.error("Error adding resource");
+    },
+  });
+  // Mutation to handle the addition of resource
+  const addSessionResources = useMutation({
+    mutationFn: async () => {
+      console.log(classId, selectedResourceId);
+      const result = await fetch(`/api/one-on-one-section/resources`, {
+        method: "POST",
+        body: JSON.stringify({
+          sectionId: classId,
+          resourceId: selectedResourceId,
+        }),
+      });
+      return result;
+    },
+
+    onSuccess: async (result) => {
+      queryClient.invalidateQueries({ queryKey: ["single-section-show"] });
+      setLoading(false);
+      if (result.ok) {
+        setDialogOpen(false);
         toast.success("Resource successfully added");
       } else {
         toast.error("Error adding resource");
@@ -81,7 +137,11 @@ const AddResource: React.FC<IaddResource> = ({ classId }) => {
       return toast.error("please select a resource");
     }
     setLoading(true);
-    mutation.mutate();
+    if (isClass) {
+      addClassResources.mutate();
+    } else {
+      addSessionResources.mutate();
+    }
   };
 
   const handlePush = () => {
@@ -104,12 +164,9 @@ const AddResource: React.FC<IaddResource> = ({ classId }) => {
   }
 
   return (
-    <Dialog>
+    <Dialog open={dialogueOpen} onOpenChange={() => setDialogOpen(false)}>
       <DialogTrigger asChild>
-        <p className="inline text-[13px]  font-semibold">
-          <Layers3 className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
-          Add Resource
-        </p>
+        {isClass ? <TriggerForClass /> : <TriggerForSession />}
       </DialogTrigger>
 
       <DialogContent className="sm:w-[600px] w-[380px] font-subtext">

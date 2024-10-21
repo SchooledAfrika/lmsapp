@@ -2,11 +2,15 @@
 // her can also delete the resources add to an particular one on one section
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
+import { serverSessionId } from "@/prisma/utils/utils";
 
 // here, we can add a resources to the one on one section
 export async function POST(req: Request) {
-  // TODO: remember to change the teacherId here to nextauth id
-  const { teacherId, resourceId, sectionId } = await req.json();
+  console.log("entered here");
+  const teacherId = await serverSessionId();
+  if (!teacherId) return notAuthenticated();
+  const { resourceId, sectionId } = await req.json();
+  console.log(resourceId);
   if (!teacherId) return notAuthenticated();
   // lets get the resouces and make sure is the owner that want to add it to a section
   const getArticle = await prisma.teachersArticle.findUnique({

@@ -13,7 +13,6 @@ import Link from "next/link";
 import EditCourses from "./EditCourses";
 import RemoveCourse from "./RemoveCourse";
 
-
 interface Props {
   index: number;
   title: string;
@@ -47,10 +46,12 @@ const CourseCard = ({
             height={200}
           />
 
-         {teacher === "SchooledAfrika" ? <EditCourses/> : ""}
-         <RemoveCourse/>
+          {teacher === "SchooledAfrika" ? <EditCourses /> : ""}
+          <RemoveCourse />
         </div>
-        <p className="text-right mr-6 font-bold mt-3 text-lightGreen">{price}</p>
+        <p className="text-right mr-6 font-bold mt-3 text-lightGreen">
+          {price}
+        </p>
         <div className="flex flex-col gap-3 mb-8 justify-center mx-4 ">
           <div className=" flex items-center justify-between">
             <div>
@@ -72,12 +73,11 @@ const CourseCard = ({
           </div>
         </div>
       </div>
-    
     </>
   );
 };
 
-const Courses = () => {
+const CoursesAdmin = () => {
   return (
     <Container>
       <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
@@ -99,4 +99,4 @@ const Courses = () => {
   );
 };
 
-export default Courses;
+export default CoursesAdmin;
