@@ -1,8 +1,8 @@
-import ParentModuleTestOne from "@/components/ParentModuleTestOne";
+import ParentTestOverview from "@/components/ParentTestOverview";
 import React from "react";
 
 const page = () => {
-  return <ParentModuleTestOne />;
+  return <ParentTestOverview />;
 };
 
 export default page;

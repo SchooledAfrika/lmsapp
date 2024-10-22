@@ -19,6 +19,8 @@ const StudentExam = () => {
   const queryClient = useQueryClient();
   const [loading, setLoading] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
+  const [score, setScore] = useState<string | null>(null);
+
   const searchParams = useSearchParams();
   const id = searchParams.get("examId"); 
 
@@ -92,7 +94,9 @@ const StudentExam = () => {
       queryClient.invalidateQueries({ queryKey: ["getStudentExams"] });
       if (result.ok) {
         const body = await result.json();
-        //console.log(body);
+        const score = body.message;
+        console.log(score);
+        setScore(score);
         setLoading(false);
         reset();
         toast.success("You have successfully submitted exam!!");
@@ -185,6 +189,7 @@ const StudentExam = () => {
 
   return (
     <Container className="">
+
       <div className=" w-full flex items-center mb-6 justify-between">
         <p className=" font-bold text-black">Details</p>
         <Backwards />
@@ -192,7 +197,16 @@ const StudentExam = () => {
       {queryLoading ? (
         <p>Loading exam data...</p>
       ) : (
-        <form className="w-full mt-6" onSubmit={handleSubmit(runSubmit)}>
+        <div className="flex md:flex-row flex-col">
+          {score !== null && (
+            <div>
+              <p className="my-2 font-semibold text-[16px]">Your Score</p>
+          <div className="border-2  border-lightGreen flex place-items-center w-[100px] h-[100px] rounded-full p-2">
+            <span className="mx-auto text-2xl font-bold text-lightGreen">{score} </span>
+          </div>
+          </div>
+           )}
+        <form className="w-full flex-5 mt-6" onSubmit={handleSubmit(runSubmit)}>
           <div className="flex flex-col w-full md:w-3/4 md:mx-auto ">
             <label className="font-bold text-[18px] pb-3 mt-6 text-center">
               Answer Your Exams
@@ -274,6 +288,7 @@ const StudentExam = () => {
             <small className="text-red-600">Please complete all fields</small>
           )}
         </form>
+        </div>
       )}
 
       <ToastContainer />

@@ -183,3 +183,13 @@
 
 }
 
+.ward-status-container {
+  max-height: 300px; /* Initial height when showing few items */
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out; /* Smooth transition for height */
+}
+
+.ward-status-expanded {
+  min-height: 500px; /* Adjust this height when showing more items */
+}
+

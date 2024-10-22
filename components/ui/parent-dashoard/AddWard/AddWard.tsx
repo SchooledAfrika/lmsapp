@@ -32,11 +32,16 @@ import "react-toastify/dist/ReactToastify.css";
 import { BsPlusSquare } from "react-icons/bs";
 import { Eye, EyeOff } from "lucide-react";
 
+interface AddWardProps {
+ 
+  onProceed: () => void; // Function to refresh the dashboard
+}
+
 export type IaddWard = z.infer<typeof addWardSchema>;
-const AddWard = () => {
+const AddWard: React.FC<AddWardProps> = ({ onProceed }) => {
   const [loadingAdd, setLoadingAdd] = useState<boolean>(false); // For the Add Ward button
   const [loadingProceed, setLoadingProceed] = useState<boolean>(false); // For the Proceed button
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(true); // Controls the dialog state
+  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false); // Controls the dialog state
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const router = useRouter();
   const [selectedWardId, setSelectedWardId] = useState<string | null>(null);
@@ -52,7 +57,8 @@ const AddWard = () => {
   // Handle option selection
   const handleSelect = (wardId: string) => {
     setSelectedWardId(wardId);
-    localStorage.setItem("selectedWardId", wardId); // Store the selected ID in localStorage
+    localStorage.setItem("selectedWardId", wardId);
+   
   };
 
   const {
@@ -75,7 +81,7 @@ const AddWard = () => {
       return result;
     },
   });
-
+ 
   //console.log(data);
 
   // Query client instance
@@ -122,11 +128,6 @@ const AddWard = () => {
     mutation.mutate(data);
   };
 
-  // loading message here
-  if (isLoading) {
-    return <p>loading...</p>;
-  }
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
@@ -135,7 +136,9 @@ const AddWard = () => {
 
   const handleMoveToWardDashboard = () => {
     if (selectedWardId) {
+      onProceed();
       setLoadingProceed(true); // Start loading for Proceed button
+      window.dispatchEvent(new Event("storage"));
 
       // Proceed to the dashboard
       router.push(`/parents-dashboard`);
@@ -153,9 +156,9 @@ const AddWard = () => {
     <div className="font-header ">
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
-          <p className="inline text-[13px] text-center font-semibold">
+          <p className="text-[13px] flex flex-col md:ml-3 px-4 mt-3 md:mt-0 text-center   py-4 bg-white rounded-md  font-semibold">
             <BsPlusSquare className="w-[40px] h-[40px]  mx-auto bg-lightGreen text-white border border-white" />
-            Add Ward
+            Add or Switch Ward
           </p>
         </DialogTrigger>
 
@@ -163,14 +166,14 @@ const AddWard = () => {
           <ScrollArea className="h-[500px] w-full ">
             <DialogHeader>
               <DialogTitle className="text-3xl font-bold">
-                ADD OR SELECT WARD
+                ADD OR SWITCH WARD
               </DialogTitle>
             </DialogHeader>
 
             <div className="grid gap-4 font-header py-4">
               <div className="grid items-center font-header gap-4">
                 <p className="text-center font-bold text-[20px] my-6">
-                  SELECT WARD
+                  SWITCH WARD
                 </p>
                 <div className="flex flex-col">
                   <Select onValueChange={handleSelect}>
