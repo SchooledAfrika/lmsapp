@@ -31,7 +31,6 @@ export async function POST(req: Request) {
   // lets check if the kyc is approved first
   // if is not approved, the send an error message to the user
   const doneKyc = await checkKyc(teacherId!);
-  console.log(doneKyc);
   if (!doneKyc || doneKyc !== "APPROVED") {
     console.log("entered here");
     return new Response(

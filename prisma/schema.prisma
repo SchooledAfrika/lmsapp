@@ -69,6 +69,9 @@ model Teacher {
   reviewers            String[]             @db.ObjectId
   status               TeacherStatus        @default(Pending)
   TeachersPlans        TeachersPlans?
+  Courses              Courses[]
+  PurchasedCourses     PurchasedCourses[]
+  Revenew              Revenew[]
 }
 
 // kyc for teachers appears below
@@ -133,6 +136,7 @@ model Student {
   country            String?
   parent             Parents?             @relation(fields: [parentsId], references: [id], onDelete: Cascade)
   parentsId          String?              @db.ObjectId
+  PurchasedCourses   PurchasedCourses[]
 }
 
 // creating the school model
@@ -374,6 +378,59 @@ model GetInTouch {
   phoneNo   String
   email     String
   message   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+}
+
+// below is the model for courses created by teacher and byAdmin also
+// this will be in form of one to many relationship with the teachers
+model Courses {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  price        Int
+  banner       String
+  previewVideo String
+  mainVideo    String
+  subject      String
+  teacher      Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId    String   @db.ObjectId
+  byAdmin      Boolean  @default(false)
+  sellCount    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+}
+
+// below is the model for courses bought by a particular student
+// once a student purchases a courses, most of the details will be available here
+// including the detailVide or mainVideo
+model PurchasedCourses {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  price        Int
+  banner       String
+  previewVideo String
+  mainVideo    String
+  subject      String
+  // adding a relationship here to connect to teacher that owns the course
+  // so we can be able to fetch and display any neccessay information for students
+  teacher      Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId    String   @db.ObjectId
+  // also adding the relationship between the student and the purchased courses
+  student      Student  @relation(fields: [studentId], references: [id])
+  studentId    String   @db.ObjectId
+  byAdmin      Boolean
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+}
+
+// below we create a revenew model 
+// so we can actually keep records of the money a teacher is making in some areas of their sells
+model Revenew {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  amt       Int
+  type      String
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  teacherId String   @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 }
