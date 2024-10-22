@@ -194,7 +194,7 @@ export const StudentNavbar: SchoolNavType[] = [
 export const ParentsNavbar: SchoolNavType[] = [
   {
     title: "Welcome to Your Dashboard",
-    description: "Let's discover and shape the next generation of lifelong learners together in our digital world.",
+    description: "Let's discover and shape the next generation of lifelong learners together.",
     path: "overview",
   },
   {
@@ -217,7 +217,7 @@ export const ParentsNavbar: SchoolNavType[] = [
   },
   {
     title: "Assessments",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Keep track of your ward's assessments.",
     path: "assessment",
     subDetails: {
       title: " Single student here",
