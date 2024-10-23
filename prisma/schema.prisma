@@ -396,6 +396,8 @@ model Courses {
   teacherId    String   @db.ObjectId
   byAdmin      Boolean  @default(false)
   sellCount    Int      @default(0)
+  details      String
+  grade        String
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
 }

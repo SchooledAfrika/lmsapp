@@ -6,6 +6,7 @@ import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import {
   checkKyc,
   checkPlans,
+  getQuery,
   serverSessionId,
   serverSessionRole,
 } from "@/prisma/utils/utils";
@@ -55,9 +56,36 @@ export async function POST(req: Request) {
 
 // below here we will create an endpoint for,  which will be displayed in the website for everyone to purchase the courses
 export async function GET(req: Request) {
+  const page = getQuery(req.url, "page");
+  // get the lower border for slice
+  const Start = Number(page) - 1;
+  const skipAmt = Start * 3;
+  const takeAmt = 20;
   try {
     const allCourses = await prisma.courses.findMany({
+      skip: skipAmt,
+      take: takeAmt,
       orderBy: [{ byAdmin: "desc" }, { sellCount: "desc" }],
+      select: {
+        id: true,
+        price: true,
+        title: true,
+        details: true,
+        previewVideo: true,
+        subject: true,
+        sellCount: true,
+        byAdmin: true,
+        createdAt: true,
+        grade: true,
+        teacher: {
+          select: {
+            profilePhoto: true,
+            status: true,
+            name: true,
+            rating: true,
+          },
+        },
+      },
     });
     return new Response(JSON.stringify(allCourses), { status: 200 });
   } catch (error) {
