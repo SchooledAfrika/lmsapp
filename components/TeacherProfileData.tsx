@@ -30,6 +30,7 @@ const TeacherProfileData: React.FC<IteacherOneOnOneSub> = ({
   clearErrors,
 }) => {
   const { data } = useSession();
+  console.log(data?.user);
   watch("aboutTutor");
   return (
     <section>
@@ -40,11 +41,12 @@ const TeacherProfileData: React.FC<IteacherOneOnOneSub> = ({
             src={data?.user.image!}
             width={200}
             height={200}
-            className="rounded-full w-[100px] h-[100px] "
+            className="rounded-full w-[70px] aspect-square  "
             alt="Teacher Picture"
+            priority
           />
           <div>
-            <span className="text-[16px] font-bold">David Olushola</span>
+            <span className="text-[16px] font-bold">{data?.user.name}</span>
           </div>
         </div>
         <textarea

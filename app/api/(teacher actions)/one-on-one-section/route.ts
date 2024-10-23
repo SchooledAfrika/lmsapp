@@ -3,11 +3,18 @@
 // then students can apply to this one on on section via the appliedSection
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated } from "@/prisma/utils/error";
-import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
+import {
+  checkKyc,
+  checkPlans,
+  serverSessionId,
+  serverSessionRole,
+  generateId,
+} from "@/prisma/utils/utils";
 
 // here we first make a post request
 // there for creating the new one to one section
 export async function POST(req: Request) {
+  // check for authentication of the teacher
   const teacherId = await serverSessionId();
   const role = await serverSessionRole();
   const payload = await req.json();
@@ -19,6 +26,22 @@ export async function POST(req: Request) {
       }),
       { status: 401 }
     );
+  // check for the kyc of the teacher here
+  const doneKyc = await checkKyc(teacherId!);
+  if (!doneKyc || doneKyc !== "APPROVED") {
+    return new Response(
+      JSON.stringify({ message: "no kyc or kyc is not approved" }),
+      { status: 401 }
+    );
+  }
+  // check if the user is in free plan, and prevent him from creating a section profile
+  // const teacherPlan = await checkPlans(teacherId!);
+  // if (teacherPlan === "FREE") {
+  //   return new Response(
+  //     JSON.stringify({ message: "subscribe for a plans, to create a section" }),
+  //     { status: 402 }
+  //   );
+  // }
   // now, lets proceed and create the section
   try {
     // lets check if the teacher already have a session profile
@@ -32,7 +55,7 @@ export async function POST(req: Request) {
       );
     }
     await prisma.oneOnOneSection.create({
-      data: { teacherId: teacherId, ...payload },
+      data: { teacherId: teacherId, sessionId: generateId(), ...payload },
     });
     return new Response(
       JSON.stringify({ message: "section created successfully" }),
@@ -46,17 +69,55 @@ export async function POST(req: Request) {
 // here, we get our section
 // while getting our section, we also include the applied sections
 export async function GET(req: Request) {
-  const teacherId = await serverSessionId();
+  const userId = await serverSessionId();
+  const role = await serverSessionRole();
+  if (!userId) return notAuthenticated();
+  let oneOneOneSectionId: string | undefined;
 
   try {
-    const allSections = await prisma.oneOnOneSection.findUnique({
+    // since we want to use this route for getting session for both teachers as well as student
+    // then we have to conditionally get the oneononesesion id for teachers which we can use to get all the sesssions
+    // that belongs to that particular teacher
+    // then for student, we can easily get it with there Id
+    if (role === "Teacher") {
+      const teacherInfo = await prisma.oneOnOneSection.findFirst({
+        where: { teacherId: userId },
+        select: {
+          id: true,
+        },
+      });
+      oneOneOneSectionId = teacherInfo?.id;
+    }
+    const allSections = await prisma.appliedSection.findMany({
       where: {
-        teacherId,
+        OR: [{ oneOnOneSectionId: oneOneOneSectionId }, { studentId: userId }],
       },
       include: {
-        AppliedSection: true,
+        student: {
+          select: {
+            name: true,
+            profilePhoto: true,
+            status: true,
+            email: true,
+          },
+        },
+        sectionOwner: {
+          select: {
+            teacher: {
+              select: {
+                name: true,
+                details: true,
+                email: true,
+                profilePhoto: true,
+                phoneNo: true,
+                status: true,
+              },
+            },
+          },
+        },
       },
     });
+    console.log(allSections);
     return new Response(JSON.stringify(allSections), { status: 200 });
   } catch (error) {
     console.log(error);

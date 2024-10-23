@@ -1,0 +1,83 @@
+================================================================================================================
+endpoint for teacher and admin to create a course
+================================================================================================================
+route: /api/courses-teacher
+method: POST
+payload:{
+    title:String,
+    price:number,
+    banner:String,
+    previewVideo: String,
+    mainVideo:  String,
+    subject:String,
+    details:String,
+    grade:String
+}
+comment: modify your Ui to include any field that is not here already
+
+================================================================================================================
+endpoint for getting courses from the frontend
+================================================================================================================
+route: /api/courses-teacher?page=number
+method: GET
+comment: the query parameter page should be a number, start with 1.
+
+
+================================================================================================================
+endpoint for normal teachers to get the courses they created
+================================================================================================================
+route: /api/created-course-byteacher
+method: GET
+comment: this endpoint should be used in the teachers dashboard for getting all the courses they created,
+only for the teachers dashboard
+
+================================================================================================================
+endpoint for normal teachers to update their courses
+================================================================================================================
+route: /api/created-course-byteacher
+method:PUT,
+payload:{
+    id:String// id of the course
+    ...others// include the fields you want update
+}
+comment: id is compulsory, then others is any other field you wish to update. example title, grade and so on.
+
+================================================================================================================
+endpoint for normal teachers to delete their courses
+================================================================================================================
+route: /api/created-course-byteacher
+method: delete
+payload: {
+    id:String// id of the course
+}
+comment: id of the course you want to delete 
+
+
+================================================================================================================
+endpoint for admin to get all the courses that was created by admin
+================================================================================================================
+route: /api/courses-from-admin
+method: GET
+comment: this endpoint should be used in the admin dashboard, this will return all the courses created by admins
+whether is the current admin or another admin
+
+================================================================================================================
+endpoint for admin to update the created courses
+================================================================================================================
+route: /api/courses-from-admin
+method:PUT,
+payload:{
+    id:String// id of the course
+    ...others// include the fields you want update
+}
+comment: id is compulsory, then others is any other field you wish to update. example title, grade and so on.
+
+================================================================================================================
+endpoint for admin to delete the created courses
+================================================================================================================
+route: /api/courses-from-admin
+method: delete
+payload: {
+    id:String// id of the coursess
+}
+comment: id of the course you want to delete 

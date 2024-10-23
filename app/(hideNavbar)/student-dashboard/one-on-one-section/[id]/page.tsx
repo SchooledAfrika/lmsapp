@@ -1,12 +1,12 @@
-import SingleSession from '@/components/ui/student-dashboard/private-session/SingleSession'
-import React from 'react'
+import SingleSessionShow from "@/components/SingleSessionShow";
+import React from "react";
 
 const page = () => {
   return (
-    <div>
-        <SingleSession/>
+    <div className=" pt-4">
+      <SingleSessionShow isTeacher={false} />
     </div>
-  )
-}
+  );
+};
 
-export default page
+export default page;

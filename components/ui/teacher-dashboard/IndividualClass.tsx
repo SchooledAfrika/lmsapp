@@ -22,6 +22,7 @@ interface Idelete {
 }
 
 const IndividualClass: React.FC<Idelete> = ({ dataId }) => {
+  const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -42,11 +43,24 @@ const IndividualClass: React.FC<Idelete> = ({ dataId }) => {
             </div>
             <hr className="bg-black" />
             <div className="flex justify-start">
-             <AddResource classId={dataId}/>
+              <AddResource
+                setDialogOpen={setDialogOpen}
+                dialogueOpen={dialogOpen}
+                classId={dataId}
+                isClass={true}
+              />
             </div>
             <hr className="bg-black" />
-            <div className="flex justify-start">
-              <AddTest classId={dataId}/>
+            <div
+              onClick={() => setDialogOpen(true)}
+              className="flex justify-start"
+            >
+              <AddTest
+                setDialogOpen={setDialogOpen}
+                dialogueOpen={dialogOpen}
+                classId={dataId}
+                isClass={true}
+              />
             </div>
             <hr className="bg-black" />
             <div className="flex justify-start">

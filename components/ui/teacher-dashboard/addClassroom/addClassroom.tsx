@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,13 +43,18 @@ import PreviewItem from "../../PreviewItem";
 import { useCloudinary } from "@/data-access/cloudinary";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { CaseUpper } from "lucide-react";
+import { CommonDashboardContext } from "@/providers/Statecontext";
 
-const AddClassroom = () => {
+const AddClassroom: React.FC<{
+  showModel: boolean;
+  setShowmodel: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ showModel, setShowmodel }) => {
   const [loading, setloading] = useState<boolean>(false);
   const [banner, setBanner] = useState<string | undefined>(undefined);
+  const { setShowPricing } = useContext(CommonDashboardContext);
   const [schedules, setSchedules] = useState<string[]>([]);
   const { imageUpload } = useCloudinary();
+
   // react hook form instance below here
   const {
     register,
@@ -82,16 +87,22 @@ const AddClassroom = () => {
       return result;
     },
     onSuccess: async (result) => {
+      const message = await result.json();
       queryClient.invalidateQueries({ queryKey: ["add"] });
+      setShowmodel(false);
       if (result.ok) {
-        const body = await result.json();
         setloading(false);
         reset();
-        return toast.success(body.message);
-      } else {
-        setloading(false);
-        return toast.error("error creating class");
+        return toast.success(message.message);
       }
+      if (result.status === 401) {
+        setloading(false);
+        return toast.error(message.message);
+      }
+
+      setloading(false);
+      toast.error(message.message);
+      return setShowPricing(true);
     },
   });
   // here we validate the datas in our form submission
@@ -111,7 +122,7 @@ const AddClassroom = () => {
     // checking if the scheduled day is already in the array
     // if there is remove, else add it
     let arrayInstance = [...schedules];
-    console.log(schedules)
+    console.log(schedules);
     const checkSchedule = arrayInstance.find((value) => value === item);
     if (checkSchedule) {
       const removedSchedule = arrayInstance.filter((value) => value !== item);
@@ -144,7 +155,7 @@ const AddClassroom = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog open={showModel} onOpenChange={() => setShowmodel(false)}>
       <DialogTrigger asChild>
         <Button className="bg-lightGreen mt-3 bg-none border-none rounded-lg hover:bg-green-700  text-white text-[13px] font-semibold  px-3    py-2 text-start lg:block">
           <SiGoogleclassroom className="sm:inline-block text-[18px] hidden mr-1" />
@@ -377,7 +388,6 @@ const AddClassroom = () => {
                 <label className="font-bold text-[16px]">Class Schedule</label>
                 <div className="grid grid-cols-3 gap-2 w-full rounded-md border p-3 ">
                   {Schedules.map((schedule, index) => (
-                    
                     <div
                       onClick={() => handleSchedule(schedule)}
                       key={index}
@@ -489,7 +499,6 @@ const AddClassroom = () => {
                     placeholder="class banner"
                     className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
                   />
-                  
                 </div>
               ) : (
                 <PreviewItem handleRemove={handleRemove} imageItem={banner} />
