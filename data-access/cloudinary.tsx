@@ -1,5 +1,3 @@
-// this is a react hook function that handles everything about uploading things to cloudinary
-
 export const useCloudinary = () => {
   const imageUpload = async (image: Blob): Promise<string | undefined> => {
     const formData = new FormData();
@@ -16,10 +14,30 @@ export const useCloudinary = () => {
       const responseBody = await result.json();
       const imgUrl = responseBody.secure_url;
       return imgUrl;
-      //    here we send a put request to update the users profile photo only
     } catch (error) {
       console.log(error);
     }
   };
-  return { imageUpload };
+
+  const videoUpload = async (video: Blob): Promise<string | undefined> => {
+    const formData = new FormData();
+    formData.append("file", video);
+    formData.append("upload_preset", "school_afrika_images");
+    try {
+      const result = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_cloudinaryName}/video/upload`,
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+      const responseBody = await result.json();
+      const videoUrl = responseBody.secure_url;
+      return videoUrl;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return { imageUpload, videoUpload }; // Return both functions
 };

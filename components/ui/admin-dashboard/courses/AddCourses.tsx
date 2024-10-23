@@ -30,14 +30,15 @@ import { MdOutlineClass } from "react-icons/md";
 
 const AddCourses = () => {
   const [loading, setloading] = useState<boolean>(false);
-  const [banner, setBanner] = useState<string | undefined>(undefined);
-  const [previewVideo, setPreviewVideo] = React.useState<string | undefined>(
+  const [bannerImg, setBannerImg] = useState<string | undefined>(undefined);
+  const [coursePreviewVideo, setCoursePreviewVideo] = React.useState<string | undefined>(
     undefined
   );
   const [courseMainVideo, setCourseMainVideo] = React.useState<
     string | undefined
   >(undefined);
   const { imageUpload } = useCloudinary();
+  const { videoUpload } = useCloudinary();
   // react hook form instance below here
   const {
     register,
@@ -57,7 +58,7 @@ const AddCourses = () => {
     mutationKey: ["postCourse"],
     mutationFn: async (data: IaddingCourse) => {
       // console.log(data);
-      const result = await fetch("", {
+      const result = await fetch("/api/courses-teacher", {
         method: "POST",
         body: JSON.stringify({
           ...data,
@@ -84,39 +85,41 @@ const AddCourses = () => {
   // only if there is data, before the mutation function is called
   const runSubmit: SubmitHandler<IaddingCourse> = async (data) => {
     setloading(true);
+    console.log(data);
     // converting the selected image to a blob and uploading to cloudinary
     // using the useCloudinary custom hook;
-    const bannerImageBlob = new Blob([data.courseBanner[0]]);
+    const bannerImageBlob = new Blob([data.banner[0]]);
     const bannerImageUrl = await imageUpload(bannerImageBlob);
-    data.courseBanner = bannerImageUrl;
+    data.banner = bannerImageUrl;
 
     //Convert the coursePreview Video too
-    const bannerVideoPreviewBlob = new Blob([data.coursePreview[0]]);
-    const bannerVideoPreviewUrl = await imageUpload(bannerVideoPreviewBlob);
-    data.coursePreview = bannerVideoPreviewUrl;
+    const bannerVideoPreviewBlob = new Blob([data.previewVideo[0]]);
+    const bannerVideoPreviewUrl = await videoUpload(bannerVideoPreviewBlob);
+    data.previewVideo = bannerVideoPreviewUrl;
 
     //Convert the course Video
-    const bannerVideoBlob = new Blob([data.courseVideo[0]]);
-    const bannerVideoUrl = await imageUpload(bannerVideoBlob);
-    data.courseVideo = bannerVideoUrl;
+    const bannerVideoBlob = new Blob([data.mainVideo[0]]);
+    const bannerVideoUrl = await videoUpload(bannerVideoBlob);
+    data.mainVideo = bannerVideoUrl;
     mutation.mutate(data);
   };
+  
 
   // handles remove image that is already present
   // if the user decides to remove it
   const handleRemove = () => {
-    setBanner(undefined);
-    setValue("courseBanner", "");
+    setBannerImg(undefined);
+    setValue("banner", "");
   };
   // the function to generate a url for the picture
   const handleShowPix = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
     const file = e.target.files[0];
-    setValue("courseBanner", e.target.files);
+    setValue("banner", e.target.files);
     const blob = new Blob([file]);
     const localUrl = URL.createObjectURL(blob);
-    setBanner(localUrl);
-    clearErrors("courseBanner");
+    setBannerImg(localUrl);
+    clearErrors("banner");
   };
 
   // Function to handle video preview for coursePreview
@@ -125,10 +128,10 @@ const AddCourses = () => {
 
     const file = e.target.files[0]; // Get the first selected file
 
-    setValue("coursePreview", e.target.files); // Set the file list in the form
+    setValue("previewVideo", e.target.files); // Set the file list in the form
     const localUrl = URL.createObjectURL(file); // Create a local URL for video preview
-    setPreviewVideo(localUrl); // Update the state to show the preview
-    clearErrors("coursePreview"); // Clear any previous errors related to coursePreview
+    setCoursePreviewVideo(localUrl); // Update the state to show the preview
+    clearErrors("previewVideo"); // Clear any previous errors related to coursePreview
   };
 
   // Function to handle video preview for courseVideo
@@ -137,10 +140,10 @@ const AddCourses = () => {
 
     const file = e.target.files[0]; // Get the first selected file
 
-    setValue("courseVideo", e.target.files); // Set the file list in the form
+    setValue("mainVideo", e.target.files); // Set the file list in the form
     const localUrl = URL.createObjectURL(file); // Create a local URL for video preview
     setCourseMainVideo(localUrl); // Update the state to show the preview
-    clearErrors("courseVideo"); // Clear any previous errors related to courseVideo
+    clearErrors("mainVideo"); // Clear any previous errors related to courseVideo
   };
 
   return (
@@ -177,20 +180,48 @@ const AddCourses = () => {
                   <small className="text-red-600">{errors.title.message}</small>
                 )}
               </div>
+              <div className=" flex flex-col">
+                <Input
+                  id="name"
+                  type="text"
+                  {...register("subject")}
+                  name="subject"
+                  onChange={() => clearErrors("subject")}
+                  placeholder="Subject"
+                  className="col-span-6 w-full"
+                />
+                {errors.subject && (
+                  <small className="text-red-600">{errors.subject.message}</small>
+                )}
+              </div>
+              <div className=" flex flex-col">
+                <Input
+                  id="name"
+                  type="text"
+                  {...register("grade")}
+                  name="grade"
+                  onChange={() => clearErrors("grade")}
+                  placeholder="Grade(Grade 1 format)"
+                  className="col-span-6 w-full"
+                />
+                {errors.grade && (
+                  <small className="text-red-600">{errors.grade.message}</small>
+                )}
+              </div>
               <div className="flex flex-col">
                 <textarea
                   cols={30}
                   rows={10}
                   id="name"
-                  {...register("description")}
-                  name="description"
-                  onChange={() => clearErrors("description")}
-                  placeholder="Course Description"
+                  {...register("details")}
+                  name="details"
+                  onChange={() => clearErrors("details")}
+                  placeholder="Course Details"
                   className="col-span-6 p-2 border text-[14px] rounded-md w-full"
                 />
-                {errors.description && (
+                {errors.details && (
                   <small className="text-red-600">
-                    {errors.description.message}
+                    {errors.details.message}
                   </small>
                 )}
               </div>
@@ -220,7 +251,7 @@ const AddCourses = () => {
                 )}
               </div>
 
-              {banner === undefined ? (
+              {bannerImg === undefined ? (
                 <div className="flex flex-col border p-3 rounded-md">
                   <label className="text-[15px] font-semibold">
                     Course Banner
@@ -230,13 +261,13 @@ const AddCourses = () => {
                     multiple={false}
                     accept="image/*"
                     onChange={handleShowPix}
-                    name="courseBanner"
-                    placeholder="Course Banner"
+                    name="banner"
+                    placeholder="Course Image"
                     className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
                   />
                 </div>
               ) : (
-                <PreviewItem handleRemove={handleRemove} imageItem={banner} />
+                <PreviewItem handleRemove={handleRemove} imageItem={bannerImg} />
               )}
 
               <div className="flex flex-col border p-3 rounded-md">
@@ -248,23 +279,23 @@ const AddCourses = () => {
                   multiple={false}
                   accept="video/*"
                   onChange={handleShowPreview}
-                  name="coursePreview"
-                  placeholder="Course Preview"
+                  name="previewVideo"
+                  placeholder="Course Preview Video"
                   className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
                 />
               </div>
 
               <div className="flex flex-col  border p-3 rounded-md">
               <label className="text-[15px] font-semibold">
-                  Main Preview Video
+                  Main  Video
                 </label>
                 <input
                   type="file"
                   multiple={false}
                   accept="video/*"
                   onChange={handleShowCourseVideo}
-                  name="courseVideo"
-                  placeholder="Course Video"
+                  name="mainVideo"
+                  placeholder="Course Main Video"
                   className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
                 />
               </div>
