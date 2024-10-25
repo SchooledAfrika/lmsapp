@@ -58,9 +58,9 @@ const AddCourses: React.FC<{
   const queryClient = useQueryClient();
   //   creating a post using mutation to the backend
   const mutation = useMutation({
-    mutationKey: ["postCourse"],
+    mutationKey: ["postCourseByTeacher"],
     mutationFn: async (data: IaddingCourse) => {
-      // console.log(data);
+      console.log(data);
       const result = await fetch("/api/courses-teacher", {
         method: "POST",
         body: JSON.stringify({
@@ -72,7 +72,7 @@ const AddCourses: React.FC<{
       return result;
     },
     onSuccess: async (result) => {
-      queryClient.invalidateQueries({ queryKey: ["getCourse"] });
+      queryClient.invalidateQueries({ queryKey: ["getCourseByTeacher"] });
       setShowmodel(false);
       if (result.ok) {
         const body = await result.json();

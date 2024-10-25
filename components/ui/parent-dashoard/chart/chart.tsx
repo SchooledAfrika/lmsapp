@@ -26,7 +26,7 @@ const Chart = () => {
     },
   });
 
-  console.log(data);
+  //console.log(data);
 
   const handleShowMore = () => {
     setVisibleItems(data.length); // Show all items
@@ -38,9 +38,9 @@ const Chart = () => {
     setIsExpanded(false); // Toggle expanded state to false
   };
 
-  if (isLoading) {
-    return <p>Loading data...</p>;
-  }
+  // if (isLoading) {
+  //   return <p>Loading data...</p>;
+  // }
 
   if (isError) {
     return <p>Error: {error.message}</p>;

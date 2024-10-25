@@ -28,7 +28,7 @@ const RemoveCourse: React.FC<IdeleteCourse> = ({ id }) => {
   //   creating a delete using mutation to the backend
   const { mutate } = useMutation({
     mutationFn: async (id: string) => {
-      const result = await fetch(`/api/courses-from-admin`, {
+      const result = await fetch(`/api/created-course-byteacher`, {
         method: "DELETE",
         body: JSON.stringify({
           id: id,
@@ -41,7 +41,7 @@ const RemoveCourse: React.FC<IdeleteCourse> = ({ id }) => {
     },
 
     onSuccess: async (result) => {
-      queryClient.invalidateQueries({ queryKey: ["getCourse"] });
+      queryClient.invalidateQueries({ queryKey: ["getCourseByTeacher"] });
       if (result.ok) {
         setloading(false);
         return toast.success("Course Successfully Deleted");

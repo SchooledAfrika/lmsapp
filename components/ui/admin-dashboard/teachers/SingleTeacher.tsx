@@ -24,6 +24,7 @@ import SingleTeacherClasses from "./SingleTeacherClasses";
 import SingleTeacherPaymentComplete from "./SingleTeacherPaymentComplete";
 import SingleTeacherPaymentPending from "./SingleTeacherPaymentPending";
 import MakeAdmin from "./MakeAdmin";
+import ApproveKYC from "./ApproveKYC";
 
 const SingleTeacher = () => {
   const { id } = useParams();
@@ -52,6 +53,21 @@ const SingleTeacher = () => {
   if (isError) {
     return <div className=" flex-1">{error.message}</div>;
   }
+
+  const grade =
+    data.grade && data.grade.length > 0
+      ? data.grade.join(", ")
+      : "Unknown Grade";
+
+      const language =
+      data.language && data.language.length > 0
+        ? data.language.join(", ")
+        : "Unknown Lnguage";
+
+        const subject =
+        data.subject && data.subject.length > 0
+          ? data.subject.join(", ")
+          : "Unknown Subject";
   return (
     <div>
       {data && (
@@ -121,11 +137,11 @@ const SingleTeacher = () => {
                       <p className="text-[13px] font-medium">
                         Preferred Grade(s)
                       </p>
-                      <p className="text-[14px] font-semibold">{data?.grade[0]}, {data?.grade[1]}, {data?.grade[2]}, {data?.grade[3]}</p>
+                      <p className="text-[14px] font-semibold">{grade}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Language(s)</p>
-                      <p className="text-[14px] font-semibold">{data?.language[0]}, {data?.language[1]}, {data?.language[2]}, {data?.language[3]}, {data?.language[4]}</p>
+                      <p className="text-[14px] font-semibold">{language}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Details</p>
@@ -145,7 +161,7 @@ const SingleTeacher = () => {
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Subject(s)</p>
-                      <p className="text-[14px] font-semibold">{data.subject[0]}, {data?.subject[1]}, {data?.subject[2]}, {data?.subject[3]}</p>
+                      <p className="text-[14px] font-semibold">{subject}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Active Plan</p>
@@ -175,6 +191,9 @@ const SingleTeacher = () => {
                         Role
                       </p>
                       <p className="text-[14px] font-semibold">{data.role}</p>
+                    </div>
+                    <div className=" flex space-x-12">
+                      <ApproveKYC/>
                     </div>
                     <div className="hidden md:flex space-x-12">
                       

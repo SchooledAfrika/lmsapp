@@ -53,7 +53,7 @@ const EditCourses: React.FC<Icourse> = ({ id }) => {
     mutationKey: ["editCourse"],
     mutationFn: async (data: IeditingCourse) => {
       console.log("Mutating with data:", data);
-      const result = await fetch("/api/courses-from-admin", {
+      const result = await fetch("/api/created-course-byteacher", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...data, id }), // Include course data and id

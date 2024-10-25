@@ -8,12 +8,11 @@ import Image from "next/image";
 import { FaGraduationCap } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
 import Container from "@/components/Container";
-
-
+import Link from "next/link";
+import EditCourses from "./EditCourses";
+import RemoveCourse from "./RemoveCourse";
 import { Skeleton } from "@mui/material";
 import { Noitem } from "@/components/ApplicantsTable";
-import SingleParentCourses from "./SingleParentCourses";
-import Link from "next/link";
 
 
 
@@ -41,22 +40,22 @@ export interface ICourses {
   teacher: TeacherInfo;
 }
 
-// export const ShowSkeleton = () => {
-//   const myArray = new Array(6).fill(" ");
-//   return (
-//     <div className=" w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-//       {myArray.map((item, index) => (
-//         <Skeleton
-//           key={index}
-//           className=" w-full rounded-md"
-//           height={250}
-//           variant="rectangular"
-//           animation="wave"
-//         />
-//       ))}
-//     </div>
-//   );
-// };
+export const ShowSkeleton = () => {
+  const myArray = new Array(6).fill(" ");
+  return (
+    <div className=" w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+      {myArray.map((item, index) => (
+        <Skeleton
+          key={index}
+          className=" w-full rounded-md"
+          height={250}
+          variant="rectangular"
+          animation="wave"
+        />
+      ))}
+    </div>
+  );
+};
 
 
 const CourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
@@ -73,10 +72,18 @@ const CourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
             height={200}
           />
 
-          
-          <SingleParentCourses title={item.title} details={item.details} teacherPhoto={item.teacher.profilePhoto} teacher={item.teacher.name} banner={item.banner} previewVideo={item.previewVideo} mainVideo={item.mainVideo}/>
+          <EditCourses id={item.id} /> 
+          <RemoveCourse id={item.id}  />
         </div>
-        
+        <div className="flex justify-between px-2">
+        <p className=" font-bold mt-3 bg-[rgba(0,0,0,0.6)] text-white p-2 rounded-md">
+         <span className="text-[14px] font-semibold">Sold:</span> {item.sellCount}
+        </p>
+        <p className=" font-bold mt-3 text-lightGreen">
+          ${item.price}
+        </p>
+
+        </div>
         
         <div className="flex flex-col gap-3 mb-8 justify-center mx-4 ">
           <div className=" flex items-center justify-between">
@@ -104,48 +111,51 @@ const CourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
   );
 };
 
-const ParentCourses = () => {
+const Courses = () => {
 
-  // const { data, isFetching, isError, error } = useQuery({
-  //   queryKey: ["getCourseByParents"],
-  //   queryFn: async () => {
-  //     const response = await fetch("");
-  //     const result = await response.json();
-  //     return result;
-  //   },
-  // });
-  //console.log(data);
+  const { data, isFetching, isError, error } = useQuery({
+    queryKey: ["getCourseByTeacher"],
+    queryFn: async () => {
+      const response = await fetch(" /api/created-course-byteacher");
+      const result = await response.json();
+      return result;
+    },
+  });
+  console.log(data);
 
-  // if (isFetching) {
-  //   return <ShowSkeleton />;
-  // }
-  // if (isError) {
-  //   return <div>{error.message}</div>;
-  // }
+  if (isFetching) {
+    return <ShowSkeleton />;
+  }
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
 
   return (
     <Container>
-    {/* {Array.isArray(data) && ( */}
+    {Array.isArray(data) && (
       <div>
-        {/* {data.length === 0 ? ( */}
-          <div className="w-full flex flex-col">
+        {data.length === 0 ? (
+          <div className="w-full">
             <Noitem desc="No new courses" />
-            <Link href="/courses" className="font-bold mx-auto bg-lightGreen my-3  p-3 rounded-md text-white">Please purchase course</Link>
           </div>
-        {/* ) : ( */}
-          {/* <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
+        ) : (
+          <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
            {data.map((item: ICourses, index) => (
               <CourseCard
               item={item} key={index}
               />
             ))}
           </div>
-        )} */}
+        )}
       </div>
-    {/* )} */}
+    )}
   </Container>
     
   );
 };
 
-export default ParentCourses;
+export default Courses;
+
+
+
+

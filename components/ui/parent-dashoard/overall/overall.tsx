@@ -83,7 +83,7 @@ const Overall = () => {
                 </div>
               </div>
               <div className="flex items-center">
-                <p className="font-bold text-lightGreen">{item.score}</p>
+                <p className="font-bold text-lightGreen">{item.score}/{Array.isArray(item?.questions) && item?.questions.length}</p>
               </div>
             </div>
           ))}

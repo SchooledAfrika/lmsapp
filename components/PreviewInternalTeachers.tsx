@@ -17,7 +17,7 @@ const PreviewInternalTeachers = () => {
     slidesToShow: 3,
     slidesToScroll: 1,
     autoplay: true,
-    speed: 3000,
+    speed: 4000,
     autoplaySpeed: 3000,
     cssEase: "linear",
     pauseOnHover: true,
@@ -69,13 +69,13 @@ const PreviewInternalTeachers = () => {
           <div className="card h-[350px] rounded-[32px] relative overflow-hidden">
             <div className="details z-[1] absolute bottom-0 p-[16px] w-full text-[14px] text-white">
             <div className="px-4 font-bold w-full text-center text-[16px] py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white">{teacher.name}</div>
-            <div className="px-2 mt-2 font-semibold w-full  text-[14px] py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white">{teacher.subject}</div>
+            <div className="px-2 mt-2 font-semibold w-full text-center  text-[13px] py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white">{teacher.subject}</div>
             <div className="chips flex justify-between">
-              <div className="chip px-2 mt-2 font-medium   text-[13px] py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white">{teacher.grades}</div>
-              <div className="chip px-2 mt-2 font-medium  text-[13px] py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white">{teacher.duration}</div>
+              <div className="chip px-2 mt-2 font-medium   text-[12px] py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white">{teacher.grades}</div>
+              <div className="chip px-2 mt-2 font-medium  text-[12px] py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white">{teacher.duration} Taught Online</div>
              
             </div>
-            <Button asChild className="my-3 bg-dimOrange w-full">
+            <Button asChild className="my-3 bg-lightGreen w-full">
               <Link href="/find-tutors">Book Teacher</Link>
             </Button>
             </div>

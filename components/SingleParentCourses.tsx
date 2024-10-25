@@ -38,7 +38,7 @@ interface courseProps {
   mainVideo: string;
 }
 
-const SingleCourses = ({
+const SingleParentCourses = ({
   title,
   details,
   teacher,
@@ -259,4 +259,4 @@ const SingleCourses = ({
   );
 };
 
-export default SingleCourses;
+export default SingleParentCourses;
