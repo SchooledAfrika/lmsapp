@@ -62,7 +62,7 @@ export const useConversion = () => {
   };
 
   const getInitials = (fullName: string): string => {
-    if (!fullName) return ''; // Check if fullName is undefined or empty
+    if (!fullName) return ""; // Check if fullName is undefined or empty
 
     const nameArray = fullName.split(" ");
     const firstInitial = nameArray[0]?.split("")[0] || ""; // Safe check for first initial and fallback
@@ -81,6 +81,57 @@ export const useConversion = () => {
     let joined = newArray.join(",");
     return joined;
   };
+  // here we will calculate the amt to pay for the session
+  const totalSessionPayment = (
+    selectedDays: string[],
+    duration: string,
+    hours: number,
+    payType: string
+  ): number => {
+    let totalAmt: number;
+
+    console.log("selectedDays", selectedDays);
+    console.log("duration", duration);
+    console.log("hours", hours);
+
+    // Return early if billing duration or required parameters are missing
+    if (selectedDays.length < 1) return 0;
+    if (duration === "Billing period") return 0;
+    if (payType === "Private Session" && !hours) return 0;
+
+    // Set base rate
+    const baseRate = 35;
+
+    // Determine multiplier for yearly payments
+    const multiplier = duration === "monthly" ? 1 : 12;
+
+    // Calculate discount per hour based on the number of selected days
+    let discountRate = 0;
+    switch (selectedDays.length) {
+      case 1:
+        discountRate = 0; // No discount for one day
+        break;
+      case 2:
+        discountRate = 5; // 5 per hour discount for two days
+        break;
+      case 3:
+        discountRate = 10; // 10 per hour discount for three days
+        break;
+      case 4:
+        discountRate = 20; // 20 per hour discount for four days
+        break;
+      default:
+        discountRate = 20; // Max discount per hour for five or more days
+        break;
+    }
+
+    // Calculate total amount, with discount applied per day and per hour
+    totalAmt = baseRate * hours * multiplier - discountRate * hours;
+
+    console.log("totalAmt", totalAmt);
+    return totalAmt;
+  };
+
   return {
     getTimeAgo,
     handleTime,
@@ -91,6 +142,7 @@ export const useConversion = () => {
     getInitials,
     joinByComma,
     joinGrades,
+    totalSessionPayment,
   };
 };
 

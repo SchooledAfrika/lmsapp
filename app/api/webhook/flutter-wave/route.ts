@@ -6,7 +6,6 @@ import {
   sessionPaymentFlutter,
   teachersPlan,
 } from "@/prisma/utils/payment";
-import { TeacherPlan } from "@prisma/client";
 
 // add student to the class after making payment
 export async function POST(req: Request) {

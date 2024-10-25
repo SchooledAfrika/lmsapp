@@ -57,18 +57,16 @@ export const sessionbookingSchema = z.object({
       message: "you can only enter Grade1 format",
     }
   ),
-  sessionTypes: z.string().min(3, { message: "field is required" }),
   subject: z.array(z.string(), { message: "select at least one subject" }),
   curriculum: z.string().min(3, { message: "field is required" }),
   specialNeeds: z.array(z.string()).optional(),
   goals: z.string().min(3, { message: "field is required" }),
-  days: z.array(z.string(), { message: "please select days" }),
+  sessionTypes: z.string().min(3, { message: "field is required" }),
+  days: z.array(z.string(), { message: "please select days" }), //selected
   times: z.string().min(3, { message: "field is required" }),
-  hours: z.string().optional(),
+  hours: z.number(),
   length: z.string().min(3, { message: "field is required" }),
   classStarts: z.date(),
-  paystack: z.boolean({ message: "selection is required" }),
-  flutterwave: z.boolean({ message: "selection is required" }),
 });
 
 // progress info for booking session with teachers
@@ -117,9 +115,9 @@ export const StudentSessionSchema = z.object({
   specialNeeds: z.array(z.string()).optional(),
   goals: z.string().min(3, { message: "field is required" }),
   sessionTypes: z.string().min(3, { message: "field is required" }),
-  days: z.array(z.string(), { message: "please select days" }),
+  days: z.array(z.string(), { message: "please select days" }), //selected
   times: z.string().min(3, { message: "field is required" }),
-  hours: z.string().optional(),
+  hours: z.number(),
   length: z.string().min(3, { message: "field is required" }),
   classStarts: z.date(),
 });

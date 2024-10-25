@@ -26,6 +26,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { format } from "date-fns";
+import { useConversion } from "@/data-access/conversion";
+import { toast } from "react-toastify";
+import { MultipleSelect } from "./StudentBookDetails";
 
 interface SessionTypes {
   id: number;
@@ -34,7 +37,27 @@ interface SessionTypes {
   billingCycle: string;
 }
 
-const Scheduling: React.FC<ISessionSub> = ({
+interface Ihours {
+  dNumber: number;
+  dString: string;
+}
+const Days = [
+  "MONDAY",
+  "TUESDAY",
+  "WEDNESDAY",
+  "THURSDAY",
+  "FRIDAY",
+  "SATURDAY",
+  "SUNDAY",
+];
+const HoursByDay: Ihours[] = [
+  { dNumber: 0.5, dString: "30mins" },
+  { dNumber: 1.0, dString: "1hr" },
+  { dNumber: 1.5, dString: "1hr:30mins" },
+  { dNumber: 2.0, dString: "2hrs" },
+];
+
+const StudentBookSchedule: React.FC<ISessionSub> = ({
   register,
   errors,
   control,
@@ -43,13 +66,18 @@ const Scheduling: React.FC<ISessionSub> = ({
   setValue,
   setTotalAmt,
   totalAmt,
+  getValues,
 }) => {
   const SessionTypes: string[] = ["Homework Support", "Private Session"];
 
   const [days, setDays] = React.useState<string[]>([]);
   const [sessionTypes, setSessionTypes] = React.useState<string>("");
-  const [hours, setHours] = React.useState<number>(1);
-  const [length, setLength] = React.useState<"monthly" | "yearly">("monthly");
+  const { totalSessionPayment } = useConversion();
+  const [duration, setduration] = React.useState<string>("");
+  const [hours, sethours] = React.useState<string>();
+  React.useEffect(() => {
+    setValue("hours", 1);
+  }, [getValues("hours")]);
   // Handle session selection
   const handleSessionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const sessionType = event.target.value;
@@ -64,31 +92,11 @@ const Scheduling: React.FC<ISessionSub> = ({
   };
 
   // Handle hours change
-  const handleHoursChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newHour = Number(event.target.valueAsNumber);
+  const handleHoursChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const newHour = Number(event.target.value);
+    setValue("hours", newHour);
     setTotalAmt && setTotalAmt((prev) => prev! * newHour);
   };
-
-  // Handle billing period change
-  const handleBillingPeriodChange = (
-    event: React.ChangeEvent<HTMLSelectElement>
-  ) => {
-    const newBillingPeriod = event.target.value as "monthly" | "yearly";
-    if (newBillingPeriod === "monthly") {
-      setTotalAmt && setTotalAmt((prev) => prev! * 1);
-    } else {
-      setTotalAmt && setTotalAmt((prev) => prev! * 12);
-    }
-  };
-  const Days = [
-    "MONDAY",
-    "TUESDAY",
-    "WEDNESDAY",
-    "THURSDAY",
-    "FRIDAY",
-    "SATURDAY",
-    "SUNDAY",
-  ];
 
   // this function below handle session selection
   const handleDays = (item: string) => {
@@ -103,6 +111,8 @@ const Scheduling: React.FC<ISessionSub> = ({
       setValue("days", arrayInstance);
       clearErrors("days");
     } else {
+      if (arrayInstance.length === 5)
+        return toast.error("Maximum of 5 days is allowed");
       arrayInstance.push(item);
       setDays(arrayInstance);
       setValue("days", arrayInstance);
@@ -123,25 +133,13 @@ const Scheduling: React.FC<ISessionSub> = ({
 
         <div className="border  px-3  py-2 mt-6  rounded-md gap-[10px]">
           <label className="font-bold text-[16px]">Select Day(s)</label>
-          <div className="grid grid-cols-2 gap-x-2 w-full">
-            {Days.map((Day, index) => (
-              <label
-                onClick={() => handleDays(Day)}
-                key={index}
-                className="flex justify-between items-center text-[13px] font-semibold gap-2 my-2 px-4 py-3 outline-none rounded-[8px] bg-white cursor-pointer"
-              >
-                {Day}
-                <input
-                  type="checkbox"
-                  name="days"
-                  checked={days.includes(Day)}
-                  value={Day}
-                  className="appearance-none h-4 w-4 border border-gray-300 rounded-full checked:bg-green-600 checked:border-transparent focus:outline-none"
-                />
-              </label>
-            ))}
-          </div>
-
+          {/* this is for selecting the days for classes */}
+          <MultipleSelect
+            selectedItem={days}
+            handleSelectedItem={handleDays}
+            itemList={Days}
+            placeholder="Class Days"
+          />
           {errors.days && (
             <small className=" text-red-600">{errors.days.message}</small>
           )}
@@ -176,37 +174,18 @@ const Scheduling: React.FC<ISessionSub> = ({
                 </small>
               )}
             </div>
-
-            {/* Hours input */}
-            {sessionTypes === "Private Session" && (
-              <div className=" flex flex-col gap-1">
-                <div className=" bg-white w-full text-[14px] py-[10px] items-center px-2 rounded-sm flex gap-2">
-                  <label>Hours per day:</label>
-                  <input
-                    {...register("hours")}
-                    name="hours"
-                    type="number"
-                    onChange={handleHoursChange}
-                    className=" border"
-                  />
-                </div>
-                {errors.hours && (
-                  <small className="text-red-600">{errors.hours.message}</small>
-                )}
-              </div>
-            )}
-
             {/* Billing period selection */}
             <div className="bg-white flex flex-col gap-1  rounded-md text-[14px] font-medium  pl-3 ">
               <select
                 id="length"
-                {...register("length")}
                 name="length"
                 className="p-3 font-medium rounded-md text-[14px]"
-                onChange={handleBillingPeriodChange}
-                value={length}
+                onChange={(e) => {
+                  setValue("length", e.target.value);
+                  setduration(e.target.value);
+                }}
               >
-                <option selected disabled>
+                <option value="" selected disabled>
                   Billing period
                 </option>
                 <option value="monthly">Monthly</option>
@@ -216,6 +195,31 @@ const Scheduling: React.FC<ISessionSub> = ({
                 <small className="text-red-600">{errors.length.message}</small>
               )}
             </div>
+            {/* handleHoursChange hours */}
+            {/* Hours input */}
+            {sessionTypes === "Private Session" && (
+              <div className=" flex flex-col gap-1">
+                <select
+                  id="hours"
+                  name="hours"
+                  className="p-3 w-full font-medium rounded-md text-[14px]"
+                  onChange={(e) => {
+                    handleHoursChange(e);
+                    sethours(e.target.value);
+                  }}
+                  defaultValue={1}
+                >
+                  <option value="" selected disabled>
+                    Select hours per day
+                  </option>
+                  {HoursByDay.map((item, index) => (
+                    <option value={item.dNumber} key={index}>
+                      {item.dString}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            )}
           </div>
         </div>
 
@@ -309,19 +313,27 @@ const Scheduling: React.FC<ISessionSub> = ({
             </small>
           )}
         </div>
-
         {/* Display price */}
-        <div className="my-2 font-semibold text-center text-[14px]">
-          <h2>
-            Total Price:{" "}
-            <span className="font-bold text-[18px]">
-              ${totalAmt && totalAmt}
-            </span>{" "}
-          </h2>
-        </div>
+        {getValues("sessionTypes") && getValues("length") && (
+          <div>
+            <div className="my-2 font-semibold text-center text-[14px]">
+              <h2 className=" font-bold">
+                Total Price:{" "}
+                <span className=" text-green-800">
+                  {totalSessionPayment(
+                    getValues("days"),
+                    getValues("length"),
+                    getValues("hours"),
+                    getValues("sessionTypes")
+                  ).toFixed(2)}
+                </span>{" "}
+              </h2>
+            </div>
+          </div>
+        )}
       </ScrollArea>
     </div>
   );
 };
 
-export default Scheduling;
+export default StudentBookSchedule;

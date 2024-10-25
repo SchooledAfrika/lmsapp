@@ -166,21 +166,22 @@ model School {
 
 // creating the model for parents
 model Parents {
-  id               String        @id @default(auto()) @map("_id") @db.ObjectId
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
   name             String?
-  email            String        @unique
+  email            String             @unique
   password         String?
   profilePhoto     String?
   role             Role
   gender           Gender?
   phoneNo          String?
   address          String?
-  CompletedProfile Boolean       @default(false)
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @default(now())
+  CompletedProfile Boolean            @default(false)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
   wards            Student[]
-  status           StudentStatus @default(Active) //for showing active or resctricted status
+  status           StudentStatus      @default(Active) //for showing active or resctricted status
   country          String?
+  PurchasedCourses PurchasedCourses[]
 }
 
 // here we created the model where teachers can upload article
@@ -418,8 +419,14 @@ model PurchasedCourses {
   teacher      Teacher  @relation(fields: [teacherId], references: [id])
   teacherId    String   @db.ObjectId
   // also adding the relationship between the student and the purchased courses
-  student      Student  @relation(fields: [studentId], references: [id])
-  studentId    String   @db.ObjectId
+  // this field is optional as it may not only be student that will purchase
+  // but also parents can purchase courses.
+  // so, that is while both fields for parents and students are optional
+  // but, what ever ways, we should be able to fill in one.
+  student      Student? @relation(fields: [studentId], references: [id])
+  studentId    String?  @db.ObjectId
+  parents      Parents? @relation(fields: [parentsId], references: [id])
+  parentsId    String?  @db.ObjectId
   byAdmin      Boolean
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())

@@ -152,3 +152,69 @@ export const teachersPlan = async (payload: Iplans) => {
     return serverError();
   }
 };
+
+// here we will handle the webhook for student paying for a course
+interface Icourses {
+  courseId: string;
+  payersId: string;
+  isStudent: string;
+}
+export const coursePayment = async (payload: Icourses) => {
+  // first, let's get the course that we want to buy or purchase
+  const theCourse = await prisma.courses.findUnique({
+    where: { id: payload.courseId },
+  });
+  if (!theCourse) return;
+  try {
+    // check if isStudent is true and buy the course for the student or
+    // buy the course for the parents if the student is false
+    if (payload.isStudent) {
+      await prisma.purchasedCourses.create({
+        data: {
+          title: theCourse?.title,
+          price: theCourse?.price,
+          byAdmin: theCourse?.byAdmin,
+          teacherId: theCourse?.teacherId,
+          subject: theCourse?.subject,
+          banner: theCourse?.banner,
+          previewVideo: theCourse?.previewVideo,
+          mainVideo: theCourse?.mainVideo,
+          studentId: payload.payersId,
+        },
+      });
+    } else {
+      await prisma.purchasedCourses.create({
+        data: {
+          title: theCourse?.title,
+          price: theCourse?.price,
+          byAdmin: theCourse?.byAdmin,
+          teacherId: theCourse?.teacherId,
+          subject: theCourse?.subject,
+          banner: theCourse?.banner,
+          previewVideo: theCourse?.previewVideo,
+          mainVideo: theCourse?.mainVideo,
+          parentsId: payload.payersId,
+        },
+      });
+    }
+    // now, update the course total sell by one
+    await prisma.courses.update({
+      where: { id: payload.courseId },
+      data: { sellCount: theCourse.sellCount + 1 },
+    });
+    // then we go ahead and add this to the revenew generated so far
+    await prisma.revenew.create({
+      data: {
+        amt: theCourse.price,
+        teacherId: theCourse.teacherId,
+        type: "Course",
+      },
+    });
+    return new Response(
+      JSON.stringify({ message: "Course bought successfully" }),
+      { status: 200 }
+    );
+  } catch (error) {
+    return serverError();
+  }
+};

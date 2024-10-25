@@ -17,6 +17,7 @@ import { PaystackButton } from "react-paystack";
 import { closePaymentModal, FlutterWaveButton } from "flutterwave-react-v3";
 import { UseFormGetValues } from "react-hook-form";
 import { IstudentSession, SuccessfulPayment } from "./BookSessionByStudent";
+import { useConversion } from "@/data-access/conversion";
 export type Isession = z.infer<typeof sessionbookingSchema>;
 
 // component for rendering btn for payment and next page
@@ -48,19 +49,11 @@ const ControlBtn: React.FC<{
       ) : (
         <div>
           {method === "Paystack" ? (
-            <PayStackBtn
-              parentsValue={getValues}
-              id={sessionId}
-              price={200}
-              enroll={enroll}
-              isByStudent={false}
-            />
+            <PayStackBtn getValue={getValues} id={sessionId} enroll={enroll} />
           ) : (
             <FlutterWaveBtn
-              isByStudent={false}
-              parentsValue={getValues}
+              getValue={getValues}
               id={sessionId}
-              price={200}
               enroll={enroll}
             />
           )}
@@ -73,13 +66,18 @@ const ControlBtn: React.FC<{
 // component to make payment with paystack method
 export const PayStackBtn: React.FC<{
   id: string;
-  price: number;
   enroll: () => void;
-  studentValue?: UseFormGetValues<IstudentSession>;
-  parentsValue?: UseFormGetValues<Isession>;
-  isByStudent: boolean;
-}> = ({ id, price, enroll, parentsValue, studentValue, isByStudent }) => {
+  getValue: UseFormGetValues<Isession>;
+}> = ({ id, enroll, getValue }) => {
   const { data } = useSession();
+  const { totalSessionPayment } = useConversion();
+  const price = totalSessionPayment(
+    getValue("days"),
+    getValue("length"),
+    getValue("hours"),
+    getValue("sessionTypes")
+  );
+  // props for paystack payment below here
   const componentProps = {
     reference: new Date().getTime().toString(),
     email: data?.user.email as string,
@@ -103,31 +101,21 @@ export const PayStackBtn: React.FC<{
         },
       ],
       plan: {
-        studentId: isByStudent ? data?.user.id : parentsValue!("childId"),
-        grade: isByStudent ? studentValue!("grade") : parentsValue!("grade"),
-        sessionType: isByStudent
-          ? studentValue!("sessionTypes")
-          : parentsValue!("sessionTypes"),
-        subjects: isByStudent
-          ? studentValue!("subject")
-          : parentsValue!("subject"),
-        curriculum: isByStudent
-          ? studentValue!("curriculum")
-          : parentsValue!("curriculum"),
-        specialNeeds: isByStudent
-          ? studentValue!("specialNeeds")
-          : parentsValue!("specialNeeds"),
-        goals: isByStudent ? studentValue!("goals") : parentsValue!("goals"),
-        days: isByStudent ? studentValue!("days") : parentsValue!("days"),
-        times: isByStudent ? studentValue!("times") : parentsValue!("times"),
-        hours: isByStudent ? studentValue!("hours") : parentsValue!("hours"),
-        length: isByStudent ? studentValue!("length") : parentsValue!("length"),
-        classStart: isByStudent
-          ? studentValue!("classStarts")
-          : parentsValue!("classStarts"),
+        studentId: getValue("childId"),
+        grade: getValue("grade"),
+        sessionType: getValue("sessionTypes"),
+        subjects: getValue("subject"),
+        curriculum: getValue("curriculum"),
+        specialNeeds: getValue("specialNeeds"),
+        goals: getValue("goals"),
+        days: getValue("days"),
+        times: getValue("times"),
+        hours: getValue("hours"),
+        length: getValue("length"),
+        classStart: getValue!("classStarts"),
         price,
         selectedTeacher: id,
-        byparents: isByStudent ? false : true,
+        byparents: true,
       },
     },
   };
@@ -142,31 +130,17 @@ export const PayStackBtn: React.FC<{
 // component to make payment with flutterwave method
 export const FlutterWaveBtn: React.FC<{
   id: string;
-  price: number;
   enroll: () => void;
-  studentValue?: UseFormGetValues<IstudentSession>;
-  parentsValue?: UseFormGetValues<Isession>;
-  isByStudent: boolean;
-}> = ({ id, price, enroll, studentValue, parentsValue, isByStudent }) => {
+  getValue: UseFormGetValues<Isession>;
+}> = ({ id, enroll, getValue }) => {
   const { data } = useSession();
-  console.log(studentValue);
-  // const byparents = {
-  //   studentId: parentsValue!("childId"),
-  //   grade: parentsValue!("grade"),
-  //   sessionType: parentsValue!("sessionTypes"),
-  //   subjects: parentsValue!("subject"),
-  //   curriculum: parentsValue!("curriculum"),
-  //   specialNeeds: parentsValue!("specialNeeds"),
-  //   goals: parentsValue!("goals"),
-  //   days: parentsValue!("days"),
-  //   times: parentsValue!("times"),
-  //   hours: parentsValue!("hours"),
-  //   length: parentsValue!("length"),
-  //   classStart: parentsValue!("classStarts"),
-  //   price,
-  //   selectedTeacher: id,
-  //   byparents: true,
-  // };
+  const { totalSessionPayment } = useConversion();
+  const price = totalSessionPayment(
+    getValue("days"),
+    getValue("length"),
+    getValue("hours"),
+    getValue("sessionTypes")
+  );
 
   const config = {
     public_key: process.env.NEXT_PUBLIC_FLUTTERPUBKEY!,
@@ -188,22 +162,22 @@ export const FlutterWaveBtn: React.FC<{
       logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
     },
     meta: {
-      studentId: data?.user.id,
-      grade: studentValue!("grade"),
-      sessionType: studentValue!("sessionTypes"),
+      studentId: getValue("childId"),
+      grade: getValue("grade"),
+      sessionType: getValue("sessionTypes"),
 
-      subjects: studentValue!("subject").join("-"),
-      curriculum: studentValue!("curriculum"),
-      specialNeeds: studentValue!("specialNeeds")?.join("-"),
-      goals: studentValue!("goals"),
-      days: studentValue!("days").join("-"),
-      times: studentValue!("times"),
-      hours: studentValue!("hours"),
-      length: studentValue!("length"),
-      classStart: studentValue!("classStarts"),
+      subjects: getValue("subject").join("-"),
+      curriculum: getValue("curriculum"),
+      specialNeeds: getValue("specialNeeds")?.join("-"),
+      goals: getValue("goals"),
+      days: getValue("days").join("-"),
+      times: getValue("times"),
+      hours: getValue("hours"),
+      length: getValue("length"),
+      classStart: getValue("classStarts"),
       price,
       selectedTeacher: id,
-      byparents: false,
+      byparents: true,
     },
     onSuccess: () => {
       alert("true oooo");
