@@ -1,15 +1,15 @@
 import Hero from "@/components/Hero";
 import Offer from "@/components/Offers";
-import PopularSubjects from "@/components/PopularSubjects";
+import PopularSubjects from "@/components/PreviewInternalTeachers";
 import Virtual from "@/components/Virtual";
 import PrivateSession from "@/components/PrivateSession";
 import HomeworkSupport from "@/components/HomeworkSupport";
-import PopularClasses from "@/components/PopularClasses";
 import GetStarted from "@/components/GetStarted";
 import Testimonials from "@/components/Testimonials";
 import ParentalControl from "@/components/ParentalControl";
 import SampleClass from "@/components/SampleClass";
 import RootLayout from "./layout";
+import PreviewInternalTeachers from "@/components/PreviewInternalTeachers";
 
 export default function Home() {
   return (
@@ -17,7 +17,7 @@ export default function Home() {
     <div>
       <Hero />
       <Offer />
-      <PopularSubjects />
+      <PreviewInternalTeachers />
       <Virtual />
       <PrivateSession />
       <HomeworkSupport />

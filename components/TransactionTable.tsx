@@ -78,7 +78,7 @@ export default function TransactionTable() {
         {TransactionType.map((Transaction) => (
           <TableRow key={Transaction.id} className="py-2">
             <TableCell className="font-semibold md:w-[200px]  text-[13px] py-2 flex  mr-1">
-              <Image
+              {/* <Image
                 src={Transaction.icon}
                 alt="icon"
                 width={100}
@@ -102,17 +102,17 @@ export default function TransactionTable() {
                       Transaction.user}
                   </p>
                 </div>
-              </div>
+              </div> */}
             </TableCell>
 
             <TableCell className="text-[12px] font-semibold">
-              {Transaction.type}
+             
             </TableCell>
             <TableCell className="text-[12px]   font-semibold">
-              {Transaction.date}
+             
             </TableCell>
             <TableCell className="">
-              <p
+              {/* <p
                 className={`${
                   Transaction.amount_add
                     ? " text-lightGreen font-semibold text-[12px]"
@@ -120,7 +120,7 @@ export default function TransactionTable() {
                 }`}
               >
                 {Transaction.amount_add || Transaction.amount_withdraw}
-              </p>
+              </p> */}
             </TableCell>
           </TableRow>
         ))}

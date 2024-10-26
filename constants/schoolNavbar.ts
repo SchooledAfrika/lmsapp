@@ -109,7 +109,7 @@ export const TeacherNavbar: SchoolNavType[] = [
   },
   {
     title: "Courses",
-    description: "Skill up with our courses.",
+    description: "Create and sell your courses with ease.",
     path: "courses",
   },
   {
@@ -149,7 +149,7 @@ export const StudentNavbar: SchoolNavType[] = [
   },
   {
     title: "Students",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "",
     path: "students",
     subDetails: {
       title: " Single student here",
@@ -194,7 +194,7 @@ export const StudentNavbar: SchoolNavType[] = [
 export const ParentsNavbar: SchoolNavType[] = [
   {
     title: "Welcome to Your Dashboard",
-    description: "Let's discover and shape the next generation of lifelong learners together in our digital world.",
+    description: "Let's discover and shape the next generation of lifelong learners together.",
     path: "overview",
   },
   {
@@ -217,7 +217,7 @@ export const ParentsNavbar: SchoolNavType[] = [
   },
   {
     title: "Assessments",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "Keep track of your ward's assessments.",
     path: "assessment",
     subDetails: {
       title: " Single student here",

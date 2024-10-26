@@ -24,6 +24,7 @@ export async function GET(req: Request) {
         percentage: true,
         questions: true,
         grade: true,
+        createdAt: true,
       },
     });
     // now lets get all the exams written by the ward in oneOnOne section
@@ -40,6 +41,7 @@ export async function GET(req: Request) {
             percentage: true,
             questions: true,
             grade: true,
+            createdAt: true,
           },
         },
       },

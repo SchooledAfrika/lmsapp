@@ -40,15 +40,15 @@ const Chart = () => {
               </p>
             </div>
             <div className="flex  flex-col py-4">
-              <p className="font-bold">28h 45m</p>
+              <p className="font-bold">00h 00m</p>
               <p className="text-[12px]">Monthly Average</p>
             </div>
             <div className="flex  flex-col">
               <p className="font-bold text-sm">Attendance Report</p>
               <p className="text-[12px]">
                 Student attendance increased by{" "}
-                <span className="text-lightGreen"> 55% </span> this month over
-                the monthly average of 28h 45m.
+                <span className="text-lightGreen"> 0% </span> this month over
+                the monthly average of 00h 00m.
               </p>
             </div>
           </div>
@@ -65,7 +65,7 @@ const Chart = () => {
         </div>
 
         <div className="flex mt-6 items-center justify-between space-x-3">
-          <div className="flex flex-col space-y-1">
+          {/* <div className="flex flex-col space-y-1">
             <p className="text-[13px] inline font-semibold mb-1">Economics</p>
             <p className="text-[12px] inline">
               {" "}
@@ -75,15 +75,15 @@ const Chart = () => {
               {" "}
               <FaLocationDot className="inline mr-1" /> Lagos
             </p>
-          </div>
-          <p className="text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-lightGreen text-white">
+          </div> */}
+          {/* <p className="text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-lightGreen text-white">
             Active
-          </p>
+          </p> */}
         </div>
         <hr className="w-full mt-1 font-semibold text-black" />
 
         <div className="flex mt-3 items-center justify-between space-x-3">
-          <div className="flex flex-col space-y-1">
+          {/* <div className="flex flex-col space-y-1">
             <p className="text-[13px] inline font-semibold mb-1">
               Writing Tutor
             </p>
@@ -95,15 +95,15 @@ const Chart = () => {
               {" "}
               <FaLocationDot className="inline mr-1" /> Lagos
             </p>
-          </div>
-          <p className="text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-dimOrange text-white">
+          </div> */}
+          {/* <p className="text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-dimOrange text-white">
             Expired
-          </p>
+          </p> */}
         </div>
         <hr className="w-full mt-1  font-semibold text-black" />
 
         <div className="flex mt-3 items-center justify-between space-x-3">
-          <div className="flex flex-col space-y-1">
+          {/* <div className="flex flex-col space-y-1">
             <p className="text-[13px] inline font-semibold mb-1">
               Assistant Teacher
             </p>
@@ -118,7 +118,7 @@ const Chart = () => {
           </div>
           <p className="text-[11px] px-[20px]  py-[5px] text-center rounded-md mr-3 bg-dimOrange text-white">
             Expired
-          </p>
+          </p> */}
         </div>
       </div>
 

@@ -8,6 +8,71 @@ export const navData = [
   { _id: 105, title: "Contact Us", href: "/contact" },
 ];
 
+export const internalTeachers = [
+  {
+    id: "teacher-1",
+    icon: "/internalTeachers/chidimma.jpg",
+    name: "Chidimma Okike",
+    subject: "Mathematics, English, Sciences.",
+    grades: "Grades 1-12",
+    duration: "800+ Hours",
+   
+  },
+  {
+    id: "teacher-2",
+    icon: "/internalTeachers/Jamiu.jpg",
+    name: "Jamiu .E. Ajape",
+    subject: "Mathematics, English, Sciences.",
+    grades: "Grades 1-10",
+    duration: "500+ Hours",
+  },
+  {
+    id: "teacher-3",
+    icon: "/internalTeachers/Dunni.jpg",
+    name: "Dunni Oluyide",
+    subject: "Mathematics, English, Sciences.",
+    grades: "Grades 1-6",
+    duration: "200+ Hours",
+  },
+  {
+    id: "teacher-4",
+    icon: "/internalTeachers/Benjamin.jpg",
+    name: "Benjamin Abiola",
+    subject: "Mathematics, Sciences.",
+    grades: "Grades 3-10",
+    duration: "250+ Hours",
+  },
+  {
+    id: "teacher-5",
+    icon: "/internalTeachers/Ogbenro.jpg",
+    name: "O'gbenro Saint .O.",
+    subject: "Mathematics, English, Sciences, SAT & International Exams.",
+    grades: "Grades 3-9",
+    duration: "2000+ Hours",
+  },
+  {
+    id: "teacher-6",
+    icon: "/internalTeachers/olaoluwa.jpg",
+    name: "Olaoluwa Abiodun",
+    subject: "Mathematics, Sciences.",
+    grades: "Grades 4-10",
+    duration: "357+ Hours",
+  },
+  {
+    id: "teacher-7",
+    icon: "/internalTeachers/Ngozi.png",
+    name: "Ngozi Alexander",
+    subject: "Mathematics, English, Sciences.",
+    grades: "Grades K-10",
+    duration: "100+ Hours",
+  },
+  
+  
+  
+  
+  
+];
+
 export const subjects = [
   {
     id: "subject-1",
@@ -125,6 +190,7 @@ export const moreSubjects = [
     rating: "⭐ 4.6/5",
   },
 ];
+
 
 export const Classes = [
   {

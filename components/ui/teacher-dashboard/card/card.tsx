@@ -16,12 +16,10 @@ const Card = () => {
         {/* First card */}
         <div className="flex flex-1   text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
           <div className="flex flex-col  justify-evenly">
-            <h3 className="font-bold text-lg pb-3">3</h3>
+            <h3 className="font-bold text-lg pb-3">0</h3>
 
             <p className="font-semibold pb-2 ">Total Classes</p>
-            <p className="inline text-[10.5px] font-medium">
-              <span className="text-lightGreen">50%</span> more than last month
-            </p>
+            
           </div>
 
           <Image
@@ -35,12 +33,10 @@ const Card = () => {
         {/* second card */}
         <div className="flex flex-1  text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
           <div className="flex flex-col  justify-evenly">
-            <h3 className="font-bold text-lg pb-3">24</h3>
+            <h3 className="font-bold text-lg pb-3">0</h3>
 
             <p className="font-semibold pb-2 ">Total Students</p>
-            <p className="inline text-[10.5px] font-medium">
-              <span className="text-red-500">15%</span> less than last month
-            </p>
+           
           </div>
 
           <Image
@@ -55,12 +51,10 @@ const Card = () => {
         {/* third card */}
         <div className="flex flex-1  text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
           <div className="flex flex-col  justify-evenly">
-            <h3 className="font-bold text-lg pb-3">17</h3>
+            <h3 className="font-bold text-lg pb-3">0</h3>
 
             <p className="font-semibold pb-2 ">Tests & Resources</p>
-            <p className="inline text-[10.5px] font-medium">
-              <span className="text-red-500">15%</span> less than last month
-            </p>
+           
           </div>
 
           <Image
@@ -74,12 +68,10 @@ const Card = () => {
         {/* fourth card */}
         <div className="flex flex-1  text-sm  p-3  justify-between space-x-2  bg-white rounded-md">
           <div className="flex flex-col  justify-evenly">
-            <h3 className="font-bold text-lg pb-3">4.3</h3>
+            <h3 className="font-bold text-lg pb-3">0</h3>
 
             <p className="font-semibold pb-2 ">Rating</p>
-            <p className="inline text-[10px] font-medium">
-              <span className="text-lightGreen ">0.5%</span> more than last month
-            </p>
+            
           </div>
 
           <Image

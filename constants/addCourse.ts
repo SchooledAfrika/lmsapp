@@ -24,13 +24,19 @@ const ACCEPTED_VIDEO_TYPES = [
   "video/webm",
 ];
 
+// export const urlRegex =
+//   /^(https?:\/\/)?((([a-zA-Z\d]([a-zA-Z\d-]*[a-zA-Z\d])*)\.)+[a-zA-Z]{2,}|\d{1,3}(\.\d{1,3}){3})(:\d+)?(\/[-a-zA-Z\d%_.~+]*)*(\?[;&a-zA-Z\d%_.~+=-]*)?(#[a-zA-Z\d_]*)?$/;
+
+
 // below is the zod schema for admin to add courses
 //
 export const addingCourseSchema = z.object({
   title: z.string().min(3, { message: "field is required" }),
-  description: z.string().min(3, { message: "field is required" }),
+  details: z.string().min(3, { message: "field is required" }),
+  subject: z.string().min(3, { message: "field is required" }),
+  grade: z.string().min(3, { message: "field is required" }),
   price: z.string({ message: "enter your price" }),
-  courseBanner: z
+  banner: z
     .any()
     // To not allow empty files
     .refine((files) => files?.length >= 1, { message: "Image is required." })
@@ -42,7 +48,7 @@ export const addingCourseSchema = z.object({
     .refine((files) => files?.[0]?.size <= MAX_FILE_SIZE, {
       message: `Max file size is 5MB.`,
     }),
-    coursePreview: z
+    previewVideo: z
     .any()
     // To not allow empty files
     .refine((files) => files?.length >= 1, { message: "Video is required." })
@@ -54,7 +60,7 @@ export const addingCourseSchema = z.object({
     .refine((files) => files?.[0]?.size <= MAX_VIDEO_FILE_SIZE, {
       message: `Max file size is 1GB.`,
     }),
-    courseVideo: z
+    mainVideo: z
     .any()
     // To not allow empty files
     .refine((files) => files?.length >= 1, { message: "Video is required." })
@@ -66,8 +72,8 @@ export const addingCourseSchema = z.object({
     .refine((files) => files?.[0]?.size <= MAX_VIDEO_FILE_SIZE, {
       message: `Max file size is 1GB.`,
     }),
+   
  
 });
 
-export const urlRegex =
-  /^(https?:\/\/)?((([a-zA-Z\d]([a-zA-Z\d-]*[a-zA-Z\d])*)\.)+[a-zA-Z]{2,}|\d{1,3}(\.\d{1,3}){3})(:\d+)?(\/[-a-zA-Z\d%_.~+]*)*(\?[;&a-zA-Z\d%_.~+=-]*)?(#[a-zA-Z\d_]*)?$/;
+

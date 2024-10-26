@@ -1,109 +1,150 @@
 "use client";
-import * as React from "react";
-import Image, { StaticImageData } from "next/image";
-import { Card, CardFooter, CardHeader } from "@/components/ui/card";
-import { ProgressBar } from "@/components/ProgressBar";
-import Link from "next/link";
-import { ParentCoursesData } from "@/constants/parentsCourse";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useClasses } from "@/data-access/class";
+import Image from "next/image";
 
-interface Props {
-  index: number;
-  icon: string;
-  classes: string;
+
+import { FaGraduationCap } from "react-icons/fa";
+import { MdVerified } from "react-icons/md";
+import Container from "@/components/Container";
+
+
+import { Skeleton } from "@mui/material";
+import { Noitem } from "@/components/ApplicantsTable";
+import SingleParentCourses from "./SingleParentCourses";
+import Link from "next/link";
+
+
+
+export interface TeacherInfo {
+  id: string;
+  name: string;
+  profilePhoto: string | null;
+  status: string;
+ 
+}
+export interface ICourses {
+  id: string;
+  byAdmin: boolean;
+  grade: string;
+  details: string;
+  teacherId: number;
   title: string;
-  time: string;
-  module: string;
-  pricing: string;
-  payment?: string;
-  purchase?: string;
+  banner: string;
+  subject: string;
+  previewVideo: string;
+  mainVideo: string;
+  price: string;
+  sellCount: string;
+  createdAt: string;
+  teacher: TeacherInfo;
 }
 
-const CourseCard = ({
-  icon,
-  classes,
-  title,
-  time,
-  module,
-  pricing,
-  payment,
-  purchase,
-}: Props) => {
-  return (
-    <div className="w-full hover:-translate-y-2 my-6 transition-transform duration-300 group">
-      <Link href="/parents-dashboard/courses/details">
-        <Card className="h-[55vh]">
-          <CardHeader>
-            <Image
-              className=" rounded-lg w-full"
-              src={icon}
-              alt="background"
-              width={100}
-              height={100}
-            />
-          </CardHeader>
-          <div className="px-4">
-            <p className="text-[13px] font-semibold">{classes}</p>
-            <p className="text-[14px] my-2 font-bold">{title}</p>
-            <div className="flex gap-4 pt-3 pb-4">
-              <span className="flex items-center gap-2 font-medium text-[12px]">
-                <Image
-                  src="/svgs/anti-clock.svg"
-                  width={15}
-                  height={15}
-                  alt="Clock"
-                />
-                {time}
-              </span>
+// export const ShowSkeleton = () => {
+//   const myArray = new Array(6).fill(" ");
+//   return (
+//     <div className=" w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+//       {myArray.map((item, index) => (
+//         <Skeleton
+//           key={index}
+//           className=" w-full rounded-md"
+//           height={250}
+//           variant="rectangular"
+//           animation="wave"
+//         />
+//       ))}
+//     </div>
+//   );
+// };
 
-              <span className="flex items-center gap-2 font-medium text-[12px]">
-                <Image
-                  src="/svgs/module.svg"
-                  width={15}
-                  height={15}
-                  alt="Module"
-                />
-                {module}
-              </span>
+
+const CourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
+  const { makeSubString } = useClasses();
+  return (
+    <>
+      <div className="w-full overflow-hidden     font-header rounded-lg card flex flex-col justify-center gap-3 hover:-translate-y-2 transition-transform duration-300 group">
+        <div className="relative text-white w-full h-[200px]">
+          <Image
+            className="w-full h-full object-cover"
+            src={item.banner}
+            alt="background"
+            width={200}
+            height={200}
+          />
+
+          
+          <SingleParentCourses title={item.title} details={item.details} teacherPhoto={item.teacher.profilePhoto} teacher={item.teacher.name} banner={item.banner} previewVideo={item.previewVideo} mainVideo={item.mainVideo}/>
+        </div>
+        
+        
+        <div className="flex flex-col gap-3 mb-8 justify-center mx-4 ">
+          <div className=" flex items-center justify-between">
+            <div>
+              <div className=" flex items-center gap-2">
+                <p className="text-[14px] font-bold">{item.title}</p>
+              </div>
+
+              <div className=" flex items-center pt-1 gap-2">
+                <p className="text-[13px] font-subtext font-medium">
+                  <FaGraduationCap className="inline mr-1 text-lg" />
+                  {item.byAdmin === true ? "SchooledAfrika" :  makeSubString(item.teacher.name)}
+                 
+                </p>
+              </div>
             </div>
-            {payment && (
-              <p>
-                <ProgressBar />
-              </p>
-            )}
+            <div className=" flex items-center gap-1 bg-green-200 px-2 py-1 rounded-md">
+              <MdVerified className=" text-green-700" />
+              <p className=" text-green-700 text-[10px]">verified</p>
+            </div>
           </div>
-          <CardFooter className="flex justify-between">
-            <p className="font-bold text-[18px] text-lightGreen font-subtext px-3 py-2 rounded-md">
-              {payment ? "" : pricing}
-            </p>
-            <div
-              className={`flex space-x-1 cursor-pointer ${
-                payment ? "" : "bg-[#FF6634] p-2 rounded"
-              }`}
-            >
-              <p
-                className={`text-white ${
-                  pricing
-                    ? "text-[12px] font-semibold"
-                    : "text-[12px] font-semibold"
-                }`}
-              >
-                {payment ? "" : purchase}
-              </p>
-            </div>
-          </CardFooter>
-        </Card>
-      </Link>
-    </div>
+        </div>
+      </div>
+    </>
   );
 };
 
 const ParentCourses = () => {
+
+  // const { data, isFetching, isError, error } = useQuery({
+  //   queryKey: ["getCourseByParents"],
+  //   queryFn: async () => {
+  //     const response = await fetch("");
+  //     const result = await response.json();
+  //     return result;
+  //   },
+  // });
+  //console.log(data);
+
+  // if (isFetching) {
+  //   return <ShowSkeleton />;
+  // }
+  // if (isError) {
+  //   return <div>{error.message}</div>;
+  // }
+
   return (
-    <div className="grid mt-8  grid-cols-1 xs:grid-cols-2 md:grid-cols-3 items-center xl:grid-cols-3 gap-2">
-      {ParentCoursesData.map((Course, index) => (
-        <CourseCard index={index} key={Course.id} {...Course} />
-      ))}
-    </div>
+    <Container>
+    {/* {Array.isArray(data) && ( */}
+      <div>
+        {/* {data.length === 0 ? ( */}
+          <div className="w-full flex flex-col">
+            <Noitem desc="No new courses" />
+            <Link href="/courses" className="font-bold mx-auto bg-lightGreen my-3  p-3 rounded-md text-white">Please purchase course</Link>
+          </div>
+        {/* ) : ( */}
+          {/* <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
+           {data.map((item: ICourses, index) => (
+              <CourseCard
+              item={item} key={index}
+              />
+            ))}
+          </div>
+        )} */}
+      </div>
+    {/* )} */}
+  </Container>
+    
   );
 };
 

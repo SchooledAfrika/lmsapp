@@ -67,7 +67,7 @@ const WardOptions = () => {
     },
   });
 
-  console.log(data);
+  //console.log(data);
 
   // Query client instance
   const queryClient = useQueryClient();

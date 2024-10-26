@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useQuery} from "@tanstack/react-query";
-
-
-
+import { useQuery } from "@tanstack/react-query";
 
 import {
   Table,
@@ -19,14 +16,7 @@ import { TableSkeleton } from "@/components/TableSkeleton";
 
 import Image from "next/image";
 
-
-
-
-
-
 const Teachers = () => {
-  
-  
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["AdminGetTeacher"],
     queryFn: async () => {
@@ -35,7 +25,7 @@ const Teachers = () => {
       return result;
     },
   });
-  console.log(data);
+  //console.log(data);
 
   // If loading
   if (isLoading) {
@@ -80,7 +70,6 @@ const Teachers = () => {
                   {item.email}
                 </TableCell>
                 <TableCell className="text-[12px] font-semibold p-2">
-                 
                   {item.status}
                 </TableCell>
 

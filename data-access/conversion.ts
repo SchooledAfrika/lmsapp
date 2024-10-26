@@ -2,7 +2,7 @@ import { format } from "timeago.js";
 import { useEffect, useState } from "react";
 export const useConversion = () => {
   // const get the date
-  function handleDate(time: string) {
+  function handleDate(time: string ) {
     const fullTime = new Date(time);
     const formattedDate = fullTime.toLocaleDateString("en-US", {
       year: "numeric",

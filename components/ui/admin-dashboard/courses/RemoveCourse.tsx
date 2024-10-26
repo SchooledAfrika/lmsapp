@@ -16,21 +16,22 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 
-// interface IdeleteSchool {
-//   classId: string;
-// }
+interface IdeleteCourse {
+  id: string;
+}
 
-const RemoveCourse = () => {
+const RemoveCourse: React.FC<IdeleteCourse> = ({ id }) => {
   const [loading, setloading] = useState<boolean>(false);
 
   //   instance of client
   const queryClient = useQueryClient();
   //   creating a delete using mutation to the backend
   const { mutate } = useMutation({
-    mutationFn: async () => {
-      const result = await fetch(``, {
+    mutationFn: async (id: string) => {
+      const result = await fetch(`/api/courses-from-admin`, {
         method: "DELETE",
         body: JSON.stringify({
+          id: id,
           
         }),
       });
@@ -58,7 +59,7 @@ const RemoveCourse = () => {
   });
   const handleDelete = () => {
     setloading(true);
-    mutate();
+    mutate(id);
    
   };
 

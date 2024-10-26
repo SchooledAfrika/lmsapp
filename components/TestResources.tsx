@@ -45,6 +45,7 @@ const TestResources: React.FC<IResource> = ({ id }) => {
     },
     enabled: Boolean(id),
   });
+  
 
   if (isFetching) {
     return (
