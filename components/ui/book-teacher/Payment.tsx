@@ -58,7 +58,6 @@ const Payment: React.FC<ISessionSub> = ({
                     <p className="text-[11px]">{item.desc}</p>
                   </div>
                 </div>
-
                 <input
                   checked={method === item.title}
                   className="w-4 ml-4 accent-lightGreen"

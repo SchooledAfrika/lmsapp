@@ -90,10 +90,6 @@ export const useConversion = () => {
   ): number => {
     let totalAmt: number;
 
-    console.log("selectedDays", selectedDays);
-    console.log("duration", duration);
-    console.log("hours", hours);
-
     // Return early if billing duration or required parameters are missing
     if (selectedDays.length < 1) return 0;
     if (duration === "Billing period") return 0;
@@ -105,30 +101,25 @@ export const useConversion = () => {
     // Determine multiplier for yearly payments
     const multiplier = duration === "monthly" ? 1 : 12;
 
-    // Calculate discount per hour based on the number of selected days
-    let discountRate = 0;
+    // Calculate total payment based on selected days
     switch (selectedDays.length) {
       case 1:
-        discountRate = 0; // No discount for one day
+        totalAmt = baseRate * hours * multiplier;
         break;
       case 2:
-        discountRate = 5; // 5 per hour discount for two days
+        totalAmt = baseRate * 2 * multiplier * hours - 5 * multiplier;
         break;
       case 3:
-        discountRate = 10; // 10 per hour discount for three days
+        totalAmt = baseRate * 3 * multiplier * hours - 10 * multiplier;
         break;
       case 4:
-        discountRate = 20; // 20 per hour discount for four days
+        totalAmt = baseRate * 4 * multiplier * hours - 20 * multiplier;
         break;
       default:
-        discountRate = 20; // Max discount per hour for five or more days
+        totalAmt = baseRate * 5 * multiplier * hours - 20 * multiplier;
         break;
     }
 
-    // Calculate total amount, with discount applied per day and per hour
-    totalAmt = baseRate * hours * multiplier - discountRate * hours;
-
-    console.log("totalAmt", totalAmt);
     return totalAmt;
   };
 

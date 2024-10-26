@@ -75,9 +75,29 @@ const StudentBookSchedule: React.FC<ISessionSub> = ({
   const { totalSessionPayment } = useConversion();
   const [duration, setduration] = React.useState<string>("");
   const [hours, sethours] = React.useState<string>();
+  const [shour, setshour] = React.useState<number>(1);
   React.useEffect(() => {
     setValue("hours", 1);
-  }, [getValues("hours")]);
+    setValue("length", "monthly");
+  }, []);
+  React.useEffect(() => {
+    function setInitailHourValue() {
+      if (!getValues("hours") && !getValues("sessionTypes")) {
+        console.log("first time hit");
+        return setValue("hours", 1);
+      } else if (
+        getValues("hours") &&
+        getValues("sessionTypes") === "Homework Support"
+      ) {
+        console.log("this is the second hit now");
+        setshour(1);
+        return setValue("hours", 1);
+      } else {
+        return;
+      }
+    }
+    setInitailHourValue();
+  }, [getValues("sessionTypes")]);
   // Handle session selection
   const handleSessionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const sessionType = event.target.value;
@@ -94,6 +114,7 @@ const StudentBookSchedule: React.FC<ISessionSub> = ({
   // Handle hours change
   const handleHoursChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newHour = Number(event.target.value);
+    setshour(newHour);
     setValue("hours", newHour);
     setTotalAmt && setTotalAmt((prev) => prev! * newHour);
   };
@@ -184,6 +205,7 @@ const StudentBookSchedule: React.FC<ISessionSub> = ({
                   setValue("length", e.target.value);
                   setduration(e.target.value);
                 }}
+                defaultValue={"monthly"}
               >
                 <option value="" selected disabled>
                   Billing period
@@ -317,9 +339,10 @@ const StudentBookSchedule: React.FC<ISessionSub> = ({
         {getValues("sessionTypes") && getValues("length") && (
           <div>
             <div className="my-2 font-semibold text-center text-[14px]">
-              <h2 className=" font-bold">
+              <h2 className=" font-bold text-[22px]">
                 Total Price:{" "}
                 <span className=" text-green-800">
+                  $
                   {totalSessionPayment(
                     getValues("days"),
                     getValues("length"),
