@@ -109,7 +109,7 @@ export const TeacherNavbar: SchoolNavType[] = [
   },
   {
     title: "Courses",
-    description: "Skill up with our courses.",
+    description: "Create and sell your courses with ease.",
     path: "courses",
   },
   {
@@ -149,7 +149,7 @@ export const StudentNavbar: SchoolNavType[] = [
   },
   {
     title: "Students",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "",
     path: "students",
     subDetails: {
       title: " Single student here",

@@ -1,16 +1,46 @@
-import Image from "next/image";
+"use client";
 import React from "react";
+import { useQuery } from "@tanstack/react-query";
+import Image from "next/image";
 import { FiEdit } from "react-icons/fi";
 import { SiGoogleclassroom } from "react-icons/si";
 import { Button } from "@/components/ui/button"
 import Link from "next/link";
 import { BsBroadcast } from "react-icons/bs";
+import { useParams } from "next/navigation";
 import SessionDeals from "./SessionDeals";
 
 
 
 
 const SingleSession = () => {
+  const { id } = useParams();
+
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["getSingleSession"],
+    queryFn: async () => {
+      const response = await fetch(`/api/class/specific/${id}`);
+      const result = await response.json();
+      return result;
+    },
+    
+  });
+  console.log(data)
+
+  //   if is loading
+  if (isLoading) {
+    return (
+      <div className="">
+        <p className="my-4 font-bold">loading...</p>
+
+        
+      </div>
+    );
+  }
+  // if is error
+  if (isError) {
+    return <div className=" flex-1">{error.message}</div>;
+  }
   return (
     <div className="font-header md:mt-6 mt-24">
         <div className="flex justify-between">

@@ -20,8 +20,8 @@ const DashboardPage = () => {
         <AddWard onProceed={handleRefresh} />
       </div>
 
-      <Chart />
-      <Overall />
+      <Chart  />
+      <Overall key={refreshKey} />
     </div>
   );
 };

@@ -1,10 +1,9 @@
 "use client";
-import * as React from "react";
+import React from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useClasses } from "@/data-access/class";
 import Image from "next/image";
-import { AdminCourses } from "@/constants/adminCourses";
 
-import { Button } from "@/components/ui/button";
 
 import { FaGraduationCap } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
@@ -12,27 +11,54 @@ import Container from "@/components/Container";
 import Link from "next/link";
 import EditCourses from "./EditCourses";
 import RemoveCourse from "./RemoveCourse";
+import { Skeleton } from "@mui/material";
+import { Noitem } from "@/components/ApplicantsTable";
 
-interface Props {
-  index: number;
+
+
+export interface TeacherInfo {
+  id: string;
+  name: string;
+  profilePhoto: string | null;
+  status: string;
+ 
+}
+export interface ICourses {
+  id: string;
+  byAdmin: boolean;
+  grade: string;
+  details: string;
+  teacherId: number;
   title: string;
-  teacher: string;
-  description: string;
-  courseBanner: string;
-  coursePreview: string;
-  courseVideo: string;
+  banner: string;
+  subject: string;
+  previewVideo: string;
+  mainVideo: string;
   price: string;
+  sellCount: string;
+  createdAt: string;
+  teacher: TeacherInfo;
 }
 
-const CourseCard = ({
-  title,
-  teacher,
-  description,
-  courseBanner,
-  coursePreview,
-  courseVideo,
-  price,
-}: Props) => {
+export const ShowSkeleton = () => {
+  const myArray = new Array(6).fill(" ");
+  return (
+    <div className=" w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+      {myArray.map((item, index) => (
+        <Skeleton
+          key={index}
+          className=" w-full rounded-md"
+          height={250}
+          variant="rectangular"
+          animation="wave"
+        />
+      ))}
+    </div>
+  );
+};
+
+
+const CourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
   const { makeSubString } = useClasses();
   return (
     <>
@@ -40,29 +66,37 @@ const CourseCard = ({
         <div className="relative text-white w-full h-[200px]">
           <Image
             className="w-full h-full object-cover"
-            src={courseBanner}
+            src={item.banner}
             alt="background"
             width={200}
             height={200}
           />
 
-          {teacher === "SchooledAfrika" ? <EditCourses /> : ""}
-          <RemoveCourse />
+          {item.byAdmin && <EditCourses id={item.id} /> }
+          <RemoveCourse id={item.id}  />
         </div>
-        <p className="text-right mr-6 font-bold mt-3 text-lightGreen">
-          {price}
+        <div className="flex justify-between px-2">
+        <p className=" font-bold mt-3 bg-[rgba(0,0,0,0.6)] text-white p-2 rounded-md">
+         <span className="text-[14px] font-semibold">Sold:</span> {item.sellCount}
         </p>
+        <p className=" font-bold mt-3 text-lightGreen">
+          ${item.price}
+        </p>
+
+        </div>
+        
         <div className="flex flex-col gap-3 mb-8 justify-center mx-4 ">
           <div className=" flex items-center justify-between">
             <div>
               <div className=" flex items-center gap-2">
-                <p className="text-[14px] font-bold">{title}</p>
+                <p className="text-[14px] font-bold">{item.title}</p>
               </div>
 
               <div className=" flex items-center pt-1 gap-2">
                 <p className="text-[13px] font-subtext font-medium">
                   <FaGraduationCap className="inline mr-1 text-lg" />
-                  {makeSubString(teacher)}
+                  {item.byAdmin === true ? "SchooledAfrika" :  makeSubString(item.teacher.name)}
+                 
                 </p>
               </div>
             </div>
@@ -78,24 +112,45 @@ const CourseCard = ({
 };
 
 const CoursesAdmin = () => {
+
+  const { data, isFetching, isError, error } = useQuery({
+    queryKey: ["getCourse"],
+    queryFn: async () => {
+      const response = await fetch("/api/courses-from-admin");
+      const result = await response.json();
+      return result;
+    },
+  });
+  console.log(data);
+
+  if (isFetching) {
+    return <ShowSkeleton />;
+  }
+  if (isError) {
+    return <div>{error.message}</div>;
+  }
+
   return (
     <Container>
-      <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
-        {AdminCourses.map((course, index) => (
-          <CourseCard
-            index={index}
-            key={course.id}
-            title={course.title}
-            teacher={course.teacher}
-            description={course.description}
-            courseBanner={course.courseBanner}
-            coursePreview={course.coursePreview}
-            courseVideo={course.courseVideo}
-            price={course.price}
-          />
-        ))}
+    {Array.isArray(data) && (
+      <div>
+        {data.length === 0 ? (
+          <div className="w-full">
+            <Noitem desc="No new courses" />
+          </div>
+        ) : (
+          <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
+           {data.map((item: ICourses, index) => (
+              <CourseCard
+              item={item} key={index}
+              />
+            ))}
+          </div>
+        )}
       </div>
-    </Container>
+    )}
+  </Container>
+    
   );
 };
 
