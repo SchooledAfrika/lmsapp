@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   if (!userId) return notAuthenticated();
   //   check if the kyc is already approved
   const donekyc = await checkKyc(userId);
-  if (role !== "Admin" && (!donekyc || donekyc !== "PENDING" )) {
+  if (role !== "Admin" && (!donekyc || donekyc !== "APPROVED" )) {
     return new Response(
       JSON.stringify({ message: "Please complete your kyc to proceed" }),
       { status: 400 }

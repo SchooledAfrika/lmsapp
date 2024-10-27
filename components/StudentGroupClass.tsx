@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {useState} from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { SingleClassSkeleton } from "./SingleClassroom";
@@ -64,9 +64,13 @@ export const Exams: React.FC<{ exams: IExam[] }> = ({ exams }) => {
   const { getTimeAgo } = useConversion();
   const { data } = useSession();
   const router = useRouter();
+
+  // New state to track if the exam should start
+  const [examStarted, setExamStarted] = useState(false);
   // lets push to the exam page for student to start exam
   const handleMoveToExam = (id: string) => {
-    router.push(`/student-dashboard/classroom/start-exam/?examId=${id}`);
+    setExamStarted(true); // Set exam started to true
+    router.push(`/student-dashboard/classroom/start-exam/?examId=${id}&examStarted=true`);
   };
   return (
     <div className=" flex-1 flex flex-col gap-2 bg-white rounded-md p-5">
@@ -219,6 +223,9 @@ const ClassDetails: React.FC<{
 
 const StudentGroupClass = () => {
   const { id } = useParams();
+
+  
+
   const { data, isFetching, error, isError } = useQuery({
     queryKey: ["StudentGroupClass"],
     queryFn: async () => {
