@@ -339,7 +339,7 @@ export const FlutterWaveBtn: React.FC<{
         enroll();
       }, 5500);
     },
-    metadata: {
+    meta: {
       courseId: id,
       payerId: data?.user.id,
       userType: data?.user.role,
@@ -357,7 +357,9 @@ export const FlutterWaveBtn: React.FC<{
         enroll();
       }, 5500);
     },
-    onClose: () => {},
+    onClose: () => {
+      alert(`${id}, ${price}, ${data?.user.name}, ${data?.user.role}`);
+    },
   };
   return (
     <div>

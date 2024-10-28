@@ -155,12 +155,12 @@ export const teachersPlan = async (payload: Iplans) => {
 
 // here we will handle the webhook for student paying for a course
 interface Icourses {
+  __CheckoutInitAddress?: string;
   courseId: string;
   payersId: string;
   userType: string;
 }
 export const coursePayment = async (payload: Icourses) => {
-  console.log(payload);
   // first, let's get the course that we want to buy or purchase
   const theCourse = await prisma.courses.findUnique({
     where: { id: payload.courseId },
@@ -170,7 +170,7 @@ export const coursePayment = async (payload: Icourses) => {
     // check if isStudent is true and buy the course for the student or
     // buy the course for the parents if the student is false
     if (payload.userType === "Student") {
-      await prisma.purchasedCourses.create({
+      const item = await prisma.purchasedCourses.create({
         data: {
           coursesId: payload.courseId,
           title: theCourse?.title,
@@ -183,6 +183,7 @@ export const coursePayment = async (payload: Icourses) => {
           studentId: payload.payersId,
         },
       });
+      console.log(item);
     } else if (payload.userType === "Parents") {
       await prisma.purchasedCourses.create({
         data: {
