@@ -157,9 +157,10 @@ export const teachersPlan = async (payload: Iplans) => {
 interface Icourses {
   courseId: string;
   payersId: string;
-  isStudent: string;
+  userType: string;
 }
 export const coursePayment = async (payload: Icourses) => {
+  console.log(payload);
   // first, let's get the course that we want to buy or purchase
   const theCourse = await prisma.courses.findUnique({
     where: { id: payload.courseId },
@@ -168,13 +169,13 @@ export const coursePayment = async (payload: Icourses) => {
   try {
     // check if isStudent is true and buy the course for the student or
     // buy the course for the parents if the student is false
-    if (payload.isStudent) {
+    if (payload.userType === "Student") {
       await prisma.purchasedCourses.create({
         data: {
+          coursesId: payload.courseId,
           title: theCourse?.title,
           price: theCourse?.price,
           byAdmin: theCourse?.byAdmin,
-          teacherId: theCourse?.teacherId,
           subject: theCourse?.subject,
           banner: theCourse?.banner,
           previewVideo: theCourse?.previewVideo,
@@ -182,9 +183,10 @@ export const coursePayment = async (payload: Icourses) => {
           studentId: payload.payersId,
         },
       });
-    } else {
+    } else if (payload.userType === "Parents") {
       await prisma.purchasedCourses.create({
         data: {
+          coursesId: payload.courseId,
           title: theCourse?.title,
           price: theCourse?.price,
           byAdmin: theCourse?.byAdmin,
@@ -194,6 +196,20 @@ export const coursePayment = async (payload: Icourses) => {
           previewVideo: theCourse?.previewVideo,
           mainVideo: theCourse?.mainVideo,
           parentsId: payload.payersId,
+        },
+      });
+    } else {
+      await prisma.purchasedCourses.create({
+        data: {
+          coursesId: payload.courseId,
+          title: theCourse?.title,
+          price: theCourse?.price,
+          byAdmin: theCourse?.byAdmin,
+          subject: theCourse?.subject,
+          banner: theCourse?.banner,
+          previewVideo: theCourse?.previewVideo,
+          mainVideo: theCourse?.mainVideo,
+          teacherId: payload.payersId,
         },
       });
     }
@@ -215,6 +231,7 @@ export const coursePayment = async (payload: Icourses) => {
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     return serverError();
   }
 };

@@ -2,6 +2,7 @@
 // this part is only accessible by the webhooks we have setup for payments
 // TODO: remember to check or add the auth header for the keys given by this webhooks payment platform
 import {
+  coursePayment,
   payForClass,
   sessionPaymentPaystack,
   teachersPlan,
@@ -42,5 +43,9 @@ export async function POST(req: Request) {
   // payment for teacher to subscribe for a plan
   if (paymentFor === "teacherplan") {
     return await teachersPlan(body.data.metadata.plan);
+  }
+  // webhook for payment for courses from anyone
+  if (paymentFor == "courses") {
+    return await coursePayment(body.data.metadata.plan);
   }
 }

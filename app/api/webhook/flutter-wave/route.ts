@@ -5,6 +5,7 @@ import {
   payForClass,
   sessionPaymentFlutter,
   teachersPlan,
+  coursePayment,
 } from "@/prisma/utils/payment";
 
 // add student to the class after making payment
@@ -32,8 +33,14 @@ export async function POST(req: Request) {
   if (paymentFor == "session ") {
     return await sessionPaymentFlutter(body.meta_data);
   }
+  // webhook for teachers making payment for plans
   if (paymentFor == "teacherplan ") {
     return await teachersPlan(body.meta_data);
+  }
+  // webhook for payment for courses from anyone
+  if (paymentFor == "courses") {
+    console.log("entered");
+    return await coursePayment(body.meta_data);
   }
   return new Response(JSON.stringify({ m: "successful" }), { status: 200 });
 }
