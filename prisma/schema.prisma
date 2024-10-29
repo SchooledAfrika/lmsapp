@@ -70,8 +70,9 @@ model Teacher {
   status               TeacherStatus        @default(Pending)
   TeachersPlans        TeachersPlans?
   Courses              Courses[]
-  PurchasedCourses     PurchasedCourses[]
-  Revenew              Revenew[]
+
+  Revenew                 Revenew[]
+  TeacherPurchasedCourses TeacherPurchasedCourses[]
 }
 
 // kyc for teachers appears below
@@ -136,7 +137,8 @@ model Student {
   country            String?
   parent             Parents?             @relation(fields: [parentsId], references: [id], onDelete: Cascade)
   parentsId          String?              @db.ObjectId
-  PurchasedCourses   PurchasedCourses[]
+
+  StudentPurchasedCourses StudentPurchasedCourses[]
 }
 
 // creating the school model
@@ -166,22 +168,22 @@ model School {
 
 // creating the model for parents
 model Parents {
-  id               String             @id @default(auto()) @map("_id") @db.ObjectId
-  name             String?
-  email            String             @unique
-  password         String?
-  profilePhoto     String?
-  role             Role
-  gender           Gender?
-  phoneNo          String?
-  address          String?
-  CompletedProfile Boolean            @default(false)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now())
-  wards            Student[]
-  status           StudentStatus      @default(Active) //for showing active or resctricted status
-  country          String?
-  PurchasedCourses PurchasedCourses[]
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  name                    String?
+  email                   String                    @unique
+  password                String?
+  profilePhoto            String?
+  role                    Role
+  gender                  Gender?
+  phoneNo                 String?
+  address                 String?
+  CompletedProfile        Boolean                   @default(false)
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @default(now())
+  wards                   Student[]
+  status                  StudentStatus             @default(Active) //for showing active or resctricted status
+  country                 String?
+  ParentsPurchasedCourses ParentsPurchasedCourses[]
 }
 
 // here we created the model where teachers can upload article
@@ -386,28 +388,31 @@ model GetInTouch {
 // below is the model for courses created by teacher and byAdmin also
 // this will be in form of one to many relationship with the teachers
 model Courses {
-  id               String             @id @default(auto()) @map("_id") @db.ObjectId
-  title            String
-  price            Int
-  banner           String
-  previewVideo     String
-  mainVideo        String
-  subject          String
-  teacher          Teacher            @relation(fields: [teacherId], references: [id])
-  teacherId        String             @db.ObjectId
-  byAdmin          Boolean            @default(false)
-  sellCount        Int                @default(0)
-  details          String
-  grade            String
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now())
-  PurchasedCourses PurchasedCourses[]
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  title                   String
+  price                   Int
+  banner                  String
+  previewVideo            String
+  mainVideo               String
+  subject                 String
+  teacher                 Teacher                   @relation(fields: [teacherId], references: [id])
+  teacherId               String                    @db.ObjectId
+  byAdmin                 Boolean                   @default(false)
+  sellCount               Int                       @default(0)
+  details                 String
+  grade                   String
+  buyersList              String[]                  @db.ObjectId
+  StudentPurchasedCourses StudentPurchasedCourses[]
+  ParentsPurchasedCourses ParentsPurchasedCourses[]
+  TeacherPurchasedCourses TeacherPurchasedCourses[]
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @default(now())
 }
 
 // below is the model for courses bought by a particular student
 // once a student purchases a courses, most of the details will be available here
 // including the detailVide or mainVideo
-model PurchasedCourses {
+model StudentPurchasedCourses {
   id           String   @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   price        Int
@@ -417,19 +422,44 @@ model PurchasedCourses {
   subject      String
   // adding a relationship here to connect to teacher that owns the course
   // so we can be able to fetch and display any neccessay information for students
-  originalCour Courses  @relation(fields: [coursesId], references: [id])
+  courseInfo   Courses  @relation(fields: [coursesId], references: [id])
+  student      Student  @relation(fields: [studentId], references: [id])
   coursesId    String   @db.ObjectId
-  // also adding the relationship between the student and the purchased courses
-  // this field is optional as it may not only be student that will purchase
-  // but also parents can purchase courses.
-  // so, that is while both fields for parents and students are optional
-  // but, what ever ways, we should be able to fill in one.
-  student      Student? @relation(fields: [studentId], references: [id])
-  studentId    String?  @db.ObjectId
-  parents      Parents? @relation(fields: [parentsId], references: [id])
-  parentsId    String?  @db.ObjectId
-  teacher      Teacher? @relation(fields: [teacherId], references: [id])
-  teacherId    String?  @db.ObjectId
+  studentId    String   @db.ObjectId
+  byAdmin      Boolean
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+}
+
+model ParentsPurchasedCourses {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  price        Int
+  banner       String
+  previewVideo String
+  mainVideo    String
+  subject      String
+  courseInfo   Courses  @relation(fields: [coursesId], references: [id])
+  parents      Parents  @relation(fields: [parentsId], references: [id])
+  coursesId    String   @db.ObjectId
+  parentsId    String   @db.ObjectId
+  byAdmin      Boolean
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+}
+
+model TeacherPurchasedCourses {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  title        String
+  price        Int
+  banner       String
+  previewVideo String
+  mainVideo    String
+  subject      String
+  courseInfo   Courses  @relation(fields: [coursesId], references: [id])
+  Teacher      Teacher  @relation(fields: [teacherId], references: [id])
+  coursesId    String   @db.ObjectId
+  teacherId    String   @db.ObjectId
   byAdmin      Boolean
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())

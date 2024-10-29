@@ -161,16 +161,20 @@ interface Icourses {
   userType: string;
 }
 export const coursePayment = async (payload: Icourses) => {
+  console.log(payload);
   // first, let's get the course that we want to buy or purchase
   const theCourse = await prisma.courses.findUnique({
     where: { id: payload.courseId },
   });
+  // checking if course actually exists or if the user has the course already
   if (!theCourse) return;
+  const alreadyBought = theCourse.buyersList.includes(payload.payersId);
+  if (alreadyBought) return;
   try {
     // check if isStudent is true and buy the course for the student or
     // buy the course for the parents if the student is false
     if (payload.userType === "Student") {
-      const item = await prisma.purchasedCourses.create({
+      const item = await prisma.studentPurchasedCourses.create({
         data: {
           coursesId: payload.courseId,
           title: theCourse?.title,
@@ -185,13 +189,12 @@ export const coursePayment = async (payload: Icourses) => {
       });
       console.log(item);
     } else if (payload.userType === "Parents") {
-      await prisma.purchasedCourses.create({
+      const parents = await prisma.parentsPurchasedCourses.create({
         data: {
           coursesId: payload.courseId,
           title: theCourse?.title,
           price: theCourse?.price,
           byAdmin: theCourse?.byAdmin,
-          teacherId: theCourse?.teacherId,
           subject: theCourse?.subject,
           banner: theCourse?.banner,
           previewVideo: theCourse?.previewVideo,
@@ -199,8 +202,9 @@ export const coursePayment = async (payload: Icourses) => {
           parentsId: payload.payersId,
         },
       });
+      console.log(parents);
     } else {
-      await prisma.purchasedCourses.create({
+      const teacher = await prisma.teacherPurchasedCourses.create({
         data: {
           coursesId: payload.courseId,
           title: theCourse?.title,
@@ -213,11 +217,15 @@ export const coursePayment = async (payload: Icourses) => {
           teacherId: payload.payersId,
         },
       });
+      console.log(teacher);
     }
     // now, update the course total sell by one
     await prisma.courses.update({
       where: { id: payload.courseId },
-      data: { sellCount: theCourse.sellCount + 1 },
+      data: {
+        sellCount: theCourse.sellCount + 1,
+        buyersList: { push: payload.payersId },
+      },
     });
     // then we go ahead and add this to the revenew generated so far
     await prisma.revenew.create({

@@ -51,8 +51,8 @@ export async function POST(req: Request) {
 export async function PUT(req: Request) {
   const theWhole = {
     __CheckoutInitAddress: "david one",
-    courseId: "6718dafc60d34bef3fabee14",
-    payersId: "67083a08145752924230feef",
+    courseId: "67192af075c08119e13988de",
+    payersId: "66ef9e1e5c4354b7c687ff2d",
     userType: "Student",
   };
   try {

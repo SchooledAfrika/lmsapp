@@ -282,7 +282,7 @@ export const PayStackBtn: React.FC<{
       toast.success("payment successful, navigate to class in your dashboard");
       enroll();
     },
-    meta: {
+    metadata: {
       custom_fields: [
         {
           display_name: data?.user.id as string, //students id
