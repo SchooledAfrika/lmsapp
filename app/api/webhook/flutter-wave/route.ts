@@ -42,22 +42,7 @@ export async function POST(req: Request) {
   }
   // webhook for payment for courses from anyone
   if (paymentFor == "courses ") {
-    console.log("entered");
     return await coursePayment(body.meta_data);
   }
   return new Response(JSON.stringify({ m: "successful" }), { status: 200 });
-}
-
-export async function PUT(req: Request) {
-  const theWhole = {
-    __CheckoutInitAddress: "david one",
-    courseId: "67192af075c08119e13988de",
-    payersId: "66ef9e1e5c4354b7c687ff2d",
-    userType: "Student",
-  };
-  try {
-    return await coursePayment(theWhole);
-  } catch (error) {
-    console.log(error);
-  }
 }

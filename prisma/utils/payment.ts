@@ -157,18 +157,19 @@ export const teachersPlan = async (payload: Iplans) => {
 interface Icourses {
   __CheckoutInitAddress?: string;
   courseId: string;
-  payersId: string;
+  payerId: string;
   userType: string;
 }
 export const coursePayment = async (payload: Icourses) => {
   console.log(payload);
+
   // first, let's get the course that we want to buy or purchase
   const theCourse = await prisma.courses.findUnique({
     where: { id: payload.courseId },
   });
   // checking if course actually exists or if the user has the course already
   if (!theCourse) return;
-  const alreadyBought = theCourse.buyersList.includes(payload.payersId);
+  const alreadyBought = theCourse.buyersList.includes(payload.payerId);
   if (alreadyBought) return;
   try {
     // check if isStudent is true and buy the course for the student or
@@ -184,7 +185,7 @@ export const coursePayment = async (payload: Icourses) => {
           banner: theCourse?.banner,
           previewVideo: theCourse?.previewVideo,
           mainVideo: theCourse?.mainVideo,
-          studentId: payload.payersId,
+          studentId: payload.payerId,
         },
       });
       console.log(item);
@@ -199,7 +200,7 @@ export const coursePayment = async (payload: Icourses) => {
           banner: theCourse?.banner,
           previewVideo: theCourse?.previewVideo,
           mainVideo: theCourse?.mainVideo,
-          parentsId: payload.payersId,
+          parentsId: payload.payerId,
         },
       });
       console.log(parents);
@@ -214,7 +215,7 @@ export const coursePayment = async (payload: Icourses) => {
           banner: theCourse?.banner,
           previewVideo: theCourse?.previewVideo,
           mainVideo: theCourse?.mainVideo,
-          teacherId: payload.payersId,
+          teacherId: payload.payerId,
         },
       });
       console.log(teacher);
@@ -224,7 +225,7 @@ export const coursePayment = async (payload: Icourses) => {
       where: { id: payload.courseId },
       data: {
         sellCount: theCourse.sellCount + 1,
-        buyersList: { push: payload.payersId },
+        buyersList: { push: payload.payerId },
       },
     });
     // then we go ahead and add this to the revenew generated so far
