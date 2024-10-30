@@ -279,7 +279,7 @@ export const PayStackBtn: React.FC<{
     publicKey: process.env.NEXT_PUBLIC_PAYSTACKPUBKEY!,
     text: "Pay with paystack",
     onSuccess: (reference: any) => {
-      toast.success("payment successful, navigate to class in your dashboard");
+      toast.success("payment successful, navigate to courses in your dashboard");
       enroll();
     },
     metadata: {
