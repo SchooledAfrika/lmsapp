@@ -152,3 +152,96 @@ export const teachersPlan = async (payload: Iplans) => {
     return serverError();
   }
 };
+
+// here we will handle the webhook for student paying for a course
+interface Icourses {
+  __CheckoutInitAddress?: string;
+  courseId: string;
+  payerId: string;
+  userType: string;
+}
+export const coursePayment = async (payload: Icourses) => {
+  console.log(payload);
+
+  // first, let's get the course that we want to buy or purchase
+  const theCourse = await prisma.courses.findUnique({
+    where: { id: payload.courseId },
+  });
+  // checking if course actually exists or if the user has the course already
+  if (!theCourse) return;
+  const alreadyBought = theCourse.buyersList.includes(payload.payerId);
+  if (alreadyBought) return;
+  try {
+    // check if isStudent is true and buy the course for the student or
+    // buy the course for the parents if the student is false
+    if (payload.userType === "Student") {
+      const item = await prisma.studentPurchasedCourses.create({
+        data: {
+          coursesId: payload.courseId,
+          title: theCourse?.title,
+          price: theCourse?.price,
+          byAdmin: theCourse?.byAdmin,
+          subject: theCourse?.subject,
+          banner: theCourse?.banner,
+          previewVideo: theCourse?.previewVideo,
+          mainVideo: theCourse?.mainVideo,
+          studentId: payload.payerId,
+        },
+      });
+      console.log(item);
+    } else if (payload.userType === "Parents") {
+      const parents = await prisma.parentsPurchasedCourses.create({
+        data: {
+          coursesId: payload.courseId,
+          title: theCourse?.title,
+          price: theCourse?.price,
+          byAdmin: theCourse?.byAdmin,
+          subject: theCourse?.subject,
+          banner: theCourse?.banner,
+          previewVideo: theCourse?.previewVideo,
+          mainVideo: theCourse?.mainVideo,
+          parentsId: payload.payerId,
+        },
+      });
+      console.log(parents);
+    } else {
+      const teacher = await prisma.teacherPurchasedCourses.create({
+        data: {
+          coursesId: payload.courseId,
+          title: theCourse?.title,
+          price: theCourse?.price,
+          byAdmin: theCourse?.byAdmin,
+          subject: theCourse?.subject,
+          banner: theCourse?.banner,
+          previewVideo: theCourse?.previewVideo,
+          mainVideo: theCourse?.mainVideo,
+          teacherId: payload.payerId,
+        },
+      });
+      console.log(teacher);
+    }
+    // now, update the course total sell by one
+    await prisma.courses.update({
+      where: { id: payload.courseId },
+      data: {
+        sellCount: theCourse.sellCount + 1,
+        buyersList: { push: payload.payerId },
+      },
+    });
+    // then we go ahead and add this to the revenew generated so far
+    await prisma.revenew.create({
+      data: {
+        amt: theCourse.price,
+        teacherId: theCourse.teacherId,
+        type: "Course",
+      },
+    });
+    return new Response(
+      JSON.stringify({ message: "Course bought successfully" }),
+      { status: 200 }
+    );
+  } catch (error) {
+    console.log(error);
+    return serverError();
+  }
+};

@@ -22,11 +22,14 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
+import { toast } from "react-toastify";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { FaGraduationCap } from "react-icons/fa6";
 import Image from "next/image";
+import { FaLock } from "react-icons/fa";
+import { Checkout } from "./Courses";
+import { useSession } from "next-auth/react";
 
 interface courseProps {
   title: string;
@@ -36,6 +39,12 @@ interface courseProps {
   banner: string;
   previewVideo: string;
   mainVideo: string;
+  showDialogBox: () => void;
+  dialogBox: boolean;
+  isCheckoutVisible: boolean;
+  handlePurchaseClick: () => void;
+  price: number;
+  id: string;
 }
 
 const SingleCourses = ({
@@ -46,9 +55,16 @@ const SingleCourses = ({
   banner,
   previewVideo,
   mainVideo,
+  showDialogBox,
+  dialogBox,
+  isCheckoutVisible,
+  price,
+  id,
+  handlePurchaseClick,
 }: courseProps) => {
   const [activeVideo, setActiveVideo] = useState(previewVideo);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { status } = useSession();
 
   useEffect(() => {
     if (videoRef.current) {
@@ -58,14 +74,11 @@ const SingleCourses = ({
 
   return (
     <Container>
-      <Dialog>
-        <DialogTrigger asChild>
-          <Button className="bg-lightGreen cursor-pointer absolute -translate-y-1/2 left-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block">
-            Preview Course
-          </Button>
-        </DialogTrigger>
-
-        <DialogContent className="sm:w-[90%] w-[400px] bg-stone-100 font-subtext">
+      <Dialog open={dialogBox} onOpenChange={() => showDialogBox()}>
+        <DialogContent
+          onClick={(e) => e.stopPropagation()}
+          className="sm:w-[90%] w-[400px] bg-stone-100 font-subtext"
+        >
           <ScrollArea className="h-[500px] w-full ">
             <div className="grid gap-4 font-header py-4">
               <div className=" w-full flex items-center font-header mb-6 justify-between">
@@ -99,7 +112,7 @@ const SingleCourses = ({
                     {" "}
                     <Image
                       className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
-                      src={teacherPhoto ?? "/course-img.jpeg"} 
+                      src={teacherPhoto ?? "/course-img.jpeg"}
                       alt="background"
                       width={200}
                       height={200}
@@ -126,9 +139,7 @@ const SingleCourses = ({
                         </CardHeader>
                         <CardContent className="px-2 overflow-x-auto w-[350px]">
                           <div className="">
-                            <p className="text-[13px] leading-5 ">
-                              {details}
-                            </p>
+                            <p className="text-[13px] leading-5 ">{details}</p>
                           </div>
                         </CardContent>
                       </Card>
@@ -199,10 +210,9 @@ const SingleCourses = ({
                   </p>
                   <p className="w-[600px] sm:inline hidden text-[12px]  font-semibold leading-5 py-3 ">
                     {" "}
-
                     <Image
                       className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
-                      src={teacherPhoto ?? "/course-img.jpeg"} 
+                      src={teacherPhoto ?? "/course-img.jpeg"}
                       alt="background"
                       width={200}
                       height={200}
@@ -233,20 +243,19 @@ const SingleCourses = ({
                     </div>
                     {/* Course Video */}
                     <div
-                      className={`flex space-x-3 p-3 rounded-md cursor-pointer ${
-                        activeVideo === mainVideo
-                          ? "bg-lightGreen text-white" // Apply background if selected
-                          : "hover:bg-lightGreen hover:text-white"
-                      }`}
-                      onClick={() => setActiveVideo(mainVideo)}
+                      onClick={() => {
+                        if (status === "unauthenticated")
+                          return toast.error("login to purchase courses");
+                        showDialogBox();
+                        handlePurchaseClick();
+                      }}
+                      className=" bg-[tomato] text-white flex items-center justify-center py-3 rounded-md gap-2 cursor-pointer"
                     >
-                      <div className="bg-lightGreen flex w-[20px] h-[20px] rounded-full place-items-center">
-                        <span className="text-white text-[13px] mx-auto">
-                          2
-                        </span>
-                      </div>
+                      <FaLock className="" />
 
-                      <p className="font-medium text-[14px]">Course Main Video</p>
+                      <p className="font-medium text-[14px]">
+                        Purchase this Course
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -255,6 +264,14 @@ const SingleCourses = ({
           </ScrollArea>
         </DialogContent>
       </Dialog>
+      {/* Conditionally render the Checkout component based on isCheckoutVisible */}
+      {isCheckoutVisible && (
+        <Checkout
+          handlePurchaseClick={handlePurchaseClick}
+          price={price}
+          id={id}
+        />
+      )}
     </Container>
   );
 };

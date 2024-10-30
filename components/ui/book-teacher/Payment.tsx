@@ -4,6 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { MdVerified } from "react-icons/md";
 import { paymentMethods } from "@/constants/pricing/school";
+import { useConversion } from "@/data-access/conversion";
 
 const Payment: React.FC<ISessionSub> = ({
   register,
@@ -20,6 +21,7 @@ const Payment: React.FC<ISessionSub> = ({
   tutorLang,
   tutorName,
 }) => {
+  const { totalSessionPayment } = useConversion();
   return (
     <div className=" w-full ">
       <div className="">
@@ -56,7 +58,6 @@ const Payment: React.FC<ISessionSub> = ({
                     <p className="text-[11px]">{item.desc}</p>
                   </div>
                 </div>
-
                 <input
                   checked={method === item.title}
                   className="w-4 ml-4 accent-lightGreen"
@@ -82,7 +83,12 @@ const Payment: React.FC<ISessionSub> = ({
                 <p>Tutor&apos;s Language: {tutorLang}</p>
               </div>
               <p className="text-lightGreen text-[13px] font-semibold">
-                {totalAmt?.toFixed(2)}
+                {totalSessionPayment(
+                  getValues("days"),
+                  getValues("length"),
+                  getValues("hours"),
+                  getValues("sessionTypes")
+                ).toFixed(2)}
               </p>
             </div>
 
@@ -103,7 +109,13 @@ const Payment: React.FC<ISessionSub> = ({
             <div className="flex justify-between mt-3 font-semibold">
               <p className="text-[17px] font-bold">Total</p>
               <p className="text-[15px] text-lightGreen">
-                ${totalAmt?.toFixed(2)}
+                $
+                {totalSessionPayment(
+                  getValues("days"),
+                  getValues("length"),
+                  getValues("hours"),
+                  getValues("sessionTypes")
+                ).toFixed(2)}
               </p>
             </div>
           </div>

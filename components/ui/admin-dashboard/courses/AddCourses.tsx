@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { SubmitHandler, useForm} from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { addingCourseSchema } from "@/constants/addCourse";
@@ -17,9 +17,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 
-
 import { Button } from "@/components/ui/button";
-
 
 import Image from "next/image";
 import PreviewItem from "../../PreviewItem";
@@ -34,9 +32,9 @@ const AddCourses: React.FC<{
 }> = ({ showModel, setShowmodel }) => {
   const [loading, setloading] = useState<boolean>(false);
   const [bannerImg, setBannerImg] = useState<string | undefined>(undefined);
-  const [coursePreviewVideo, setCoursePreviewVideo] = React.useState<string | undefined>(
-    undefined
-  );
+  const [coursePreviewVideo, setCoursePreviewVideo] = React.useState<
+    string | undefined
+  >(undefined);
   const [courseMainVideo, setCourseMainVideo] = React.useState<
     string | undefined
   >(undefined);
@@ -94,20 +92,22 @@ const AddCourses: React.FC<{
     // using the useCloudinary custom hook;
     const bannerImageBlob = new Blob([data.banner[0]]);
     const bannerImageUrl = await imageUpload(bannerImageBlob);
+    console.log(bannerImageUrl);
     data.banner = bannerImageUrl;
 
     //Convert the coursePreview Video too
     const bannerVideoPreviewBlob = new Blob([data.previewVideo[0]]);
     const bannerVideoPreviewUrl = await videoUpload(bannerVideoPreviewBlob);
+    console.log(bannerVideoPreviewUrl);
     data.previewVideo = bannerVideoPreviewUrl;
 
     //Convert the course Video
     const bannerVideoBlob = new Blob([data.mainVideo[0]]);
     const bannerVideoUrl = await videoUpload(bannerVideoBlob);
+    console.log(bannerVideoUrl);
     data.mainVideo = bannerVideoUrl;
     mutation.mutate(data);
   };
-  
 
   // handles remove image that is already present
   // if the user decides to remove it
@@ -195,7 +195,9 @@ const AddCourses: React.FC<{
                   className="col-span-6 w-full"
                 />
                 {errors.subject && (
-                  <small className="text-red-600">{errors.subject.message}</small>
+                  <small className="text-red-600">
+                    {errors.subject.message}
+                  </small>
                 )}
               </div>
               <div className=" flex flex-col">
@@ -271,7 +273,10 @@ const AddCourses: React.FC<{
                   />
                 </div>
               ) : (
-                <PreviewItem handleRemove={handleRemove} imageItem={bannerImg} />
+                <PreviewItem
+                  handleRemove={handleRemove}
+                  imageItem={bannerImg}
+                />
               )}
 
               <div className="flex flex-col border p-3 rounded-md">
@@ -290,9 +295,7 @@ const AddCourses: React.FC<{
               </div>
 
               <div className="flex flex-col  border p-3 rounded-md">
-              <label className="text-[15px] font-semibold">
-                  Main  Video
-                </label>
+                <label className="text-[15px] font-semibold">Main Video</label>
                 <input
                   type="file"
                   multiple={false}
