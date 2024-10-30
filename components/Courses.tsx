@@ -32,7 +32,6 @@ export interface TeacherInfo {
   name: string;
   profilePhoto: string | null;
   status: string;
- 
 }
 export interface ICourses {
   id: string;
@@ -45,14 +44,13 @@ export interface ICourses {
   subject: string;
   previewVideo: string;
   mainVideo: string;
-  price:  number;
+  price: number;
   sellCount: string;
   createdAt: string;
   teacher: TeacherInfo;
 }
 
-
-const CourseCard = ({ item }: { item: ICourses })  => {
+const CourseCard = ({ item }: { item: ICourses }) => {
   const {
     makeSubString,
     capitalizeString,
@@ -60,16 +58,20 @@ const CourseCard = ({ item }: { item: ICourses })  => {
     showpayments,
     enroll,
   } = useClasses();
-  const { data } = useSession();
+  const { data, status } = useSession();
 
   // Add a state to toggle the checkout visibility
-  const [isCheckoutVisible, setIsCheckoutVisible] = useState(false);
+  const [isCheckoutVisible, setIsCheckoutVisible] = useState<boolean>(false);
+  const [dialogBox, setDialogBox] = useState<boolean>(false);
 
   // Function to handle course purchase (toggle checkout visibility)
   const handlePurchaseClick = () => {
-    setIsCheckoutVisible(true);
+    setIsCheckoutVisible((prev) => !prev);
   };
-  
+  // handle show dialog box
+  const showDialogBox = () => {
+    setDialogBox((prev) => !prev);
+  };
   return (
     <>
       <div className="w-full overflow-hidden     font-header rounded-lg card flex flex-col justify-center gap-3 hover:-translate-y-2 transition-transform duration-300 group">
@@ -82,31 +84,46 @@ const CourseCard = ({ item }: { item: ICourses })  => {
             height={200}
           />
 
-          <SingleCourses title={item.title} details={item.details} teacherPhoto={item.teacher.profilePhoto} teacher={item.teacher.name} banner={item.banner} previewVideo={item.previewVideo} mainVideo={item.mainVideo}/>
-          {/* {item.teacherId?.includes(data?.user.id as string) ? ( 
-            <button className=" bg-green-600 absolute -translate-y-1/2 left-3 rounded-md text-white text-[12px] font-bold px-4   py-2 text-center lg:block">
-              Enrolled
-            </button> 
-          ) : (
-            <button
-              onClick={enroll}
-              className=" bg-dimOrange absolute -translate-y-1/2 left-3 rounded-md text-white text-[12px] font-bold px-4   py-2 text-center lg:block"
+          <div>
+            <Button
+              onClick={showDialogBox}
+              className="bg-lightGreen cursor-pointer absolute -translate-y-1/2 left-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block"
             >
-              Purchase Course
-            </button>
-          )}  */}
-           <Button className="bg-dimOrange cursor-pointer absolute -translate-y-1/2 right-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block">
+              Preview Course
+            </Button>
+            <SingleCourses
+              title={item.title}
+              details={item.details}
+              teacherPhoto={item.teacher.profilePhoto}
+              teacher={item.teacher.name}
+              banner={item.banner}
+              previewVideo={item.previewVideo}
+              mainVideo={item.mainVideo}
+              showDialogBox={showDialogBox}
+              dialogBox={dialogBox}
+              isCheckoutVisible={isCheckoutVisible}
+              handlePurchaseClick={handlePurchaseClick}
+              price={item.price}
+              id={item.id}
+            />
+          </div>
+          <Button
+            onClick={() => {
+              if (status === "unauthenticated")
+                return toast.error("login to purchase courses");
+              handlePurchaseClick();
+            }}
+            className="bg-dimOrange cursor-pointer absolute -translate-y-1/2 right-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block"
+          >
             Purchase Course
-          </Button> 
+          </Button>
         </div>
         <div className="flex justify-between px-2">
-        <p className=" font-bold mt-3 bg-[rgba(0,0,0,0.6)] text-white p-1 rounded-md">
-         <span className="text-[14px] font-semibold">Sold:</span> {item.sellCount}
-        </p>
-        <p className=" font-bold mt-3 text-lightGreen">
-          ${item.price}
-        </p>
-
+          <p className=" font-bold mt-3 bg-[rgba(0,0,0,0.6)] text-white p-1 rounded-md">
+            <span className="text-[14px] font-semibold">Sold:</span>{" "}
+            {item.sellCount}
+          </p>
+          <p className=" font-bold mt-3 text-lightGreen">${item.price}</p>
         </div>
         {/* <p className="text-right mr-6 font-bold mt-3 text-lightGreen">${item.price}</p> */}
         <div className="flex flex-col gap-3 mb-8 justify-center mx-4 ">
@@ -117,17 +134,18 @@ const CourseCard = ({ item }: { item: ICourses })  => {
               </div>
 
               <div className=" flex items-center pt-1 gap-2">
-              <p className="text-[13px] font-subtext font-medium">
-                   <Image
-                      className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
-                      src={item.teacher.profilePhoto ?? "/course-img.jpeg"} 
-                      alt="background"
-                      width={200}
-                      height={200}
-                    />
+                <p className="text-[13px] font-subtext font-medium">
+                  <Image
+                    className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
+                    src={item.teacher.profilePhoto ?? "/course-img.jpeg"}
+                    alt="background"
+                    width={200}
+                    height={200}
+                  />
                   {/* <FaGraduationCap className="inline mr-1 text-lg" /> */}
-                  {item.byAdmin === true ? "SchooledAfrika" :  makeSubString(item.teacher.name)}
-                 
+                  {item.byAdmin === true
+                    ? "SchooledAfrika"
+                    : makeSubString(item.teacher.name)}
                 </p>
               </div>
             </div>
@@ -140,19 +158,23 @@ const CourseCard = ({ item }: { item: ICourses })  => {
       </div>
 
       {/* Conditionally render the Checkout component based on isCheckoutVisible */}
-      {isCheckoutVisible && <Checkout {...item} enroll={() => {}} />}
-     
+      {isCheckoutVisible && (
+        <Checkout
+          handlePurchaseClick={handlePurchaseClick}
+          price={item.price}
+          id={item.id}
+        />
+      )}
     </>
   );
 };
 
 // component that display a dialogue box for payment method based on the class selected
-const Checkout: React.FC<ICourses & { enroll: () => void }> = ({
-  enroll,
-  id,
-  price,
-  
-}) => {
+export const Checkout: React.FC<{
+  handlePurchaseClick: () => void;
+  id: string;
+  price: number;
+}> = ({ id, handlePurchaseClick, price }) => {
   // this state manages the payment method the user has selected
   const [selected, setSelected] = useState<string | undefined>(undefined);
   // method to update the payment
@@ -161,7 +183,7 @@ const Checkout: React.FC<ICourses & { enroll: () => void }> = ({
   };
   return (
     <div
-      onClick={enroll}
+      onClick={handlePurchaseClick}
       className=" fixed px-3 py-2 flex items-center justify-center w-full h-screen top-0 left-0 bottom-0 z-[999] bg-[rgba(0,0,0,0.1)] backdrop-blur-sm"
     >
       <div
@@ -222,12 +244,16 @@ const Checkout: React.FC<ICourses & { enroll: () => void }> = ({
           ) : (
             <div>
               {selected === "Paystack" ? (
-                <PayStackBtn id={id} price={price} enroll={enroll} />
+                <PayStackBtn
+                  id={id}
+                  price={price}
+                  enroll={handlePurchaseClick}
+                />
               ) : (
                 <FlutterWaveBtn
                   id={id}
                   price={price}
-                  enroll={enroll}
+                  enroll={handlePurchaseClick}
                 />
               )}
             </div>
@@ -254,21 +280,21 @@ export const PayStackBtn: React.FC<{
     text: "Pay with paystack",
     onSuccess: (reference: any) => {
       toast.success("payment successful, navigate to class in your dashboard");
-      setTimeout(() => {
-        queryClient.invalidateQueries({
-          queryKey: ["infiniteclass", "home-class"],
-        });
-        enroll();
-      }, 5500);
+      enroll();
     },
     metadata: {
       custom_fields: [
         {
           display_name: data?.user.id as string, //students id
           variable_name: id, //class id
-          value: `${price}-class`, //for the price and class specified payment
+          value: `${price}-courses`, //for the price and class specified payment
         },
       ],
+      plan: {
+        courseId: id,
+        payerId: data?.user.id,
+        userType: data?.user.role,
+      },
     },
   };
   return (
@@ -291,12 +317,12 @@ export const FlutterWaveBtn: React.FC<{
     public_key: process.env.NEXT_PUBLIC_FLUTTERPUBKEY!,
     tx_ref: Date.now().toString(),
     amount: price,
-    currency: "NGN",
+    currency: "USD",
     payment_options: "card",
     customer: {
       email: data?.user.email as string,
       phone_number: data?.user.id as string, //id of the student or user that want to make payment,
-      name: `${id}-class`, // field for id of the class and the payment type
+      name: `${id}-courses`, // field for id of the class and the payment type
     },
     customizations: {
       title: "school afrika",
@@ -305,7 +331,7 @@ export const FlutterWaveBtn: React.FC<{
     },
     onSuccess: () => {
       toast.success("payment successful, navigate to class in your dashboard");
-     
+
       setTimeout(() => {
         queryClient.invalidateQueries({
           queryKey: ["infinitecourse", "home-course"],
@@ -313,18 +339,27 @@ export const FlutterWaveBtn: React.FC<{
         enroll();
       }, 5500);
     },
+    meta: {
+      courseId: id,
+      payerId: data?.user.id,
+      userType: data?.user.role,
+    },
   };
   const fwConfig = {
     ...config,
     text: "Pay with flutterwave",
     callback: () => {
       closePaymentModal(); // this will close the modal programmatically
-      toast.success("payment successful, navigate to courses in your dashboard");
+      toast.success(
+        "payment successful, navigate to courses in your dashboard"
+      );
       setTimeout(() => {
         enroll();
       }, 5500);
     },
-    onClose: () => {},
+    onClose: () => {
+      alert(`${id}, ${price}, ${data?.user.name}, ${data?.user.role}`);
+    },
   };
   return (
     <div>
@@ -335,7 +370,6 @@ export const FlutterWaveBtn: React.FC<{
     </div>
   );
 };
-
 
 const Courses = () => {
   // creating our useref for watching the button when displayed
@@ -379,22 +413,20 @@ const Courses = () => {
     );
   }
   // checking for errors
-  if (status === "error") {
-    return <p>something went wrong, check your network status</p>;
+  if (isError) {
+    return <p>{error.message}</p>;
   }
   // flaten the data gotten here
   const queryData = data?.pages.flat();
   return (
     <Container>
       <div className="w-full  mx-auto px-4 pt-16 pb-6">
-      <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
-      {Array.isArray(queryData) &&
+        <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
+          {Array.isArray(queryData) &&
             queryData.map((item: ICourses, index) => (
-          <CourseCard key={index} item={item}
-            
-          />
-        ))}
-      </div>
+              <CourseCard key={index} item={item} />
+            ))}
+        </div>
       </div>
       <div className=" w-full flex items-center justify-center">
         {hasNextPage && (
@@ -407,8 +439,7 @@ const Courses = () => {
           </div>
         )}
       </div>
-      <ToastContainer/>
-     
+      <ToastContainer />
     </Container>
   );
 };

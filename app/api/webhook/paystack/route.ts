@@ -2,6 +2,7 @@
 // this part is only accessible by the webhooks we have setup for payments
 // TODO: remember to check or add the auth header for the keys given by this webhooks payment platform
 import {
+  coursePayment,
   payForClass,
   sessionPaymentPaystack,
   teachersPlan,
@@ -11,6 +12,8 @@ import crypto from "crypto";
 // add student to the class after making payment
 export async function POST(req: Request) {
   const body = await req.json();
+  console.log("entered");
+  console.log(body);
   // lets first verify the signature and make sure the webhook is coming
   // from paystack it self
   const hash = crypto
@@ -31,6 +34,7 @@ export async function POST(req: Request) {
   const typePayArray = fields.value.split("-");
   const amt = typePayArray[0];
   const paymentFor = typePayArray[1];
+  console.log(body.data.metadata.plan);
   //   lets get the class first so that we can be able to push the new id
   if (paymentFor === "class") {
     return await payForClass(classId, studentId);
@@ -42,5 +46,10 @@ export async function POST(req: Request) {
   // payment for teacher to subscribe for a plan
   if (paymentFor === "teacherplan") {
     return await teachersPlan(body.data.metadata.plan);
+  }
+  // webhook for payment for courses from anyone
+  if (paymentFor == "courses") {
+    console.log("paystack entered here");
+    return await coursePayment(body.data.metadata.plan);
   }
 }

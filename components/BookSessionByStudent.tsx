@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { ScrollArea } from "./ui/scroll-area";
 import ProgressLine from "./ui/PrograssLine";
@@ -13,8 +13,11 @@ import StudentBookDetails from "./ui/book-teacher/StudentBookDetails";
 import StudentBookSchedule from "./ui/book-teacher/StudentBookSchedule";
 import PaymentByStudentSession from "./ui/book-teacher/PaymentByStudentSession";
 import { Button } from "./ui/button";
-import { FlutterWaveBtn, PayStackBtn } from "./BookSessionByParents";
 import Image from "next/image";
+import { useConversion } from "@/data-access/conversion";
+import { useSession } from "next-auth/react";
+import { closePaymentModal, FlutterWaveButton } from "flutterwave-react-v3";
+import { PaystackButton } from "react-paystack";
 
 export type IstudentSession = z.infer<typeof StudentSessionSchema>;
 
@@ -73,19 +76,15 @@ const ControlBtn: React.FC<{
           {method === "Paystack" ? (
             <div className=" z-[99999]">
               <PayStackBtn
-                studentValue={getValues}
+                getValue={getValues}
                 id={sessionId}
-                price={200}
                 enroll={enroll}
-                isByStudent={true}
               />
             </div>
           ) : (
             <FlutterWaveBtn
-              isByStudent={true}
-              studentValue={getValues}
+              getValue={getValues}
               id={sessionId}
-              price={200}
               enroll={enroll}
             />
           )}
@@ -94,6 +93,149 @@ const ControlBtn: React.FC<{
     </div>
   );
 };
+
+// payment button handled below here
+// component to make payment with paystack method
+export const PayStackBtn: React.FC<{
+  id: string;
+  enroll: () => void;
+  getValue: UseFormGetValues<IstudentSession>;
+}> = ({ id, enroll, getValue }) => {
+  const { data } = useSession();
+  const { totalSessionPayment } = useConversion();
+  const price = totalSessionPayment(
+    getValue("days"),
+    getValue("length"),
+    getValue("hours"),
+    getValue("sessionTypes")
+  );
+  // props for paystack payment below here
+  const componentProps = {
+    reference: new Date().getTime().toString(),
+    email: data?.user.email as string,
+    amount: price * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+    publicKey: process.env.NEXT_PUBLIC_PAYSTACKPUBKEY!,
+    text: "Pay now",
+    onSuccess: (reference: any) => {
+      enroll();
+    },
+    metadata: {
+      custom_fields: [
+        {
+          display_name: data?.user.id as string, //students id
+          variable_name: id, //sessionId id
+          value: `${price}-session`, //for the price and class specified payment
+        },
+        {
+          display_name: "random second", //students id
+          variable_name: "random second", //sessionId id
+          value: `random second`, //for the price and class specified payment
+        },
+      ],
+      plan: {
+        studentId: data?.user.id,
+        grade: getValue("grade"),
+        sessionType: getValue("sessionTypes"),
+        subjects: getValue("subject"),
+        curriculum: getValue("curriculum"),
+        specialNeeds: getValue("specialNeeds"),
+        goals: getValue("goals"),
+        days: getValue("days"),
+        times: getValue("times"),
+        hours: getValue("hours"),
+        length: getValue("length"),
+        classStart: getValue!("classStarts"),
+        price,
+        selectedTeacher: id,
+        byparents: false,
+      },
+    },
+  };
+  return (
+    <PaystackButton
+      {...componentProps}
+      className="w-1/4 ml-auto  py-3 flex items-center justify-center bg-green-600 cursor-pointer rounded-sm font-bold text-white"
+    />
+  );
+};
+
+// component to make payment with flutterwave method
+export const FlutterWaveBtn: React.FC<{
+  id: string;
+  enroll: () => void;
+  getValue: UseFormGetValues<IstudentSession>;
+}> = ({ id, enroll, getValue }) => {
+  const { data } = useSession();
+  const { totalSessionPayment } = useConversion();
+  const price = totalSessionPayment(
+    getValue("days"),
+    getValue("length"),
+    getValue("hours"),
+    getValue("sessionTypes")
+  );
+
+  const config = {
+    public_key: process.env.NEXT_PUBLIC_FLUTTERPUBKEY!,
+    tx_ref: Date.now().toString(),
+    amount: price,
+    currency: "NGN",
+    payment_options: "card",
+    customer: {
+      email: data?.user.email as string,
+      phone_number: data?.user.id as string, //id of the student or user that want to make payment,
+      name: `${id}-session`, // field for id of the class and the payment type
+      names: "calcs",
+      bestshows: "this is me",
+      wow: "trying now ooo",
+    },
+    customizations: {
+      title: "school afrika",
+      description: "payment for  enrollment",
+      logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
+    },
+    meta: {
+      studentId: data?.user.id,
+      grade: getValue("grade"),
+      sessionType: getValue("sessionTypes"),
+
+      subjects: getValue("subject").join("-"),
+      curriculum: getValue("curriculum"),
+      specialNeeds: getValue("specialNeeds")?.join("-"),
+      goals: getValue("goals"),
+      days: getValue("days").join("-"),
+      times: getValue("times"),
+      hours: getValue("hours"),
+      length: getValue("length"),
+      classStart: getValue("classStarts"),
+      price,
+      selectedTeacher: id,
+      byparents: false,
+    },
+    onSuccess: () => {
+      alert("true oooo");
+      enroll();
+    },
+  };
+  const fwConfig = {
+    ...config,
+    text: "Pay now",
+    callback: () => {
+      closePaymentModal();
+      enroll();
+    },
+    onClose: () => {},
+  };
+  return (
+    <div>
+      <FlutterWaveButton
+        className=" py-3 flex ml-auto w-1/4 items-center justify-center bg-green-600 cursor-pointer rounded-sm font-bold text-white"
+        {...fwConfig}
+      />
+    </div>
+  );
+};
+
+// default page export appears here
 const BookSessionByStudent: React.FC<{
   sessionId: string;
   tutorName: string;
