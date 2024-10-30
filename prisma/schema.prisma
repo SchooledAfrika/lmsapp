@@ -427,6 +427,7 @@ model StudentPurchasedCourses {
   coursesId    String   @db.ObjectId
   studentId    String   @db.ObjectId
   byAdmin      Boolean
+  gifted       Boolean  @default(false)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @default(now())
 }

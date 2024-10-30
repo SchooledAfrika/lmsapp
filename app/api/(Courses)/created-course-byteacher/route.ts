@@ -76,28 +76,41 @@ export async function PUT(req: Request) {
 export async function DELETE(req: Request) {
   const { id } = await req.json();
   const userId = await serverSessionId();
+  const role = await serverSessionRole();
   // check authentication
   if (!userId) return notAuthenticated();
   try {
-    // check if is the owner that want to delete the course
-    const gottenCourse = await prisma.courses.findUnique({
+    // first, lets get the course we want to delete
+    const theCourse = await prisma.courses.findUnique({
       where: { id },
       select: {
         teacherId: true,
       },
     });
-    if (gottenCourse?.teacherId !== userId) {
+    // return an error if the course does not exist
+    if (!theCourse) {
       return new Response(
-        JSON.stringify({ message: "This course does not belong to you" }),
+        JSON.stringify({ message: "courses does not exist" }),
+        { status: 404 }
+      );
+    }
+    // lets check if the user that wants to delete the course
+    // is the owner of the course
+    // and admin can also delete the course
+    if (theCourse.teacherId !== userId && role !== "Admin") {
+      return new Response(
+        JSON.stringify({
+          message: "You are not allowed to delete this course",
+        }),
         { status: 400 }
       );
     }
-    // now we can proceed and delete now
+    // we can now proceed to deleting the course from the database
     await prisma.courses.delete({
       where: { id },
     });
     return new Response(
-      JSON.stringify({ message: "course deleted successfully" }),
+      JSON.stringify({ message: "Course deleted successfully" }),
       { status: 200 }
     );
   } catch (error) {

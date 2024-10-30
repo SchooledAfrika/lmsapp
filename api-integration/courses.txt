@@ -81,3 +81,43 @@ payload: {
     id:String// id of the coursess
 }
 comment: id of the course you want to delete 
+
+
+new endpoint 10/29/24
+================================================================================================================
+endpoint for teachers, parents or students to get their purchsed course in their dashboard
+================================================================================================================
+route: /api/courses-bought
+method:GET
+comment: this contains all the neccessary informations for all the course, then to view a single video, maybe you
+can use the dialog box just like the one in the site to display the video.
+
+================================================================================================================
+endpoint for teachers to delete the course they bought.
+================================================================================================================
+route: /api/purchased-course/delete-by-teachers
+method: DELETE
+payload:{
+    courseId:string
+}
+comment: this will help teachers delete the courses they purchased, courseId is the id of the purchased course
+
+================================================================================================================
+endpoint for students to delete the course they bought.
+================================================================================================================
+route: /api/purchased-course/delete-by-student
+method: DELETE
+payload:{
+    courseId:string
+}
+comment: this will help students delete the courses they purchased, courseId is the id of the purchased course
+
+================================================================================================================
+endpoint for parents to delete the course they bought.
+================================================================================================================
+route: /api/purchased-course/delete-by-parents
+method:DELETE
+payload:{
+    courseId:string
+}
+comment: this will help parents delete the courses they purchased, courseId is the id of the purchased course

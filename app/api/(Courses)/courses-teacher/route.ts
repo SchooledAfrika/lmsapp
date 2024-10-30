@@ -91,7 +91,6 @@ export async function GET(req: Request) {
     });
     return new Response(JSON.stringify(allCourses), { status: 200 });
   } catch (error) {
-    console.log(error);
     return serverError();
   }
 }
