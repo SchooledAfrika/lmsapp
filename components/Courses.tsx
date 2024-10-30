@@ -326,7 +326,7 @@ export const FlutterWaveBtn: React.FC<{
     },
     customizations: {
       title: "school afrika",
-      description: "payment for class enrollment",
+      description: "payment for course enrollment",
       logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
     },
     onSuccess: () => {

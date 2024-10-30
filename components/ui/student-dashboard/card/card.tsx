@@ -94,11 +94,11 @@ const Card = () => {
           >
             <Link href="/" className="inline">
               <BsBroadcast className="inline mr-1" />
-              Go Live
+              Join Session
             </Link>
           </Button>
           <p className="text-[12.5px] text-center  font-normal">
-            Start a live session now!
+            Join a live session now!
           </p>
         </div>
       </div>
