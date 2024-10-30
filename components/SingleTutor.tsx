@@ -333,9 +333,15 @@ const Rattings: React.FC<{
   );
 };
 
-export const FullPageLoading = () => {
+export const FullPageLoading: React.FC<{ fullpage: boolean }> = ({
+  fullpage,
+}) => {
   return (
-    <div className=" w-full h-[calc(100vh-70px)] bg-slate-100 flex items-center justify-center">
+    <div
+      className={` w-full ${
+        fullpage ? " h-screen" : "h-[calc(100vh-70px)]"
+      } bg-slate-100 flex items-center justify-center`}
+    >
       <CircularProgress size={80} color="success" />
     </div>
   );
@@ -354,7 +360,7 @@ const SingleTutor = () => {
     },
   });
   if (isLoading) {
-    return <FullPageLoading />;
+    return <FullPageLoading fullpage={false} />;
   }
   const SingleData: ISessionShow = data;
   return (

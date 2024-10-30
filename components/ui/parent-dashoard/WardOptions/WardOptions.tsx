@@ -8,7 +8,6 @@ import { z } from "zod";
 import { addWardSchema } from "@/constants/addWard";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
-
 import {
   Select,
   SelectContent,
@@ -17,14 +16,72 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-import Image from "next/image";
+import Cookies from "js-cookie";
 import Link from "next/link";
+import { FullPageLoading } from "@/components/SingleTutor";
 
 export type IaddWard = z.infer<typeof addWardSchema>;
+
+// the component to display select for wards
+const SelectWard: React.FC<{ data: any }> = ({ data }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const [selectedWard, handleSelectedWard] = useState<string | undefined>(
+    () => {
+      const wardId = Cookies.get("wardId") as string | undefined;
+      console.log(wardId);
+      return wardId;
+    }
+  );
+  const router = useRouter();
+  // useEffect to update the wardsId continuesly when changed
+  const handleSelect = (value: string) => {
+    handleSelectedWard(value);
+  };
+  // commant to proceed to wards page
+  // and also to set the new wardId in our cookies
+  const handleContinue = () => {
+    console.log(selectedWard);
+    if (!selectedWard)
+      return toast.error("Please select a ward to continue...");
+    setLoading(true);
+    Cookies.set("wardId", selectedWard);
+    router.push("/parents-dashboard");
+  };
+  return (
+    <div className="flex flex-col items-center px-2 mb-2 ">
+      <Select onValueChange={handleSelect}>
+        <SelectTrigger className="md:w-[500px] w-full  py-6">
+          <SelectValue placeholder="Select Ward" />
+        </SelectTrigger>
+        <SelectContent className="font-header font-medium">
+          <SelectGroup>
+            {Array.isArray(data) &&
+              data.map((item: any) => (
+                <SelectItem key={item.id} value={item.id}>
+                  {item.name}
+                </SelectItem>
+              ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+
+      <button
+        onClick={handleContinue}
+        disabled={selectedWard == undefined ? true : false}
+        type="submit"
+        className={`md:w-[500px] w-full mx-auto mt-3 py-4 rounded-md text-md ${
+          selectedWard === undefined
+            ? " bg-slate-300 text-slate-500 font-bold cursor-not-allowed"
+            : "bg-lightGreen hover:bg-green-700 transition-all ease-in-out duration-700 text-white cursor-pointer"
+        } `}
+      >
+        {loading ? "loading..." : "Continue"}
+      </button>
+    </div>
+  );
+};
 const WardOptions = () => {
   const [loadingAdd, setLoadingAdd] = useState<boolean>(false); // For the Add Ward button
   const [loadingProceed, setLoadingProceed] = useState<boolean>(false); // For the Proceed button
@@ -113,91 +170,22 @@ const WardOptions = () => {
     mutation.mutate(data);
   };
 
-  // loading message here
-  if (isLoading) {
-    return <p>loading...</p>;
-  }
-
-  // return a div telling the teacher to select a ward if ther is none
-  // if (data.length == 0) {
-  //   return (
-  //     <div>
-  //       <p>No ward here, choose ward please</p>
-  //     </div>
-  //   );
-  // }
-
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  // Move to Ward Dashboard
-
-  const handleMoveToWardDashboard = () => {
-    if (selectedWardId) {
-      setLoadingProceed(true); // Start loading for Proceed button
-
-      // Proceed to the dashboard
-      router.push(`/parents-dashboard`);
-
-      // Set a timer to reset the loading state after a short delay
-      setTimeout(() => {
-        setLoadingProceed(false); // Stop loading after a delay (simulate navigation completion)
-      }, 1000); // Adjust the timeout duration as necessary
-    } else {
-      toast.error("Please select a ward before proceeding!");
-    }
-  };
+  if (isLoading) {
+    return <FullPageLoading fullpage={true} />;
+  }
 
   return (
-    <div className="font-header ">
-      <div className="pt-4">
-        <Link href="/">
-          <Image
-            src={"/logo.png"}
-            alt="logo"
-            width={100}
-            height={100}
-            className="w-[100px] ml-3 mb-4 "
-            priority
-          />
-        </Link>
-      </div>
-      <p className="text-center font-bold text-[20px] mt-12 mb-6">
-        SELECT WARD
-      </p>
-      <div className="flex flex-col items-center px-2 mb-6 ">
-        <Select onValueChange={handleSelect}>
-          <SelectTrigger className="md:w-[500px] w-full  py-6">
-            <SelectValue placeholder="Select Ward" />
-          </SelectTrigger>
-          <SelectContent className="font-header font-medium">
-            <SelectGroup>
-              {Array.isArray(data) &&
-                data.map((item: any) => (
-                  <SelectItem key={item.id} value={item.id}>
-                    {item.name}
-                  </SelectItem>
-                ))}
-            </SelectGroup>
-          </SelectContent>
-        </Select>
-
-        <Button
-          onClick={handleMoveToWardDashboard}
-          disabled={loadingProceed}
-          type="submit"
-          className="md:w-[500px] w-full mx-auto mt-3 py-8 text-md bg-lightGreen hover:bg-green-700"
-        >
-          {loadingProceed ? "Redirecting..." : "Redirect to ward dashboard"}
-        </Button>
-      </div>
-
+    <div className="font-header w-full h-screen overflow-hidden  py-3 ">
+      <p className="text-center font-bold text-[20px]  mb-3">SELECT WARD</p>
+      <SelectWard data={data} />
       <p className="text-center font-bold text-[18px]">OR</p>
-      <p className="text-center font-bold text-[20px] mt-12 mb-6">
+      <p className="text-center font-bold text-[20px] mt-2 mb-6">
         ADD MORE WARD(S)
       </p>
-
       <div className=" flex flex-col w-full mx-auto md:w-[500px] gap-2">
         <form
           onSubmit={handleSubmit(runSubmit)}
