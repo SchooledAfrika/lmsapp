@@ -121,3 +121,14 @@ payload:{
     courseId:string
 }
 comment: this will help parents delete the courses they purchased, courseId is the id of the purchased course
+
+================================================================================================================
+endpoint for parents to gift courses to the wards
+================================================================================================================
+route: /api/purchased-course/gift-course-to-ward
+method: POST
+payload:{
+    wardId:string,
+    courseId:string,
+}
+comment: this will allow parents to gift the course to the child. wardId can be gotten from the api i provided for getting all the ward
