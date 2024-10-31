@@ -62,7 +62,7 @@ const SingleCourses = ({
   id,
   handlePurchaseClick,
 }: courseProps) => {
-  const [activeVideo, setActiveVideo] = useState(previewVideo);
+  const [activeVideo, setActiveVideo] = useState(mainVideo);
   const videoRef = useRef<HTMLVideoElement>(null);
   const { status } = useSession();
 
