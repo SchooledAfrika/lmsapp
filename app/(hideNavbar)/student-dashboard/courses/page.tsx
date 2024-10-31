@@ -1,12 +1,12 @@
-import StudentCourses from "@/components/StudentCourses";
-import React from "react";
+import Courses from '@/components/ui/student-dashboard/courses/courses'
+import React from 'react'
 
 const page = () => {
   return (
-    <div>
-      <StudentCourses />
+    <div className='my-[80px]'>
+        <Courses/>
     </div>
-  );
-};
+  )
+}
 
-export default page;
+export default page

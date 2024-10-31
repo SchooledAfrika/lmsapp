@@ -279,7 +279,7 @@ export const PayStackBtn: React.FC<{
     publicKey: process.env.NEXT_PUBLIC_PAYSTACKPUBKEY!,
     text: "Pay with paystack",
     onSuccess: (reference: any) => {
-      toast.success("payment successful, navigate to class in your dashboard");
+      toast.success("payment successful, navigate to courses in your dashboard");
       enroll();
     },
     metadata: {
@@ -326,11 +326,13 @@ export const FlutterWaveBtn: React.FC<{
     },
     customizations: {
       title: "school afrika",
-      description: "payment for class enrollment",
+      description: "payment for course enrollment",
       logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
     },
     onSuccess: () => {
-      toast.success("payment successful, navigate to class in your dashboard");
+
+      toast.success("payment successful, navigate to courses in your dashboard");
+     
 
       setTimeout(() => {
         queryClient.invalidateQueries({
