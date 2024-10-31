@@ -8,6 +8,8 @@ import Link from "next/link";
 import { ProgressBar } from "@/components/ProgressBar";
 import { BsThreeDots } from "react-icons/bs";
 import { useConversion } from "@/data-access/conversion";
+import Cookies from "js-cookie";
+import { RxAvatar } from "react-icons/rx";
 
 // Define types for sessions
 export interface Teacher {
@@ -24,16 +26,22 @@ interface SessionInfo {
   sectionType: string;
   startTime: string;
   subject: string[];
-  teacher: Teacher;
+  sectionOwner: {
+    teacher: Teacher;
+  };
 }
 
+const NoProfile = () => {
+  return (
+    <div className=" w-[35] aspect-square rounded-full border border-black flex items-center justify-center">
+      <RxAvatar />
+    </div>
+  );
+};
+
 const SessionCard = ({ item }: { item: SessionInfo }) => {
-  const { handleDate } = useConversion();
+  const { handleDate, makeSubstring } = useConversion();
   // Safely access teacher and provide defaults if needed
-  const teacher = item.teacher || {};
-  const teacherProfilePhoto =
-    teacher.profilePhoto || ("/tutors.jpg" as string);
-  const teacherName = teacher.name || "Unknown Teacher";
   const subjects =
     item.subject && item.subject.length > 0
       ? item.subject.join(", ")
@@ -48,43 +56,55 @@ const SessionCard = ({ item }: { item: SessionInfo }) => {
             <div className="border-l-4 rounded-full leading-[100px] border-l-lightGreen"></div>
             <div className="py-3 flex flex-col">
               <div className="flex space-x-2 mb-2">
-                <Image
-                  src={`/${subjects.toLowerCase()}.png`}
-                  alt="course"
-                  width={100}
-                  height={100}
-                  className="w-[30px] h-[30px]"
-                />
+                {item.sectionType === "Private Session" ? (
+                  <Image
+                    src="/private2.png"
+                    alt="course"
+                    width={100}
+                    height={100}
+                    className="w-[30px] h-[30px]"
+                  />
+                ) : (
+                  <Image
+                    src="/homework2.jpg"
+                    alt="course"
+                    width={100}
+                    height={100}
+                    className="w-[30px] h-[30px]"
+                  />
+                )}
                 <p className="font-bold">{subjects}</p>
               </div>
               <p className="text-[13px] font-semibold">
-              <span className="text-[11px]">Initiated on:</span>  {handleDate(item.startTime)}
+                <span className="text-[11px]">Initiated on:</span>{" "}
+                {handleDate(item.startTime)}
               </p>
-             
             </div>
-            
           </div>
           <div className="flex items-center space-x-3 p-3 ">
-          <p className="text-[12px] px-3  w-full text-center py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white font-semibold">
-                {item.sectionType}
-              </p>
-              <p className="text-[12px] px-4  w-full text-center py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white font-semibold">
-                {item.grade}
-              </p>
-             
-
+            <p className="text-[12px] px-3  w-full text-center py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white font-semibold">
+              {item.sectionType}
+            </p>
+            <p className="text-[12px] px-4  w-full text-center py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white font-semibold">
+              {item.grade}
+            </p>
           </div>
-          
 
           <div className="flex items-center space-x-2">
-            <Image
-              src={teacherProfilePhoto}
-              alt="teacher"
-              width={100}
-              height={100}
-              className="w-[35px] h-[35px] rounded-full"
-            />
-            <p className="text-[13px] font-semibold">{teacherName}</p>
+            {item.sectionOwner.teacher.profilePhoto ? (
+              <Image
+                src={item.sectionOwner.teacher.profilePhoto}
+                alt="teacher"
+                width={100}
+                height={100}
+                className="w-[35px] h-[35px] rounded-full"
+              />
+            ) : (
+              <NoProfile />
+            )}
+            <p className="text-[13px] font-semibold">
+              {makeSubstring(item.sectionOwner.teacher.name, 20)}
+            </p>
           </div>
 
           {/* <div className="flex items-center">
@@ -128,27 +148,30 @@ const SessionCard = ({ item }: { item: SessionInfo }) => {
           </div>
 
           <div className="flex items-center space-x-3 p-3 ">
-          <p className="text-[12px] px-3  w-full text-center py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white font-semibold">
-                {item.sectionType}
-              </p>
-              <p className="text-[12px] px-4  w-full text-center py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white font-semibold">
-                {item.grade}
-              </p>
-             
-
+            <p className="text-[12px] px-3  w-full text-center py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white font-semibold">
+              {item.sectionType}
+            </p>
+            <p className="text-[12px] px-4  w-full text-center py-2 rounded-md bg-[rgba(0,0,0,0.6)] text-white font-semibold">
+              {item.grade}
+            </p>
           </div>
 
-          <div className="flex items-center mb-2 space-x-2">
-            <Image
-              src={teacherProfilePhoto}
-              alt="teacher"
-              width={100}
-              height={100}
-              className="w-[40px] h-[40px] rounded-full"
-            />
-            <p className="text-[14px] font-semibold">{teacherName}</p>
+          <div className="flex items-center space-x-2">
+            {item.sectionOwner.teacher.profilePhoto ? (
+              <Image
+                src={item.sectionOwner.teacher.profilePhoto}
+                alt="teacher"
+                width={100}
+                height={100}
+                className="w-[35px] h-[35px] rounded-full"
+              />
+            ) : (
+              <NoProfile />
+            )}
+            <p className="text-[13px] font-semibold">
+              {makeSubstring(item.sectionOwner.teacher.name, 20)}
+            </p>
           </div>
-
           {/* <div className="flex ">
             <Button
               asChild
@@ -167,13 +190,7 @@ const SessionCard = ({ item }: { item: SessionInfo }) => {
 
 const Sessions = () => {
   //The wardId is already stored in the localStorage and so we initialize a state for it
-  const [wardId, setWardId] = useState<string | null>(null);
-
-  // Retrieve wardId from localStorage
-  useEffect(() => {
-    const storedWardId = localStorage.getItem("selectedWardId");
-    setWardId(storedWardId); // Set wardId from localStorage directly
-  }, []);
+  const wardId = Cookies.get("wardId");
 
   // Fetch teachers data, only run query if wardId exists
   const { isLoading, isError, error, data } = useQuery<SessionInfo[]>({
@@ -191,8 +208,6 @@ const Sessions = () => {
     enabled: !!wardId, // The query will only run if wardId exists
   });
 
-  console.log(data);
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -205,6 +220,8 @@ const Sessions = () => {
   if (!data || data.length === 0) {
     return <p>No data available</p>;
   }
+
+  console.log(data);
   return (
     <div className="max-w-full md:mt-6 mt-12  mx-auto px-4  py-3">
       <div className="grid grid-cols-1 items-center   gap-6 ">

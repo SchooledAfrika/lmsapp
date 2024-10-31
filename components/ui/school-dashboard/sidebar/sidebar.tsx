@@ -14,9 +14,11 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import Cookies from "js-cookie";
 import { useConversion } from "@/data-access/conversion";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Sidebar = ({ dashboard }: { dashboard: string }) => {
   const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
+  const queryClient = useQueryClient();
   const router = useRouter();
   const { data } = useSession();
   const { makeSubstring } = useConversion();
@@ -26,6 +28,7 @@ const Sidebar = ({ dashboard }: { dashboard: string }) => {
     if (dashboard === "parent") {
       Cookies.remove("wardId");
     }
+    queryClient.clear();
     // then continue with logging out the user
     const logOutData = await signOut({ redirect: false, callbackUrl: "/" });
     router.push(logOutData.url);
@@ -69,15 +72,17 @@ const Sidebar = ({ dashboard }: { dashboard: string }) => {
       {/* then the last part for log out */}
       <div className="w-full h-[120px] bg-green-800 mt-16  flex items-end justify-center  relative rounded-lg">
         <div className=" w-3/5 h-[120px] left-1/2 rounded-xl transform -translate-x-1/2 bg-white absolute gap-1 -translate-y-1/2 flex flex-col items-center justify-center">
-          <Image
-            className=" w-[60px] aspect-square rounded-full object-cover"
-            src={data?.user.image!}
-            alt="passport"
-            width={200}
-            height={200}
-          />
+          {data?.user.image && (
+            <Image
+              className=" w-[60px] aspect-square rounded-full object-cover"
+              src={data?.user.image!}
+              alt="passport"
+              width={200}
+              height={200}
+            />
+          )}
           <p className=" text-[10px] font-bold">
-            {makeSubstring(data?.user.name!, 8)}
+            {data?.user.name && makeSubstring(data?.user.name!, 8)}
           </p>
         </div>
         <div

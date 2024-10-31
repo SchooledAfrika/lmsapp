@@ -25,7 +25,7 @@ import { FullPageLoading } from "@/components/SingleTutor";
 export type IaddWard = z.infer<typeof addWardSchema>;
 
 // the component to display select for wards
-const SelectWard: React.FC<{ data: any }> = ({ data }) => {
+const SelectWard = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedWard, handleSelectedWard] = useState<string | undefined>(
     () => {
@@ -34,6 +34,14 @@ const SelectWard: React.FC<{ data: any }> = ({ data }) => {
       return wardId;
     }
   );
+  const { isLoading, isError, error, data } = useQuery({
+    queryKey: ["getWard"],
+    queryFn: async () => {
+      const response = await fetch("/api/more-wards");
+      const result = await response.json();
+      return result;
+    },
+  });
   const router = useRouter();
   // useEffect to update the wardsId continuesly when changed
   const handleSelect = (value: string) => {
@@ -47,10 +55,16 @@ const SelectWard: React.FC<{ data: any }> = ({ data }) => {
       return toast.error("Please select a ward to continue...");
     setLoading(true);
     Cookies.set("wardId", selectedWard);
-    router.push("/parents-dashboard");
+    return setTimeout(() => {
+      router.push("/parents-dashboard");
+    }, 4000);
   };
+
+  if (isLoading) {
+    return <p>loading...</p>;
+  }
   return (
-    <div className="flex flex-col items-center px-2 mb-2 ">
+    <div className="flex flex-col items-center w-full px-2 mb-2 ">
       <Select onValueChange={handleSelect}>
         <SelectTrigger className="md:w-[500px] w-full  py-6">
           <SelectValue placeholder="Select Ward" />
@@ -67,22 +81,21 @@ const SelectWard: React.FC<{ data: any }> = ({ data }) => {
         </SelectContent>
       </Select>
 
-      <button
+      <div
         onClick={handleContinue}
-        disabled={selectedWard == undefined ? true : false}
-        type="submit"
-        className={`md:w-[500px] w-full mx-auto mt-3 py-4 rounded-md text-md ${
+        className={`md:w-[500px] w-full mx-auto mt-3 py-4 rounded-md text-md flex items-center justify-center ${
           selectedWard === undefined
             ? " bg-slate-300 text-slate-500 font-bold cursor-not-allowed"
             : "bg-lightGreen hover:bg-green-700 transition-all ease-in-out duration-700 text-white cursor-pointer"
         } `}
       >
-        {loading ? "loading..." : "Continue"}
-      </button>
+        <p>{loading ? "loading..." : "Continue"}</p>
+      </div>
     </div>
   );
 };
-const WardOptions = () => {
+
+const MoreWardForm = () => {
   const [loadingAdd, setLoadingAdd] = useState<boolean>(false); // For the Add Ward button
   const [loadingProceed, setLoadingProceed] = useState<boolean>(false); // For the Proceed button
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -97,15 +110,6 @@ const WardOptions = () => {
     formState: { errors },
   } = useForm<IaddWard>({
     resolver: zodResolver(addWardSchema),
-  });
-
-  const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["getWard"],
-    queryFn: async () => {
-      const response = await fetch("/api/more-wards");
-      const result = await response.json();
-      return result;
-    },
   });
 
   //console.log(data);
@@ -157,108 +161,107 @@ const WardOptions = () => {
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  return (
+    <div className=" flex flex-col w-full mx-auto md:w-[500px] gap-2">
+      <form
+        onSubmit={handleSubmit(runSubmit)}
+        className=" flex flex-col gap-2 w-full px-2"
+      >
+        <div>
+          <input
+            {...register("email")}
+            type="email"
+            name="email"
+            placeholder="Enter Ward Email Address"
+            className=" p-4 outline-none rounded-[8px] w-full bg-white"
+          />
+          {errors.email && (
+            <small className=" text-red-600">{errors.email.message}</small>
+          )}
+        </div>
 
-  if (isLoading) {
-    return <FullPageLoading fullpage={true} />;
-  }
+        <div className="relative">
+          <input
+            {...register("password")}
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Enter Ward Password"
+            className=" p-4 outline-none rounded-[8px] w-full bg-white"
+          />
+          {errors.password && (
+            <small className=" text-red-600">{errors.password.message}</small>
+          )}
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute top-4 right-4 border-none bg-transparent cursor-pointer"
+          >
+            {showPassword ? (
+              <EyeOff className="text-lightGreen" />
+            ) : (
+              <Eye className="text-lightGreen" />
+            )}
+          </button>
+        </div>
+        <div>
+          <Controller
+            control={control}
+            name="gender"
+            render={({ field }) => (
+              <Select onValueChange={field.onChange}>
+                <SelectTrigger className=" py-[27px]">
+                  <SelectValue
+                    placeholder={`${
+                      field.value ? field.value : "Enter Gender of Ward"
+                    }`}
+                  />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Male">Male</SelectItem>
+                  <SelectItem value="Female">Female</SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
+          {errors.gender && (
+            <small className=" text-red-600">{errors.gender.message}</small>
+          )}
+        </div>
 
+        <div>
+          <input
+            {...register("name")}
+            type="text"
+            name="name"
+            placeholder="Enter Ward Name"
+            className=" p-4 outline-none rounded-[8px] w-full bg-white"
+          />
+          {errors.name && (
+            <small className=" text-red-600">{errors.name.message}</small>
+          )}
+        </div>
+
+        <Button
+          type="submit"
+          className="w-full py-6 mb-6 bg-lightGreen hover:bg-green-700"
+          disabled={loadingAdd}
+        >
+          {loadingAdd ? "adding ward..." : "Add Ward"}
+        </Button>
+      </form>
+    </div>
+  );
+};
+const WardOptions = () => {
   return (
     <div className="font-header w-full h-screen overflow-hidden flex flex-col items-center justify-center  py-3 ">
       <p className="text-center font-bold text-[20px]  mb-3">SELECT WARD</p>
-      <SelectWard data={data} />
+      <SelectWard />
       <p className="text-center font-bold text-[18px]">OR</p>
       <p className="text-center font-bold text-[20px] mt-2 mb-6">
         ADD MORE WARD(S)
       </p>
-      <div className=" flex flex-col w-full mx-auto md:w-[500px] gap-2">
-        <form
-          onSubmit={handleSubmit(runSubmit)}
-          className=" flex flex-col gap-2 w-full px-2"
-        >
-          <div>
-            <input
-              {...register("email")}
-              type="email"
-              name="email"
-              placeholder="Enter Ward Email Address"
-              className=" p-4 outline-none rounded-[8px] w-full bg-white"
-            />
-            {errors.email && (
-              <small className=" text-red-600">{errors.email.message}</small>
-            )}
-          </div>
-
-          <div className="relative">
-            <input
-              {...register("password")}
-              type={showPassword ? "text" : "password"}
-              name="password"
-              placeholder="Enter Ward Password"
-              className=" p-4 outline-none rounded-[8px] w-full bg-white"
-            />
-            {errors.password && (
-              <small className=" text-red-600">{errors.password.message}</small>
-            )}
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
-              className="absolute top-4 right-4 border-none bg-transparent cursor-pointer"
-            >
-              {showPassword ? (
-                <EyeOff className="text-lightGreen" />
-              ) : (
-                <Eye className="text-lightGreen" />
-              )}
-            </button>
-          </div>
-          <div>
-            <Controller
-              control={control}
-              name="gender"
-              render={({ field }) => (
-                <Select onValueChange={field.onChange}>
-                  <SelectTrigger className=" py-[27px]">
-                    <SelectValue
-                      placeholder={`${
-                        field.value ? field.value : "Enter Gender of Ward"
-                      }`}
-                    />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Male">Male</SelectItem>
-                    <SelectItem value="Female">Female</SelectItem>
-                  </SelectContent>
-                </Select>
-              )}
-            />
-            {errors.gender && (
-              <small className=" text-red-600">{errors.gender.message}</small>
-            )}
-          </div>
-
-          <div>
-            <input
-              {...register("name")}
-              type="text"
-              name="name"
-              placeholder="Enter Ward Name"
-              className=" p-4 outline-none rounded-[8px] w-full bg-white"
-            />
-            {errors.name && (
-              <small className=" text-red-600">{errors.name.message}</small>
-            )}
-          </div>
-
-          <Button
-            type="submit"
-            className="w-full py-6 mb-6 bg-lightGreen hover:bg-green-700"
-            disabled={loadingAdd}
-          >
-            {loadingAdd ? "adding ward..." : "Add Ward"}
-          </Button>
-        </form>
-      </div>
-
+      <MoreWardForm />
       <ToastContainer />
     </div>
   );

@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
+import Cookies from "js-cookie";
 
 // Define types for teachers
 interface Teacher {
@@ -23,20 +24,11 @@ interface TeacherInfo {
   className: string;
   grade: string;
   subject: string;
-  teacher: Teacher; 
+  teacher: Teacher;
 }
 
 const TeachersTable = () => {
-
-  //The wardId is already stored in the localStorage and so we initialize a state for it 
-  const [wardId, setWardId] = useState<string | null>(null);
-
-  
-  // Retrieve wardId from localStorage
-  useEffect(() => {
-    const storedWardId = localStorage.getItem("selectedWardId");
-    setWardId(storedWardId); // Set wardId from localStorage directly
-  }, []); 
+  const wardId = Cookies.get("wardId");
 
   // Fetch teachers data, only run query if wardId exists
   const { isLoading, isError, error, data } = useQuery<TeacherInfo[]>({
@@ -52,7 +44,7 @@ const TeachersTable = () => {
     enabled: !!wardId, // The query will only run if wardId exists
   });
 
- // console.log(data);
+  // console.log(data);
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -80,18 +72,22 @@ const TeachersTable = () => {
       </TableHeader>
       <TableBody>
         {data.map((item) => (
-          <TableRow className="text-[12px] font-semibold" key={item.teacher.name}>
+          <TableRow
+            className="text-[12px] font-semibold"
+            key={item.teacher.name}
+          >
             {" "}
             {/* Use a unique key, maybe teacher's name */}
             <TableCell className="flex items-center  mr-1">
-            <Image
-                  src={item.teacher.profilePhoto}
-                  alt="icon"
-                  width={100}
-                  height={100}
-                  className="w-[40px] h-[40px] rounded-md mr-1"
-                />{" "}
-              {item.teacher.name}</TableCell>
+              <Image
+                src={item.teacher.profilePhoto}
+                alt="icon"
+                width={100}
+                height={100}
+                className="w-[40px] h-[40px] rounded-md mr-1"
+              />{" "}
+              {item.teacher.name}
+            </TableCell>
             <TableCell>{item.className}</TableCell>
             <TableCell>{item.subject}</TableCell>
             <TableCell>{item.teacher.status}</TableCell>

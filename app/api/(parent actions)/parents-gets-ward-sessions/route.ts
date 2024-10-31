@@ -41,7 +41,7 @@ export async function GET(req: Request) {
         },
       },
     });
-
+    console.log(childSessions);
     return new Response(JSON.stringify(childSessions), { status: 200 });
   } catch (error) {
     return serverError();

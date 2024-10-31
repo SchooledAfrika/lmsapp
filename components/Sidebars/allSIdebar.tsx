@@ -37,11 +37,12 @@ const WardProfile = () => {
 
   // Fetch the ward list (the same query you used in AddWard)
   const { data, isLoading, isError, error } = useQuery<IwardsInfo[]>({
-    queryKey: ["getWard"],
+    queryKey: ["getWards"],
     queryFn: async () => {
       const response = await fetch("/api/more-wards");
       return await response.json();
     },
+    enabled: !!wardId,
   });
   if (isLoading) return <div>loading...</div>;
   if (isError) return <div>error...</div>;
@@ -60,13 +61,13 @@ const WardProfile = () => {
           />
         ) : (
           <span className="text-[18px]">
-            {getInitials(selectedWard?.name as string)}
+            {selectedWard?.name && getInitials(selectedWard?.name as string)}
           </span>
         )}
       </div>
       <div className="flex flex-col">
         <p className="text-[13px]">
-          {makeSubstring(selectedWard?.name as string, 9)}
+          {selectedWard?.name && makeSubstring(selectedWard?.name as string, 9)}
         </p>
       </div>
     </div>

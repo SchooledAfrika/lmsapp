@@ -14,13 +14,6 @@ export enum registerType {
   Parents = "Parents",
 }
 
-const accountTypeToLink: { [key: string]: string } = {
-  "School Account": "/school-account",
-  "Student Account": "/student-account",
-  "Parent Account": "/parent-account",
-  "Teacher Account": "/teacher-account",
-};
-
 const Register: FC = () => {
   const [selectAccountType, setSelectAccountType] = useState<
     registerType | undefined
@@ -43,6 +36,10 @@ const Register: FC = () => {
     if (selectAccountType === undefined) {
       return alert("please select your role");
     }
+    // here, we should redirect to the school website, if the user selected school
+    if (selectAccountType === "School") {
+      return (window.location.href = "https://schooledng.com");
+    }
     // set cookies for a role
     Cookies.set("role", selectAccountType);
     // then direct the user to the path to complete the registration process
@@ -55,15 +52,21 @@ const Register: FC = () => {
         <div className="sm:w-full md:w-[45%]">
           <p className="pb-2 font-bold text-orange-400">Get Started</p>
           <span className="font-bold text-[20px] md:text-[26px]">
-          Join in shaping the future of Education.
-
+            Join in shaping the future of Education.
           </span>
           <p className="text-gray-500 py-6 text-[13px]">
-          At Schooled Afrika, we're dedicated to empowering learners, educators, and institutions with the
-          tools they need to thrive in the digital age. Join us in shaping the future of education, one click at
-          a time.
+            At Schooled Afrika, we're dedicated to empowering learners,
+            educators, and institutions with the tools they need to thrive in
+            the digital age. Join us in shaping the future of education, one
+            click at a time.
           </p>
-          <Image src={"/careers.svg"} alt="career" width={200} height={200} className="hidden w-[400px] sm:block" />
+          <Image
+            src={"/careers.svg"}
+            alt="career"
+            width={200}
+            height={200}
+            className="hidden w-[400px] sm:block"
+          />
         </div>
         <div className="sm:w-full md:w-[45%]">
           <div className="flex justify-end mb-[50px]">
