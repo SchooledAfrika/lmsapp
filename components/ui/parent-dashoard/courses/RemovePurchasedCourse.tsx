@@ -18,9 +18,15 @@ import Image from "next/image";
 
 interface IdeleteCourse {
   courseId: string;
+  setDeleteOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isDeleteOpen: boolean;
 }
 
-const RemovePurchasedCourse: React.FC<IdeleteCourse> = ({ courseId }) => {
+const RemovePurchasedCourse: React.FC<IdeleteCourse> = ({
+  courseId,
+  setDeleteOpen,
+  isDeleteOpen,
+}) => {
   const [loading, setloading] = useState<boolean>(false);
 
   //   instance of client
@@ -28,21 +34,21 @@ const RemovePurchasedCourse: React.FC<IdeleteCourse> = ({ courseId }) => {
   //   creating a delete using mutation to the backend
   const { mutate } = useMutation({
     mutationFn: async (courseId: string) => {
-      const result = await fetch(`/api/purchased-course/delete-by-student`, {
+      const result = await fetch(`/api/purchased-course/delete-by-parents`, {
         method: "DELETE",
         body: JSON.stringify({
           courseId: courseId,
-          
         }),
       });
       return result;
-     
-      
     },
 
     onSuccess: async (result) => {
-      queryClient.invalidateQueries({ queryKey: ["getPurchasedCourseByStudent"] });
       if (result.ok) {
+        queryClient.invalidateQueries({
+          queryKey: ["getPurchasedCourseByParent"],
+        });
+        setDeleteOpen(false);
         setloading(false);
         return toast.success("Course Successfully Deleted");
       } else {
@@ -60,19 +66,15 @@ const RemovePurchasedCourse: React.FC<IdeleteCourse> = ({ courseId }) => {
   const handleDelete = () => {
     setloading(true);
     mutate(courseId);
-   
   };
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>
-      <Button className="bg-dimOrange cursor-pointer absolute -translate-y-1/2 right-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block">
-            Delete Course
-          </Button>
-      </DialogTrigger>
+    <Dialog open={isDeleteOpen} onOpenChange={() => setDeleteOpen(false)}>
       <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold">Remove Course</DialogTitle>
+          <DialogTitle className="text-3xl font-bold">
+            Remove Course
+          </DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 font-header py-4">
           <div className="flex flex-1 items-center justify-center mx-auto gap-2">
@@ -110,4 +112,4 @@ const RemovePurchasedCourse: React.FC<IdeleteCourse> = ({ courseId }) => {
   );
 };
 
-export default RemovePurchasedCourse
+export default RemovePurchasedCourse;

@@ -17,10 +17,61 @@ import { TeacherSideBar } from "@/constants/teacherSidebar";
 import { StudentSideBar } from "@/constants/studentSidebar";
 import { ParentSideBar } from "@/constants/parentsSideBar";
 import Image from "next/image";
+import Cookies from "js-cookie";
 
 interface Isidebar {
   findpath: string;
 }
+
+interface IwardsInfo {
+  id: string;
+  profilePhoto: string;
+  email: string;
+  name: string;
+}
+// component to display wards profiledata
+const WardProfile = () => {
+  const { getInitials, makeSubstring } = useConversion();
+  // get the wardId from the cookies
+  const wardId = Cookies.get("wardId");
+
+  // Fetch the ward list (the same query you used in AddWard)
+  const { data, isLoading, isError, error } = useQuery<IwardsInfo[]>({
+    queryKey: ["getWard"],
+    queryFn: async () => {
+      const response = await fetch("/api/more-wards");
+      return await response.json();
+    },
+  });
+  if (isLoading) return <div>loading...</div>;
+  if (isError) return <div>error...</div>;
+  // filter out the selected ward based on the id
+  const selectedWard = data?.find((ward) => ward.id === wardId);
+  return (
+    <div className="w-full p-2 cursor-pointer rounded-md ease-in-out transform duration-200 flex items-center space-x-2 bg-white border-[tomato]  border border-dashed  ">
+      <div className="border border-[tomato] w-[40px] h-[40px] flex items-center justify-center rounded-full">
+        {selectedWard?.profilePhoto ? (
+          <Image
+            src={selectedWard.profilePhoto}
+            alt="Ward Profile"
+            width={100}
+            height={100}
+            className="w-full h-full object-cover rounded-full"
+          />
+        ) : (
+          <span className="text-[18px]">
+            {getInitials(selectedWard?.name as string)}
+          </span>
+        )}
+      </div>
+      <div className="flex flex-col">
+        <p className="text-[13px]">
+          {makeSubstring(selectedWard?.name as string, 9)}
+        </p>
+      </div>
+    </div>
+  );
+};
 export const SchoolSideBarComponent = ({ findpath }: Isidebar) => {
   const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
   return (
@@ -99,46 +150,6 @@ export const ParentSideBarComponent = ({ findpath }: Isidebar) => {
   const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
   const [selectedWardName, setSelectedWardName] = useState<string>("");
   const [selectedWardPhoto, setSelectedWardPhoto] = useState<string>("");
-  const { getInitials } = useConversion();
-
-  // Fetch the ward list (the same query you used in AddWard)
-  const { data: wards } = useQuery({
-    queryKey: ["getWard"],
-    queryFn: async () => {
-      const response = await fetch("/api/more-wards");
-      return await response.json();
-    },
-  });
-
-  
-  useEffect(() => {
-    // Function to update the selected ward name and photo
-  const updateSelectedWard = () => {
-    const storedWardId = localStorage.getItem("selectedWardId");
-    if (storedWardId && Array.isArray(wards)) {
-      const ward = wards.find((ward: any) => ward.id === storedWardId);
-      if (ward) {
-        setSelectedWardName(ward.name); // Set the ward name
-        setSelectedWardPhoto(ward.profilePhoto); // Set the ward photo if available
-      } else {
-        setSelectedWardName(""); // Reset if no matching ward
-        setSelectedWardPhoto("");
-      }
-    }
-  };
-    updateSelectedWard(); // Update initially when component mounts
-
-    // Listen for localStorage changes from other components
-    const handleStorageChange = () => {
-      updateSelectedWard();
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, [wards]); // Add `wards` as a dependency to update when fetched
 
   return (
     <div className=" w-full flex flex-col space-y-2">
@@ -159,32 +170,7 @@ export const ParentSideBarComponent = ({ findpath }: Isidebar) => {
           <p className=" text-[14px]">{item.name}</p>
         </Link>
       ))}
-
-      <div className="w-full p-2 cursor-pointer rounded-md ease-in-out transform duration-200 flex items-center space-x-2 bg-green-800 text-white  ">
-      <div className="border-2 w-[40px] h-[40px] flex items-center justify-center rounded-full">
-          {selectedWardPhoto ? (
-            <Image
-              src={selectedWardPhoto}
-              alt="Ward Profile"
-              width={100}
-              height={100}
-              className="w-full h-full object-cover rounded-full"
-            />
-          ) : (
-            <span className="text-[18px]">
-              {selectedWardName ? getInitials(selectedWardName) : "?"}
-            </span>
-          )}
-        </div>
-        <div className="flex flex-col">
-          {selectedWardName ? (
-            <p className="text-[13px]">{selectedWardName}</p>
-          ) : (
-            <p>No ward selected</p>
-          )}
-          {/* <p className="text-[12px] underline">Switch Ward</p> */}
-        </div>
-      </div>
+      <WardProfile />
     </div>
   );
 };

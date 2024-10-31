@@ -22,7 +22,6 @@ interface IdeleteCourse {
 
 const RemovePurchasedCourse: React.FC<IdeleteCourse> = ({ courseId }) => {
   const [loading, setloading] = useState<boolean>(false);
-
   //   instance of client
   const queryClient = useQueryClient();
   //   creating a delete using mutation to the backend
@@ -32,16 +31,15 @@ const RemovePurchasedCourse: React.FC<IdeleteCourse> = ({ courseId }) => {
         method: "DELETE",
         body: JSON.stringify({
           courseId: courseId,
-          
         }),
       });
       return result;
-     
-      
     },
 
     onSuccess: async (result) => {
-      queryClient.invalidateQueries({ queryKey: ["getPurchasedCourseByStudent"] });
+      queryClient.invalidateQueries({
+        queryKey: ["getPurchasedCourseByStudent"],
+      });
       if (result.ok) {
         setloading(false);
         return toast.success("Course Successfully Deleted");
@@ -60,19 +58,20 @@ const RemovePurchasedCourse: React.FC<IdeleteCourse> = ({ courseId }) => {
   const handleDelete = () => {
     setloading(true);
     mutate(courseId);
-   
   };
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-      <Button className="bg-dimOrange cursor-pointer absolute -translate-y-1/2 right-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block">
-            Delete Course
-          </Button>
+        <Button className="bg-dimOrange cursor-pointer absolute -translate-y-1/2 right-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block">
+          Delete Course
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold">Remove Course</DialogTitle>
+          <DialogTitle className="text-3xl font-bold">
+            Remove Course
+          </DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 font-header py-4">
           <div className="flex flex-1 items-center justify-center mx-auto gap-2">
@@ -110,4 +109,4 @@ const RemovePurchasedCourse: React.FC<IdeleteCourse> = ({ courseId }) => {
   );
 };
 
-export default RemovePurchasedCourse
+export default RemovePurchasedCourse;

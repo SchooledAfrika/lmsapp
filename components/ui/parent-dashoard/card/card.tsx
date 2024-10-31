@@ -6,15 +6,15 @@ import Cookies from "js-cookie";
 import { CircularProgress } from "@mui/material";
 
 // Define interfaces for type safety
-interface TotalClasses {
+export interface TotalClasses {
   classNo: number;
 }
 
-interface TotalTeachers {
+export interface TotalTeachers {
   teachersNo: number;
 }
 
-interface TotalAssessments {
+export interface TotalAssessments {
   totalExams: number;
 }
 

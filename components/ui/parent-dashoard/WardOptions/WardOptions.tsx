@@ -85,23 +85,7 @@ const SelectWard: React.FC<{ data: any }> = ({ data }) => {
 const WardOptions = () => {
   const [loadingAdd, setLoadingAdd] = useState<boolean>(false); // For the Add Ward button
   const [loadingProceed, setLoadingProceed] = useState<boolean>(false); // For the Proceed button
-  const router = useRouter();
-  const [selectedWardId, setSelectedWardId] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState<boolean>(false);
-
-  // Retrieve stored ward ID on component mount
-  useEffect(() => {
-    const storedWardId = localStorage.getItem("selectedWardId");
-    if (storedWardId) {
-      setSelectedWardId(storedWardId);
-    }
-  }, []);
-
-  // Handle option selection
-  const handleSelect = (wardId: string) => {
-    setSelectedWardId(wardId);
-    localStorage.setItem("selectedWardId", wardId); // Store the selected ID in localStorage
-  };
 
   const {
     register,
@@ -179,7 +163,7 @@ const WardOptions = () => {
   }
 
   return (
-    <div className="font-header w-full h-screen overflow-hidden  py-3 ">
+    <div className="font-header w-full h-screen overflow-hidden flex flex-col items-center justify-center  py-3 ">
       <p className="text-center font-bold text-[20px]  mb-3">SELECT WARD</p>
       <SelectWard data={data} />
       <p className="text-center font-bold text-[18px]">OR</p>
@@ -255,7 +239,6 @@ const WardOptions = () => {
           <div>
             <input
               {...register("name")}
-              autoFocus
               type="text"
               name="name"
               placeholder="Enter Ward Name"

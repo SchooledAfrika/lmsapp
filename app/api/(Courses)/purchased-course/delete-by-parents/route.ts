@@ -4,9 +4,9 @@ import { onlyTeacher, serverError } from "@/prisma/utils/error";
 import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 export async function DELETE(req: Request) {
-  const { courseId, id, role } = await req.json();
-  //   const id = await serverSessionId();
-  //   const role = await serverSessionRole();
+  const { courseId } = await req.json();
+  const id = await serverSessionId();
+  const role = await serverSessionRole();
   if (role !== "Parents") return onlyTeacher();
   try {
     // now lets get the course we want to delete
