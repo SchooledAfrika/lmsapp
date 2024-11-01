@@ -15,18 +15,11 @@ import { closePaymentModal, FlutterWaveButton } from "flutterwave-react-v3";
 import { GetClassLoader } from "./loaders/skeleton";
 import { CircularProgress } from "@mui/material";
 import { useInView } from "react-intersection-observer";
-
+import { RiGraduationCapFill } from "react-icons/ri";
 import Image from "next/image";
-import { AdminCourses } from "@/constants/adminCourses";
-
 import { Button } from "@/components/ui/button";
-
-import { FaGraduationCap } from "react-icons/fa";
-
 import Container from "./Container";
-import Link from "next/link";
 import SingleCourses from "./SingleCourses";
-
 export interface TeacherInfo {
   id: string;
   name: string;
@@ -51,13 +44,7 @@ export interface ICourses {
 }
 
 const CourseCard = ({ item }: { item: ICourses }) => {
-  const {
-    makeSubString,
-    capitalizeString,
-    convertArray,
-    showpayments,
-    enroll,
-  } = useClasses();
+  const { makeSubString } = useClasses();
   const { data, status } = useSession();
 
   // Add a state to toggle the checkout visibility
@@ -105,6 +92,7 @@ const CourseCard = ({ item }: { item: ICourses }) => {
               handlePurchaseClick={handlePurchaseClick}
               price={item.price}
               id={item.id}
+              isAdmin={item.byAdmin}
             />
           </div>
           <Button
@@ -134,19 +122,25 @@ const CourseCard = ({ item }: { item: ICourses }) => {
               </div>
 
               <div className=" flex items-center pt-1 gap-2">
-                <p className="text-[13px] font-subtext font-medium">
-                  <Image
-                    className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
-                    src={item.teacher.profilePhoto ?? "/course-img.jpeg"}
-                    alt="background"
-                    width={200}
-                    height={200}
-                  />
+                <div className=" flex items-center gap-1">
+                  {item.byAdmin ? (
+                    <RiGraduationCapFill className=" text-[24px]" />
+                  ) : (
+                    <Image
+                      className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
+                      src={item.teacher.profilePhoto ?? "/course-img.jpeg"}
+                      alt="background"
+                      width={200}
+                      height={200}
+                    />
+                  )}
                   {/* <FaGraduationCap className="inline mr-1 text-lg" /> */}
-                  {item.byAdmin === true
-                    ? "SchooledAfrika"
-                    : makeSubString(item.teacher.name)}
-                </p>
+                  <p>
+                    {item.byAdmin === true
+                      ? "SchooledAfrika"
+                      : makeSubString(item.teacher.name)}
+                  </p>
+                </div>
               </div>
             </div>
             <div className=" flex items-center gap-1 bg-green-200 px-2 py-1 rounded-md">
@@ -279,7 +273,9 @@ export const PayStackBtn: React.FC<{
     publicKey: process.env.NEXT_PUBLIC_PAYSTACKPUBKEY!,
     text: "Pay with paystack",
     onSuccess: (reference: any) => {
-      toast.success("payment successful, navigate to courses in your dashboard");
+      toast.success(
+        "payment successful, navigate to courses in your dashboard"
+      );
       enroll();
     },
     metadata: {
@@ -330,9 +326,9 @@ export const FlutterWaveBtn: React.FC<{
       logo: "https://res.cloudinary.com/dfn0senip/image/upload/v1720127002/v5tp1e4dsjx5sidhxoud.png",
     },
     onSuccess: () => {
-
-      toast.success("payment successful, navigate to courses in your dashboard");
-     
+      toast.success(
+        "payment successful, navigate to courses in your dashboard"
+      );
 
       setTimeout(() => {
         queryClient.invalidateQueries({
@@ -420,6 +416,7 @@ const Courses = () => {
   }
   // flaten the data gotten here
   const queryData = data?.pages.flat();
+  console.log(queryData);
   return (
     <Container>
       <div className="w-full  mx-auto px-4 pt-16 pb-6">

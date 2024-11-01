@@ -30,6 +30,7 @@ import Image from "next/image";
 import { FaLock } from "react-icons/fa";
 import { Checkout } from "./Courses";
 import { useSession } from "next-auth/react";
+import { RiGraduationCapFill } from "react-icons/ri";
 
 interface courseProps {
   title: string;
@@ -45,6 +46,7 @@ interface courseProps {
   handlePurchaseClick: () => void;
   price: number;
   id: string;
+  isAdmin: boolean;
 }
 
 const SingleCourses = ({
@@ -61,8 +63,9 @@ const SingleCourses = ({
   price,
   id,
   handlePurchaseClick,
+  isAdmin,
 }: courseProps) => {
-  const [activeVideo, setActiveVideo] = useState(mainVideo);
+  const [activeVideo, setActiveVideo] = useState(previewVideo);
   const videoRef = useRef<HTMLVideoElement>(null);
   const { status } = useSession();
 
@@ -77,11 +80,11 @@ const SingleCourses = ({
       <Dialog open={dialogBox} onOpenChange={() => showDialogBox()}>
         <DialogContent
           onClick={(e) => e.stopPropagation()}
-          className="sm:w-[90%] w-[400px] bg-stone-100 font-subtext"
+          className="sm:w-[90%] w-[400px] px-0 bg-stone-100 font-subtext"
         >
-          <ScrollArea className="h-[500px] w-full ">
+          <ScrollArea className="h-[500px] w-full px-4 ">
             <div className="grid gap-4 font-header py-4">
-              <div className=" w-full flex items-center font-header mb-6 justify-between">
+              <div className=" w-full flex items-center font-header mb-1 justify-between">
                 <p className=" font-bold text-black">Course Overview</p>
                 <DialogClose asChild>
                   <Button
@@ -93,14 +96,14 @@ const SingleCourses = ({
                   </Button>
                 </DialogClose>
               </div>
-              <div className="flex sm:flex-row flex-col justify-between my-6">
+              <div className="flex sm:flex-row flex-col justify-between my-1">
                 <div className="md:flex-7 relative cursor-pointer">
                   <video
                     ref={videoRef}
                     width="600"
                     controls
                     poster={banner}
-                    className="rounded-md w-[400px] md:w-[600px]"
+                    className="rounded-md w-[400px] md:w-[600px] border-black border-2"
                   >
                     <source src={activeVideo} type="video/mp4" />
                   </video>
@@ -208,20 +211,23 @@ const SingleCourses = ({
                   <p className="w-[600px] sm:block hidden mb-4 text-[13px] leading-5 ">
                     {details}
                   </p>
-                  <p className="w-[600px] sm:inline hidden text-[12px]  font-semibold leading-5 py-3 ">
-                    {" "}
-                    <Image
-                      className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
-                      src={teacherPhoto ?? "/course-img.jpeg"}
-                      alt="background"
-                      width={200}
-                      height={200}
-                    />
+                  <div className=" flex items-center gap-1">
+                    {isAdmin ? (
+                      <RiGraduationCapFill className=" text-[24px]" />
+                    ) : (
+                      <Image
+                        className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
+                        src={teacherPhoto ?? "/course-img.jpeg"}
+                        alt="background"
+                        width={200}
+                        height={200}
+                      />
+                    )}
                     {/* <FaGraduationCap className="inline mr-1 text-lg" /> */}
-                    {teacher}
-                  </p>
+                    <p>{isAdmin === true ? "SchooledAfrika" : teacher}</p>
+                  </div>
                 </div>
-                <div className=" md:flex-4 sm:block hidden  font-header bg-stone-50 p-3 rounded-md">
+                <div className=" md:flex-4 sm:block hidden h-fit  font-header bg-stone-50 p-3 rounded-md">
                   <p className="font-semibold">Course Contents</p>
                   <div className="flex flex-col mt-3">
                     {/* Course Preview */}
