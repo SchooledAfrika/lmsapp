@@ -28,6 +28,7 @@ export async function GET(
             },
           },
         },
+        kyc: {},
       },
     });
     return new Response(JSON.stringify(oneTeacher), { status: 200 });
