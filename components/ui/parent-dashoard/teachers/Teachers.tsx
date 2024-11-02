@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import React from "react";
 import { Button } from "@/components/ui/button";
@@ -10,11 +10,7 @@ import DashboardPagination from "@/components/DashboardPagination";
 const Teachers = () => {
   return (
     <div className=" ">
-      
-
       <TeachersTable />
-
-      <DashboardPagination />
     </div>
   );
 };

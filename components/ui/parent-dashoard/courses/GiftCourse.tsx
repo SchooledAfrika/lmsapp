@@ -23,6 +23,8 @@ import "react-toastify/dist/ReactToastify.css";
 
 interface IDeleteCourse {
   courseId: string;
+  isOpen: boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface Ward {
@@ -30,26 +32,26 @@ interface Ward {
   name: string;
 }
 
-const GiftCourse: React.FC<IDeleteCourse> = ({ courseId }) => {
+const GiftCourse: React.FC<IDeleteCourse> = ({
+  courseId,
+  isOpen,
+  setIsOpen,
+}) => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedWardId, setSelectedWardId] = useState<string | null>(null);
-
-  // Retrieve stored ward ID on component mount
-  useEffect(() => {
-    const storedWardId = localStorage.getItem("selectedWardId");
-    if (storedWardId) {
-      setSelectedWardId(storedWardId);
-    }
-  }, []);
-
+  const queryClient = useQueryClient();
   // Handle option selection
   const handleSelect = (wardId: string) => {
     setSelectedWardId(wardId);
-    localStorage.setItem("selectedWardId", wardId);
   };
 
   // Fetch wards data
-  const { data, isLoading: isDataLoading, isError, error } = useQuery<Ward[]>({
+  const {
+    data,
+    isLoading: isDataLoading,
+    isError,
+    error,
+  } = useQuery<Ward[]>({
     queryKey: ["getWard"],
     queryFn: async () => {
       const response = await fetch("/api/more-wards");
@@ -57,11 +59,7 @@ const GiftCourse: React.FC<IDeleteCourse> = ({ courseId }) => {
       const result = await response.json();
       return result;
     },
-    
-   
   });
-
-  const queryClient = useQueryClient();
 
   // Mutation for gifting course
   const { mutate } = useMutation({
@@ -79,7 +77,7 @@ const GiftCourse: React.FC<IDeleteCourse> = ({ courseId }) => {
       return result;
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["getPurchasedCourseByParent"] });
+      setIsOpen(false);
       toast.success("Course Successfully Gifted to Ward");
       setLoading(false);
     },
@@ -101,53 +99,54 @@ const GiftCourse: React.FC<IDeleteCourse> = ({ courseId }) => {
 
   return (
     <div>
-
-   
-    <Dialog>
-      <DialogTrigger asChild>
-        <Button className="bg-lightGreen cursor-pointer rounded-md text-white text-[12px] font-bold px-4 py-2">
-          Gift Course to Ward
-        </Button>
-      </DialogTrigger>
-      <DialogContent className="sm:w-[600px] w-[380px] font-subtext">
-        <DialogHeader>
-          <DialogTitle className="text-3xl font-bold">Gift Course to Ward</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-4 font-header py-4">
-          <div className="flex flex-col">
-            <Select onValueChange={handleSelect}>
-              <SelectTrigger className="md:w-[550px] w-full py-6">
-                <SelectValue placeholder="Select Ward" />
-              </SelectTrigger>
-              <SelectContent className="font-header font-medium">
-                <SelectGroup>
-                  {isDataLoading && <SelectItem value="" disabled>Loading wards...</SelectItem>}
-                  {isError && <SelectItem value="" disabled>{error.message}</SelectItem>}
-                  {Array.isArray(data) &&
-                    data.map((item: Ward) => (
-                      <SelectItem key={item.id} value={item.id}>
-                        {item.name}
+      <Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
+        <DialogContent className="sm:w-[600px] w-[380px] font-subtext">
+          <DialogHeader>
+            <DialogTitle className="text-3xl font-bold">
+              Gift Course to Ward
+            </DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 font-header py-4">
+            <div className="flex flex-col">
+              <Select onValueChange={handleSelect}>
+                <SelectTrigger className="md:w-[550px] w-full py-6">
+                  <SelectValue placeholder="Select Ward" />
+                </SelectTrigger>
+                <SelectContent className="font-header font-medium">
+                  <SelectGroup>
+                    {isDataLoading && (
+                      <SelectItem value="" disabled>
+                        Loading wards...
                       </SelectItem>
-                    ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+                    )}
+                    {isError && (
+                      <SelectItem value="" disabled>
+                        {error.message}
+                      </SelectItem>
+                    )}
+                    {Array.isArray(data) &&
+                      data.map((item: Ward) => (
+                        <SelectItem key={item.id} value={item.id}>
+                          {item.name}
+                        </SelectItem>
+                      ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
-        </div>
 
-        <DialogFooter>
-          <Button
-            onClick={handleGiftCourse}
-            disabled={loading || isDataLoading} // Disable if loading or data is loading
-            className="w-full py-8 text-lg bg-lightGreen hover:bg-green-700"
-          >
-            {loading ? "Gifting Course..." : "Gift Course"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-      
-    </Dialog>
-    <ToastContainer  />
+          <DialogFooter>
+            <Button
+              onClick={handleGiftCourse}
+              disabled={loading || isDataLoading} // Disable if loading or data is loading
+              className="w-full py-8 text-lg bg-lightGreen hover:bg-green-700"
+            >
+              {loading ? "Gifting Course..." : "Gift Course"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

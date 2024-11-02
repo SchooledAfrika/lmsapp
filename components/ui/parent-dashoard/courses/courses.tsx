@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import { MdVerified } from "react-icons/md";
@@ -10,6 +10,7 @@ import SinglePurchasedCourse from "./SinglePurchasedCourse";
 import RemovePurchasedCourse from "./RemovePurchasedCourse";
 import GiftCourse from "./GiftCourse";
 import { toast, ToastContainer } from "react-toastify";
+import { Button } from "../../button";
 
 export interface TeacherInfo {
   id: string;
@@ -55,6 +56,8 @@ const ShowSkeleton = () => {
 };
 
 const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [isDeleteOpen, setDeleteOpen] = useState<boolean>(false);
   return (
     <div className="w-full overflow-hidden font-header rounded-lg card flex flex-col justify-center gap-3 hover:-translate-y-2 transition-transform duration-300 group">
       <div className="relative text-white w-full h-[200px]">
@@ -76,7 +79,17 @@ const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
           price={item.price}
           id={item.id}
         />
-        <RemovePurchasedCourse courseId={item.id} />
+        <Button
+          onClick={() => setDeleteOpen(true)}
+          className="bg-dimOrange cursor-pointer absolute -translate-y-1/2 right-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block"
+        >
+          Delete Course
+        </Button>
+        <RemovePurchasedCourse
+          setDeleteOpen={setDeleteOpen}
+          isDeleteOpen={isDeleteOpen}
+          courseId={item.id}
+        />
       </div>
 
       <div className="flex flex-col gap-3 mb-8 justify-center mx-4">
@@ -103,14 +116,25 @@ const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
             <p className="text-green-700 text-[10px]">verified</p>
           </div>
         </div>
-        <GiftCourse courseId={item.id} />
+        <Button
+          onClick={() => setIsOpen(true)}
+          className="bg-lightGreen cursor-pointer rounded-md text-white text-[12px] font-bold px-4 py-2"
+        >
+          Gift Course to Ward
+        </Button>
+        <GiftCourse isOpen={isOpen} setIsOpen={setIsOpen} courseId={item.id} />
       </div>
     </div>
   );
 };
 
 const Courses = () => {
-  const { data: purchasedCoursesData, isFetching: isPurchasedFetching, isError: isPurchasedError, error: purchasedError } = useQuery<ICourses[]>({
+  const {
+    data: purchasedCoursesData,
+    isLoading: isPurchasedLoading,
+    isError: isPurchasedError,
+    error: purchasedError,
+  } = useQuery<ICourses[]>({
     queryKey: ["getPurchasedCourseByParent"],
     queryFn: async () => {
       const response = await fetch("/api/courses-bought");
@@ -128,24 +152,24 @@ const Courses = () => {
     }
   }, [isPurchasedError, purchasedError]);
 
-  if (isPurchasedFetching) return <ShowSkeleton />;
+  if (isPurchasedLoading) return <ShowSkeleton />;
 
   return (
     <Container>
-     
       <div>
-        <h2 className="font-bold text-center text-[25px] my-3">Purchased Courses</h2>
-        {Array.isArray(purchasedCoursesData) && purchasedCoursesData.length === 0 ? (
+        <h2 className="font-bold text-center text-[25px]">Purchased Courses</h2>
+        {Array.isArray(purchasedCoursesData) &&
+        purchasedCoursesData.length === 0 ? (
           <Noitem desc="No purchased courses" />
         ) : (
-          <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
+          <div className="grid mt-2 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
             {purchasedCoursesData?.map((item: ICourses) => (
               <PurchasedCourseCard item={item} key={item.id} />
             ))}
           </div>
         )}
       </div>
-      <ToastContainer /> 
+      <ToastContainer />
     </Container>
   );
 };

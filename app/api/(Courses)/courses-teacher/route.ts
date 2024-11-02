@@ -59,7 +59,7 @@ export async function GET(req: Request) {
   const page = getQuery(req.url, "page");
   // get the lower border for slice
   const Start = Number(page) - 1;
-  const skipAmt = Start * 3;
+  const skipAmt = Start * 20;
   const takeAmt = 20;
   try {
     const allCourses = await prisma.courses.findMany({

@@ -1,86 +1,85 @@
-'use client';
-import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import AddWard from '../AddWard/AddWard';
-import { useQuery} from '@tanstack/react-query';
+"use client";
+import React, { useState, useEffect } from "react";
+import Image from "next/image";
+import { useQuery } from "@tanstack/react-query";
+import Cookies from "js-cookie";
+import { CircularProgress } from "@mui/material";
 
-
-// Define interfaces for type safety 
-interface TotalClasses {
+// Define interfaces for type safety
+export interface TotalClasses {
   classNo: number;
 }
 
-interface TotalTeachers {
+export interface TotalTeachers {
   teachersNo: number;
 }
 
-interface TotalAssessments {
+export interface TotalAssessments {
   totalExams: number;
 }
 
+// function to return small reuseable loaders
+const SmallLoaders = () => {
+  return <CircularProgress size={30} color="primary" />;
+};
+// function to return the totalValue in the different div
+const TotalValues: React.FC<{ itemNumber: number }> = ({ itemNumber }) => {
+  return <h3 className="font-bold text-xl pb-3">{itemNumber}</h3>;
+};
+
 const Card = () => {
- 
-  const [wardId, setWardId] = useState<string | null>(null);
-
-  
-
-  // Retrieve wardId from localStorage on component mount
-  useEffect(() => {
-    const storedWardId = localStorage.getItem('selectedWardId');
-    setWardId(storedWardId);
-  }, []);
+  // get wardId from the cookies
+  const wardId = Cookies.get("wardId");
 
   // Fetch total classes
-  const { data: totalClassesData, isLoading: loadingClasses, isError: errorClasses } = useQuery<TotalClasses>({
+  const {
+    data: totalClassesData = { classNo: 0 },
+    isLoading: loadingClasses,
+    isError: errorClasses,
+  } = useQuery<TotalClasses>({
     queryKey: ["totalClasses", wardId],
     queryFn: async () => {
-      const response = await fetch(`/api/parent-info/parents-child-overview/total-classes?childId=${wardId}`);
-      if (!response.ok) throw new Error('Failed to fetch total classes');
+      const response = await fetch(
+        `/api/parent-info/parents-child-overview/total-classes?childId=${wardId}`
+      );
       return response.json();
     },
     enabled: !!wardId, // Ensure the query only runs if id is present
   });
 
   // Fetch total teachers
-  const { data: totalTeachersData, isLoading: loadingTeachers, isError: errorTeachers } = useQuery<TotalTeachers>({
+  const {
+    data: totalTeachersData = { teachersNo: 0 },
+    isLoading: loadingTeachers,
+    isError: errorTeachers,
+  } = useQuery<TotalTeachers>({
     queryKey: ["totalTeachers", wardId],
     queryFn: async () => {
-      const response = await fetch(`/api/parent-info/parents-child-overview/total-teacher?childId=${wardId}`);
-      if (!response.ok) throw new Error('Failed to fetch total teachers');
+      const response = await fetch(
+        `/api/parent-info/parents-child-overview/total-teacher?childId=${wardId}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch total teachers");
       return response.json();
     },
     enabled: !!wardId, // Ensure the query only runs if id is present
   });
 
   // Fetch total assessments
-  const { data: totalAssessmentsData, isLoading: loadingAssessments, isError: errorAssessments } = useQuery<TotalAssessments>({
+  const {
+    data: totalAssessmentsData = { totalExams: 0 },
+    isLoading: loadingAssessments,
+    isError: errorAssessments,
+  } = useQuery<TotalAssessments>({
     queryKey: ["totalAssessments", wardId],
     queryFn: async () => {
-      const response = await fetch(`/api/parent-info/parents-child-overview/total-exams?childId=${wardId}`);
-      if (!response.ok) throw new Error('Failed to fetch total assessments');
+      const response = await fetch(
+        `/api/parent-info/parents-child-overview/total-exams?childId=${wardId}`
+      );
+      if (!response.ok) throw new Error("Failed to fetch total assessments");
       return response.json();
     },
     enabled: !!wardId, // Ensure the query only runs if id is present
   });
-
-  // Loading states for individual queries
-  if (loadingClasses || loadingTeachers || loadingAssessments) {
-    return <div className='text-[14px]'>Fetching Ward Data...</div>; // Loading indicator while fetching data
-  }
-
-  // Error handling for each query
-  if (errorClasses) {
-    return <div>Error loading total classes data.</div>;
-  }
-
-  if (errorTeachers) {
-    return <div>Error loading total teachers data.</div>;
-  }
-
-  if (errorAssessments) {
-    return <div>Error loading total assessments data.</div>;
-  }
-  
 
   return (
     <div className="w-full bg-stone-100 ">
@@ -89,7 +88,7 @@ const Card = () => {
         {/* Total Classes Card */}
         <div className="flex text-sm p-3 justify-between space-x-2 py-6 bg-white rounded-md">
           <div className="flex flex-col justify-evenly">
-            <h3 className="font-bold text-xl pb-3">{totalClassesData?.classNo ?? 0}</h3>
+            <TotalValues itemNumber={totalClassesData?.classNo as number} />
             <p className="font-semibold pb-2">Total Sessions</p>
           </div>
           <Image
@@ -104,7 +103,8 @@ const Card = () => {
         {/* Total Teachers Card */}
         <div className="flex text-sm p-3 justify-between space-x-2 bg-white rounded-md">
           <div className="flex flex-col justify-evenly">
-            <h3 className="font-bold text-xl pb-3">{totalTeachersData?.teachersNo ?? 0}</h3>
+            <TotalValues itemNumber={totalTeachersData?.teachersNo as number} />
+
             <p className="font-semibold pb-2">Total Teachers</p>
           </div>
           <Image
@@ -115,11 +115,12 @@ const Card = () => {
             className="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
           />
         </div>
-
         {/* Total Assessments Card */}
         <div className="flex  text-sm p-3 justify-between space-x-2 bg-white rounded-md">
           <div className="flex flex-col justify-evenly">
-            <h3 className="font-bold text-xl pb-3">{totalAssessmentsData?.totalExams ?? 0}</h3>
+            <TotalValues
+              itemNumber={totalAssessmentsData?.totalExams as number}
+            />
             <p className="font-semibold pb-2">Total Assessments</p>
           </div>
           <Image
@@ -130,8 +131,6 @@ const Card = () => {
             className="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
           />
         </div>
-
-        
       </div>
     </div>
   );

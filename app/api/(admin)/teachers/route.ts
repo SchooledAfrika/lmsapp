@@ -21,6 +21,16 @@ export async function GET(req: Request) {
             plan: true,
           },
         },
+        kyc: {
+          select: {
+            docImg: true,
+            docType: true,
+            status: true,
+            verifiedImg: true,
+            createdAt: true,
+            teacherId: true,
+          },
+        },
       },
     });
     return new Response(JSON.stringify(allTeachers), { status: 200 });

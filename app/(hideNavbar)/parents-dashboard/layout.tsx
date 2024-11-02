@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/nextAuth";
 import React from "react";
-
+import { cookies } from "next/headers";
 export const metadata: Metadata = {
   title: "SchooledAfrika | Parents Dashboard",
   description: "Parents dashboard",
@@ -26,6 +26,11 @@ export default async function RootLayout({
   if (session?.user.role !== "Parents") return redirect("/");
   if (!session?.user.CompletedProfile)
     return redirect("/parent-account/details");
+  // now, lets check if the ward is selected before visiting any of this page
+  const cookieStore = cookies;
+  const wardId = cookieStore().get("wardId")?.value;
+  console.log("the wardId", wardId);
+  if (!wardId) return redirect("/parent-account/ward-options");
   return (
     <>
       <CommonDashboardContext>

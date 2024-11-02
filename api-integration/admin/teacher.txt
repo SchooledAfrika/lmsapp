@@ -48,3 +48,21 @@ payload==>{
     type:string
 }
 comment===> teacherId is the id of the teacher then type is an enum of either "INTERNAL" or "EXTERNAL"
+
+
+new endpoint 11/2/2024
+this is about kyc
+---getting all the teacher as been modified to include kyc status
+---gettting single teacher has been modified to include all information about the kyc
+---then below is the endpoint to change the kyc of the teacher
+
+================================================================================================================
+endpoint for admin to  change the kyc of the user
+================================================================================================================
+enpoint==> /api/teachers/approve-kyc
+method==> PUT
+payload==>{
+    teacherId:string,
+    status:string
+}
+comment==> the status is a string enum which are either "PENDING", "APPROVED" or "REJECTED".
