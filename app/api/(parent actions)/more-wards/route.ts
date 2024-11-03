@@ -17,6 +17,8 @@ import bcrypt from "bcryptjs";
 export async function GET(req: Request) {
   //   lets check for authentication of users first
   const parentsId = await serverSessionId();
+  console.log("special testing");
+  console.log(parentsId);
   const role = await serverSessionRole();
   if (!parentsId) return notAuthenticated();
   if (role !== "Parents") return onlyParents();
@@ -34,6 +36,7 @@ export async function GET(req: Request) {
         },
       },
     });
+    console.log(allWards);
     return new Response(JSON.stringify(allWards?.wards), { status: 200 });
   } catch (error) {
     return serverError();

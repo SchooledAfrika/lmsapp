@@ -245,3 +245,39 @@ export const coursePayment = async (payload: Icourses) => {
     return serverError();
   }
 };
+
+// this part registers the special request in the database
+// after payment
+interface ISpecialRequest {
+  parentsId: string;
+  studentId: string;
+  amt: number;
+  language: string;
+  subject: string;
+  grade: string;
+  time: string;
+  kindOfTeacher: string;
+}
+export const specialRequest = async (payload: ISpecialRequest) => {
+  console.log(payload);
+  try {
+    await prisma.specialTeacherUnmerged.create({
+      data: {
+        parentsId: payload.parentsId,
+        studentId: payload.studentId,
+        amt: Number(payload.amt),
+        language: payload.language,
+        subject: payload.subject,
+        grade: payload.grade,
+        time: payload.time,
+        kindOfTeacher: payload.kindOfTeacher,
+      },
+    });
+    return new Response(JSON.stringify({ message: "successfull" }), {
+      status: 200,
+    });
+  } catch (error) {
+    console.log(error);
+    return serverError();
+  }
+};

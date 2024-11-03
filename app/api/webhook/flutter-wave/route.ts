@@ -6,6 +6,7 @@ import {
   sessionPaymentFlutter,
   teachersPlan,
   coursePayment,
+  specialRequest,
 } from "@/prisma/utils/payment";
 
 // add student to the class after making payment
@@ -25,9 +26,6 @@ export async function POST(req: Request) {
   const classArray = data.customer.name.split("-");
   const classId = classArray[0];
   const paymentFor = classArray[1];
-  console.log("webhook flutter entered now");
-  console.log(paymentFor);
-  console.log(body.meta_data);
   // check for the payment type and run it accordingly
   if (paymentFor == "class ") {
     return await payForClass(classId, studentId);
@@ -43,6 +41,10 @@ export async function POST(req: Request) {
   // webhook for payment for courses from anyone
   if (paymentFor == "courses ") {
     return await coursePayment(body.meta_data);
+  }
+  // payment for specualRequest
+  if (paymentFor == "specialRequest ") {
+    return await specialRequest(body.meta_data);
   }
   return new Response(JSON.stringify({ m: "successful" }), { status: 200 });
 }
