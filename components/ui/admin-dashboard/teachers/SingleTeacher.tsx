@@ -2,6 +2,7 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
+import { useConversion } from "@/data-access/conversion";
 
 import {
   Card,
@@ -28,7 +29,8 @@ import ApproveKYC from "./ApproveKYC";
 
 const SingleTeacher = () => {
   const { id } = useParams();
-  console.log(id);
+  //console.log(id);
+  const { handleDate } = useConversion();
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["SingleTeacher"],
     queryFn: async () => {
@@ -39,7 +41,7 @@ const SingleTeacher = () => {
     },
   });
 
-  console.log(data);
+  //console.log(data);
 
   //   if is loading
   if (isLoading) {
@@ -152,8 +154,8 @@ const SingleTeacher = () => {
                       <p className="text-[14px] font-semibold">{data.email}</p>
                     </div>
                     <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Joined On</p>
-                      <p className="text-[14px] font-semibold">{data.createdAt}</p>
+                      <p className="text-[13px] font-medium">Joined On</p> 
+                      <p className="text-[14px] font-semibold">{handleDate(data?.createdAt)}</p>
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Address</p>
@@ -188,12 +190,18 @@ const SingleTeacher = () => {
                     </div>
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">
+                        KYC STATUS
+                      </p>
+                      <p className="text-[14px] font-semibold">{data.kyc.status}</p>
+                    </div>
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">
                         Role
                       </p>
                       <p className="text-[14px] font-semibold">{data.role}</p>
                     </div>
                     <div className=" flex space-x-12">
-                      <ApproveKYC/>
+                      <ApproveKYC teacherData={data}  />
                     </div>
                     <div className="hidden md:flex space-x-12">
                       

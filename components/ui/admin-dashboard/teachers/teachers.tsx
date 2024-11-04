@@ -25,7 +25,7 @@ const Teachers = () => {
       return result;
     },
   });
-  //console.log(data);
+  console.log(data);
 
   // If loading
   if (isLoading) {
