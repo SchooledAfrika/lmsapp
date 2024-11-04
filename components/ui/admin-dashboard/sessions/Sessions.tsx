@@ -71,7 +71,7 @@ const TotalAndMore: React.FC<{ item: string[] }> = ({ item }) => {
 const OfferCard: React.FC<{ item: IOffers }> = ({ item }) => {
   const router = useRouter();
   const handleClick = () => {
-    router.push(`/admin-dashboard/sessions/${item.id}`);
+    router.push(`/admin-dashboard/sessions/single-sessions/${item.id}`);
   };
   return (
     <div className=" bg-white p-3 flex flex-col gap-5 shadow-md">
@@ -146,7 +146,7 @@ export const ShowSkeleton = () => {
 
 const Sessions = () => {
   // making use of react query to get all the offers
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["get-sessions"],
     queryFn: async () => {
       const response = await fetch("/api/session-view");
@@ -156,7 +156,7 @@ const Sessions = () => {
   });
   console.log(data);
 
-  if (isFetching) {
+  if (isLoading) {
     return <ShowSkeleton />;
   }
   if (isError) {

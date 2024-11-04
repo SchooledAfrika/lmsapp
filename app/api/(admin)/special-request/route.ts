@@ -19,7 +19,17 @@ export async function GET(req: Request) {
       orderBy: {
         createdAt: "desc",
       },
+      include: {
+        student: {
+          select: {
+            profilePhoto: true,
+            name: true,
+            email: true,
+          },
+        },
+      },
     });
+    console.log(allSession);
     return new Response(JSON.stringify(allSession), { status: 200 });
   } catch (error) {
     return serverError();
@@ -28,7 +38,8 @@ export async function GET(req: Request) {
 
 // updating the specialRequest and also merging a teacher here
 export async function PUT(req: Request) {
-  const { specialRequestId, amt, sessionId } = await req.json();
+  const { adminSessionId, amt, teacherSessionId } = await req.json();
+  console.log(adminSessionId, amt, teacherSessionId);
   const userId = await serverSessionId();
   const role = await serverSessionRole();
   if (!userId) return notAuthenticated();
@@ -36,7 +47,7 @@ export async function PUT(req: Request) {
 
   // lets check if the specialRequest actually exists before we proceed
   const theSpecialRequest = await prisma.specialTeacherUnmerged.findUnique({
-    where: { id: specialRequestId },
+    where: { id: adminSessionId },
     select: {
       id: true,
       merged: true,
@@ -58,7 +69,7 @@ export async function PUT(req: Request) {
   //   now lets get the teacher id making use of their session Id provided
   //   throw an error if this teacher does not exist
   const teacherId = await prisma.oneOnOneSection.findFirst({
-    where: { sessionId },
+    where: { sessionId: teacherSessionId },
     select: { teacherId: true },
   });
   if (!teacherId)
@@ -73,7 +84,7 @@ export async function PUT(req: Request) {
         studentId: theSpecialRequest.studentId,
         teacherId: teacherId.teacherId,
         subject: theSpecialRequest.subject,
-        amt,
+        amt: Number(amt),
         language: theSpecialRequest.language,
         grade: theSpecialRequest.grade,
         time: theSpecialRequest.time,
@@ -82,7 +93,7 @@ export async function PUT(req: Request) {
     // now we can update the database of the special request model
     // and set the merged to true
     await prisma.specialTeacherUnmerged.update({
-      where: { id: specialRequestId },
+      where: { id: adminSessionId },
       data: { merged: true },
     });
     return new Response(
@@ -90,6 +101,7 @@ export async function PUT(req: Request) {
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     return serverError();
   }
 }

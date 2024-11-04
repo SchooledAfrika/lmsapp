@@ -259,7 +259,6 @@ interface ISpecialRequest {
   kindOfTeacher: string;
 }
 export const specialRequest = async (payload: ISpecialRequest) => {
-  console.log(payload);
   try {
     await prisma.specialTeacherUnmerged.create({
       data: {
@@ -277,7 +276,6 @@ export const specialRequest = async (payload: ISpecialRequest) => {
       status: 200,
     });
   } catch (error) {
-    console.log(error);
     return serverError();
   }
 };
