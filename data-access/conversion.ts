@@ -1,8 +1,9 @@
 import { format } from "timeago.js";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { CommonDashboardContext } from "@/providers/Statecontext";
 export const useConversion = () => {
   // const get the date
-  function handleDate(time: string ) {
+  function handleDate(time: string) {
     const fullTime = new Date(time);
     const formattedDate = fullTime.toLocaleDateString("en-US", {
       year: "numeric",
@@ -138,7 +139,6 @@ export const useConversion = () => {
 };
 
 export const useGetDocument = (item: string) => {
-  console.log(item);
   const [dataSize, setDataSize] = useState<any>(null);
   useEffect(() => {
     const fileSize = async () => {
@@ -158,4 +158,9 @@ export const useGetDocument = (item: string) => {
   });
 
   return { dataSize };
+};
+
+export const useWardId = () => {
+  const { wardId, setwardIds } = useContext(CommonDashboardContext);
+  return { wardId, setwardIds };
 };

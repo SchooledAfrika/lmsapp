@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import Cookies from "js-cookie";
 import { CircularProgress } from "@mui/material";
+import { useWardId } from "@/data-access/conversion";
 
 // Define interfaces for type safety
 export interface TotalClasses {
@@ -18,10 +19,6 @@ export interface TotalAssessments {
   totalExams: number;
 }
 
-// function to return small reuseable loaders
-const SmallLoaders = () => {
-  return <CircularProgress size={30} color="primary" />;
-};
 // function to return the totalValue in the different div
 const TotalValues: React.FC<{ itemNumber: number }> = ({ itemNumber }) => {
   return <h3 className="font-bold text-xl pb-3">{itemNumber}</h3>;
@@ -80,6 +77,10 @@ const Card = () => {
     },
     enabled: !!wardId, // Ensure the query only runs if id is present
   });
+
+  if (loadingAssessments || loadingTeachers || loadingClasses) {
+    return <p>loading now...</p>;
+  }
 
   return (
     <div className="w-full bg-stone-100 ">
