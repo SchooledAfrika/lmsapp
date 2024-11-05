@@ -24,11 +24,11 @@ const SmallLoaders = () => {
 };
 // function to return the totalValue in the different div
 const TotalValues: React.FC<{ itemNumber: number }> = ({ itemNumber }) => {
-  return <h3 className="font-bold text-xl pb-3">{itemNumber}</h3>;
+  return <p className="font-bold text-xl pb-3">{itemNumber}</p>;
 };
 
 const Card = () => {
-  // get wardId from the cookies
+  // Get wardId from the cookies
   const wardId = Cookies.get("wardId");
 
   // Fetch total classes
@@ -44,7 +44,7 @@ const Card = () => {
       );
       return response.json();
     },
-    enabled: !!wardId, // Ensure the query only runs if id is present
+    enabled: !!wardId, // Ensure the query only runs if wardId is present
   });
 
   // Fetch total teachers
@@ -61,7 +61,7 @@ const Card = () => {
       if (!response.ok) throw new Error("Failed to fetch total teachers");
       return response.json();
     },
-    enabled: !!wardId, // Ensure the query only runs if id is present
+    enabled: !!wardId,
   });
 
   // Fetch total assessments
@@ -78,13 +78,18 @@ const Card = () => {
       if (!response.ok) throw new Error("Failed to fetch total assessments");
       return response.json();
     },
-    enabled: !!wardId, // Ensure the query only runs if id is present
+    enabled: !!wardId,
   });
 
+  // If data is loading, display the loader to prevent hydration issues
+  if (loadingClasses || loadingTeachers || loadingAssessments) {
+    return <SmallLoaders />;
+  }
+
   return (
-    <div className="w-full bg-stone-100 ">
+    <div className="w-full bg-stone-100">
       {/* Card section */}
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3  gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-3">
         {/* Total Classes Card */}
         <div className="flex text-sm p-3 justify-between space-x-2 py-6 bg-white rounded-md">
           <div className="flex flex-col justify-evenly">
@@ -104,7 +109,6 @@ const Card = () => {
         <div className="flex text-sm p-3 justify-between space-x-2 bg-white rounded-md">
           <div className="flex flex-col justify-evenly">
             <TotalValues itemNumber={totalTeachersData?.teachersNo as number} />
-
             <p className="font-semibold pb-2">Total Teachers</p>
           </div>
           <Image
@@ -115,8 +119,9 @@ const Card = () => {
             className="w-[30px] h-[30px] md:w-[40px] md:h-[40px]"
           />
         </div>
+
         {/* Total Assessments Card */}
-        <div className="flex  text-sm p-3 justify-between space-x-2 bg-white rounded-md">
+        <div className="flex text-sm p-3 justify-between space-x-2 bg-white rounded-md">
           <div className="flex flex-col justify-evenly">
             <TotalValues
               itemNumber={totalAssessmentsData?.totalExams as number}
