@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
@@ -25,16 +25,68 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-
+import { useWardId } from "@/data-access/conversion";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import Cookies from "js-cookie";
 import { BsPlusSquare } from "react-icons/bs";
 import { Eye, EyeOff } from "lucide-react";
 
 interface AddWardProps {
   onProceed: () => void; // Function to refresh the dashboard
 }
+
+const SwitchWard: React.FC<{
+  data: any;
+  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ data, setIsDialogOpen }) => {
+  const [selectedId, setSelectedId] = useState<string | undefined>(undefined);
+  const { setWardIs, wardId } = useWardId();
+  const handleSelect = (wardId: string) => {
+    setSelectedId(wardId);
+  };
+  const handleChange = () => {
+    if (!selectedId) return;
+    Cookies.set("wardId", selectedId!);
+    setWardIs(selectedId);
+    setIsDialogOpen(false);
+  };
+  return (
+    <div className="flex flex-col w-full items-center">
+      <Select onValueChange={handleSelect}>
+        <SelectTrigger className="md:w-[500px] w-full  py-6">
+          <SelectValue placeholder="Select Ward" />
+        </SelectTrigger>
+        <SelectContent className="font-header font-medium">
+          <SelectGroup className=" flex flex-col gap-1">
+            {Array.isArray(data) &&
+              data.map((item: any) => (
+                <SelectItem
+                  className={` cursor-pointer hover:bg-green-600 transition-all ease-in-out duration-700 ${
+                    item.id === wardId && " bg-green-600 text-white"
+                  }`}
+                  key={item.id}
+                  value={item.id}
+                >
+                  {item.name}
+                </SelectItem>
+              ))}
+          </SelectGroup>
+        </SelectContent>
+      </Select>
+      <div
+        onClick={handleChange}
+        className={`md:w-[500px] w-full flex items-center justify-center  mt-3 py-5 rounded-md text-md ${
+          selectedId
+            ? "bg-lightGreen text-white font-semibold hover:bg-green-700 cursor-pointer transition-all ease-in-out duration-700"
+            : " bg-gray-500 cursor-not-allowed"
+        } `}
+      >
+        <p>Switch ward</p>
+      </div>
+    </div>
+  );
+};
 
 export type IaddWard = z.infer<typeof addWardSchema>;
 const AddWard = () => {
@@ -130,25 +182,6 @@ const AddWard = () => {
     setShowPassword(!showPassword);
   };
 
-  // Move to Ward Dashboard
-
-  const handleMoveToWardDashboard = () => {
-    if (selectedWardId) {
-      setLoadingProceed(true); // Start loading for Proceed button
-      window.dispatchEvent(new Event("storage"));
-
-      // Proceed to the dashboard
-      router.push(`/parents-dashboard`);
-
-      // Set a timer to reset the loading state after a short delay
-      setTimeout(() => {
-        setLoadingProceed(false); // Stop loading after a delay (simulate navigation completion)
-        setIsDialogOpen(false); // Close the dialog after successful navigation
-      });
-    } else {
-      toast.error("Please select a ward before proceeding!");
-    }
-  };
   return (
     <div className="font-header ">
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -161,42 +194,12 @@ const AddWard = () => {
 
         <DialogContent className="sm:w-[600px]  w-[380px] font-subtext">
           <ScrollArea className="h-[500px] w-full ">
-            <DialogHeader>
-              <DialogTitle className="text-3xl font-bold">
-                ADD OR SWITCH WARD
-              </DialogTitle>
-            </DialogHeader>
-
             <div className="grid gap-4 font-header py-4">
               <div className="grid items-center font-header gap-4">
                 <p className="text-center font-bold text-[20px] my-6">
                   SWITCH WARD
                 </p>
-                <div className="flex flex-col">
-                  <Select onValueChange={handleSelect}>
-                    <SelectTrigger className="md:w-[500px] w-full  py-6">
-                      <SelectValue placeholder="Select Ward" />
-                    </SelectTrigger>
-                    <SelectContent className="font-header font-medium">
-                      <SelectGroup>
-                        {Array.isArray(data) &&
-                          data.map((item: any) => (
-                            <SelectItem key={item.id} value={item.id}>
-                              {item.name}
-                            </SelectItem>
-                          ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                  <Button
-                    onClick={handleMoveToWardDashboard}
-                    disabled={loadingProceed}
-                    type="submit"
-                    className="md:w-[500px] w-full  mt-3 py-8 text-md bg-lightGreen hover:bg-green-700"
-                  >
-                    {loadingProceed ? "Proceeding..." : "Proceed"}
-                  </Button>
-                </div>
+                <SwitchWard setIsDialogOpen={setIsDialogOpen} data={data} />
               </div>
               <p className="text-center font-bold text-[18px]">OR</p>
               <p className="text-center font-bold text-[20px] mt-6 mb-6">

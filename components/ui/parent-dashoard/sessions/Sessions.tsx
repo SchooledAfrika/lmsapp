@@ -10,6 +10,7 @@ import { BsThreeDots } from "react-icons/bs";
 import { useConversion } from "@/data-access/conversion";
 import Cookies from "js-cookie";
 import { RxAvatar } from "react-icons/rx";
+import { useWardId } from "@/data-access/conversion";
 
 // Define types for sessions
 export interface Teacher {
@@ -106,20 +107,6 @@ const SessionCard = ({ item }: { item: SessionInfo }) => {
               {makeSubstring(item.sectionOwner.teacher.name, 20)}
             </p>
           </div>
-
-          {/* <div className="flex items-center">
-            <Button
-              asChild
-              className="bg-dimOrange hover:bg-dimYellow text-[10px]"
-            >
-              <Link
-                href={`/parents-dashboard/sessions/${item.id}`}
-                className=""
-              >
-                Lesson in Session
-              </Link>
-            </Button>
-          </div> */}
         </div>
       </div>
 
@@ -172,16 +159,6 @@ const SessionCard = ({ item }: { item: SessionInfo }) => {
               {makeSubstring(item.sectionOwner.teacher.name, 20)}
             </p>
           </div>
-          {/* <div className="flex ">
-            <Button
-              asChild
-              className="bg-dimOrange w-full hover:bg-dimYellow text-[12px]"
-            >
-              <Link href="/parents-dashboard/sessions/test" className="">
-                Lesson in Session
-              </Link>
-            </Button>
-          </div> */}
         </div>
       </div>
     </div>
@@ -190,7 +167,7 @@ const SessionCard = ({ item }: { item: SessionInfo }) => {
 
 const Sessions = () => {
   //The wardId is already stored in the localStorage and so we initialize a state for it
-  const wardId = Cookies.get("wardId");
+  const { wardId } = useWardId();
 
   // Fetch teachers data, only run query if wardId exists
   const { isLoading, isError, error, data } = useQuery<SessionInfo[]>({

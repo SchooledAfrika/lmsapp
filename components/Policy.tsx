@@ -1,15 +1,14 @@
 import React from "react";
 
-
 const Policy = () => {
   return (
     <div className="font-header text-center mt-12 md:px-6 px-3">
-      <h1 className="md:text-[50px] text-[30px] font-subtext font-bold">
-         Privacy Policy
-      </h1>
+      <p className="md:text-[50px] text-[30px] font-subtext font-bold">
+        Privacy Policy
+      </p>
 
       <div className="text-justify md:ml-12 ml-3 mt-12 ">
-        <h3 className="text-[25px] font-bold">1. Introduction</h3>
+        <p className="text-[25px] font-bold">1. Introduction</p>
         <p className="max-w-[1000px] md:ml-6 font-medium">
           Welcome to Schooled Afrika. We are committed to protecting your
           privacy and ensuring that your personal information is handled in a
@@ -19,7 +18,7 @@ const Policy = () => {
         </p>
       </div>
       <div className="text-justify md:ml-12 ml-3 mt-12">
-        <h3 className="text-[25px] font-bold">2. Information we collect</h3>
+        <p className="text-[25px] font-bold">2. Information we collect</p>
         <p className="max-w-[1000px] md:ml-6 font-medium">
           We may collect the following types of information:
         </p>
@@ -55,9 +54,7 @@ const Policy = () => {
       </div>
 
       <div className="text-justify md:ml-12 ml-3 mt-12">
-        <h3 className="text-[25px] font-bold">
-          3. How We Use Your Information
-        </h3>
+        <p className="text-[25px] font-bold">3. How We Use Your Information</p>
         <p className="max-w-[1000px] md:ml-6 font-medium">
           We may collect the following types of information:
         </p>
@@ -88,7 +85,7 @@ const Policy = () => {
       </div>
 
       <div className="text-justify md:ml-12 ml-3 mt-12">
-        <h3 className="text-[25px] font-bold">4. Sharing Your Information</h3>
+        <p className="text-[25px] font-bold">4. Sharing Your Information</p>
         <p className="max-w-[1000px] md:ml-6 font-medium">
           We may share your information with:
         </p>
@@ -115,7 +112,7 @@ const Policy = () => {
         </div>
       </div>
       <div className="text-justify md:ml-12 ml-3 mt-12">
-        <h3 className="text-[25px] font-bold">5. Data Security</h3>
+        <p className="text-[25px] font-bold">5. Data Security</p>
         <p className="max-w-[1000px] md:ml-6 font-medium">
           We implement appropriate security measures to protect your information
           from unauthorized access, alteration, disclosure, or destruction.
@@ -124,7 +121,7 @@ const Policy = () => {
         </p>
       </div>
       <div className="text-justify md:ml-12 ml-3 mt-12">
-        <h3 className="text-[25px] font-bold">6. Your Rights</h3>
+        <p className="text-[25px] font-bold">6. Your Rights</p>
         <p className="max-w-[1000px] md:ml-6 font-medium">
           You have the right to:
         </p>
@@ -156,9 +153,9 @@ const Policy = () => {
         </div>
       </div>
       <div className="text-justify md:ml-12 ml-3 mt-12">
-        <h3 className="text-[25px] font-bold">
+        <p className="text-[25px] font-bold">
           7. Cookies and Tracking Technologies
-        </h3>
+        </p>
         <p className="max-w-[1000px] md:ml-6 font-medium">
           We use cookies and similar tracking technologies to enhance your
           experience on our website. You can manage your cookie preferences
@@ -166,7 +163,7 @@ const Policy = () => {
         </p>
       </div>
       <div className="text-justify md:ml-12 ml-3 mt-12">
-        <h3 className="text-[25px] font-bold">8. Children’s Privacy</h3>
+        <p className="text-[25px] font-bold">8. Childrens Privacy</p>
         <p className="max-w-[1000px] md:ml-6 font-medium">
           Our services are not intended for children under the age of 13. We do
           not knowingly collect personal information from children under 13
@@ -176,9 +173,9 @@ const Policy = () => {
         </p>
       </div>
       <div className="text-justify md:ml-12 ml-3 mt-12">
-        <h3 className="text-[25px] font-bold">
+        <p className="text-[25px] font-bold">
           9. Changes to This Privacy Policy
-        </h3>
+        </p>
         <p className="max-w-[1000px] md:ml-6 font-medium">
           We may update this Privacy Policy from time to time. We will notify
           you of any significant changes by posting the new policy on our
@@ -188,19 +185,21 @@ const Policy = () => {
         </p>
       </div>
       <div className="text-justify md:ml-12 ml-3 mt-12">
-        <h3 className="text-[25px] font-bold">10. Contact Us</h3>
-        <p className="max-w-[1000px] md:ml-6 font-medium">
-          If you have any questions or concerns about this Privacy Policy or our
-          data practices, please contact us at:
+        <p className="text-[25px] font-bold">10. Contact Us</p>
+        <div className="max-w-[1000px] md:ml-6 font-medium">
+          <p>
+            If you have any questions or concerns about this Privacy Policy or
+            our data practices, please contact us at:
+          </p>
           <p className="my-3 text-[14px] font-medium">
             SchooledAfrika <br />
             Schooledafrika@gmail.com <br />
             +2347035082028 <br />
           </p>
-        </p>
+        </div>
       </div>
       <div className="text-justify md:ml-12 ml-3 mt-12 mb-16">
-        <h3 className="text-[25px] font-bold">Acknowledgement</h3>
+        <p className="text-[25px] font-bold">Acknowledgement</p>
         <p className="max-w-[1000px]  font-medium">
           By using our services, you acknowledge that you have read and
           understood this Privacy Policy and agree to our collection, use, and

@@ -10,8 +10,7 @@ import { useConversion } from "@/data-access/conversion";
 import { Skeleton } from "@mui/material";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Cookies from "js-cookie";
-import { Cookie } from "lucide-react";
+import { useWardId } from "@/data-access/conversion";
 
 export type IparentExam = z.infer<typeof parentExamSchema>;
 
@@ -50,12 +49,12 @@ interface IallTest {
 // component that will return all the test
 const AllTest: React.FC<IallTest> = ({ setId, id, setShowExam, showExam }) => {
   //The wardId is already stored in the localStorage and so we initialize a state for it
-  const wardId = Cookies.get("wardId");
+  const wardId = useWardId();
 
   const { getTimeAgo, handleDate, handleTime } = useConversion();
   // here we get all the exams from teacher
-  const { data, isFetching, isError, error } = useQuery({
-    queryKey: ["allAssessment"],
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["allAssessment", wardId],
     queryFn: async () => {
       const response = await fetch(
         `/api/wards-all-assessment?childId=${wardId}`
@@ -64,7 +63,7 @@ const AllTest: React.FC<IallTest> = ({ setId, id, setShowExam, showExam }) => {
       return result;
     },
   });
-  if (isFetching) {
+  if (isLoading) {
     return <LoadingView heading="Assessment" />;
   }
   if (isError) {

@@ -78,11 +78,6 @@ const Card = () => {
     enabled: !!wardId,
   });
 
-  // If data is loading, display the loader to prevent hydration issues
-  if (loadingClasses || loadingTeachers || loadingAssessments) {
-    return <p>loading</p>;
-  }
-
   return (
     <div className="w-full bg-stone-100">
       {/* Card section */}

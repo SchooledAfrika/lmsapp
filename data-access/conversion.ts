@@ -161,6 +161,6 @@ export const useGetDocument = (item: string) => {
 };
 
 export const useWardId = () => {
-  const { wardId, setwardIds } = useContext(CommonDashboardContext);
-  return { wardId, setwardIds };
+  const { wardId, setWardIs } = useContext(CommonDashboardContext);
+  return { wardId, setWardIs };
 };
