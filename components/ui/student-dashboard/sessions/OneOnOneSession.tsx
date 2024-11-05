@@ -3,9 +3,9 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "./ui/button";
-import DashboardPagination from "./DashboardPagination";
-import Container from "./Container";
+import { Button } from "../../button";
+import DashboardPagination from "../../../DashboardPagination";
+import Container from "../../../Container";
 import { OneOnOneList } from "@/constants/oneOnOneList";
 import { useQuery } from "@tanstack/react-query";
 import { MdContentCopy } from "react-icons/md";
@@ -15,7 +15,7 @@ import { useConversion } from "@/data-access/conversion";
 import { IoIosRadio } from "react-icons/io";
 import { Skeleton } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { Noitem } from "./ApplicantsTable";
+import { Noitem } from "../../../ApplicantsTable";
 
 interface IstudentOneonOne {
   name: string;
