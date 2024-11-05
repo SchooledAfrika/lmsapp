@@ -9,9 +9,8 @@ const DashboardPage = () => {
     <div className="mt-[100px] md:mt-3">
       <div className="flex md:flex-row flex-col   py-4 cursor-pointer     rounded-md">
         <Card />
-        {/* <AddWard /> */}
+        <AddWard />
       </div>
-
       <Chart />
       <Overall />
     </div>

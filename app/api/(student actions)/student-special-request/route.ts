@@ -7,8 +7,8 @@ import { getQuery, serverSessionId } from "@/prisma/utils/utils";
 export async function GET(req: Request) {
   const studentId = getQuery(req.url, "studentId");
   // check for authentication below
-  const userId = await serverSessionId();
-  if (!userId) return notAuthenticated();
+  // const userId = await serverSessionId();
+  // if (!userId) return notAuthenticated();
   try {
     const allSpecialRequestedSessions =
       await prisma.specialTeacherMerged.findMany({

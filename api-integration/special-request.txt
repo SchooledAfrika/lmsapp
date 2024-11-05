@@ -1,0 +1,14 @@
+
+================================================================================================================
+endpoint for student to get special requests made by the parents
+================================================================================================================
+route: /api/student-special-request?studentId=string
+method:GET
+comment: the query parameter studentId is the id of the student you wish to get the special request associated to them
+
+================================================================================================================
+endpoint for teachers to get the special request merged to them
+================================================================================================================
+route:/api/teacher-special-request
+method:GET
+comment:this query gets all the special request that was merged to a particular teacher

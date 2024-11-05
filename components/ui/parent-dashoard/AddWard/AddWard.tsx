@@ -33,12 +33,11 @@ import { BsPlusSquare } from "react-icons/bs";
 import { Eye, EyeOff } from "lucide-react";
 
 interface AddWardProps {
- 
   onProceed: () => void; // Function to refresh the dashboard
 }
 
 export type IaddWard = z.infer<typeof addWardSchema>;
-const AddWard: React.FC<AddWardProps> = ({ onProceed }) => {
+const AddWard = () => {
   const [loadingAdd, setLoadingAdd] = useState<boolean>(false); // For the Add Ward button
   const [loadingProceed, setLoadingProceed] = useState<boolean>(false); // For the Proceed button
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false); // Controls the dialog state
@@ -58,7 +57,6 @@ const AddWard: React.FC<AddWardProps> = ({ onProceed }) => {
   const handleSelect = (wardId: string) => {
     setSelectedWardId(wardId);
     localStorage.setItem("selectedWardId", wardId);
-   
   };
 
   const {
@@ -81,7 +79,7 @@ const AddWard: React.FC<AddWardProps> = ({ onProceed }) => {
       return result;
     },
   });
- 
+
   //console.log(data);
 
   // Query client instance
@@ -136,7 +134,6 @@ const AddWard: React.FC<AddWardProps> = ({ onProceed }) => {
 
   const handleMoveToWardDashboard = () => {
     if (selectedWardId) {
-      onProceed();
       setLoadingProceed(true); // Start loading for Proceed button
       window.dispatchEvent(new Event("storage"));
 
