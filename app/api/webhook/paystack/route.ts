@@ -5,6 +5,7 @@ import {
   coursePayment,
   payForClass,
   sessionPaymentPaystack,
+  specialRequest,
   teachersPlan,
 } from "@/prisma/utils/payment";
 import crypto from "crypto";
@@ -49,7 +50,10 @@ export async function POST(req: Request) {
   }
   // webhook for payment for courses from anyone
   if (paymentFor == "courses") {
-    console.log("paystack entered here");
     return await coursePayment(body.data.metadata.plan);
+  }
+  // wehook for special requests
+  if (paymentFor == "specialRequest") {
+    return await specialRequest(body.data.metadata.plan);
   }
 }

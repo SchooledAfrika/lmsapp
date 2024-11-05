@@ -38,7 +38,8 @@ export const Approval: React.FC<{
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   dialogOpen: boolean;
   selectedId: string;
-}> = ({ auto, setDialogOpen, dialogOpen, selectedId }) => {
+  url: string;
+}> = ({ auto, setDialogOpen, dialogOpen, selectedId, url }) => {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [amt, setAmt] = useState<string | null>(null);
   const { id } = useParams();
@@ -46,7 +47,7 @@ export const Approval: React.FC<{
   const mutation = useMutation({
     mutationKey: ["merge-session"],
     mutationFn: async () => {
-      const response = await fetch("/api/session-view", {
+      const response = await fetch(`${url}`, {
         method: "PUT",
         body: JSON.stringify({
           amt,
@@ -61,9 +62,8 @@ export const Approval: React.FC<{
       if (response.status === 200) {
         toast.success(result.message);
         setDialogOpen(false);
-        setTimeout(() => {
-          queryclient.invalidateQueries({ queryKey: ["session-single"] });
-        }, 3000);
+        queryclient.invalidateQueries({ queryKey: ["session-single"] });
+        queryclient.invalidateQueries({ queryKey: ["single-special-request"] });
         return;
       }
       setSubmitting(false);
@@ -163,6 +163,7 @@ const ShowTeacher: React.FC<{ details: ITeacherInfo }> = ({ details }) => {
               setDialogOpen={setDialogOpen}
               dialogOpen={dialogOpen}
               auto={true}
+              url="/api/session-view"
             />
           </div>
         </div>
@@ -172,7 +173,7 @@ const ShowTeacher: React.FC<{ details: ITeacherInfo }> = ({ details }) => {
 };
 
 // list of all the session profile that can be merged
-const ShowAllSessionProfile = () => {
+export const ShowAllSessionProfile: React.FC<{ url: string }> = ({ url }) => {
   const [filterStr, setFilterStr] = useState<string>("");
   const [selectedId, setSelectedId] = useState<string>("");
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -261,6 +262,7 @@ const ShowAllSessionProfile = () => {
                       {selectedId === teacher?.sessionId && (
                         <div onClick={() => setDialogOpen(true)}>
                           <Approval
+                            url={url}
                             selectedId={selectedId}
                             dialogOpen={dialogOpen}
                             setDialogOpen={setDialogOpen}
@@ -312,7 +314,7 @@ const TeachersToMerge: React.FC<{ infos: ITeacherInfo }> = ({ infos }) => {
       {sessionTeacher ? (
         <ShowTeacher details={infos} />
       ) : (
-        <ShowAllSessionProfile />
+        <ShowAllSessionProfile url="/api/session-view" />
       )}
     </div>
   );
@@ -375,68 +377,123 @@ export const SingleRowWithArray: React.FC<{
 };
 
 // component for students info
-const StudentInfos: React.FC<{ infos: IOffers }> = ({ infos }) => {
-  console.log("this is the show", infos.student.profilePhoto);
+export const StudentInfos: React.FC<{
+  name: string;
+  email: string;
+  profilePhoto: string;
+  sectionType: string;
+  curriculum?: string;
+  grade: string;
+  hoursperday?: number;
+  createdAt: string;
+  startTime?: string;
+  learningGoal?: string;
+  amt: number;
+  merged: boolean;
+  duration?: string;
+  learningDays?: string[];
+  specialNeed?: string[];
+  kindofteacher?: string;
+  specialRequest: boolean;
+  daytime?: string;
+}> = ({
+  name,
+  email,
+  profilePhoto,
+  sectionType,
+  curriculum,
+  grade,
+  hoursperday,
+  createdAt,
+  startTime,
+  learningGoal,
+  amt,
+  merged,
+  duration,
+  learningDays,
+  specialNeed,
+  specialRequest,
+  daytime,
+  kindofteacher,
+}) => {
   const { handleDate } = useConversion();
   return (
     <div className=" bg-white py-3 px-2 rounded-md">
       <div className=" w-full flex items-center flex-col border-b pb-3">
-        {infos.student.profilePhoto === null ? (
+        {profilePhoto === null ? (
           <div className=" w-[80px] aspect-square rounded-full border flex items-center justify-center text-[40px]">
             <CgProfile />
           </div>
         ) : (
           <Image
-            src={infos?.student.profilePhoto!}
+            src={profilePhoto!}
             alt="studentpic"
             width={200}
             height={200}
             className=" w-[80px] aspect-square rounded-full"
           />
         )}
-        <p className=" text-[14px] font-semibold">{infos?.student.email}</p>
-        <p className=" text-[14px] font-semibold">{infos?.student.name}</p>
+        <p className=" text-[14px] font-semibold">{email}</p>
+        <p className=" text-[14px] font-semibold">{name}</p>
       </div>
       {/* the remaining part of the card below here */}
       <div className=" flex flex-col gap-1 pt-2">
         <div className=" w-full flex items-center justify-center">
           <div className=" px-4 py-2 text-[12px] bg-green-700 text-white rounded-md">
-            <p>{infos?.sectionType}</p>
+            <p>{sectionType}</p>
           </div>
         </div>
-        <SingleRowNoArray name="Curriculum" value={infos?.curriculum} />
-        <SingleRowNoArray name="Grade" value={infos?.grade} />
-        <SingleRowNoArray
-          name="Hours/day"
-          value={infos?.hoursperday + " " + "hours"}
-        />
-        <SingleRowNoArray
-          name="Created Date"
-          value={handleDate(infos?.createdAt)}
-        />
-        <SingleRowNoArray
-          name="Start Time"
-          value={handleDate(infos?.startTime)}
-        />
-        <SingleRowNoArray name="Goals" value={infos?.learningGoal} />
-        <SingleRowNoArray name="AMT" value={"$" + infos?.amt} />
-        <SingleRowPayment name="Merged" value={infos?.merged} />
-        <SingleRowNoArray name="Duration" value={infos?.duration} />
-        <SingleRowWithArray name="Days" value={infos?.learningDays} />
-        <SingleRowWithArray name="SpecialNeed" value={infos?.specialNeed} />
+        {!specialRequest && (
+          <SingleRowNoArray name="Curriculum" value={curriculum as string} />
+        )}
+        <SingleRowNoArray name="Grade" value={grade} />
+        {!specialRequest && (
+          <SingleRowNoArray
+            name="Hours/day"
+            value={hoursperday + " " + "hours"}
+          />
+        )}
+        <SingleRowNoArray name="Created Date" value={handleDate(createdAt)} />
+        {!specialRequest && (
+          <SingleRowNoArray name="Start Time" value={handleDate(startTime!)} />
+        )}
+        {!specialRequest && (
+          <SingleRowNoArray name="Goals" value={learningGoal!} />
+        )}
+        <SingleRowNoArray name="AMT" value={"$" + amt} />
+        <SingleRowPayment name="Merged" value={merged} />
+        {!specialRequest && (
+          <SingleRowNoArray name="Duration" value={duration!} />
+        )}
+        {!specialRequest && (
+          <SingleRowWithArray name="Days" value={learningDays!} />
+        )}
+        {!specialRequest && (
+          <SingleRowWithArray name="Special Need" value={specialNeed!} />
+        )}
+        {!specialRequest && (
+          <SingleRowWithArray name="Days" value={learningDays!} />
+        )}
+        {specialRequest && <SingleRowNoArray name="time" value={daytime!} />}
+        {specialRequest && (
+          <div className=" flex w-full items-center flex-col gap-1">
+            <div className=" w-full flex items-center justify-center text-[tomato]  font-semibold">
+              <p className="text-[14px]">Kind of teacher needed</p>
+            </div>
+            <p className=" text-[12px]">{kindofteacher}</p>
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
 // loading for the page
-const LoadingSkeleton = () => {
+export const LoadingSkeleton: React.FC<{ title: string }> = ({ title }) => {
   return (
     <div>
       <div className=" w-full flex items-center justify-center">
-        <p className=" mb-4 text-black font-bold text-[24px]">
-          Single unmerged session
-        </p>
+        <p className=" mb-4 text-black font-bold text-[24px]">{title}</p>
       </div>
       <div className=" w-full md:px-20">
         <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 border-2 px-4 py-2 rounded-md shadow-md ">
@@ -471,7 +528,7 @@ const SingleSessionAdmin = () => {
   });
   // return loading if is loading
   if (isFetching) {
-    return <LoadingSkeleton />;
+    return <LoadingSkeleton title="Single unmerged session" />;
   }
   // return error if is error
   if (isError) {
@@ -487,7 +544,24 @@ const SingleSessionAdmin = () => {
       </div>
       <div className=" w-full md:px-20">
         <div className=" w-full grid grid-cols-1 md:grid-cols-2 gap-3 border-2 px-4 py-2 rounded-md shadow-md ">
-          <StudentInfos infos={singleSession} />
+          <StudentInfos
+            email={singleSession.student.email}
+            name={singleSession.student.name}
+            profilePhoto={singleSession.student.profilePhoto!}
+            sectionType={singleSession.sectionType}
+            curriculum={singleSession.curriculum}
+            grade={singleSession.grade}
+            hoursperday={singleSession.hoursperday}
+            createdAt={singleSession.createdAt}
+            startTime={singleSession.startTime}
+            learningGoal={singleSession.learningGoal}
+            amt={singleSession.amt}
+            merged={singleSession.merged}
+            duration={singleSession.duration}
+            learningDays={singleSession.learningDays}
+            specialNeed={singleSession.specialNeed}
+            specialRequest={false}
+          />
           <TeachersToMerge infos={singleSession.sectionInfo} />
         </div>
       </div>

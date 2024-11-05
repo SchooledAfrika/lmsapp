@@ -355,9 +355,7 @@ export const FlutterWaveBtn: React.FC<{
         enroll();
       }, 5500);
     },
-    onClose: () => {
-      alert(`${id}, ${price}, ${data?.user.name}, ${data?.user.role}`);
-    },
+    onClose: () => {},
   };
   return (
     <div>
