@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -12,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import Image from "next/image";
 import Cookies from "js-cookie";
+import { useWardId } from "@/data-access/conversion";
 
 // Define types for teachers
 interface Teacher {
@@ -28,7 +28,7 @@ interface TeacherInfo {
 }
 
 const TeachersTable = () => {
-  const wardId = Cookies.get("wardId");
+  const { wardId } = useWardId();
 
   // Fetch teachers data, only run query if wardId exists
   const { isLoading, isError, error, data } = useQuery<TeacherInfo[]>({

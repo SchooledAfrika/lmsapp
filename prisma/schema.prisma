@@ -73,6 +73,7 @@ model Teacher {
 
   Revenew                 Revenew[]
   TeacherPurchasedCourses TeacherPurchasedCourses[]
+  SpecialTeacherMerged    SpecialTeacherMerged[]
 }
 
 // kyc for teachers appears below
@@ -139,6 +140,8 @@ model Student {
   parentsId          String?              @db.ObjectId
 
   StudentPurchasedCourses StudentPurchasedCourses[]
+  SpecialTeacherUnmerged  SpecialTeacherUnmerged[]
+  SpecialTeacherMerged    SpecialTeacherMerged[]
 }
 
 // creating the school model
@@ -184,6 +187,7 @@ model Parents {
   status                  StudentStatus             @default(Active) //for showing active or resctricted status
   country                 String?
   ParentsPurchasedCourses ParentsPurchasedCourses[]
+  SpecialTeacherUnmerged  SpecialTeacherUnmerged[]
 }
 
 // here we created the model where teachers can upload article
@@ -718,6 +722,42 @@ model StudentClassExam {
   updatedAt  DateTime        @default(now())
 
   @@index([classesId, studentId, mainExamId], name: "studentclassExam_classrooms")
+}
+
+// model for when a parents request for special teacher
+// an unmerged special teacher
+model SpecialTeacherUnmerged {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  parent        Parents  @relation(fields: [parentsId], references: [id])
+  parentsId     String   @db.ObjectId
+  student       Student  @relation(fields: [studentId], references: [id])
+  studentId     String   @db.ObjectId
+  amt           Float
+  language      String
+  subject       String
+  grade         String
+  time          String
+  kindOfTeacher String
+  merged        Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+}
+
+// this is created once the admin merges the special request 
+model SpecialTeacherMerged {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  student   Student  @relation(fields: [studentId], references: [id])
+  teacher   Teacher  @relation(fields: [teacherId], references: [id])
+  studentId String   @db.ObjectId
+  teacherId String   @db.ObjectId
+  amt       Float
+  language  String
+  subject   String
+  grade     String
+  time      String
+  merged    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 }
 
 // this is enum for grades

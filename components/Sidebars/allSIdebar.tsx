@@ -6,7 +6,7 @@ import Link from "next/link";
 import { CommonDashboardContext } from "@/providers/Statecontext";
 import { AdminDashboardContext } from "@/providers/Admincontext";
 import { useContext } from "react";
-import { useConversion } from "@/data-access/conversion";
+import { useConversion, useWardId } from "@/data-access/conversion";
 import {
   AdminSideBar,
   AdminSideBarType,
@@ -32,8 +32,8 @@ interface IwardsInfo {
 // component to display wards profiledata
 const WardProfile = () => {
   const { getInitials, makeSubstring } = useConversion();
+  const { wardId } = useWardId();
   // get the wardId from the cookies
-  const wardId = Cookies.get("wardId");
 
   // Fetch the ward list (the same query you used in AddWard)
   const { data, isLoading, isError, error } = useQuery<IwardsInfo[]>({
