@@ -4,8 +4,8 @@ import { serverError } from "@/prisma/utils/error";
 import { getQuery, serverSessionId } from "@/prisma/utils/utils";
 
 export async function GET(req: Request) {
-  const userId = getQuery(req.url, "id");
-  // const userId = await serverSessionId();
+  //const userId = getQuery(req.url, "id");
+  const userId = await serverSessionId();
   try {
     const allClasses = await prisma.teacher.findUnique({
       where: { id: userId },
