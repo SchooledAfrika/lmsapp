@@ -161,11 +161,18 @@ interface Icourses {
   userType: string;
 }
 export const coursePayment = async (payload: Icourses) => {
-  console.log(payload);
-
   // first, let's get the course that we want to buy or purchase
   const theCourse = await prisma.courses.findUnique({
     where: { id: payload.courseId },
+    include: {
+      teacher: {
+        select: {
+          name: true,
+          profilePhoto: true,
+          status: true,
+        },
+      },
+    },
   });
   // checking if course actually exists or if the user has the course already
   if (!theCourse) return;
@@ -186,6 +193,13 @@ export const coursePayment = async (payload: Icourses) => {
           previewVideo: theCourse?.previewVideo,
           mainVideo: theCourse?.mainVideo,
           studentId: payload.payerId,
+          CourseInfo: {
+            teacher: {
+              id: theCourse.teacherId,
+              name: theCourse.teacher.name!,
+              status: theCourse.teacher.status,
+            },
+          },
         },
       });
       console.log(item);
@@ -201,6 +215,13 @@ export const coursePayment = async (payload: Icourses) => {
           previewVideo: theCourse?.previewVideo,
           mainVideo: theCourse?.mainVideo,
           parentsId: payload.payerId,
+          CourseInfo: {
+            teacher: {
+              id: theCourse.teacherId,
+              name: theCourse.teacher.name!,
+              status: theCourse.teacher.status,
+            },
+          },
         },
       });
       console.log(parents);
@@ -216,6 +237,13 @@ export const coursePayment = async (payload: Icourses) => {
           previewVideo: theCourse?.previewVideo,
           mainVideo: theCourse?.mainVideo,
           teacherId: payload.payerId,
+          CourseInfo: {
+            teacher: {
+              id: theCourse.teacherId,
+              name: theCourse.teacher.name!,
+              status: theCourse.teacher.status,
+            },
+          },
         },
       });
       console.log(teacher);

@@ -76,7 +76,8 @@ const CourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
       </div>
       <div className="flex justify-between px-2">
         <p className="font-bold mt-3 bg-[rgba(0,0,0,0.6)] text-white p-2 rounded-md">
-          <span className="text-[14px] font-semibold">Sold:</span> {item.sellCount}
+          <span className="text-[14px] font-semibold">Sold:</span>{" "}
+          {item.sellCount}
         </p>
         <p className="font-bold mt-3 text-lightGreen">${item.price}</p>
       </div>
@@ -89,7 +90,9 @@ const CourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
             <div className="flex items-center pt-1 gap-2">
               <p className="text-[13px] font-subtext font-medium">
                 <FaGraduationCap className="inline mr-1 text-lg" />
-                {item.byAdmin ? "SchooledAfrika" : makeSubString(item.teacher.name)}
+                {item.byAdmin
+                  ? "SchooledAfrika"
+                  : makeSubString(item.teacher.name)}
               </p>
             </div>
           </div>
@@ -114,24 +117,22 @@ const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
           width={200}
           height={200}
         />
-       
 
         <SinglePurchasedCourse
-              title={item.title}
-              details={item.details}
-              teacherPhoto={item.courseInfo?.teacher?.profilePhoto || ""}
-              teacher={item.courseInfo?.teacher?.name || "Unknown Teacher"}
-              banner={item.banner}
-              previewVideo={item.previewVideo}
-              mainVideo={item.mainVideo}
-              price={item.price}
-              id={item.id}
-            />
+          title={item.title}
+          details={item.details}
+          teacherPhoto={item.courseInfo?.teacher?.profilePhoto || ""}
+          teacher={item.courseInfo?.teacher?.name || "Unknown Teacher"}
+          banner={item.banner}
+          previewVideo={item.previewVideo}
+          mainVideo={item.mainVideo}
+          price={item.price}
+          id={item.id}
+        />
 
         <RemovePurchasedCourse courseId={item.id} />
-       
       </div>
-     
+
       <div className="flex flex-col gap-3 mb-8 justify-center mx-4">
         <div className="flex items-center justify-between">
           <div>
@@ -139,18 +140,18 @@ const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
               <p className="text-[14px] font-bold">{item.title}</p>
             </div>
             <div className="flex items-center pt-1 gap-2">
-            <p className="w-[600px] sm:inline hidden text-[12px]  font-semibold leading-5 py-3 ">
-                    {" "}
-                    <Image
-                      className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
-                      src={item.courseInfo?.teacher?.profilePhoto || ""}
-                      alt="background"
-                      width={200}
-                      height={200}
-                    />
-                    {/* <FaGraduationCap className="inline mr-1 text-lg" /> */}
-                    {item.courseInfo?.teacher?.name || "Unknown Teacher"}
-                  </p>
+              <p className="w-[600px] sm:inline hidden text-[12px]  font-semibold leading-5 py-3 ">
+                {" "}
+                <Image
+                  className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
+                  src={item.courseInfo?.teacher?.profilePhoto || ""}
+                  alt="background"
+                  width={200}
+                  height={200}
+                />
+                {/* <FaGraduationCap className="inline mr-1 text-lg" /> */}
+                {item.courseInfo?.teacher?.name || "Unknown Teacher"}
+              </p>
               {/* <p className="text-[13px] font-subtext font-medium">
                 <FaGraduationCap className="inline mr-1 text-lg" />
                 {item.byAdmin ? "SchooledAfrika" : makeSubString(item.teacher.name)}
@@ -168,7 +169,12 @@ const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
 };
 
 const Courses = () => {
-  const { data: coursesData, isFetching: isCoursesFetching, isError: isCoursesError, error: coursesError } = useQuery({
+  const {
+    data: coursesData,
+    isFetching: isCoursesFetching,
+    isError: isCoursesError,
+    error: coursesError,
+  } = useQuery({
     queryKey: ["getCourseByTeacher"],
     queryFn: async () => {
       const response = await fetch("/api/created-course-byteacher");
@@ -177,7 +183,12 @@ const Courses = () => {
     },
   });
 
-  const { data: purchasedCoursesData, isFetching: isPurchasedFetching, isError: isPurchasedError, error: purchasedError } = useQuery({
+  const {
+    data: purchasedCoursesData,
+    isFetching: isPurchasedFetching,
+    isError: isPurchasedError,
+    error: purchasedError,
+  } = useQuery({
     queryKey: ["getPurchasedCourseByTeacher"],
     queryFn: async () => {
       const response = await fetch("/api/courses-bought");
@@ -187,18 +198,24 @@ const Courses = () => {
   });
 
   console.log(purchasedCoursesData);
+  console.log(coursesData);
 
   if (isCoursesFetching || isPurchasedFetching) return <ShowSkeleton />;
 
   if (isCoursesError || isPurchasedError) {
-    return <div>{(coursesError || purchasedError)?.message || "An error occurred"}</div>;
+    return (
+      <div>
+        {(coursesError || purchasedError)?.message || "An error occurred"}
+      </div>
+    );
   }
-
 
   return (
     <Container>
       <div>
-        <h2 className="font-bold text-center text-[25px] my-3">Created Courses</h2>
+        <h2 className="font-bold text-center text-[25px] my-3">
+          Created Courses
+        </h2>
         {Array.isArray(coursesData) && coursesData.length === 0 ? (
           <Noitem desc="No new courses" />
         ) : (
@@ -209,9 +226,12 @@ const Courses = () => {
           </div>
         )}
       </div>
-       <div>
-        <h2 className="font-bold text-center text-[25px] my-3">Purchased Courses</h2>
-        {Array.isArray(purchasedCoursesData) && purchasedCoursesData.length === 0 ? (
+      <div>
+        <h2 className="font-bold text-center text-[25px] my-3">
+          Purchased Courses
+        </h2>
+        {Array.isArray(purchasedCoursesData) &&
+        purchasedCoursesData.length === 0 ? (
           <Noitem desc="No purchased courses" />
         ) : (
           <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
@@ -220,7 +240,7 @@ const Courses = () => {
             ))}
           </div>
         )}
-      </div> 
+      </div>
     </Container>
   );
 };

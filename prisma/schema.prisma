@@ -407,17 +407,17 @@ model Courses {
   grade                   String
   buyersList              String[]                  @db.ObjectId
   StudentPurchasedCourses StudentPurchasedCourses[]
-  ParentsPurchasedCourses ParentsPurchasedCourses[]
   TeacherPurchasedCourses TeacherPurchasedCourses[]
   createdAt               DateTime                  @default(now())
   updatedAt               DateTime                  @default(now())
+  ParentsPurchasedCourses ParentsPurchasedCourses[]
 }
 
 // below is the model for courses bought by a particular student
 // once a student purchases a courses, most of the details will be available here
 // including the detailVide or mainVideo
 model StudentPurchasedCourses {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   price        Int
   banner       String
@@ -426,48 +426,51 @@ model StudentPurchasedCourses {
   subject      String
   // adding a relationship here to connect to teacher that owns the course
   // so we can be able to fetch and display any neccessay information for students
-  courseInfo   Courses  @relation(fields: [coursesId], references: [id])
-  student      Student  @relation(fields: [studentId], references: [id])
-  coursesId    String   @db.ObjectId
-  studentId    String   @db.ObjectId
+  CourseInfo   CoursesInfo
+  mainCourse   Courses     @relation(fields: [coursesId], references: [id])
+  student      Student     @relation(fields: [studentId], references: [id])
+  coursesId    String      @db.ObjectId
+  studentId    String      @db.ObjectId
   byAdmin      Boolean
-  gifted       Boolean  @default(false)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+  gifted       Boolean     @default(false)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @default(now())
 }
 
 model ParentsPurchasedCourses {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   price        Int
   banner       String
   previewVideo String
   mainVideo    String
   subject      String
-  courseInfo   Courses  @relation(fields: [coursesId], references: [id])
-  parents      Parents  @relation(fields: [parentsId], references: [id])
-  coursesId    String   @db.ObjectId
-  parentsId    String   @db.ObjectId
+  CourseInfo   CoursesInfo
+  mainCourse   Courses     @relation(fields: [coursesId], references: [id])
+  parents      Parents     @relation(fields: [parentsId], references: [id])
+  coursesId    String      @db.ObjectId
+  parentsId    String      @db.ObjectId
   byAdmin      Boolean
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @default(now())
 }
 
 model TeacherPurchasedCourses {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
   title        String
   price        Int
   banner       String
   previewVideo String
   mainVideo    String
   subject      String
-  courseInfo   Courses  @relation(fields: [coursesId], references: [id])
-  Teacher      Teacher  @relation(fields: [teacherId], references: [id])
-  coursesId    String   @db.ObjectId
-  teacherId    String   @db.ObjectId
+  CourseInfo   CoursesInfo
+  mainCourse   Courses     @relation(fields: [coursesId], references: [id])
+  Teacher      Teacher     @relation(fields: [teacherId], references: [id])
+  coursesId    String      @db.ObjectId
+  teacherId    String      @db.ObjectId
   byAdmin      Boolean
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @default(now())
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @default(now())
 }
 
 // below we create a revenew model 
@@ -894,4 +897,15 @@ enum PlansType {
   Diamond
   Bronze
   Free
+}
+
+type CoursesInfo {
+  teacher TeacherInfo
+}
+
+type TeacherInfo {
+  id           String
+  profilePhoto String?
+  name         String
+  status       String
 }
