@@ -1,5 +1,5 @@
-import OneOneSession from "@/components/OneOnOneSession";
-import PrivateSession from "@/components/ui/student-dashboard/private-session/PrivateSession";
+import OneOneSession from "@/components/ui/student-dashboard/sessions/OneOnOneSession";
+
 import React from "react";
 
 const page = () => {

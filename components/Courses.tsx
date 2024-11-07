@@ -20,6 +20,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Container from "./Container";
 import SingleCourses from "./SingleCourses";
+import { useConversion } from "@/data-access/conversion";
 export interface TeacherInfo {
   id: string;
   name: string;
@@ -42,6 +43,33 @@ export interface ICourses {
   createdAt: string;
   teacher: TeacherInfo;
 }
+
+export const CourseCreator: React.FC<{
+  byAdmin: boolean;
+  profilePhoto: string;
+  name: string;
+}> = ({ byAdmin, profilePhoto, name }) => {
+  const { makeSubString } = useClasses();
+  return (
+    <div className=" flex items-center gap-1">
+      {byAdmin ? (
+        <RiGraduationCapFill className=" text-[20px]" />
+      ) : (
+        <Image
+          className="w-[25px] inline rounded-full object-cover mr-1 h-[25px]"
+          src={profilePhoto}
+          alt="background"
+          width={200}
+          height={200}
+        />
+      )}
+      {/* <FaGraduationCap className="inline mr-1 text-lg" /> */}
+      <p className=" text-[14px] font-semibold text-gray-500">
+        {byAdmin === true ? "SchooledAfrika" : makeSubString(name)}
+      </p>
+    </div>
+  );
+};
 
 const CourseCard = ({ item }: { item: ICourses }) => {
   const { makeSubString } = useClasses();
@@ -122,25 +150,11 @@ const CourseCard = ({ item }: { item: ICourses }) => {
               </div>
 
               <div className=" flex items-center pt-1 gap-2">
-                <div className=" flex items-center gap-1">
-                  {item.byAdmin ? (
-                    <RiGraduationCapFill className=" text-[24px]" />
-                  ) : (
-                    <Image
-                      className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
-                      src={item.teacher.profilePhoto ?? "/course-img.jpeg"}
-                      alt="background"
-                      width={200}
-                      height={200}
-                    />
-                  )}
-                  {/* <FaGraduationCap className="inline mr-1 text-lg" /> */}
-                  <p>
-                    {item.byAdmin === true
-                      ? "SchooledAfrika"
-                      : makeSubString(item.teacher.name)}
-                  </p>
-                </div>
+                <CourseCreator
+                  name={item.teacher.name}
+                  byAdmin={item.byAdmin}
+                  profilePhoto={item.teacher.profilePhoto!}
+                />
               </div>
             </div>
             <div className=" flex items-center gap-1 bg-green-200 px-2 py-1 rounded-md">

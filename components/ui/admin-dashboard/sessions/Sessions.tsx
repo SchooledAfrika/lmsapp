@@ -67,7 +67,33 @@ const TotalAndMore: React.FC<{ item: string[] }> = ({ item }) => {
     </div>
   );
 };
-
+export const Noprofile = () => {
+  return (
+    <div className=" w-[40px] aspect-square rounded-full border flex items-center justify-center text-[20px]">
+      <CgProfile />
+    </div>
+  );
+};
+export const ModifiedNoProfile: React.FC<{ userImage: string | null }> = ({
+  userImage,
+}) => {
+  return (
+    <div>
+      {userImage === null ? (
+        <Noprofile />
+      ) : (
+        <Image
+          alt=""
+          src={userImage}
+          width={200}
+          height={200}
+          className=" w-[40px] aspect-square rounded-full"
+          priority
+        />
+      )}
+    </div>
+  );
+};
 const OfferCard: React.FC<{ item: IOffers }> = ({ item }) => {
   const router = useRouter();
   const handleClick = () => {
@@ -76,22 +102,7 @@ const OfferCard: React.FC<{ item: IOffers }> = ({ item }) => {
   return (
     <div className=" bg-white p-3 flex flex-col gap-5 shadow-md">
       <div className=" flex items-center gap-2">
-        <div>
-          {item.student.profilePhoto === null ? (
-            <div className=" w-[40px] aspect-square rounded-full border flex items-center justify-center text-[20px]">
-              <CgProfile />
-            </div>
-          ) : (
-            <Image
-              alt=""
-              src={item.student.profilePhoto!}
-              width={200}
-              height={200}
-              className=" w-[40px] aspect-square rounded-full"
-              priority
-            />
-          )}
-        </div>
+        <ModifiedNoProfile userImage={item.student.profilePhoto} />
         <div>
           <p className=" text-[12px]">{item.student.email}</p>
           <p className=" text-[14px] font-semibold">{item.student.name}</p>

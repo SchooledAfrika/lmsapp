@@ -30,6 +30,7 @@ import Image from "next/image";
 import { FaLock } from "react-icons/fa";
 //import { Checkout } from "./Courses";
 import { useSession } from "next-auth/react";
+import { CourseCreator } from "@/components/Courses";
 
 interface courseProps {
   title: string;
@@ -41,6 +42,7 @@ interface courseProps {
   mainVideo: string;
   price: number;
   id: string;
+  byAdmin: boolean;
 }
 
 const SinglePurchasedCourse = ({
@@ -53,6 +55,7 @@ const SinglePurchasedCourse = ({
   mainVideo,
   price,
   id,
+  byAdmin,
 }: courseProps) => {
   const [activeVideo, setActiveVideo] = useState(previewVideo);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -66,17 +69,17 @@ const SinglePurchasedCourse = ({
 
   return (
     <Container>
-      <Dialog >
-      <DialogTrigger asChild>
-        <Button className="bg-lightGreen cursor-pointer mb-6 absolute -translate-y-1/2 left-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block">
-           View Course
-        </Button>
-      </DialogTrigger>
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button className="bg-lightGreen cursor-pointer mb-6 absolute -translate-y-1/2 left-3 rounded-md text-white text-[12px] font-bold  py-2 text-center lg:block">
+            View Course
+          </Button>
+        </DialogTrigger>
         <DialogContent
           onClick={(e) => e.stopPropagation()}
           className="sm:w-[90%] w-[400px] bg-stone-100 font-subtext"
         >
-          <ScrollArea className="h-[500px] w-full ">
+          <ScrollArea className="h-[500px] w-full px-4 ">
             <div className="grid gap-4 font-header py-4">
               <div className=" w-full flex items-center font-header mb-6 justify-between">
                 <p className=" font-bold text-black">Course Overview</p>
@@ -104,19 +107,13 @@ const SinglePurchasedCourse = ({
                   <p className="w-[600px]  sm:hidden block text-[14px] font-bold leading-5 py-3">
                     {title}
                   </p>
-
-                  <p className="w-[600px] sm:hidden    text-[12px] inline font-semibold leading-5 py-3 ">
-                    {" "}
-                    <Image
-                      className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
-                      src={teacherPhoto ?? "/course-img.jpeg"}
-                      alt="background"
-                      width={200}
-                      height={200}
+                  <div className=" sm:hidden">
+                    <CourseCreator
+                      name={teacher}
+                      profilePhoto={teacherPhoto!}
+                      byAdmin={byAdmin}
                     />
-                    {/* <FaGraduationCap className="inline mr-1 text-lg" /> */}
-                    {teacher}
-                  </p>
+                  </div>
                   <Tabs
                     defaultValue="description"
                     className="my-3 w-[400px] sm:hidden block"
@@ -205,18 +202,13 @@ const SinglePurchasedCourse = ({
                   <p className="w-[600px] sm:block hidden mb-4 text-[13px] leading-5 ">
                     {details}
                   </p>
-                  <p className="w-[600px] sm:inline hidden text-[12px]  font-semibold leading-5 py-3 ">
-                    {" "}
-                    <Image
-                      className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
-                      src={teacherPhoto ?? "/course-img.jpeg"}
-                      alt="background"
-                      width={200}
-                      height={200}
+                  <div>
+                    <CourseCreator
+                      name={teacher}
+                      profilePhoto={teacherPhoto!}
+                      byAdmin={byAdmin}
                     />
-                    {/* <FaGraduationCap className="inline mr-1 text-lg" /> */}
-                    {teacher}
-                  </p>
+                  </div>
                 </div>
                 <div className=" md:flex-4 sm:block hidden  font-header bg-stone-50 p-3 rounded-md">
                   <p className="font-semibold">Course Contents</p>
@@ -253,9 +245,10 @@ const SinglePurchasedCourse = ({
                         </span>
                       </div>
 
-                      <p className="font-medium text-[14px]">Course Main Video</p>
+                      <p className="font-medium text-[14px]">
+                        Course Main Video
+                      </p>
                     </div>
-                    
                   </div>
                 </div>
               </div>
@@ -263,7 +256,6 @@ const SinglePurchasedCourse = ({
           </ScrollArea>
         </DialogContent>
       </Dialog>
-     
     </Container>
   );
 };

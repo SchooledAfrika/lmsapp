@@ -84,9 +84,9 @@ export const TeacherNavbar: SchoolNavType[] = [
     },
   },
   {
-    title: "1 on 1 Sections",
+    title: "Sessions",
     description: "An Overview of all the sections you have for easy access and management",
-    path: "one-on-one-section",
+    path: "sessions",
     subDetails: {
       title: " Single 1-on-1 section details",
       description: " this is for single 1-on-1 section path",
@@ -157,9 +157,9 @@ export const StudentNavbar: SchoolNavType[] = [
     },
   },
   {
-    title: "1 on 1 Sections",
+    title: "Sessions",
     description: "Get into class you're enrolled in.",
-    path: "one-on-one-section",
+    path: "sessions",
     subDetails: {
       title: " Single 1-on-1 section details",
       description: " this is for single 1-on-1 section path",

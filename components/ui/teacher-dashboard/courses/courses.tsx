@@ -13,6 +13,8 @@ import { Skeleton } from "@mui/material";
 import { Noitem } from "@/components/ApplicantsTable";
 import SinglePurchasedCourse from "./SinglePurchasedCourse";
 import RemovePurchasedCourse from "./RemovePurchasedCourse";
+import { ModifiedNoProfile } from "../../admin-dashboard/sessions/Sessions";
+import { CourseCreator } from "@/components/Courses";
 
 export interface TeacherInfo {
   id: string;
@@ -36,7 +38,8 @@ export interface ICourses {
   price: number;
   sellCount: string;
   createdAt: string;
-  courseInfo?: {
+
+  CourseInfo?: {
     teacher: TeacherInfo;
   };
   teacher: TeacherInfo;
@@ -106,6 +109,42 @@ const CourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
   );
 };
 
+export const AllTeacherCreatedCourses = () => {
+  const {
+    data: coursesData,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["getCourseByTeacher"],
+    queryFn: async () => {
+      const response = await fetch("/api/created-course-byteacher");
+      const result = await response.json();
+      return result;
+    },
+  });
+  if (isLoading) {
+    return <ShowSkeleton />;
+  }
+  if (isError) {
+    return <p>{error.message}</p>;
+  }
+  return (
+    <div className=" flex flex-col gap-3">
+      <h2 className="font-bold text-center text-[25px]">Created Courses</h2>
+      {Array.isArray(coursesData) && coursesData.length === 0 ? (
+        <Noitem desc="No new courses" />
+      ) : (
+        <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
+          {coursesData?.map((item: ICourses, index: number) => (
+            <CourseCard item={item} key={index} />
+          ))}
+        </div>
+      )}
+    </div>
+  );
+};
+
 const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
   return (
     <div className="w-full overflow-hidden font-header rounded-lg card flex flex-col justify-center gap-3 hover:-translate-y-2 transition-transform duration-300 group">
@@ -121,41 +160,31 @@ const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
         <SinglePurchasedCourse
           title={item.title}
           details={item.details}
-          teacherPhoto={item.courseInfo?.teacher?.profilePhoto || ""}
-          teacher={item.courseInfo?.teacher?.name || "Unknown Teacher"}
+          teacherPhoto={item.CourseInfo?.teacher?.profilePhoto!}
+          teacher={item.CourseInfo?.teacher?.name!}
           banner={item.banner}
           previewVideo={item.previewVideo}
           mainVideo={item.mainVideo}
           price={item.price}
           id={item.id}
+          byAdmin={item.byAdmin}
         />
 
         <RemovePurchasedCourse courseId={item.id} />
       </div>
 
-      <div className="flex flex-col gap-3 mb-8 justify-center mx-4">
+      <div className="flex flex-col gap-3 mb-2 justify-center mx-4">
         <div className="flex items-center justify-between">
           <div>
             <div className="flex items-center mt-6 gap-2">
               <p className="text-[14px] font-bold">{item.title}</p>
             </div>
-            <div className="flex items-center pt-1 gap-2">
-              <p className="w-[600px] sm:inline hidden text-[12px]  font-semibold leading-5 py-3 ">
-                {" "}
-                <Image
-                  className="w-[30px] inline rounded-full object-cover mr-1 h-[30px]"
-                  src={item.courseInfo?.teacher?.profilePhoto || ""}
-                  alt="background"
-                  width={200}
-                  height={200}
-                />
-                {/* <FaGraduationCap className="inline mr-1 text-lg" /> */}
-                {item.courseInfo?.teacher?.name || "Unknown Teacher"}
-              </p>
-              {/* <p className="text-[13px] font-subtext font-medium">
-                <FaGraduationCap className="inline mr-1 text-lg" />
-                {item.byAdmin ? "SchooledAfrika" : makeSubString(item.teacher.name)}
-              </p> */}
+            <div className="flex mt-2">
+              <CourseCreator
+                name={item.CourseInfo?.teacher.name!}
+                byAdmin={item.byAdmin}
+                profilePhoto={item.CourseInfo?.teacher.profilePhoto!}
+              />
             </div>
           </div>
           <div className="flex items-center gap-1 bg-green-200 px-2 py-1 rounded-md">
@@ -168,27 +197,8 @@ const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
   );
 };
 
-const Courses = () => {
-  const {
-    data: coursesData,
-    isFetching: isCoursesFetching,
-    isError: isCoursesError,
-    error: coursesError,
-  } = useQuery({
-    queryKey: ["getCourseByTeacher"],
-    queryFn: async () => {
-      const response = await fetch("/api/created-course-byteacher");
-      const result = await response.json();
-      return result;
-    },
-  });
-
-  const {
-    data: purchasedCoursesData,
-    isFetching: isPurchasedFetching,
-    isError: isPurchasedError,
-    error: purchasedError,
-  } = useQuery({
+export const AllPurchasedCourses = () => {
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getPurchasedCourseByTeacher"],
     queryFn: async () => {
       const response = await fetch("/api/courses-bought");
@@ -196,53 +206,25 @@ const Courses = () => {
       return result;
     },
   });
-
-  console.log(purchasedCoursesData);
-  console.log(coursesData);
-
-  if (isCoursesFetching || isPurchasedFetching) return <ShowSkeleton />;
-
-  if (isCoursesError || isPurchasedError) {
-    return (
-      <div>
-        {(coursesError || purchasedError)?.message || "An error occurred"}
-      </div>
-    );
+  if (isLoading) {
+    return <ShowSkeleton />;
   }
-
+  if (isError) {
+    return <p>{error.message}</p>;
+  }
+  console.log(data);
   return (
-    <Container>
-      <div>
-        <h2 className="font-bold text-center text-[25px] my-3">
-          Created Courses
-        </h2>
-        {Array.isArray(coursesData) && coursesData.length === 0 ? (
-          <Noitem desc="No new courses" />
-        ) : (
-          <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
-            {coursesData?.map((item: ICourses, index: number) => (
-              <CourseCard item={item} key={index} />
-            ))}
-          </div>
-        )}
-      </div>
-      <div>
-        <h2 className="font-bold text-center text-[25px] my-3">
-          Purchased Courses
-        </h2>
-        {Array.isArray(purchasedCoursesData) &&
-        purchasedCoursesData.length === 0 ? (
-          <Noitem desc="No purchased courses" />
-        ) : (
-          <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
-            {purchasedCoursesData?.map((item: ICourses, index: number) => (
-              <PurchasedCourseCard item={item} key={index} />
-            ))}
-          </div>
-        )}
-      </div>
-    </Container>
+    <div className=" flex flex-col gap-3">
+      <h2 className="font-bold text-center text-[25px]">Purchased Courses</h2>
+      {Array.isArray(data) && data.length === 0 ? (
+        <Noitem desc="No purchased courses" />
+      ) : (
+        <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
+          {data?.map((item: ICourses, index: number) => (
+            <PurchasedCourseCard item={item} key={index} />
+          ))}
+        </div>
+      )}
+    </div>
   );
 };
-
-export default Courses;

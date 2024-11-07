@@ -163,8 +163,8 @@ const ApproveKYC: React.FC<TeacherProfileProps> = ({ teacherData }) => {
                 render={({ field }) => (
                   <Select
                     onValueChange={(value) => {
-                      field.onChange(value); // Update field value on selection
-                      clearErrors("status"); // Clear any existing errors
+                      field.onChange(value); 
+                      clearErrors("status"); 
                     }}
                   >
                     <SelectTrigger className="w-full py-2">

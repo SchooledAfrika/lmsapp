@@ -36,7 +36,7 @@ function Terms() {
             <p className=" text-xl font-medium">2. Payment:</p>
             <ol className="py-2 text-justify">
               <li>
-                All prices quoted or metered are in GBP ($) and include
+                All prices quoted or metered are in USD ($) and include
                 applicable taxes, unless stated otherwise. Additional charges,
                 may apply and will be clearly stated before you make a payment.
               </li>

@@ -3,9 +3,9 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "./ui/button";
-import DashboardPagination from "./DashboardPagination";
-import Container from "./Container";
+import { Button } from "../../button";
+import DashboardPagination from "../../../DashboardPagination";
+import Container from "../../../Container";
 import { OneOnOneList } from "@/constants/oneOnOneList";
 import { useQuery } from "@tanstack/react-query";
 import { MdContentCopy } from "react-icons/md";
@@ -15,7 +15,7 @@ import { useConversion } from "@/data-access/conversion";
 import { IoIosRadio } from "react-icons/io";
 import { Skeleton } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { Noitem } from "./ApplicantsTable";
+import { Noitem } from "../../../ApplicantsTable";
 
 interface IstudentOneonOne {
   name: string;
@@ -281,7 +281,7 @@ const SessionHeading = () => {
 };
 const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
   // here we can now fetch our session
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getSession"],
     queryFn: async () => {
       const response = await fetch("/api/one-on-one-section");
@@ -290,7 +290,7 @@ const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
     },
   });
 
-  if (isFetching) return <SessionLoadings isTeacher={isTeacher} />;
+  if (isLoading) return <SessionLoadings isTeacher={isTeacher} />;
   if (isError)
     return (
       <div>
