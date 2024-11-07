@@ -57,6 +57,7 @@ export async function POST(req: Request) {
         mainVideo: course.mainVideo,
         studentId: wardId,
         gifted: true,
+        CourseInfo: course.CourseInfo,
       },
     });
     return new Response(
