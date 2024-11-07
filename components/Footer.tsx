@@ -57,6 +57,7 @@ const Footer: React.FC = () => {
               <Link href="/courses">Courses </Link>
               <Link href="/vacancies">Vacancies </Link>
               <Link href="/contact">Contact</Link>
+              {/* <Link href="/how-it-works">How it Works</Link> */}
             </div>
           </div>
         </nav>
