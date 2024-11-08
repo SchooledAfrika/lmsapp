@@ -3,10 +3,11 @@ import ChartDialog from "@/components/ChartDialog";
 import Image from "next/image";
 import { MdVerified } from "react-icons/md";
 import { TiArrowSortedDown } from "react-icons/ti";
-
+import { useSession } from "next-auth/react";
 
 const Recents = () => {
-  
+  const { data } = useSession();
+
   return (
     <div className="my-6 flex  md:flex-row justify-between flex-col  text-[15px] gap-3   md:gap-3 rounded-md">
       <div className="flex md:flex-4 h-full    px-3 bg-white rounded-md py-6  flex-col">
@@ -21,11 +22,10 @@ const Recents = () => {
             </p>
           </div>
         </div>
-        <ChartDialog />
+        <ChartDialog userId={data?.user.id as string} />
       </div>
 
       <div className="flex flex-3 bg-white md:mb-0 mb-6 py-6 px-3  rounded-md overflow-hidden">
-        
         <div className="">
           <h3 className="text-slate-400 text-[14px] font-bold">
             Recently Added

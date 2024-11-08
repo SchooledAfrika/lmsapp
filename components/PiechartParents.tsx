@@ -5,6 +5,7 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Pie } from "react-chartjs-2";
 import { useQuery } from "@tanstack/react-query";
 import { ChartsSkeleton } from "./ChartDialog";
+import { useWardId } from "@/data-access/conversion";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -19,16 +20,19 @@ const options = {
   },
 };
 
-const PieCharts = () => {
+const PiechartParents = () => {
+  const { wardId } = useWardId();
   const {
     data: infoData,
     isLoading,
     isError,
     error,
   } = useQuery<number[]>({
-    queryKey: ["teacher-piechart"],
+    queryKey: ["teacher-piechart-parents", wardId],
     queryFn: async () => {
-      const response = await fetch("/api/charts/total-teacher-chart");
+      const response = await fetch(
+        `/api/charts/parents-piechart?wardId=${wardId}`
+      );
       const result = response.json();
       return result;
     },
@@ -40,7 +44,7 @@ const PieCharts = () => {
     return <div>{error.message}</div>;
   }
   const data = {
-    labels: ["Total-Students", "Total-Classes", "Total-Resources"],
+    labels: ["Total-Classes", "Total-Exams", "Total-Resources"],
     datasets: [
       {
         label: "Distributions",
@@ -58,4 +62,4 @@ const PieCharts = () => {
   );
 };
 
-export default PieCharts;
+export default PiechartParents;

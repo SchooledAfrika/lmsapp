@@ -6,18 +6,14 @@ import Image from "next/image";
 import { MdVerified } from "react-icons/md";
 import { TiArrowSortedDown } from "react-icons/ti";
 import Link from "next/link";
+import { useWardId } from "@/data-access/conversion";
 
 const Overall = () => {
   //The wardId is already stored in the localStorage and so we initialize a state for it
-  const [wardId, setWardId] = useState<string | null>(null);
+  const { wardId } = useWardId();
 
-  // Retrieve wardId from localStorage
-  useEffect(() => {
-    const storedWardId = localStorage.getItem("selectedWardId");
-    setWardId(storedWardId); // Set wardId from localStorage directly
-  }, []);
   // here we get all the exams from teacher
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["wardAssessment"],
     queryFn: async () => {
       const response = await fetch(
@@ -28,14 +24,13 @@ const Overall = () => {
     },
   });
 
- 
-  if (isFetching) {
+  if (isLoading) {
     return <p>Loading...</p>;
   }
   if (isError) {
     return <div>{error.message}</div>;
   }
-
+  console.log(data);
   return (
     <div className="my-6 flex  md:flex-row justify-between flex-col  text-[15px] gap-3   md:gap-3 rounded-md">
       <div className="flex md:flex-4 h-full    px-3 bg-white rounded-md py-6  flex-col">
@@ -50,7 +45,7 @@ const Overall = () => {
             </p>
           </div>
         </div>
-        <ChartDialog />
+        <ChartDialog userId={wardId as string} />
       </div>
 
       <div className="flex flex-col flex-3 bg-white md:mb-0 mb-6 py-6 px-3  rounded-md ">
@@ -58,7 +53,10 @@ const Overall = () => {
           <p className="text-slate-500 text-[14px] font-semibold">
             Ward's Assessment
           </p>
-          <Link href="/parents-dashboard/assessment" className="text-[11.5px] text-lightGreen  ">
+          <Link
+            href="/parents-dashboard/assessment"
+            className="text-[11.5px] text-lightGreen  "
+          >
             View More
           </Link>
         </div>
@@ -74,7 +72,7 @@ const Overall = () => {
                   className="w-[30px] h-[30px]"
                 />
                 <div className="flex flex-col space-y-1">
-                  <p className="text-[13px] font-bold">Mathematics</p>
+                  <p className="text-[13px] font-bold">{item.subject}</p>
                   <p className="text-[12px] font-semibold">
                     {item.grade}{" "}
                     <span className="border border-l mx-2 border-l-slate-500"></span>
@@ -83,7 +81,10 @@ const Overall = () => {
                 </div>
               </div>
               <div className="flex items-center">
-                <p className="font-bold text-lightGreen">{item.score}/{Array.isArray(item?.questions) && item?.questions.length}</p>
+                <p className="font-bold text-lightGreen">
+                  {item.score}/
+                  {Array.isArray(item?.questions) && item?.questions.length}
+                </p>
               </div>
             </div>
           ))}

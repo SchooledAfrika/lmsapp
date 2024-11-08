@@ -17,57 +17,19 @@ export async function GET(req: Request) {
       // fetch courses bought by students
       const studentCourses = await prisma.studentPurchasedCourses.findMany({
         where: { studentId: id },
-        include: {
-          courseInfo: {
-            select: {
-              teacher: {
-                select: {
-                  name: true,
-                  profilePhoto: true,
-                  status: true,
-                },
-              },
-            },
-          },
-        },
       });
       return new Response(JSON.stringify(studentCourses), { status: 200 });
     } else if (role === "Teacher") {
+      console.log(id);
       // return courses that was purchased by teachers
       const teacherCourses = await prisma.teacherPurchasedCourses.findMany({
         where: { teacherId: id },
-        include: {
-          courseInfo: {
-            select: {
-              teacher: {
-                select: {
-                  name: true,
-                  profilePhoto: true,
-                  status: true,
-                },
-              },
-            },
-          },
-        },
       });
       return new Response(JSON.stringify(teacherCourses), { status: 200 });
     } else {
       // this will return all the courses bought by a particular parents
       const parentsCourses = await prisma.parentsPurchasedCourses.findMany({
         where: { parentsId: id },
-        include: {
-          courseInfo: {
-            select: {
-              teacher: {
-                select: {
-                  name: true,
-                  profilePhoto: true,
-                  status: true,
-                },
-              },
-            },
-          },
-        },
       });
       return new Response(JSON.stringify(parentsCourses), { status: 200 });
     }

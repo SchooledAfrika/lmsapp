@@ -281,7 +281,7 @@ const SessionHeading = () => {
 };
 const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
   // here we can now fetch our session
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getSession"],
     queryFn: async () => {
       const response = await fetch("/api/one-on-one-section");
@@ -290,7 +290,7 @@ const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
     },
   });
 
-  if (isFetching) return <SessionLoadings isTeacher={isTeacher} />;
+  if (isLoading) return <SessionLoadings isTeacher={isTeacher} />;
   if (isError)
     return (
       <div>

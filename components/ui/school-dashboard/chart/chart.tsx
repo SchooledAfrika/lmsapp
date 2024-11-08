@@ -1,11 +1,9 @@
 "use client";
-import ChartDialog from "@/components/ChartDialog";
 import PieCharts from "@/components/PieChart";
 import React from "react";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { GoDotFill } from "react-icons/go";
 import ChartDetails from "@/components/ChartDetails";
-import Image from "next/image";
 import RecentlyAdded from "@/components/RecentlyAdded";
 
 const Chart = () => {
@@ -13,7 +11,9 @@ const Chart = () => {
     <div className="mt-12  flex md:flex-row flex-col relative  text-[15px] gap-3   md:gap-3 rounded-md">
       <div className="flex md:flex-4 h-full   px-3 bg-white rounded-md py-6  flex-col">
         <div className="flex flex-1 justify-between">
-          <p className="pl-3 text-[14px] font-semibold text-slate-600">Student Attendance Rate</p>
+          <p className="pl-3 text-[14px] font-semibold text-slate-600">
+            Student Attendance Rate
+          </p>
           <div className="flex justify-end">
             <p className="inline justify-end font-subtext text-lightGreen text-[13px]">
               Monthly
@@ -52,17 +52,16 @@ const Chart = () => {
               </p>
             </div>
           </div>
-          
         </div>
-       
-       <RecentlyAdded/>
-       
-       
+
+        <RecentlyAdded />
       </div>
 
       <div className="flex md:flex-5 mb-6  bg-white rounded-md py-4 px-2 flex-col">
         <div className="flex pl-3 justify-between">
-          <p className="text-[14px] text-slate-500 font-semibold">Student Perfomance</p>
+          <p className="text-[14px] text-slate-500 font-semibold">
+            Student Perfomance
+          </p>
           <div className="flex text-[13px] text-lightGreen font-subtext justify-end">
             <p className="inline justify-end ">
               Monthly
@@ -88,11 +87,10 @@ const Chart = () => {
             Fail
           </p>
         </div>
-        <ChartDialog />
         <p className="font-bold text-center">Weeks (7) Days</p>
-        <hr className="my-3"/>
+        <hr className="my-3" />
         <p className="text-slate-600 px-4 font-semibold">Chart Details</p>
-        <ChartDetails/>
+        <ChartDetails />
       </div>
     </div>
   );
