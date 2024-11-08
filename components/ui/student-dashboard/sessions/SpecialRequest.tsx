@@ -166,7 +166,7 @@ const SpecialRequest = () => {
     const studentId = session?.user?.id; 
     console.log(studentId);
   // here we can now fetch our session
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getSpecialRequest"],
     queryFn: async () => {
       const response = await fetch(`/api/student-special-request?studentId=${studentId}`);
@@ -177,7 +177,7 @@ const SpecialRequest = () => {
 
   console.log(data)
 
-  if (isFetching) return <SessionLoadings  />;
+  if (isLoading) return <SessionLoadings  />;
   if (isError)
     return (
       <div>
