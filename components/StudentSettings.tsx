@@ -292,7 +292,7 @@ const UpdatePassword = () => {
       onSubmit={handleSubmit(runSubmit)}
       className="h-[55%] bg-[#FFFFFF] rounded-[5px] p-4 my-4"
     >
-      <hr className="my-4" />
+     
       <label className="font-bold text-[#9F9F9F] my-4">Security</label>
       <div className="relative">
         <input
@@ -357,25 +357,9 @@ const StudentSettings = () => {
   return (
     <section className="flex flex-col md:flex-row mt-[100px] md:mt-[30px] gap-4">
       <div className="flex-5 bg-[#FFFFFF] rounded-[5px] p-5 h-[100vh] overflow-y-scroll scrollbar-hide">
-        <hr className="my-4" />
+       
         <UpdateProfile />
 
-        <div className="my-5">
-          <p className="font-bold pb-2">Need Plan ?</p>
-          <p className="text-[14px] font-medium">
-            Enjoy our services to its fullest.
-          </p>
-          <Button className="bg-transparent text-[#359C71] border border-[#359C71] mt-4 font-bold px-2">
-            <Image
-              src="/svgs/contact-support.svg"
-              width={20}
-              height={20}
-              alt="View Plans"
-              className="mr-2"
-            />
-            Contact Support
-          </Button>
-        </div>
       </div>
 
       <div className="flex-4 rounded-[5px]">
