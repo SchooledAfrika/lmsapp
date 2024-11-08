@@ -59,14 +59,12 @@ export const ChartsSkeleton = () => {
   );
 };
 
-export default function ChartDialog() {
+const ChartDialog: React.FC<{ userId: string }> = ({ userId }) => {
   const { data: userInfo } = useSession();
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["student-score-chart"],
     queryFn: async () => {
-      const response = await fetch(
-        `/api/charts/student-exam-score/${userInfo?.user.id}`
-      );
+      const response = await fetch(`/api/charts/student-exam-score/${userId}`);
       const result = await response.json();
       return result;
     },
@@ -92,4 +90,6 @@ export default function ChartDialog() {
     ],
   };
   return <Line options={options} data={dataCount} />;
-}
+};
+
+export default ChartDialog;
