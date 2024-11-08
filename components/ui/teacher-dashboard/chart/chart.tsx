@@ -6,23 +6,24 @@ import { GoDotFill } from "react-icons/go";
 import Image from "next/image";
 import Link from "next/link";
 import { FaLocationDot, FaSchoolFlag } from "react-icons/fa6";
+import { PieChart } from "lucide-react";
 const Chart = () => {
   return (
     <div className="mt-12  flex md:flex-row flex-col relative  text-[15px] gap-3   md:gap-3 rounded-md">
       <div className="flex md:flex-3    px-3 bg-white rounded-md py-6  flex-col">
         <div className="flex flex-1 justify-between">
           <p className="pl-3 text-[14px] font-semibold text-slate-600">
-            Student Attendance Rate
+            Teacher Activity Rate
           </p>
           <div className="flex justify-end">
             <p className="inline justify-end font-subtext text-lightGreen text-[13px]">
-              Monthly
+              Yearly
               <TiArrowSortedDown className="inline text-xl text-lightGreen" />
             </p>
           </div>
         </div>
-
-        <div className="flex mt-[5px]  mb-6 overflow-hidden md:flex-row flex-col  justify-center ">
+        <PieCharts />
+        {/* <div className="flex mt-[5px]  mb-6 overflow-hidden md:flex-row flex-col  justify-center ">
           <PieCharts />
           <div className="flex flex-col pl-2 flex-1 py-3">
             <div className="flex mt-6 text-[12px] font-bold">
@@ -52,7 +53,7 @@ const Chart = () => {
               </p>
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
       {/* second flex */}
 

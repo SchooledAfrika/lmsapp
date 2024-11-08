@@ -1,17 +1,14 @@
 import React from "react";
-import DashboardPagination from "@/components/DashboardPagination";
 import HandleAddCourses from "@/components/ui/teacher-dashboard/courses/HandleAddCourses";
-import Courses from "@/components/ui/teacher-dashboard/courses/courses";
-
+import ResourceFeatures from "@/components/ui/teacher-dashboard/ResourceFeatures";
 
 const page = () => {
   return (
     <div className="mt-[80px] md:mt-6">
       <div className="flex justify-end mt-6">
-        <HandleAddCourses/>
+        <HandleAddCourses />
       </div>
-      <Courses />
-      <DashboardPagination />
+      <ResourceFeatures />
     </div>
   );
 };
