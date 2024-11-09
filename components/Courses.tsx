@@ -432,7 +432,7 @@ const Courses = () => {
   return (
     <Container>
       <div className="w-full  mx-auto px-4 pt-16 pb-6">
-        <div className="grid mt-8 grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
+        <div className="grid  grid-cols-1 sm:grid-cols-2 md:grid-cols-3 items-center xl:grid-cols-3 gap-6  lgl:px-10">
           {Array.isArray(queryData) &&
             queryData.map((item: ICourses, index) => (
               <CourseCard key={index} item={item} />

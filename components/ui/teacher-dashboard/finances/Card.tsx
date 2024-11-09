@@ -18,8 +18,8 @@ const Card = () => {
     <div className="w-full bg-stone-100">
       {/* Card section */}
       <div className="md:flex md:flex-row  gap grid grid-cols-1 justify-between    gap-6">
-        <div className="flex  flex-6 flex-col">
-          <div className="flex  gap-6">
+        <div className="flex   flex-6 flex-col">
+          <div className="flex md:flex-row flex-col gap-6">
             {/* First card */}
             <KycCard />
             {/* second card */}
