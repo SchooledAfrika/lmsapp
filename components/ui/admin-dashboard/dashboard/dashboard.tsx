@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 import AdminChartDialog from "@/components/AdminChartDialog";
 import React from "react";
@@ -9,24 +9,17 @@ import { ParentsChart } from "../ParentsChart";
 
 const dashboard = () => {
   return (
-  <div>
-    <AdminChartDialog/>
-
-    <div className="w-full grid md:grid-cols-2 grid-cols-1 gap-3">
-     <StudentsChart/>
-    <ParentsChart/>
-     
+    <div>
+      <AdminChartDialog />
+      <div className="w-full mt-12 grid md:grid-cols-2 grid-cols-1 gap-3">
+        <StudentsChart />
+        <ParentsChart />
+      </div>
+      <div className="">
+        <TeachersChart />
+      </div>
     </div>
-   <div className="">
-    <TeachersChart/>
-   </div>
-   
-
-   
-   
-  </div>
-
-  )
+  );
 };
 
 export default dashboard;
