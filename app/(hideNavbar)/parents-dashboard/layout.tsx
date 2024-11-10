@@ -9,6 +9,7 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/nextAuth";
 import React from "react";
 import { cookies } from "next/headers";
+import ConfirmLogout from "@/components/ui/ConfirmLogout";
 export const metadata: Metadata = {
   title: "SchooledAfrika | Parents Dashboard",
   description: "Parents dashboard",
@@ -39,6 +40,7 @@ export default async function RootLayout({
             <Sidebar dashboard="parent" />
           </div>
           <div className=" sm:flex-10 md:flex-12 h-full md:px-8 px-4">
+            <ConfirmLogout />
             <MobileSideBar dashboard="parent" />
             <Navbar dashboard="parent" />
             <MobileNav />

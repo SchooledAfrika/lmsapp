@@ -47,7 +47,10 @@ const WardProfile = () => {
   if (isLoading) return <div>loading...</div>;
   if (isError) return <div>error...</div>;
   // filter out the selected ward based on the id
-  const selectedWard = data?.find((ward) => ward.id === wardId);
+  const selectedWard = Array.isArray(data)
+    ? data.find((ward) => ward.id === wardId)
+    : null;
+
   return (
     <div className="w-full p-2 cursor-pointer rounded-md ease-in-out transform duration-200 flex items-center space-x-2 bg-white border-[tomato]  border border-dashed  ">
       <div className="border border-[tomato] w-[40px] h-[40px] flex items-center justify-center rounded-full">

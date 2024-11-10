@@ -102,6 +102,7 @@ export async function POST(req: Request) {
         mainExamId: examId,
         studentId,
         classesId: classExam?.classesId!,
+        subject: getExam?.subject!,
       },
     });
     return successFullMessage(`${correctAnswer}`);

@@ -17,22 +17,13 @@ import { useConversion } from "@/data-access/conversion";
 import { useQueryClient } from "@tanstack/react-query";
 
 const Sidebar = ({ dashboard }: { dashboard: string }) => {
-  const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
+  const { showSideBar, setShowSideBar, confirmLogout, setConfirmLogout } =
+    useContext(CommonDashboardContext);
   const queryClient = useQueryClient();
   const router = useRouter();
   const { data } = useSession();
   const { makeSubstring } = useConversion();
-  // function to signout users
-  const signOutUser = async () => {
-    // lets clear the selected wardId for parents dashboard first
-    if (dashboard === "parent") {
-      Cookies.remove("wardId");
-    }
-    queryClient.clear();
-    // then continue with logging out the user
-    const logOutData = await signOut({ redirect: false, callbackUrl: "/" });
-    router.push(logOutData.url);
-  };
+
   // manipulating the path values
   const path = usePathname().split("/");
   let findpath: string;
@@ -86,7 +77,7 @@ const Sidebar = ({ dashboard }: { dashboard: string }) => {
           </p>
         </div>
         <div
-          onClick={signOutUser}
+          onClick={() => setConfirmLogout(true)}
           className=" text-white mb-6 flex gap-1 items-center text-[12px] cursor-pointer"
         >
           <p>logout</p>

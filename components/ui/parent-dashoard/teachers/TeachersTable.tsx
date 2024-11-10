@@ -12,6 +12,7 @@ import {
 import Image from "next/image";
 import { useWardId } from "@/data-access/conversion";
 import { LoadingTable } from "@/components/TeachersTable";
+import { Noitem } from "@/components/ApplicantsTable";
 
 // Define types for teachers
 interface Teacher {
@@ -57,7 +58,11 @@ const TeachersTable = () => {
   }
 
   if (!data || data.length === 0) {
-    return <p>No data available</p>;
+    return (
+      <div>
+        <Noitem desc="No teacher yet" />
+      </div>
+    );
   }
 
   return (

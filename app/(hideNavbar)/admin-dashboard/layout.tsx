@@ -9,6 +9,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/nextAuth";
 import { redirect } from "next/navigation";
 import Sidebar from "@/components/ui/school-dashboard/sidebar/sidebar";
+import ConfirmLogout from "@/components/ui/ConfirmLogout";
 
 export const metadata: Metadata = {
   title: "SchooledAfrika | Admin",
@@ -32,7 +33,7 @@ export default async function RootLayout({
         </div>
         <div className=" sm:flex-10 md:flex-12 h-full md:px-8 px-4">
           {/* this component below serves the purpose of the pricing model */}
-          <PricingLayout />
+          <ConfirmLogout />
           <MobileSideBar dashboard="admin" />
           <Navbar dashboard="admin" />
           <MobileNav />

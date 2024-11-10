@@ -40,6 +40,7 @@ export async function POST(req: Request) {
   }
   // webhook for payment for courses from anyone
   if (paymentFor == "courses ") {
+    console.log("entered");
     return await coursePayment(body.meta_data);
   }
   // payment for specualRequest

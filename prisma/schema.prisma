@@ -716,6 +716,7 @@ model StudentClassExam {
   questions  ExamQuestions[]
   title      String
   grade      Grade
+  subject    String
   // the id of the student that have answered there questions
   studentId  String          @db.ObjectId
   mainExamId String          @db.ObjectId

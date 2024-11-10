@@ -19,8 +19,6 @@ import {
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Cookies from "js-cookie";
-import Link from "next/link";
-import { FullPageLoading } from "@/components/SingleTutor";
 
 export type IaddWard = z.infer<typeof addWardSchema>;
 
@@ -56,7 +54,9 @@ const SelectWard = () => {
     setLoading(true);
     Cookies.set("wardId", selectedWard);
     return setTimeout(() => {
-      router.push("/parents-dashboard");
+      const values = `${process.env.NEXT_PUBLIC_HOMEPAGE}/parents-dashboard`;
+      console.log(values);
+      window.location.href = values;
     }, 4000);
   };
 
