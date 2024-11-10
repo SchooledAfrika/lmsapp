@@ -37,7 +37,7 @@ const OptionsDialog: React.FC<Iinfo> = ({
   SchoolClassStudent,
   showStudent,
 }) => {
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["active-students"],
     queryFn: async () => {
       const response = await fetch("/api/class-student");
@@ -45,7 +45,7 @@ const OptionsDialog: React.FC<Iinfo> = ({
       return result;
     },
   });
-  if (isFetching) {
+  if (isLoading) {
     <div>
       <p>Loading...</p>
     </div>;

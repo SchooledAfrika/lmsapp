@@ -256,7 +256,7 @@ export const SessionLoadings: React.FC<{ isTeacher: boolean }> = ({
 };
 
 const ShowSectionId = () => {
-  const { data, isFetching } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["get-session-id"],
     queryFn: async () => {
       const response = await fetch("/api/teacher-sessionId");
@@ -264,7 +264,7 @@ const ShowSectionId = () => {
       return result;
     },
   });
-  if (isFetching) return;
+  if (isLoading) return;
   return (
     <div className="flex justify-end mb-2">
       {data ? <ShowSessionId sessionId={data.sessionId} /> : <CreateSession />}

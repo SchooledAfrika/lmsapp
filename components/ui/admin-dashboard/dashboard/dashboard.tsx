@@ -11,7 +11,7 @@ const dashboard = () => {
   return (
     <div>
       <AdminChartDialog />
-      <div className="w-full mt-12 grid md:grid-cols-2 grid-cols-1 gap-3">
+      <div className="w-full mt-12 mb-12 grid md:grid-cols-2 grid-cols-1 gap-3">
         <StudentsChart />
         <ParentsChart />
       </div>

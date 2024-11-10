@@ -106,7 +106,7 @@ const CourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
 };
 
 const CoursesAdmin = () => {
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getCourse"],
     queryFn: async () => {
       const response = await fetch("/api/courses-from-admin");
@@ -116,7 +116,7 @@ const CoursesAdmin = () => {
   });
   console.log(data);
 
-  if (isFetching) {
+  if (isLoading) {
     return <ShowSkeleton />;
   }
   if (isError) {

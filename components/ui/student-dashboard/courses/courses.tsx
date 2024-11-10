@@ -126,7 +126,7 @@ const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
 const Courses = () => {
   
 
-  const { data: purchasedCoursesData, isFetching: isPurchasedFetching, isError: isPurchasedError, error: purchasedError } = useQuery({
+  const { data: purchasedCoursesData, isLoading: isPurchasedLoading, isError: isPurchasedError, error: purchasedError } = useQuery({
     queryKey: ["getPurchasedCourseByStudent"],
     queryFn: async () => {
       const response = await fetch("/api/courses-bought");
@@ -137,7 +137,7 @@ const Courses = () => {
 
   console.log(purchasedCoursesData);
 
-  if ( isPurchasedFetching) return <ShowSkeleton />;
+  if ( isPurchasedLoading) return <ShowSkeleton />;
 
   if ( isPurchasedError) {
     return <div>{(purchasedError)?.message || "An error occurred"}</div>;
