@@ -1,9 +1,7 @@
 "use client";
-import React, { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import ChartDialog from "@/components/ChartDialog";
 import Image from "next/image";
-import { MdVerified } from "react-icons/md";
 import { TiArrowSortedDown } from "react-icons/ti";
 import Link from "next/link";
 import { useWardId } from "@/data-access/conversion";

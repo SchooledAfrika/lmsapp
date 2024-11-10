@@ -2,11 +2,8 @@
 import PieCharts from "@/components/PieChart";
 import React from "react";
 import { TiArrowSortedDown } from "react-icons/ti";
-import { GoDotFill } from "react-icons/go";
-import Image from "next/image";
 import Link from "next/link";
-import { FaLocationDot, FaSchoolFlag } from "react-icons/fa6";
-import { PieChart } from "lucide-react";
+
 const Chart = () => {
   return (
     <div className="mt-12  flex md:flex-row flex-col relative  text-[15px] gap-3   md:gap-3 rounded-md">
