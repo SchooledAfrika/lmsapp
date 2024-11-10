@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import React from "react";
-import Sidebar from "@/components/ui/admin-dashboard/sidebar/sidebar";
 import MobileNav from "@/components/ui/admin-dashboard/navbar/MobileNav";
 import MobileSideBar from "@/components/ui/admin-dashboard/sidebar/MobileSidebar";
 import AdminDashboardContext from "@/providers/Admincontext";
@@ -9,6 +8,7 @@ import PricingLayout from "@/components/ui/Pricing-layout";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/nextAuth";
 import { redirect } from "next/navigation";
+import Sidebar from "@/components/ui/school-dashboard/sidebar/sidebar";
 
 export const metadata: Metadata = {
   title: "SchooledAfrika | Admin",

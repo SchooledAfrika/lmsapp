@@ -26,6 +26,20 @@ import SingleTeacherPaymentComplete from "./SingleTeacherPaymentComplete";
 import SingleTeacherPaymentPending from "./SingleTeacherPaymentPending";
 import MakeAdmin from "./MakeAdmin";
 import ApproveKYC from "./ApproveKYC";
+import { LoadingSkeleton } from "../sessions/SingleSessionAdmin";
+
+const CommonDivs: React.FC<{
+  name: string;
+  value: string;
+  inactive?: boolean;
+}> = ({ name, value, inactive }) => {
+  return (
+    <div className=" flex gap-2 text-[14px]">
+      <p className=" font-medium">{name}:</p>
+      <p className={` font-semibold ${inactive && " text-red-600"}`}>{value}</p>
+    </div>
+  );
+};
 
 const SingleTeacher = () => {
   const { id } = useParams();
@@ -42,34 +56,31 @@ const SingleTeacher = () => {
   });
 
   //console.log(data);
-
   //   if is loading
   if (isLoading) {
-    return (
-      <div className="">
-        <p className="my-4 font-bold">loading...</p>
-      </div>
-    );
+    return <LoadingSkeleton title="Teacher's Details" />;
   }
   // if is error
   if (isError) {
     return <div className=" flex-1">{error.message}</div>;
   }
 
+  console.log(data);
+
   const grade =
     data.grade && data.grade.length > 0
       ? data.grade.join(", ")
       : "Unknown Grade";
 
-      const language =
-      data.language && data.language.length > 0
-        ? data.language.join(", ")
-        : "Unknown Lnguage";
+  const language =
+    data.language && data.language.length > 0
+      ? data.language.join(", ")
+      : "Unknown Lnguage";
 
-        const subject =
-        data.subject && data.subject.length > 0
-          ? data.subject.join(", ")
-          : "Unknown Subject";
+  const subject =
+    data.subject && data.subject.length > 0
+      ? data.subject.join(", ")
+      : "Unknown Subject";
   return (
     <div>
       {data && (
@@ -101,112 +112,92 @@ const SingleTeacher = () => {
                 <IoBookOutline className="mr-2 w-5 h-5" />
                 Courses
               </TabsTrigger>
-             
             </TabsList>
             <TabsContent value="personal-information">
               <Card>
                 <CardHeader>
                   <CardTitle className="text-[18px]">Personal Data</CardTitle>
                   <CardDescription className="md:hidden block">
-                  <div className=" flex justify-end">
-                      
-                     
-                      <p className="text-[14px] font-semibold">{data.teachingRole === "INTERNAL" ? <MakeAdmin dataId={data.id}/> : ""}</p>
+                    <div className=" flex justify-end">
+                      <p className="text-[14px] font-semibold">
+                        {data.teachingRole === "INTERNAL" ? (
+                          <MakeAdmin dataId={data.id} />
+                        ) : (
+                          ""
+                        )}
+                      </p>
                     </div>
-            </CardDescription>
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <div className="grid md:grid-cols-2 grid-cols-1 space-y-3">
+                  <div className="grid md:grid-cols-2 grid-cols-1 gap-2">
+                    <CommonDivs name="Name" value={data.name} />
+                    <CommonDivs name="Phone Number" value={data.phoneNo} />
+                    <CommonDivs name="Gneder" value={data.gender} />
+                    <CommonDivs name="Email" value={data.email} />
+                    <CommonDivs name="Preferred Grades" value={grade} />
+                    <CommonDivs name="Languages" value={language} />
+                    <CommonDivs name="Details" value={data.details} />
+                    <CommonDivs name="Email" value={data.email} />
+                    <CommonDivs
+                      name="Joined On"
+                      value={handleDate(data?.createdAt)}
+                    />
+                    <CommonDivs name="Address" value={data.address} />
+                    <CommonDivs name="Subjects" value={subject} />
+
+                    {data.subscriped ? (
+                      <CommonDivs name="Active plan" value={data?.subscriped} />
+                    ) : (
+                      <CommonDivs
+                        name="Active plan"
+                        value="No plans currentlly"
+                        inactive={true}
+                      />
+                    )}
+                    {data.subscriped ? (
+                      <CommonDivs
+                        name="Plan expires on"
+                        value={data?.subscriptionDuration}
+                      />
+                    ) : (
+                      <CommonDivs
+                        name="Plan expires on"
+                        value="No plans currentlly"
+                        inactive={true}
+                      />
+                    )}
+                    <CommonDivs
+                      name="Total Hours Taught Online"
+                      value={data.hours}
+                    />
+                    <CommonDivs
+                      name="Teaching Role"
+                      value={data.teachingRole}
+                    />
+
+                    {data.kyc ? (
+                      <CommonDivs name="Kyc status" value={data.kyc.status} />
+                    ) : (
+                      <CommonDivs
+                        name="Kyc status"
+                        value="No kyc"
+                        inactive={true}
+                      />
+                    )}
+                    <CommonDivs name="Role" value={data.role} />
+
                     <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Name</p>
-                      <p className="text-[14px] font-semibold">{data.name}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Phone Number</p>
-                      <p className="text-[14px] font-semibold">
-                        {data.phoneNo}
-                      </p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Gender</p>
-                      <p className="text-[14px] font-semibold">{data.gender}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Email</p>
-                      <p className="text-[14px] font-semibold">{data.email}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">
-                        Preferred Grade(s)
-                      </p>
-                      <p className="text-[14px] font-semibold">{grade}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Language(s)</p>
-                      <p className="text-[14px] font-semibold">{language}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Details</p>
-                      <p className="text-[14px] font-semibold">{data.details}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Email</p>
-                      <p className="text-[14px] font-semibold">{data.email}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Joined On</p> 
-                      <p className="text-[14px] font-semibold">{handleDate(data?.createdAt)}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Address</p>
-                      <p className="text-[14px] font-semibold">{data.address}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Subject(s)</p>
-                      <p className="text-[14px] font-semibold">{subject}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Active Plan</p>
-                      <p className="text-[14px] font-semibold">{data?.subscriped}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Plan expires on</p>
-                      <p className="text-[14px] font-semibold">
-                        
-                        {data?.subscriptionDuration}
-                      </p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">
-                        Total Hours Taught Online
-                      </p>
-                      <p className="text-[14px] font-semibold">{data.hours} hours</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">
-                        Teaching Role
-                      </p>
-                      <p className="text-[14px] font-semibold">{data.teachingRole}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">
-                        KYC STATUS
-                      </p>
-                      <p className="text-[14px] font-semibold">{data.kyc.status}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">
-                        Role
-                      </p>
-                      <p className="text-[14px] font-semibold">{data.role}</p>
-                    </div>
-                    <div className=" flex space-x-12">
-                      <ApproveKYC teacherData={data}  />
+                      <ApproveKYC teacherData={data} />
                     </div>
                     <div className="hidden md:flex space-x-12">
-                      
-                     
-                      <p className="text-[14px] font-semibold">{data.teachingRole === "INTERNAL" ? <MakeAdmin dataId={data.id}/> : ""}</p>
+                      <p className="text-[14px] font-semibold">
+                        {data.teachingRole === "INTERNAL" ? (
+                          <MakeAdmin dataId={data.id} />
+                        ) : (
+                          ""
+                        )}
+                      </p>
                     </div>
                   </div>
                 </CardContent>
@@ -221,14 +212,16 @@ const SingleTeacher = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-2">
-                  <SingleTeacherClasses dataId={data.id} classes={data.Classes} />
+                  <SingleTeacherClasses
+                    dataId={data.id}
+                    classes={data.Classes}
+                  />
                 </CardContent>
                 <CardFooter>
                   <DashboardPagination />
                 </CardFooter>
               </Card>
             </TabsContent>
-            
           </Tabs>
         </div>
       )}

@@ -20,7 +20,7 @@ const CredentialReg = z
     email: z.string().email({ message: "enter a valid email address" }),
     password: z
       .string()
-      .min(6, { message: "password must be at least 6 characters" }),
+      .min(8, { message: "password must be at least 8 characters" }),
     confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {

@@ -23,8 +23,9 @@ import SingleParentCourses from "./SingleParentCourses";
 import Payments from "./Payments";
 import WardOptions from "./WardInfo";
 import WardInfo from "./WardInfo";
+import { LoadingSkeleton } from "../sessions/SingleSessionAdmin";
 
-const  SingleParent = () => {
+const SingleParent = () => {
   const { id } = useParams();
   console.log(id);
   const { isLoading, isError, error, data } = useQuery({
@@ -41,11 +42,7 @@ const  SingleParent = () => {
 
   //   if is loading
   if (isLoading) {
-    return (
-      <div className="">
-        <p className="my-4 font-bold">loading...</p>
-      </div>
-    );
+    return <LoadingSkeleton title="Parents details" />;
   }
   // if is error
   if (isError) {
@@ -54,111 +51,114 @@ const  SingleParent = () => {
   return (
     <div>
       {data && (
-    <div key={data.id} className="font-header md:my-12 mt-24 mb-12">
-      <div className="flex md:my-12 mt-24 mb-12 justify-between">
-        <p className="font-bold text-lg">Parent Details</p>
-        <Link href="/admin-dashboard/parents" className="cursor-pointer">
-          <Image
-            src="/closeAlt.svg"
-            alt="cancel"
-            width={100}
-            height={100}
-            className="w-[20px] h-[20px]"
-          />
-        </Link>
-      </div>
+        <div key={data.id} className="font-header md:my-12 mt-24 mb-12">
+          <div className="flex md:my-12 mt-24 mb-12 justify-between">
+            <p className="font-bold text-lg">Parent Details</p>
+            <Link href="/admin-dashboard/parents" className="cursor-pointer">
+              <Image
+                src="/closeAlt.svg"
+                alt="cancel"
+                width={100}
+                height={100}
+                className="w-[20px] h-[20px]"
+              />
+            </Link>
+          </div>
 
-      <Tabs defaultValue="personal-information" className="md:w-[100%] w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="personal-information">
-            {" "}
-            <FaRegEye className="mr-2 w-5 h-5" /> Personal Data
-          </TabsTrigger>
-         
-          <TabsTrigger value="payments">
-            {" "}
-            <MdOutlinePayments className="mr-2 w-5 h-5" /> Payments
-          </TabsTrigger>
-        </TabsList>
-        <TabsContent value="personal-information">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-[18px]">Personal Data</CardTitle>
-              {/* <CardDescription>
+          <Tabs
+            defaultValue="personal-information"
+            className="md:w-[100%] w-full"
+          >
+            <TabsList className="grid w-full grid-cols-3">
+              <TabsTrigger value="personal-information">
+                {" "}
+                <FaRegEye className="mr-2 w-5 h-5" /> Personal Data
+              </TabsTrigger>
+
+              <TabsTrigger value="payments">
+                {" "}
+                <MdOutlinePayments className="mr-2 w-5 h-5" /> Payments
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="personal-information">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-[18px]">Personal Data</CardTitle>
+                  {/* <CardDescription>
               Make changes to your account here. Click save when you're done.
             </CardDescription> */}
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <div className="grid md:grid-cols-2 grid-cols-1 space-y-3">
-              {/* <div className=" flex space-x-12">
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <div className="grid md:grid-cols-2 grid-cols-1 space-y-3">
+                    {/* <div className=" flex space-x-12">
                   <p className="text-[13px] font-medium">Profile Picture</p>
                   <p className="text-[14px] font-semibold">{data.profilePhoto}</p>
                 </div> */}
-                <div className=" flex space-x-12">
-                  <p className="text-[13px] font-medium">Name</p>
-                  <p className="text-[14px] font-semibold">{data.name}</p>
-                </div>
-                <div className=" flex space-x-12">
-                  <p className="text-[13px] font-medium">Phone Number</p>
-                  <p className="text-[14px] font-semibold">{data.phoneNo}</p>
-                </div>
-                <div className=" flex space-x-12">
-                  <p className="text-[13px] font-medium">Email</p>
-                  <p className="text-[14px] font-semibold">
-                    {data.email}
-                  </p>
-                </div>
-                <div className=" flex space-x-12">
-                  <p className="text-[13px] font-medium">Joined On</p>
-                  <p className="text-[14px] font-semibold">{data.createdAt}</p>
-                </div>
-                <div className=" flex space-x-12">
-                  <p className="text-[13px] font-medium">Address</p>
-                  <p className="text-[14px] font-semibold">{data.address}</p>
-                </div>
-                <div className=" flex space-x-12">
-                  <p className="text-[13px] font-medium">Country</p>
-                  <p className="text-[14px] font-semibold">{data.country}</p>
-                </div>
-                <div className=" flex space-x-12">
-                  <p className="text-[13px] font-medium">
-                  Total Wards
-                  </p>
-                  <WardInfo dataId={data.id} wards={data.wards}/>
-                </div>
-                <div className=" flex space-x-12">
-                  <p className="text-[13px] font-medium">Active Plan</p>
-                  <p className="text-[14px] font-semibold">{data.plan}</p>
-                </div>
-                <div className=" flex space-x-12">
-                  <p className="text-[13px] font-medium">
-                  Plan expires on
-                  </p>
-                  <p className="text-[14px] font-semibold"></p>
-                </div>
-                
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-        
-        <TabsContent value="payments">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-[18px]">Payments</CardTitle>
-              <CardDescription>Keep track of all payments.</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-               <Payments/> 
-             
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-    </div>
-    )}
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">Name</p>
+                      <p className="text-[14px] font-semibold">{data.name}</p>
+                    </div>
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">Phone Number</p>
+                      <p className="text-[14px] font-semibold">
+                        {data.phoneNo}
+                      </p>
+                    </div>
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">Email</p>
+                      <p className="text-[14px] font-semibold">{data.email}</p>
+                    </div>
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">Joined On</p>
+                      <p className="text-[14px] font-semibold">
+                        {data.createdAt}
+                      </p>
+                    </div>
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">Address</p>
+                      <p className="text-[14px] font-semibold">
+                        {data.address}
+                      </p>
+                    </div>
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">Country</p>
+                      <p className="text-[14px] font-semibold">
+                        {data.country}
+                      </p>
+                    </div>
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">Total Wards</p>
+                      <WardInfo dataId={data.id} wards={data.wards} />
+                    </div>
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">Active Plan</p>
+                      <p className="text-[14px] font-semibold">{data.plan}</p>
+                    </div>
+                    <div className=" flex space-x-12">
+                      <p className="text-[13px] font-medium">Plan expires on</p>
+                      <p className="text-[14px] font-semibold"></p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+
+            <TabsContent value="payments">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="text-[18px]">Payments</CardTitle>
+                  <CardDescription>Keep track of all payments.</CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Payments />
+                </CardContent>
+              </Card>
+            </TabsContent>
+          </Tabs>
+        </div>
+      )}
     </div>
   );
-}
+};
 
-export default SingleParent
+export default SingleParent;

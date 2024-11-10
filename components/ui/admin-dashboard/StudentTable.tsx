@@ -14,6 +14,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { TableSkeleton } from "@/components/TableSkeleton";
+import { Noprofile } from "./sessions/Sessions";
 
 const StudentTable = () => {
   const { isLoading, isError, error, data } = useQuery({
@@ -38,7 +39,7 @@ const StudentTable = () => {
   if (isError) {
     return <div className="flex-1">{error.message}</div>;
   }
-
+  console.log(data);
   return (
     <Table className="bg-white overflow-x-auto rounded-md my-6">
       <TableHeader>
@@ -59,13 +60,18 @@ const StudentTable = () => {
                 className="flex items-center gap-4"
                 href={`/admin-dashboard/students/${student.id}`}
               >
-                <Image
-                  src={student.profilePhoto}
-                  alt="Student Image"
-                  width={50}
-                  height={10}
-                  className="rounded-[100%] h-[50px]"
-                />
+                {student.profilePhoto ? (
+                  <Image
+                    src={student.profilePhoto}
+                    alt="Student Image"
+                    width={50}
+                    height={10}
+                    className="rounded-[100%] h-[50px]"
+                  />
+                ) : (
+                  <Noprofile />
+                )}
+
                 <div className="leading-none">
                   {student.name} <br />
                   <span className="text-[12px] text-gray-400">
