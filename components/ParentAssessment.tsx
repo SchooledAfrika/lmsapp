@@ -49,7 +49,7 @@ interface IallTest {
 // component that will return all the test
 const AllTest: React.FC<IallTest> = ({ setId, id, setShowExam, showExam }) => {
   //The wardId is already stored in the localStorage and so we initialize a state for it
-  const wardId = useWardId();
+  const { wardId } = useWardId();
 
   const { getTimeAgo, handleDate, handleTime } = useConversion();
   // here we get all the exams from teacher
@@ -69,6 +69,7 @@ const AllTest: React.FC<IallTest> = ({ setId, id, setShowExam, showExam }) => {
   if (isError) {
     return <div>{error.message}</div>;
   }
+  console.log(data);
   if (data && id == undefined) {
     const emptyArray = Array.isArray(data) && data.length > 0;
     if (!emptyArray) {
@@ -142,7 +143,6 @@ const AllTest: React.FC<IallTest> = ({ setId, id, setShowExam, showExam }) => {
 const ParentAssessment = () => {
   const [showexam, setShowexam] = useState(true);
   const [id, setId] = useState<undefined | string>(undefined);
-  console.log(id);
   return (
     <section>
       <Container>

@@ -8,12 +8,10 @@ import GetStarted from "@/components/GetStarted";
 import Testimonials from "@/components/Testimonials";
 import ParentalControl from "@/components/ParentalControl";
 import SampleClass from "@/components/SampleClass";
-import RootLayout from "./layout";
 import PreviewInternalTeachers from "@/components/PreviewInternalTeachers";
 
 export default function Home() {
   return (
-   
     <div>
       <Hero />
       <Offer />
@@ -34,6 +32,5 @@ export default function Home() {
       <GetStarted />
       <Testimonials />
     </div>
-   
   );
 }

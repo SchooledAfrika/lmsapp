@@ -31,6 +31,7 @@ export async function POST(req: Request) {
         questions: exam.test,
         title: exam.title,
         grade: exam.grade,
+        subject: exam.subject,
       },
     });
     return new Response(

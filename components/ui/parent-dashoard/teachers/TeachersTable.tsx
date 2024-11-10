@@ -10,8 +10,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import Cookies from "js-cookie";
 import { useWardId } from "@/data-access/conversion";
+import { LoadingTable } from "@/components/TeachersTable";
 
 // Define types for teachers
 interface Teacher {
@@ -44,14 +44,15 @@ const TeachersTable = () => {
     enabled: !!wardId, // The query will only run if wardId exists
   });
 
-  // console.log(data);
-
   if (isLoading) {
-    return <p>Loading...</p>;
+    return (
+      <div>
+        <LoadingTable />
+      </div>
+    );
   }
 
   if (isError) {
-    // console.error(error); // Log the error to see what went wrong
     return <p>Error: {error?.message}</p>;
   }
 
