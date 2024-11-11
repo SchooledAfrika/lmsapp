@@ -79,6 +79,7 @@ export async function GET(req: Request) {
         byAdmin: true,
         createdAt: true,
         grade: true,
+        buyersList: true,
         teacher: {
           select: {
             profilePhoto: true,

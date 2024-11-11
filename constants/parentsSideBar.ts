@@ -22,7 +22,6 @@ export const ParentSideBar: StudentSideBarType[] = [
     icon: LiaClipboardListSolid,
   },
   { path: "courses", name: "Courses", icon: PiCirclesFour },
-  { path: "calender", name: "Calender", icon: MdOutlineCalendarMonth },
   { path: "transactions", name: "Transactions", icon: LiaMoneyCheckAltSolid },
   {
     path: "parent-settings",

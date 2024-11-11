@@ -15,7 +15,14 @@ export default function Home() {
     <div>
       <Hero />
       <Offer />
-      <PreviewInternalTeachers />
+      <div className="w-full mt-10 mb-4  flex flex-col items-center">
+        <h2 className="text-2xl font-header text-lightGreen font-bold">
+          {" "}
+          <span className="hidden  md:inline-flex w-20 md:w-60 mb-2 py-[.5px]  lgl:w-72 h-[.5px] bg-lightGreen mr-6"></span>
+          We Support{" "}
+          <span className="hidden md:inline-flex mb-2 w-20 py-[.5px] md:w-60 lgl:w-72 h-[.5px] bg-lightGreen ml-6"></span>
+        </h2>
+      </div>
       <Virtual />
       <PrivateSession />
       <HomeworkSupport />
@@ -29,8 +36,9 @@ export default function Home() {
         </h2>
       </div>
       <SampleClass />
-      <GetStarted />
+      <PreviewInternalTeachers />
       <Testimonials />
+      <GetStarted />
     </div>
   );
 }

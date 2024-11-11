@@ -152,8 +152,6 @@ export const StudentSideBarComponent = ({ findpath }: Isidebar) => {
 // work on the parents side bar
 export const ParentSideBarComponent = ({ findpath }: Isidebar) => {
   const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
-  const [selectedWardName, setSelectedWardName] = useState<string>("");
-  const [selectedWardPhoto, setSelectedWardPhoto] = useState<string>("");
 
   return (
     <div className=" w-full flex flex-col space-y-2">

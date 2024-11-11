@@ -35,7 +35,7 @@ const FeedbackCard = ({ content, rating, name, index }: Props) => {
 const Testimonials = () => {
   return (
     <Container>
-      <div className="max-w-full  mx-auto px-4 py-24">
+      <div className="max-w-full  mx-auto px-4 ">
         <div className="w-full  flex flex-col items-center">
           <h2 className="text-2xl font-header text-lightGreen font-bold">
             {" "}
