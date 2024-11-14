@@ -38,7 +38,7 @@ const SessionFeatures = () => {
   const [oneOneOne, setOneOneOne] = useState<boolean>(true);
 
   return (
-    <div className=" flex flex-col gap-2">
+    <div className=" flex my-6 flex-col gap-2">
       <ToggleTab
         setTabState={setOneOneOne}
         tabState={oneOneOne}

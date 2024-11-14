@@ -59,7 +59,7 @@ export const TeacherOneOnOne: React.FC = () => {
         reset();
         toast.success("Session profile edited successfully");
         setTimeout(() => {
-          router.push("/teacher-dashboard/one-on-one-section");
+          router.push("/teacher-dashboard/sessions");
         }, 4000);
       }
       // if there is no kyc and nothing else
@@ -92,7 +92,7 @@ export const TeacherOneOnOne: React.FC = () => {
       <div className="flex justify-between items-center mb-5">
         <span className="font-bold">Details</span>
         <Link
-          href="/teacher-dashboard/one-on-one-section"
+          href="/teacher-dashboard/sessions"
           className="cursor-pointer"
         >
           <Backwards />
