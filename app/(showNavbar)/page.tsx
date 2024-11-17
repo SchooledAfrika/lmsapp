@@ -17,7 +17,6 @@ export default function Home() {
     <div>
       <Hero />
       <Offer />
-      <PreviewInternalTeachers />
       <Virtual />
       <PrivateSession />
       <HomeworkSupport />
@@ -31,6 +30,7 @@ export default function Home() {
         </h2>
       </div>
       <SampleClass />
+      <PreviewInternalTeachers />
       <GetStarted />
       <Testimonials />
     </div>
