@@ -99,7 +99,7 @@ const Desc: React.FC<{
           {makeSubstring(desc, 70)}
         </p>
         <div className=" flex flex-wrap items-center gap-2 w-full">
-          <div className="text-[13px] text-black font-bold flex items-center gap-1">
+          <div className=" max-ss:hidden text-[13px] text-black font-bold flex items-center gap-1">
             <p>Speaks:</p>
             <div className=" flex items-center">
               {lang.map((language, index) => (
@@ -107,7 +107,7 @@ const Desc: React.FC<{
               ))}
             </div>
           </div>
-          <div className=" flex-wrap flex items-center text-[13px] text-black font-bold gap-2">
+          <div className=" max-ss:hidden flex-wrap flex items-center text-[13px] text-black font-bold gap-2">
             <p>Teaches:</p>
             <div className=" flex-wrap flex items-center gap-1">
               {subjects.map((subject, index) => (
@@ -151,23 +151,13 @@ const Desc: React.FC<{
     </div>
   );
 };
-const PayDetails: React.FC<{
+export const PayDetails: React.FC<{
   rating: number;
-  setShowBooking: React.Dispatch<React.SetStateAction<boolean>>;
-  showBooking: boolean;
   sessionId: string;
   tutorName: string;
   tutorImg: string;
   tutorLang: string[];
-}> = ({
-  rating,
-  setShowBooking,
-  showBooking,
-  sessionId,
-  tutorImg,
-  tutorLang,
-  tutorName,
-}) => {
+}> = ({ rating, sessionId, tutorImg, tutorLang, tutorName }) => {
   return (
     <div className=" flex flex-2 flex-col items-center gap-4">
       <BookSession
@@ -180,6 +170,43 @@ const PayDetails: React.FC<{
         <p>Reviews</p>
         <IoIosStar className=" text-orange-500" />
         {rating === null ? <p>0</p> : <p>{rating.toFixed(2)}</p>}
+      </div>
+    </div>
+  );
+};
+
+const MobileArrayDesc: React.FC<{ subjects: string[]; lang: string[] }> = ({
+  subjects,
+  lang,
+}) => {
+  return (
+    <div className=" ss:hidden">
+      <div className="   flex items-center gap-1">
+        <p className=" text-black font-semibold text-[13px]">Speaks:</p>
+        <div className=" flex items-center">
+          {lang.map((language, index) => (
+            <p className=" text-[10px]" key={index}>
+              {language},
+            </p>
+          ))}
+        </div>
+      </div>
+      <div className=" flex-wrap flex items-center text-[13px] text-black  gap-2">
+        <p className=" font-semibold">Teaches:</p>
+        <div className=" flex-wrap flex items-center gap-1">
+          {subjects.map((subject, index) => (
+            <div className=" flex items-center gap-1" key={index}>
+              <Image
+                src={`/${subject.toLowerCase()}.png`}
+                alt="subjects"
+                width={100}
+                height={100}
+                className=" w-[12px] aspect-square"
+              />
+              <p className=" text-[10px]">{subject}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -207,9 +234,8 @@ const SingleSession: React.FC<{
           id={item.id}
         />
       </div>
+      <MobileArrayDesc subjects={item.subjects} lang={item.teacher.language} />
       <PayDetails
-        showBooking={showBooking}
-        setShowBooking={setShowBooking}
         rating={item.teacher.rating}
         sessionId={item.id}
         tutorName={item.teacher.name}

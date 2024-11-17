@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { CommonDashboardContext } from "@/providers/Statecontext";
-import { AdminDashboardContext } from "@/providers/Admincontext";
 import { useContext } from "react";
 import { useConversion, useWardId } from "@/data-access/conversion";
 import {
@@ -178,7 +177,7 @@ export const ParentSideBarComponent = ({ findpath }: Isidebar) => {
 };
 
 export const AdminSideBarComponent = ({ findpath }: Isidebar) => {
-  const { showSideBar, setShowSideBar } = useContext(AdminDashboardContext);
+  const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
   return (
     <div className="w-full flex flex-col space-y-2">
       {AdminSideBar.map((item: AdminSideBarType, index) => (

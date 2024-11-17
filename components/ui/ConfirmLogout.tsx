@@ -38,7 +38,7 @@ const ConfirmLogout = () => {
       onClick={closeModel}
       className={` ${
         confirmLogout ? "flex" : "hidden"
-      } px-6 md:px-24 py-3 items-center justify-center fixed top-0 left-0 w-full backdrop-blur-md h-screen bg-[rgba(0,0,0,0.4)] z-[999]`}
+      } px-6 md:px-24 py-3 items-center justify-center fixed top-0 left-0 w-full backdrop-blur-md h-screen bg-[rgba(0,0,0,0.4)] z-[999999]`}
     >
       <div className=" w-full md:w-[400px] rounded-md py-4 shadow-lg px-3 border flex flex-col items-center gap-5">
         <PiSealWarningFill className=" text-[60px]" />

@@ -23,6 +23,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { IoClose } from "react-icons/io5";
 import ShareLink from "./Share";
 import { CircularProgress } from "@mui/material";
+import BookSession from "./BookSession";
 
 // this is to show that item is not submitted yet
 const BeforeReviewSubmit: React.FC<{
@@ -192,7 +193,9 @@ const ProfileShow: React.FC<{
   dp: string;
   name: string;
   teacherId: string;
-}> = ({ dp, name, teacherId }) => {
+  sessionId: string;
+  langs: string[];
+}> = ({ dp, name, teacherId, sessionId, langs }) => {
   const [showRatting, setShowratting] = useState<boolean>(false);
   const { status } = useSession();
   const handleRattingShow = () => {
@@ -217,8 +220,13 @@ const ProfileShow: React.FC<{
         <MdVerified className=" text-[20px] text-green-800" />
       </div>
       <div className=" flex flex-col gap-3 items-center w-full">
-        <div className=" w-1/3 py-3 bg-green-800 text-white max-md:text-[12px] flex items-center justify-center rounded-lg">
-          <p>Book a session</p>
+        <div className=" w-1/3  max-md:text-[12px] flex items-center justify-center rounded-lg">
+          <BookSession
+            sessionId={sessionId}
+            tutorLang={langs}
+            tutorImg={dp}
+            tutorName={name}
+          />
         </div>
         <div onClick={handleRattingShow} className=" w-1/3 cursor-pointer">
           <ShowRatting
@@ -362,6 +370,13 @@ const SingleTutor = () => {
   if (isLoading) {
     return <FullPageLoading fullpage={false} />;
   }
+  if (isError) {
+    return (
+      <div className=" w-full h-screen flex items-center justify-center">
+        <p>{error.message}</p>
+      </div>
+    );
+  }
   const SingleData: ISessionShow = data;
   return (
     <Container>
@@ -375,6 +390,8 @@ const SingleTutor = () => {
               dp={SingleData.teacher.profilePhoto}
               name={SingleData.teacher.name}
               teacherId={SingleData.teacherId}
+              sessionId={SingleData.id}
+              langs={SingleData.teacher.language}
             />
           </div>
           <div className=" flex-6 flex flex-col gap-4">

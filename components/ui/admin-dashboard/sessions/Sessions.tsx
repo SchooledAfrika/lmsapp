@@ -178,7 +178,7 @@ const Sessions = () => {
     <section>
       <div className="max-w-full">
         <div className=" w-full flex items-center justify-center">
-          <p className=" mb-4 text-black font-bold text-[24px]">
+          <p className=" mb-4 text-black font-bold text-[16px] md:text-[24px]">
             List of unmerged sessions
           </p>
         </div>
@@ -189,7 +189,7 @@ const Sessions = () => {
                 <Noitem desc="No new session" />
               </div>
             ) : (
-              <div className="grid  grid-cols-2 gap-3  md:grid-cols-4">
+              <div className="grid grid-cols-1  xs:grid-cols-2 gap-3  md:grid-cols-4">
                 {data.map((item: IOffers, index) => (
                   <OfferCard item={item} key={index} />
                 ))}

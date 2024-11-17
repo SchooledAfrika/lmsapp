@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
 import React from "react";
-import MobileNav from "@/components/ui/admin-dashboard/navbar/MobileNav";
-import MobileSideBar from "@/components/ui/admin-dashboard/sidebar/MobileSidebar";
-import AdminDashboardContext from "@/providers/Admincontext";
+// import MobileNav from "@/components/ui/admin-dashboard/navbar/MobileNav";
+import MobileSideBar from "@/components/ui/school-dashboard/sidebar/MobileSideBar";
 import Navbar from "@/components/ui/admin-dashboard/navbar/navbar";
-import PricingLayout from "@/components/ui/Pricing-layout";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/nextAuth";
 import { redirect } from "next/navigation";
 import Sidebar from "@/components/ui/school-dashboard/sidebar/sidebar";
 import ConfirmLogout from "@/components/ui/ConfirmLogout";
+import CommonDashboardContext from "@/providers/Statecontext";
+import MobileNav from "@/components/ui/school-dashboard/navbar/MobileNav";
 
 export const metadata: Metadata = {
   title: "SchooledAfrika | Admin",
@@ -26,7 +26,7 @@ export default async function RootLayout({
   const session = await getServerSession(authOptions);
   if (session?.user.role !== "Admin") return redirect("/");
   return (
-    <AdminDashboardContext>
+    <CommonDashboardContext>
       <main className="bg-stone-100 flex flex-col sm:flex-row font-header">
         <div className=" hidden sm:block sm:flex-4 md:flex-2 font-semibold  px-6 py-10 bg-white h-screen sticky top-0 overflow-auto scrollbar-hide">
           <Sidebar dashboard="admin" />
@@ -40,6 +40,6 @@ export default async function RootLayout({
           {children}
         </div>
       </main>
-    </AdminDashboardContext>
+    </CommonDashboardContext>
   );
 }

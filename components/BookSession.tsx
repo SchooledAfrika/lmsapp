@@ -26,12 +26,12 @@ const BookSession: React.FC<{
     return toast.error("only students and parents can book a session");
   };
   return (
-    <div>
+    <div className=" max-ss:w-full">
       <div
         onClick={handleShow}
-        className=" text-white w-full  bg-green-700 rounded-md px-4 py-4 sm:py-4 text-[14px] flex items-center justify-center cursor-pointer"
+        className=" max-ss:w-full text-white w-full  bg-green-700 rounded-md px-4 py-4 sm:py-4 text-[14px] flex items-center justify-center cursor-pointer"
       >
-        Book Session
+        <p>Book Session</p>
       </div>
       {data?.user.role === "Student" && showDialog && (
         <BookSessionByStudent

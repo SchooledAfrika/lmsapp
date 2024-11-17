@@ -11,15 +11,11 @@ import {
   StudentSideBarComponent,
   TeacherSideBarComponent,
 } from "@/components/Sidebars/allSIdebar";
-import { signOut, useSession } from "next-auth/react";
-import Cookies from "js-cookie";
+import { useSession } from "next-auth/react";
 import { useConversion } from "@/data-access/conversion";
-import { useQueryClient } from "@tanstack/react-query";
 
 const Sidebar = ({ dashboard }: { dashboard: string }) => {
-  const { showSideBar, setShowSideBar, confirmLogout, setConfirmLogout } =
-    useContext(CommonDashboardContext);
-  const queryClient = useQueryClient();
+  const { setConfirmLogout } = useContext(CommonDashboardContext);
   const router = useRouter();
   const { data } = useSession();
   const { makeSubstring } = useConversion();

@@ -50,7 +50,7 @@ interface IoneonOne {
 // component to show sessionId or create session btn
 const CreateSession = () => {
   return (
-    <Link href={"/teacher-dashboard/one-on-one-section/edit-profile"}>
+    <Link href={"/teacher-dashboard/sessions/edit-profile"}>
       <Button className="bg-secondary text-white text-[12px] py-5 my-3 mr-0 md:mr-6">
         <Image
           src="/svgs/edit.svg"
