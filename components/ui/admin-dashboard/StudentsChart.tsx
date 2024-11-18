@@ -1,6 +1,6 @@
-"use client"
-import { TrendingUp } from "lucide-react"
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts"
+"use client";
+import { TrendingUp } from "lucide-react";
+import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 import {
   Card,
   CardContent,
@@ -8,27 +8,16 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
-} from "@/components/ui/chart"
-const chartData = [
-  { month: "Jan", active: 186, passive: 80 },
-  { month: "Feb", active: 305, passive: 200 },
-  { month: "Mar", active: 237, passive: 120 },
-  { month: "Apr", active: 73, passive: 190 },
-  { month: "May", active: 209, passive: 130 },
-  { month: "Jun", active: 214, passive: 140 },
-  { month: "Jul", active: 186, passive: 80 },
-  { month: "Aug", active: 305, passive: 200 },
-  { month: "Sep", active: 237, passive: 120 },
-  { month: "Oct", active: 73, passive: 190 },
-  { month: "Nov", active: 209, passive: 130 },
-  { month: "Dec", active: 214, passive: 140 },
-]
+} from "@/components/ui/chart";
+import { useQuery } from "@tanstack/react-query";
+import { LargeSkeleton } from "@/components/AdminChartDialog";
+
 const chartConfig = {
   desktop: {
     label: "Active",
@@ -38,10 +27,24 @@ const chartConfig = {
     label: "desktop",
     color: "hsl(var(--chart-2))",
   },
-} satisfies ChartConfig
+} satisfies ChartConfig;
 export function StudentsChart() {
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ["admin-students-charts"],
+    queryFn: async () => {
+      const response = await fetch("/api/charts/admin-student-chart");
+      const result = await response.json();
+      return result;
+    },
+  });
+  if (isLoading) {
+    return <LargeSkeleton />;
+  }
+  if (isError) {
+    return <p>{error.message}</p>;
+  }
   return (
-    <Card className=" mt-12 mb-6">
+    <Card className="mb-6">
       <CardHeader>
         <CardTitle className="text-[18px]">Students</CardTitle>
         <CardDescription>
@@ -52,7 +55,7 @@ export function StudentsChart() {
         <ChartContainer config={chartConfig}>
           <AreaChart
             accessibilityLayer
-            data={chartData}
+            data={data}
             margin={{
               left: 12,
               right: 12,
@@ -73,7 +76,6 @@ export function StudentsChart() {
                   offset="5%"
                   stopColor="var(--color-desktop)"
                   stopOpacity={0.8}
-                 
                 />
                 <stop
                   offset="95%"
@@ -101,7 +103,6 @@ export function StudentsChart() {
               fillOpacity={0.4}
               stroke="var(--color-mobile)"
               stackId="a"
-             
             />
             <Area
               dataKey="passive"
@@ -118,7 +119,8 @@ export function StudentsChart() {
         <div className="flex w-full items-start gap-2 text-sm">
           <div className="grid gap-2">
             <div className="flex items-center gap-2 font-medium leading-none">
-              Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+              Progressive chart of student
+              <TrendingUp className="h-4 w-4" />
             </div>
             <div className="flex items-center gap-2 leading-none text-muted-foreground">
               January - December 2024
@@ -127,5 +129,5 @@ export function StudentsChart() {
         </div>
       </CardFooter>
     </Card>
-  )
+  );
 }

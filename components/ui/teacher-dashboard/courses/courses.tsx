@@ -145,7 +145,7 @@ export const AllTeacherCreatedCourses = () => {
   );
 };
 
-const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
+export const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
   return (
     <div className="w-full overflow-hidden font-header rounded-lg card flex flex-col justify-center gap-3 hover:-translate-y-2 transition-transform duration-300 group">
       <div className="relative text-white w-full h-[200px]">

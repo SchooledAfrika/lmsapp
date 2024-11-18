@@ -42,6 +42,7 @@ export interface ICourses {
   sellCount: string;
   createdAt: string;
   teacher: TeacherInfo;
+  buyersList: string[];
 }
 
 export const CourseCreator: React.FC<{
@@ -123,16 +124,24 @@ const CourseCard = ({ item }: { item: ICourses }) => {
               isAdmin={item.byAdmin}
             />
           </div>
-          <Button
-            onClick={() => {
-              if (status === "unauthenticated")
-                return toast.error("login to purchase courses");
-              handlePurchaseClick();
-            }}
-            className="bg-dimOrange cursor-pointer absolute -translate-y-1/2 right-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block"
-          >
-            Purchase Course
-          </Button>
+          {/* checking if the user already purchase the course before */}
+          {status === "authenticated" &&
+          item.buyersList.includes(data?.user.id!) ? (
+            <Button className=" bg-green-700 cursor-pointer absolute -translate-y-1/2 right-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block">
+              Purchased
+            </Button>
+          ) : (
+            <Button
+              onClick={() => {
+                if (status === "unauthenticated")
+                  return toast.error("login to purchase courses");
+                handlePurchaseClick();
+              }}
+              className="bg-dimOrange cursor-pointer absolute -translate-y-1/2 right-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block"
+            >
+              Purchase Course
+            </Button>
+          )}
         </div>
         <div className="flex justify-between px-2">
           <p className=" font-bold mt-3 bg-[rgba(0,0,0,0.6)] text-white p-1 rounded-md">

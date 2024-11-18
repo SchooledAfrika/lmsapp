@@ -1,7 +1,5 @@
 "use client";
 import React from "react";
-
-import { useQuery, useQueries } from "@tanstack/react-query";
 import {
   Table,
   TableBody,
@@ -11,8 +9,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Image from "next/image";
-import Link from "next/link";
-import TeacherOptions from "./TeacherOptions";
 import ViewSingleClasses from "./ViewSingleClasses";
 
 interface ISingleTeacher {
@@ -24,25 +20,6 @@ const SingleTeacherClasses: React.FC<ISingleTeacher> = ({
   dataId,
   classes,
 }) => {
-  // Ensure classes is defined and is an array
-  const validClasses = Array.isArray(classes) ? classes : [];
-  // getting individual classes using parallel query with usequeries
-  const queries = useQueries({
-    queries: validClasses.map((singleClass: any) => {
-      return {
-        queryKey: ["class", singleClass],
-        queryFn: async () => {
-          const response = await fetch(`/api/teachers/${dataId}`);
-          const result = await response.json();
-          return result;
-        },
-      };
-    }),
-  });
-
-  
-
-  console.log(dataId);
   return (
     <div>
       <Table className="bg-white overflow-x-auto rounded-md mt-12">
@@ -85,7 +62,22 @@ const SingleTeacherClasses: React.FC<ISingleTeacher> = ({
                 {singleClass.maxCapacity}
               </TableCell>
               <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
-                <ViewSingleClasses dataId={singleClass.id} duration={singleClass.duration} starts={singleClass.classStarts} ends={singleClass.classEnds} time={singleClass.classTime} schedules={singleClass.schedules} studentIDs={singleClass.studentIDs} price={singleClass.price} rating={singleClass.rating} resourceIds={singleClass.resourceIds} publicClass={singleClass.publicClass} maxCapacity={singleClass.maxCapacity} currentCapacity={singleClass.currentCapacity} createdAt={singleClass.createdAt}  />
+                <ViewSingleClasses
+                  dataId={singleClass.id}
+                  duration={singleClass.duration}
+                  starts={singleClass.classStarts}
+                  ends={singleClass.classEnds}
+                  time={singleClass.classTime}
+                  schedules={singleClass.schedules}
+                  studentIDs={singleClass.studentIDs}
+                  price={singleClass.price}
+                  rating={singleClass.rating}
+                  resourceIds={singleClass.resourceIds}
+                  publicClass={singleClass.publicClass}
+                  maxCapacity={singleClass.maxCapacity}
+                  currentCapacity={singleClass.currentCapacity}
+                  createdAt={singleClass.createdAt}
+                />
               </TableCell>
             </TableRow>
           ))}

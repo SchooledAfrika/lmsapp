@@ -7,6 +7,34 @@ import { SiGoogleclassroom } from "react-icons/si";
 import AdminCoursesList from "../../AdminCoursesList";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "@mui/material";
+
+const AdminStudentLoading = () => {
+  return (
+    <div className=" flex gap-2 flex-col">
+      <Skeleton
+        variant="text"
+        animation="wave"
+        height={80}
+        className=" w-[200px]"
+      />
+      <div className=" w-full  border rounded-md flex gap-3 p-3">
+        <Skeleton
+          height={400}
+          variant="rectangular"
+          animation="wave"
+          className=" flex-1 rounded-md"
+        />
+        <Skeleton
+          height={400}
+          variant="rectangular"
+          animation="wave"
+          className=" flex-2 rounded-md"
+        />
+      </div>
+    </div>
+  );
+};
 
 const StudentDetails = () => {
   const [activeComponent, setActiveComponent] = useState("personalInfo");
@@ -30,14 +58,8 @@ const StudentDetails = () => {
     },
   });
 
-  console.log(data);
-
   if (isLoading) {
-    return (
-      <div className="">
-        <p className="my-4 font-bold">loading...</p>
-      </div>
-    );
+    return <AdminStudentLoading />;
   }
 
   if (isError) {

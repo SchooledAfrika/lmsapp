@@ -11,6 +11,8 @@ import { useConversion } from "@/data-access/conversion";
 import Cookies from "js-cookie";
 import { RxAvatar } from "react-icons/rx";
 import { useWardId } from "@/data-access/conversion";
+import { Skeleton } from "@mui/material";
+import { Noitem } from "@/components/ApplicantsTable";
 
 // Define types for sessions
 export interface Teacher {
@@ -165,6 +167,23 @@ const SessionCard = ({ item }: { item: SessionInfo }) => {
   );
 };
 
+const SessionSkeleton = () => {
+  const skeletonArray = new Array(6).fill("");
+  return (
+    <div className=" flex flex-col gap-4 mt-3">
+      {skeletonArray.map((item, index) => (
+        <Skeleton
+          height={110}
+          variant="rectangular"
+          animation="wave"
+          className=" w-full rounded-md "
+          key={index}
+        />
+      ))}
+    </div>
+  );
+};
+
 const Sessions = () => {
   //The wardId is already stored in the localStorage and so we initialize a state for it
   const { wardId } = useWardId();
@@ -186,7 +205,7 @@ const Sessions = () => {
   });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <SessionSkeleton />;
   }
 
   if (isError) {
@@ -194,8 +213,8 @@ const Sessions = () => {
     return <p>Error: {error?.message}</p>;
   }
 
-  if (!data || data.length === 0) {
-    return <p>No data available</p>;
+  if (Array.isArray(data) && data.length === 0) {
+    return <Noitem desc="No session available" />;
   }
 
   console.log(data);

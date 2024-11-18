@@ -1,16 +1,9 @@
 "use client";
-import {
-  AdminNavbar,
-  SchoolNavType,
-  Subtype
-} from "@/constants/schoolNavbar";
+import { AdminNavbar, SchoolNavType, Subtype } from "@/constants/schoolNavbar";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
 import { AdminOptions } from "./AdminOptions";
-
-
-
 
 const Navbar = ({ dashboard }: { dashboard: string }) => {
   const path = usePathname().split("/");
@@ -24,11 +17,15 @@ const Navbar = ({ dashboard }: { dashboard: string }) => {
         return setPresent(getItem);
       } else if (path.length === 3) {
         const currentPathString = path[2];
-        const getItem =  AdminNavbar.find((item) => item.path === currentPathString)
+        const getItem = AdminNavbar.find(
+          (item) => item.path === currentPathString
+        );
         return setPresent(getItem);
       } else {
         const currentPathString = path[2];
-        const getItem = AdminNavbar.find((item) => item.path === currentPathString)
+        const getItem = AdminNavbar.find(
+          (item) => item.path === currentPathString
+        );
         return setPresent(getItem?.subDetails);
       }
     };
@@ -56,15 +53,11 @@ const Navbar = ({ dashboard }: { dashboard: string }) => {
             placeholder="Search for anything..."
           />
         </div>
-       
-          {/* <Image src="/circle-user.png" alt="userLogo" width={100} height={100} className=" w-[40px] h-[40px] cursor-pointer"/> */}
-          <div className="">
-            <AdminOptions/>
-         
-          </div>
-          
-       
-       
+
+        {/* <Image src="/circle-user.png" alt="userLogo" width={100} height={100} className=" w-[40px] h-[40px] cursor-pointer"/> */}
+        <div className="">
+          <AdminOptions />
+        </div>
       </div>
     </div>
   );

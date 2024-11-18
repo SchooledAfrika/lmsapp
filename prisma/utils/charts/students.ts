@@ -4,6 +4,7 @@ export interface IexamsSum {
   score: number | null;
 }
 
+// this handles forming chart data for the total score a student have
 export const processScoresByMonth = (scores: IexamsSum[]) => {
   const monthlyScores: { [key: number]: number[] } = {};
   // Group scores by month

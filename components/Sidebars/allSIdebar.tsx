@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
 import { CommonDashboardContext } from "@/providers/Statecontext";
-import { AdminDashboardContext } from "@/providers/Admincontext";
 import { useContext } from "react";
 import { useConversion, useWardId } from "@/data-access/conversion";
 import {
@@ -47,7 +46,10 @@ const WardProfile = () => {
   if (isLoading) return <div>loading...</div>;
   if (isError) return <div>error...</div>;
   // filter out the selected ward based on the id
-  const selectedWard = data?.find((ward) => ward.id === wardId);
+  const selectedWard = Array.isArray(data)
+    ? data.find((ward) => ward.id === wardId)
+    : null;
+
   return (
     <div className="w-full p-2 cursor-pointer rounded-md ease-in-out transform duration-200 flex items-center space-x-2 bg-white border-[tomato]  border border-dashed  ">
       <div className="border border-[tomato] w-[40px] h-[40px] flex items-center justify-center rounded-full">
@@ -149,8 +151,6 @@ export const StudentSideBarComponent = ({ findpath }: Isidebar) => {
 // work on the parents side bar
 export const ParentSideBarComponent = ({ findpath }: Isidebar) => {
   const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
-  const [selectedWardName, setSelectedWardName] = useState<string>("");
-  const [selectedWardPhoto, setSelectedWardPhoto] = useState<string>("");
 
   return (
     <div className=" w-full flex flex-col space-y-2">
@@ -177,7 +177,7 @@ export const ParentSideBarComponent = ({ findpath }: Isidebar) => {
 };
 
 export const AdminSideBarComponent = ({ findpath }: Isidebar) => {
-  const { showSideBar, setShowSideBar } = useContext(AdminDashboardContext);
+  const { showSideBar, setShowSideBar } = useContext(CommonDashboardContext);
   return (
     <div className="w-full flex flex-col space-y-2">
       {AdminSideBar.map((item: AdminSideBarType, index) => (

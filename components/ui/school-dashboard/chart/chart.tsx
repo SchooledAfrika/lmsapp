@@ -4,7 +4,6 @@ import React from "react";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { GoDotFill } from "react-icons/go";
 import ChartDetails from "@/components/ChartDetails";
-import RecentlyAdded from "@/components/RecentlyAdded";
 
 const Chart = () => {
   return (
@@ -53,8 +52,6 @@ const Chart = () => {
             </div>
           </div>
         </div>
-
-        <RecentlyAdded />
       </div>
 
       <div className="flex md:flex-5 mb-6  bg-white rounded-md py-4 px-2 flex-col">
