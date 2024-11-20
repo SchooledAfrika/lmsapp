@@ -26,16 +26,35 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-
 import Link from "next/link";
 import { User2 } from "lucide-react";
+import { FaChartPie } from "react-icons/fa6";
 
 export type IupdatingTeacherRole = z.infer<typeof changeTeacherRoleSchema>;
 
-interface Irole {
+export interface Irole {
   dataId: string;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  dialogueOpen: boolean;
+  isRole: boolean;
+
 }
-const ChangeRole: React.FC<Irole> = ({ dataId }) => {
+
+const TriggerForRole = () => {
+  return (
+    <div className=" text-[13px] font-semibold flex items-center">
+      <User2 className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
+      <p className="inline text-[13px]  font-semibold">
+          
+          Update Role
+        </p>
+      
+    </div>
+  );
+};
+
+const ChangeRole: React.FC<Irole> = ({ dataId,  dialogueOpen,
+  setDialogOpen, isRole }) => {
   const [loading, setloading] = useState<boolean>(false);
   const {
     register,
@@ -60,7 +79,7 @@ const ChangeRole: React.FC<Irole> = ({ dataId }) => {
         method: "PUT",
         body: JSON.stringify({
           ...data,
-          teacherId: dataId
+          teacherId: dataId,
         }),
       });
 
@@ -71,6 +90,7 @@ const ChangeRole: React.FC<Irole> = ({ dataId }) => {
       if (result.ok) {
         const body = await result.json();
         setloading(false);
+        setDialogOpen(false);
         reset();
         return toast.success(body.message);
       } else {
@@ -82,81 +102,81 @@ const ChangeRole: React.FC<Irole> = ({ dataId }) => {
   // here we validate the datas in our form submission
   // only if there is data, before the mutation function is called
   const runSubmit: SubmitHandler<IupdatingTeacherRole> = async (data) => {
-    console.log(data);
+    //console.log(data);
     setloading(true);
     mutation.mutate(data);
   };
   return (
-    <div>
-
-   
-    <Dialog>
+    <Dialog open={dialogueOpen} onOpenChange={() => setDialogOpen(false)}>
       <DialogTrigger asChild>
-        <p className="inline text-[13px]  font-semibold">
-                    <User2 className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
-                    Update Role
-                </p>
+      {isRole && <TriggerForRole />}
+
       </DialogTrigger>
-      <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
+    
+      <DialogContent onClick={(e) => {
+          e.stopPropagation();
+        }}
+        className="sm:w-[600px] w-[380px] font-subtext">
         <DialogHeader>
-          <DialogTitle className="text-3xl font-bold">Update Teacher Role</DialogTitle>
+          <DialogTitle className="text-3xl font-bold">
+            Update Teacher Role
+          </DialogTitle>
         </DialogHeader>
         <div className="grid gap-4 font-header py-4">
           <div className="grid  items-center font-header gap-4">
-          <p className="font-medium text-[15px]  ">
-              Selecting either of these options changes a teacher from working as an external teacher to working as an internal teacher for SchooledAfrika and back.
+            <p className="font-medium text-[15px]  ">
+              Selecting either of these options changes a teacher from working
+              as an external teacher to working as an internal teacher for
+              SchooledAfrika and back.
             </p>
             <p className="font-semibold text-[16px]  ">
               Are you sure you want to perform this operation?
             </p>
-            
           </div>
-          <form onSubmit={handleSubmit(runSubmit)}>
-            <div className="flex gap-[10px] pt-4">
-              <Controller
-                control={control}
-                name="type"
-                render={({ field }) => (
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value);
-                      clearErrors("type");
-                    }}
-                  >
-                    <SelectTrigger className=" w-full py-2">
-                      <SelectValue placeholder="Status" />
-                    </SelectTrigger>
-
-                    <SelectContent className=" font-subtext font-medium">
-                      <SelectGroup>
-                        <SelectItem value="INTERNAL">INTERNAL</SelectItem>
-                        <SelectItem value="EXTERNAL">EXTERNAL</SelectItem>
-                       
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-              {errors.type && (
-                <small className="text-red-600">{errors.type.message}</small>
-              )}
-            </div>
-
-            <Button
-              type="submit"
-              className="bg-secondary w-full text-white text-[16px] py-7 my-3"
-              disabled={loading}
-            >
-              {loading ? "updating role..." : "Update Role"}
-            </Button>
-          </form>
         </div>
-        
+        <div className="w-[96%] mt-2">
+        <form onSubmit={handleSubmit(runSubmit)}  className=" flex flex-col gap-2 w-full px-2">
+          <div className="flex flex-col gap-[10px] pt-4">
+            <Controller
+              control={control}
+              name="type"
+              render={({ field }) => (
+                <Select
+                  onValueChange={(value) => {
+                    field.onChange(value);
+                    clearErrors("type");
+                  }}
+                >
+                  <SelectTrigger className=" w-full py-2">
+                    <SelectValue placeholder="Change Teacher Role" />
+                  </SelectTrigger>
+
+                  <SelectContent className=" font-subtext font-medium">
+                    <SelectGroup>
+                      <SelectItem value="INTERNAL">INTERNAL</SelectItem>
+                      <SelectItem value="EXTERNAL">EXTERNAL</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.type && (
+              <small className="text-red-600">{errors.type.message}</small>
+            )}
+          </div>
+
+          <Button
+            type="submit"
+            className="bg-secondary w-full text-white text-[16px] py-7 my-3"
+            disabled={loading}
+          >
+            {loading ? "updating role..." : "Update Role"}
+          </Button>
+        </form>
+        </div>
       </DialogContent>
-     
-    </Dialog> 
-    <ToastContainer />
-    </div>
+      <ToastContainer/>
+    </Dialog>
   );
 };
 
