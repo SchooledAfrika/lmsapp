@@ -1,8 +1,6 @@
 "use client";
-
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
-
 import {
   Table,
   TableBody,
@@ -13,8 +11,8 @@ import {
 } from "@/components/ui/table";
 import TeacherOptions from "./TeacherOptions";
 import { TableSkeleton } from "@/components/TableSkeleton";
-
-import Image from "next/image";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Teachers = () => {
   const { isLoading, isError, error, data } = useQuery({
@@ -77,12 +75,13 @@ const Teachers = () => {
                   {item.PaymentPlans ? item.PaymentPlans : "Basic"}
                 </TableCell>
                 <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
-                  <TeacherOptions dataId={item.id} />
+                  <TeacherOptions email={item.email} dataId={item.id} />
                 </TableCell>
               </TableRow>
             ))}
         </TableBody>
       </Table>
+      <ToastContainer />
     </div>
   );
 };
