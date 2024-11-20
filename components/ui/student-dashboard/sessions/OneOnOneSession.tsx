@@ -172,9 +172,9 @@ const ViewDetails: React.FC<{ sessionId: string; isTeacher: boolean }> = ({
   const router = useRouter();
   const navigateLink = () => {
     if (isTeacher) {
-      router.push(`/teacher-dashboard/one-on-one-section/${sessionId}`);
+      router.push(`/teacher-dashboard/sessions/one-on-one-section/${sessionId}`);
     } else {
-      router.push(`/student-dashboard/one-on-one-section/${sessionId}`);
+      router.push(`/student-dashboard/sessions/one-on-one-section/${sessionId}`);
     }
   };
   return (

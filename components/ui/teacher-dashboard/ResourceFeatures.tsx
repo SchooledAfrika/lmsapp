@@ -5,6 +5,7 @@ import {
   AllPurchasedCourses,
   AllTeacherCreatedCourses,
 } from "./courses/courses";
+import HandleComingSoon from "./courses/HandleComingSoon";
 
 const ResourceFeatures = () => {
   const [createdCourse, setCreatedCourse] = useState<boolean>(true);
@@ -16,7 +17,7 @@ const ResourceFeatures = () => {
         firstTabTitle="Created Courses"
         secondTabTitle="Purchased Courses"
       />
-      {createdCourse ? <AllTeacherCreatedCourses /> : <AllPurchasedCourses />}
+      {createdCourse ? <HandleComingSoon /> : <AllPurchasedCourses />}
     </div>
   );
 };

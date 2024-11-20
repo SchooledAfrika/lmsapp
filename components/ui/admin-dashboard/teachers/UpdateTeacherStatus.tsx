@@ -29,13 +29,40 @@ import {
 
 import Link from "next/link";
 import { FaChartPie } from "react-icons/fa6";
+import { User2 } from "lucide-react";
+import { Irole } from "./ChangeRole";
 
 export type IupdatingTeacherStatus = z.infer<typeof teacherStatusSchema>;
 
-interface Idelete {
-  dataId: string;
-}
-const UpdateTeacherStatus: React.FC<Idelete> = ({ dataId }) => {
+
+const TriggerForRole = () => {
+  return (
+    <div className=" text-[13px] font-semibold flex items-center">
+      <User2 className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
+      <p className="inline text-[13px]  font-semibold">
+          
+          Update Role
+        </p>
+      
+    </div>
+  );
+};
+
+const TriggerForStatus = () => {
+  return (
+    <div className=" text-[13px] font-semibold flex items-center">
+       <FaChartPie className="inline w-4 h-4 mr-2 ml-0 text-lightGreen " />
+      <p className="inline text-[13px] cursor-pointer  font-semibold">
+         
+          Update Status
+        </p>
+      
+    </div>
+  );
+};
+
+const UpdateTeacherStatus: React.FC<Irole> = ({ dataId,  dialogueOpen,
+  setDialogOpen, isRole }) => {
   const [loading, setloading] = useState<boolean>(false);
   const {
     register,
@@ -70,6 +97,7 @@ const UpdateTeacherStatus: React.FC<Idelete> = ({ dataId }) => {
       if (result.ok) {
         const body = await result.json();
         setloading(false);
+        setDialogOpen(false);
         reset();
         return toast.success(body.message);
       } else {
@@ -86,17 +114,15 @@ const UpdateTeacherStatus: React.FC<Idelete> = ({ dataId }) => {
     mutation.mutate(data);
   };
   return (
-    <div>
-
    
-    <Dialog>
+    <Dialog open={dialogueOpen} onOpenChange={() => setDialogOpen(false)}>
       <DialogTrigger asChild>
-        <p className="inline text-[13px] cursor-pointer  font-semibold">
-          <FaChartPie className="inline w-4 h-4 mr-2 ml-0 text-lightGreen " />
-          Update Status
-        </p>
+      {isRole && <TriggerForStatus />}
       </DialogTrigger>
-      <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
+      <DialogContent onClick={(e) => {
+          e.stopPropagation();
+        }}
+        className="sm:w-[600px] w-[380px] font-subtext">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold">Update Status</DialogTitle>
         </DialogHeader>
@@ -149,10 +175,11 @@ const UpdateTeacherStatus: React.FC<Idelete> = ({ dataId }) => {
         </div>
         
       </DialogContent>
+      <ToastContainer />
      
     </Dialog> 
-    <ToastContainer />
-    </div>
+    
+    
   );
 };
 

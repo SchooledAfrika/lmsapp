@@ -23,11 +23,15 @@ interface ITeacher {
 
 const TeacherOptions: React.FC<ITeacher> = ({ dataId, email }) => {
   const [ismailOpen, setismailOpen] = useState<boolean>(false);
+  const [updateStatusDialogOpen, setUpdateStatusDialogOpen] =
+    useState<boolean>(false);
+  const [changeRoleDialogOpen, setChangeRoleDialogOpen] =
+    useState<boolean>(false);
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button className="border-none bg-slate-100" variant="outline">
-          <FaEllipsisH className="ml-3 text-lightGreen " />
+          <FaEllipsisH className="ml-3 text-lightGreen" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-40">
@@ -35,7 +39,7 @@ const TeacherOptions: React.FC<ITeacher> = ({ dataId, email }) => {
           <div className="grid gap-2">
             <div className="flex justify-start">
               <Link href={`/admin-dashboard/teachers/${dataId}`}>
-                <p className="inline text-[13px]  font-semibold">
+                <p className="inline text-[13px] font-semibold">
                   <FaRegEye className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
                   View
                 </p>
@@ -57,21 +61,34 @@ const TeacherOptions: React.FC<ITeacher> = ({ dataId, email }) => {
               />
             </div>
             <hr className="bg-black" />
-            <div className="flex justify-start cursor-pointer">
-              <ChangeRole dataId={dataId} />
+
+            {/* Update Status Dialog Trigger */}
+            <div
+              onClick={() => setUpdateStatusDialogOpen(true)}
+              className="flex justify-start cursor-pointer"
+            >
+              <UpdateTeacherStatus
+                setDialogOpen={setUpdateStatusDialogOpen}
+                dialogueOpen={updateStatusDialogOpen}
+                isRole={true}
+                dataId={dataId}
+              />
             </div>
             <hr className="bg-black" />
-            <div className="flex justify-start">
-              <UpdateTeacherStatus dataId={dataId} />
+
+            {/* Change Role Dialog Trigger */}
+            <div
+              onClick={() => setChangeRoleDialogOpen(true)}
+              className="flex justify-start cursor-pointer"
+            >
+              <ChangeRole
+                setDialogOpen={setChangeRoleDialogOpen}
+                dialogueOpen={changeRoleDialogOpen}
+                isRole={true}
+                dataId={dataId}
+              />
             </div>
             <hr className="bg-black" />
-            {/* <div className="flex justify-start">
-              <p className="inline text-[13px]  font-semibold">
-                <FaUserSlash className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
-                Suspend
-              </p>
-            </div>
-            <hr className="bg-black" /> */}
             <div className="flex justify-start">
               <RemoveTeacher dataId={dataId} />
             </div>
