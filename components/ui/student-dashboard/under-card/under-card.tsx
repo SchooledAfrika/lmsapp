@@ -10,7 +10,7 @@ import { BsBroadcast } from "react-icons/bs";
 const UnderCard = () => {
   return (
     <div className="mt-12  flex md:flex-row flex-col relative   text-[15px] gap-3   md:gap-3 rounded-md">
-      <div className="flex md:flex-4     px-3 bg-white rounded-md py-6  flex-col">
+      <div className="flex md:flex-3     px-3 bg-white rounded-md py-6  flex-col">
         <p className="font-bold text-slate-400 text-[14px]">Ongoing Session</p>
         <div className="relative">
            <Image
@@ -18,7 +18,7 @@ const UnderCard = () => {
            alt="teacher"
            width={200}
            height={200}
-           className="rounded-md   mt-3 w-96 object-top h-52 object-cover "
+           className="rounded-md   mt-3 w-[27rem] object-top h-52 object-cover "
         
         /> 
          <Button
@@ -83,9 +83,9 @@ const UnderCard = () => {
       
 
       {/* third flex */}
-      <div className="bg-white flex-3 rounded-md py-6 px-6 pb-1 ">
-            <p className="text-slate-500 text-[14px] mb-3 font-semibold">Announcements</p>
-            <div className="flex items-center space-x-3">
+      {/* <div className="bg-white flex-3 rounded-md py-6 px-6 pb-1 ">
+            <p className="text-slate-500 text-[14px] mb-3 font-semibold">Announcements</p> */}
+            {/* <div className="flex items-center space-x-3">
                 
                 <div className="flex flex-col">
                     <p className="text-[13px] font-bold">All Students</p>
@@ -94,9 +94,9 @@ const UnderCard = () => {
                 </div>
                
             </div> 
-            <hr className="w-full mt-3 font-semibold text-black"/>
+            <hr className="w-full mt-3 font-semibold text-black"/> */}
 
-            <div className="flex items-center space-x-3">
+            {/* <div className="flex items-center space-x-3">
                 
                 <div className="flex flex-col">
                     <p className="text-[13px] font-bold">All Students</p>
@@ -105,8 +105,8 @@ const UnderCard = () => {
                 </div>
                
             </div> 
-            <hr className="w-full my-3 font-semibold text-black"/>
-            <div className="flex items-center space-x-3">
+            <hr className="w-full my-3 font-semibold text-black"/> */}
+            {/* <div className="flex items-center space-x-3">
                 
                 <div className="flex flex-col">
                     <p className="text-[13px] font-bold">All Students</p>
@@ -114,9 +114,9 @@ const UnderCard = () => {
                    
                 </div>
                
-            </div> 
-            <hr className="w-full my-3 font-semibold text-black"/>
-            </div>
+            </div>  
+            <hr className="w-full my-3 font-semibold text-black"/> */}
+            {/* </div> */}
       
     </div>
   );

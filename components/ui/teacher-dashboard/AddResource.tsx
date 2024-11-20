@@ -73,7 +73,7 @@ const AddResource: React.FC<Iadd> = ({
   // Mutation to handle the addition of resource
   const addClassResources = useMutation({
     mutationFn: async () => {
-      console.log(classId, selectedResourceId);
+      //console.log(classId, selectedResourceId);
       const result = await fetch(`/api/class/resources`, {
         method: "POST",
         body: JSON.stringify({

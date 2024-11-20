@@ -19,6 +19,7 @@ import { boolean } from "zod";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddResource from "./ui/teacher-dashboard/AddResource";
+import Link from "next/link";
 
 // interface for the session
 interface ISingleSession {
@@ -382,6 +383,21 @@ const SingleSessionShow: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
   const SingleSession: ISingleSession = data;
   return (
     <div className=" w-full flex flex-col gap-3">
+      <div className="flex justify-between my-12">
+            <p className="font-bold text-lg">Details</p>
+            <Link
+               href={isTeacher ? "/teacher-dashboard/sessions" : "/student-dashboard/sessions"}
+              className="cursor-pointer"
+            >
+              <Image
+                src="/closeAlt.svg"
+                alt="cancel"
+                width={100}
+                height={100}
+                className="w-[20px] h-[20px]"
+              />
+            </Link>
+          </div>
       <TopSection isTeacher={isTeacher} infos={SingleSession} />
       <DownSection
         isTeacher={isTeacher}
