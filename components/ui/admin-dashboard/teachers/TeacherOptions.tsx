@@ -5,16 +5,15 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
 import { Button } from "@/components/ui/button";
 import { FaEllipsisH } from "react-icons/fa";
 import Link from "next/link";
 import { FaRegEye } from "react-icons/fa";
 // import RemoveClass from "./RemoveClass";
 import { IoMailUnreadOutline } from "react-icons/io5";
-import RemoveTeacher from "./RemoveTeacher";
 import UpdateTeacherStatus from "./UpdateTeacherStatus";
 import ChangeRole, { SendSingleMail } from "./ChangeRole";
+import "react-toastify/dist/ReactToastify.css";
 
 interface ITeacher {
   dataId: string;
@@ -87,10 +86,6 @@ const TeacherOptions: React.FC<ITeacher> = ({ dataId, email }) => {
                 isRole={true}
                 dataId={dataId}
               />
-            </div>
-            <hr className="bg-black" />
-            <div className="flex justify-start">
-              <RemoveTeacher dataId={dataId} />
             </div>
             <hr className="bg-black" />
           </div>

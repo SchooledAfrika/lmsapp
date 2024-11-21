@@ -81,7 +81,6 @@ const Teachers = () => {
             ))}
         </TableBody>
       </Table>
-      <ToastContainer />
     </div>
   );
 };

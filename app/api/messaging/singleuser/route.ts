@@ -17,10 +17,6 @@ export async function POST(req: Request) {
     );
   }
   try {
-    // testing
-    return new Response(JSON.stringify({ message: "successfully sent" }), {
-      status: 200,
-    });
     const messaging = await fetch(
       `${process.env.Email_link}message-to-singleTeacher`,
       {
@@ -30,6 +26,9 @@ export async function POST(req: Request) {
           subject,
           message,
         }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
     );
     if (messaging.ok) {
