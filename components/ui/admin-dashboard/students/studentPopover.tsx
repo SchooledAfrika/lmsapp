@@ -10,12 +10,16 @@ import { FaEllipsisH } from "react-icons/fa";
 import Link from "next/link";
 import RemoveStudent from "./RemoveStudent";
 import { FaRegEye } from "react-icons/fa";
+import { SendSingleMail } from "../teachers/ChangeRole";
+import { IoMailUnreadOutline } from "react-icons/io5";
 
 interface IStudent {
   studentId: string;
+  email: string;
 }
 
-const StudentPopover: React.FC<IStudent> = ({ studentId }) => {
+const StudentPopover: React.FC<IStudent> = ({ studentId, email }) => {
+  const [ismailOpen, setismailOpen] = useState<boolean>(false);
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -23,7 +27,7 @@ const StudentPopover: React.FC<IStudent> = ({ studentId }) => {
           <FaEllipsisH className="ml-3 " />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-30">
+      <PopoverContent className="w-30 flex flex-col gap-2">
         <Link
           href={`/admin-dashboard/students/${studentId}`}
           className="text-[13px] font-bold"
@@ -33,8 +37,23 @@ const StudentPopover: React.FC<IStudent> = ({ studentId }) => {
             View Details
           </p>
         </Link>
-
-        <div className="flex justify-start pt-2">
+        <hr />
+        <div className="flex justify-start">
+          <div
+            onClick={() => setismailOpen(true)}
+            className=" flex items-center text-[13px]  font-semibold"
+          >
+            <IoMailUnreadOutline className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
+            <p>Send Email</p>
+          </div>
+          <SendSingleMail
+            ismailOpen={ismailOpen}
+            setIsmailOpen={setismailOpen}
+            email={email}
+          />
+        </div>
+        <hr />
+        <div className="flex justify-start">
           <RemoveStudent studentId={studentId} />
         </div>
       </PopoverContent>

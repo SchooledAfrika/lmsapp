@@ -1,8 +1,6 @@
 "use client";
-
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
-
 import {
   Table,
   TableBody,
@@ -14,8 +12,6 @@ import {
 import TeacherOptions from "./TeacherOptions";
 import { TableSkeleton } from "@/components/TableSkeleton";
 
-import Image from "next/image";
-
 const Teachers = () => {
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["AdminGetTeacher"],
@@ -25,9 +21,6 @@ const Teachers = () => {
       return result;
     },
   });
-  //console.log(data);
-
-  // If loading
   if (isLoading) {
     return (
       <div className="">
@@ -44,7 +37,7 @@ const Teachers = () => {
 
   return (
     <div className="w-full font-header">
-      <Table className="bg-white overflow-x-auto rounded-md mt-12">
+      <Table className="bg-white overflow-x-auto rounded-md mt-2">
         <TableHeader>
           <TableRow>
             <TableHead className="text-[12px] w-[100px] text-left p-2">
@@ -77,7 +70,7 @@ const Teachers = () => {
                   {item.PaymentPlans ? item.PaymentPlans : "Basic"}
                 </TableCell>
                 <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
-                  <TeacherOptions dataId={item.id} />
+                  <TeacherOptions email={item.email} dataId={item.id} />
                 </TableCell>
               </TableRow>
             ))}

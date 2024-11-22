@@ -161,7 +161,6 @@ interface Icourses {
   userType: string;
 }
 export const coursePayment = async (payload: Icourses) => {
-  console.log(payload);
   // first, let's get the course that we want to buy or purchase
   const theCourse = await prisma.courses.findUnique({
     where: { id: payload.courseId },

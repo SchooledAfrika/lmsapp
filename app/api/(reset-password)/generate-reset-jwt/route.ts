@@ -26,7 +26,7 @@ export async function POST(req: Request) {
       });
       const link = baseLink + token;
       //   now send mail to the deployed server for mailing
-      await fetch("https://email-testing-qiuk.onrender.com/message", {
+      await fetch(`${process.env.Email_link}message`, {
         method: "POST",
         body: JSON.stringify({ name: checkedStudent.name, link, email }),
         headers: {

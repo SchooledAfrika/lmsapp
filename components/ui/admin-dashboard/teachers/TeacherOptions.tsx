@@ -5,26 +5,27 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
 import { Button } from "@/components/ui/button";
 import { FaEllipsisH } from "react-icons/fa";
 import Link from "next/link";
 import { FaRegEye } from "react-icons/fa";
+// import RemoveClass from "./RemoveClass";
 import { IoMailUnreadOutline } from "react-icons/io5";
-import { User2 } from "lucide-react";
-import ChangeRole from "./ChangeRole";
 import UpdateTeacherStatus from "./UpdateTeacherStatus";
-import RemoveTeacher from "./RemoveTeacher";
+import ChangeRole, { SendSingleMail } from "./ChangeRole";
+import "react-toastify/dist/ReactToastify.css";
 
 interface ITeacher {
   dataId: string;
+  email: string;
 }
 
-const TeacherOptions: React.FC<ITeacher> = ({ dataId }) => {
-  // Separate dialog states for both dialogs
-  const [updateStatusDialogOpen, setUpdateStatusDialogOpen] = useState<boolean>(false);
-  const [changeRoleDialogOpen, setChangeRoleDialogOpen] = useState<boolean>(false);
-
+const TeacherOptions: React.FC<ITeacher> = ({ dataId, email }) => {
+  const [ismailOpen, setismailOpen] = useState<boolean>(false);
+  const [updateStatusDialogOpen, setUpdateStatusDialogOpen] =
+    useState<boolean>(false);
+  const [changeRoleDialogOpen, setChangeRoleDialogOpen] =
+    useState<boolean>(false);
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -45,10 +46,18 @@ const TeacherOptions: React.FC<ITeacher> = ({ dataId }) => {
             </div>
             <hr className="bg-black" />
             <div className="flex justify-start">
-              <p className="inline text-[13px] font-semibold">
+              <div
+                onClick={() => setismailOpen(true)}
+                className=" flex items-center text-[13px]  font-semibold"
+              >
                 <IoMailUnreadOutline className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
-                Send Email
-              </p>
+                <p>Send Email</p>
+              </div>
+              <SendSingleMail
+                ismailOpen={ismailOpen}
+                setIsmailOpen={setismailOpen}
+                email={email}
+              />
             </div>
             <hr className="bg-black" />
 
@@ -77,11 +86,6 @@ const TeacherOptions: React.FC<ITeacher> = ({ dataId }) => {
                 isRole={true}
                 dataId={dataId}
               />
-            </div>
-            <hr className="bg-black" />
-
-            <div className="flex justify-start">
-              <RemoveTeacher dataId={dataId} />
             </div>
             <hr className="bg-black" />
           </div>

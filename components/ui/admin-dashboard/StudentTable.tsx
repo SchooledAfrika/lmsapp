@@ -41,7 +41,7 @@ const StudentTable = () => {
   }
   console.log(data);
   return (
-    <Table className="bg-white overflow-x-auto rounded-md my-6">
+    <Table className="bg-white overflow-x-auto rounded-md">
       <TableHeader>
         <TableRow className="text-[14px] p-0">
           <TableHead className="!pl-10">User</TableHead>
@@ -87,17 +87,6 @@ const StudentTable = () => {
             <TableCell className="text-[12px] font-semibold">
               {student.country}
             </TableCell>
-            {/* <TableCell
-              className={`${
-                student.payment === "Paid"
-                  ? "text-green-500"
-                  : student.payment === "Due"
-                  ? "text-yellow-500"
-                  : "text-red-500"
-              } text-[12px] font-semibold`}
-            >
-              {student.payment}
-            </TableCell> */}
             <TableCell
               className={`${
                 student.status === "Active"
@@ -110,7 +99,7 @@ const StudentTable = () => {
               {student.status}
             </TableCell>
             <TableCell className="text-[16px] text-lightGreen cursor-pointer text-center p-2">
-              <StudentPopover studentId={student.id} />
+              <StudentPopover email={student.email} studentId={student.id} />
             </TableCell>
           </TableRow>
         ))}

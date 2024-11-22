@@ -5,26 +5,23 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
 import { Button } from "@/components/ui/button";
 import { FaEllipsisH } from "react-icons/fa";
 import Link from "next/link";
-import { Layers3 } from "lucide-react";
 import { FaRegEye } from "react-icons/fa";
-import { BookOpenCheck } from "lucide-react";
 // import RemoveClass from "./RemoveClass";
 import { IoMailUnreadOutline } from "react-icons/io5";
-import { FaTableList } from "react-icons/fa6";
-import { ListCollapse } from "lucide-react";
-import { FaUserSlash } from "react-icons/fa6";
 import RemoveParent from "./RemoveParent";
 import UpdateParentStatus from "./UpdateParentStatus";
+import { SendSingleMail } from "../teachers/ChangeRole";
 
 interface Iparent {
   dataId: string;
+  email: string;
 }
 
-const ParentOptions: React.FC<Iparent> = ({dataId}) => {
+const ParentOptions: React.FC<Iparent> = ({ dataId, email }) => {
+  const [ismailOpen, setismailOpen] = useState<boolean>(false);
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -45,21 +42,22 @@ const ParentOptions: React.FC<Iparent> = ({dataId}) => {
             </div>
             <hr className="bg-black" />
             <div className="flex justify-start">
-              <p className="inline text-[13px]  font-semibold">
+              <div
+                onClick={() => setismailOpen(true)}
+                className=" flex items-center text-[13px]  font-semibold"
+              >
                 <IoMailUnreadOutline className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
-                Send Email
-              </p>
+                <p>Send Email</p>
+              </div>
+              <SendSingleMail
+                ismailOpen={ismailOpen}
+                setIsmailOpen={setismailOpen}
+                email={email}
+              />
             </div>
             <hr className="bg-black" />
-            {/* <div className="flex justify-start">
-              <p className="inline text-[13px]  font-semibold">
-                <BookOpenCheck className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
-                Add Test
-              </p>
-            </div>
-            <hr className="bg-black" /> */}
             <div className="flex justify-start">
-              <UpdateParentStatus dataId={dataId}/>
+              <UpdateParentStatus dataId={dataId} />
             </div>
             <hr className="bg-black" />
             <div className="flex justify-start">
