@@ -64,12 +64,13 @@ export const SendSingleMail: React.FC<{
         toast({
           variant: "default",
           title: "email",
-          description: "mail sent successfully to the teacher",
+          description: result.message,
           className: " bg-green-500 text-white",
         });
         setSubject(undefined);
         setMessage(undefined);
         setIsmailOpen(false);
+        setSending(false);
       } else {
         setSending(false);
         toast({

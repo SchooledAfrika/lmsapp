@@ -1,4 +1,5 @@
 // here, we should be able to send message to only one user
+import { MessageUsers } from "@/prisma/utils/Emails/messageUser";
 import { notAuthenticated, onlyAdmin, serverError } from "@/prisma/utils/error";
 import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
@@ -17,30 +18,7 @@ export async function POST(req: Request) {
     );
   }
   try {
-    const messaging = await fetch(
-      `${process.env.Email_link}message-to-singleTeacher`,
-      {
-        method: "POST",
-        body: JSON.stringify({
-          email,
-          subject,
-          message,
-        }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      }
-    );
-    if (messaging.ok) {
-      return new Response(
-        JSON.stringify({ message: "message sent was successful" }),
-        { status: 200 }
-      );
-    } else {
-      return new Response(JSON.stringify({ message: "something went wrong" }), {
-        status: 500,
-      });
-    }
+    return MessageUsers(email, subject, message);
   } catch (error) {
     return serverError();
   }
