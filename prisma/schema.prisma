@@ -74,6 +74,23 @@ model Teacher {
   Revenew                 Revenew[]
   TeacherPurchasedCourses TeacherPurchasedCourses[]
   SpecialTeacherMerged    SpecialTeacherMerged[]
+  // linking teacher to meeting infos
+  MeetingInfo             MeetingInfo?
+}
+
+// here, we will store all the zoom information of a particular teacher here
+// and also to track whether the accesstoken has expired or not.
+// we use crons job to always request for new Accesstoken every time intervals
+// we will always update via the updated at
+model MeetingInfo {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  accessToken  String
+  refreshToken String
+  stillValid   Boolean  @default(true)
+  owner        Teacher  @relation(fields: [teacherId], references: [id])
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @default(now())
+  teacherId    String   @unique @db.ObjectId
 }
 
 // kyc for teachers appears below
@@ -291,8 +308,24 @@ model Classes {
   ClassExams                 ClassExams[]
   StudentClassExam           StudentClassExam[]
   AnnouncementByTeacherClass AnnouncementByTeacherClass[]
+  // the link between classes and zoom links
+  ClassLink                  ClassLink?
 
   @@index([teacherId], name: "teachers_class_index")
+}
+
+// here is the model showing one to one relationship 
+// between a particular class and meeting
+// at the created at, we will track when meeting is created and we will use 
+// crons job to make the meeting validity false when the time has expired
+model ClassLink {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  zoomLink   String
+  class      Classes  @relation(fields: [classesId], references: [id])
+  classesId  String   @unique @db.ObjectId
+  stillValid Boolean  @default(true)
+  createdAt  DateTime @default(now()) //update this field anytime a meeting is created. 
+  updatedAt  DateTime @default(now())
 }
 
 // below is the model for one on one section
