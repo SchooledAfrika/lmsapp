@@ -11,11 +11,54 @@ import { BsBroadcast } from "react-icons/bs";
 import SingleClassTable from "./SingleClassTable";
 import { useParams } from "next/navigation";
 import { TableSkeleton } from "@/components/TableSkeleton";
+import { SingleClassSkeleton } from "@/components/SingleClassroom";
 
 interface studentProps {
   studentIds: string[];
- 
 }
+
+const CheckZoomUser = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["checkzoom"],
+    queryFn: async () => {
+      const response = await fetch("/api/zoom/isconnected");
+      const result = await response.json();
+      return result;
+    },
+  });
+  if (isLoading) {
+    return <div>loading...</div>;
+  }
+  const handleConnectZoom = () => {
+    const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_ZOOM_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_ZOOM_REDIRECT_URL}`;
+    window.location.href = url;
+  };
+  return (
+    <div>
+      {data === null ? (
+        <div
+          onClick={handleConnectZoom}
+          className=" flex items-center px-3 py-3 rounded-md bg-dimOrange w-fit cursor-pointer text-white gap-1"
+        >
+          <BsBroadcast />
+          <p className=" text-[12px]">Connect Zoom</p>
+        </div>
+      ) : (
+        <div>
+          <Button
+            asChild
+            className=" bg-dimOrange hover:bg-gold rounded-md text-white text-[14px] mt-3 px-3   py-2 w-32 text-center lg:block"
+          >
+            <Link href="/" className="inline">
+              <BsBroadcast className="inline mr-1" />
+              Start Session
+            </Link>
+          </Button>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const SingleClassroom = () => {
   const { id } = useParams();
@@ -27,17 +70,13 @@ const SingleClassroom = () => {
       const result = await response.json();
       return result;
     },
-    
   });
-  console.log(data)
 
   //   if is loading
   if (isLoading) {
     return (
-      <div className="">
-        <p className="my-4 font-bold">loading...</p>
-
-        <TableSkeleton />
+      <div className=" mt-4">
+        <SingleClassSkeleton />;
       </div>
     );
   }
@@ -101,16 +140,7 @@ const SingleClassroom = () => {
                 <p className="text-[13px] my-3 font-semibold">
                   Date Created : {data?.classStarts}
                 </p>
-
-                <Button
-                  asChild
-                  className=" bg-dimOrange hover:bg-gold rounded-md text-white text-[14px] mt-3 px-3   py-2 w-32 text-center lg:block"
-                >
-                  <Link href="/" className="inline">
-                    <BsBroadcast className="inline mr-1" />
-                    Start Session
-                  </Link>
-                </Button>
+                <CheckZoomUser />
               </div>
             </div>
             <div className="bg-white rounded-md py-6 px-6 pb-1 ">

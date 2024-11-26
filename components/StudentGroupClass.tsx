@@ -1,5 +1,5 @@
 "use client";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { SingleClassSkeleton } from "./SingleClassroom";
@@ -70,7 +70,9 @@ export const Exams: React.FC<{ exams: IExam[] }> = ({ exams }) => {
   // lets push to the exam page for student to start exam
   const handleMoveToExam = (id: string) => {
     setExamStarted(true); // Set exam started to true
-    router.push(`/student-dashboard/classroom/start-exam/?examId=${id}&examStarted=true`);
+    router.push(
+      `/student-dashboard/classroom/start-exam/?examId=${id}&examStarted=true`
+    );
   };
   return (
     <div className=" flex-1 flex flex-col gap-2 bg-white rounded-md p-5">
@@ -223,10 +225,7 @@ const ClassDetails: React.FC<{
 
 const StudentGroupClass = () => {
   const { id } = useParams();
-
-  
-
-  const { data, isFetching, error, isError } = useQuery({
+  const { data, isLoading, error, isError } = useQuery({
     queryKey: ["StudentGroupClass"],
     queryFn: async () => {
       const response = await fetch(
@@ -237,7 +236,7 @@ const StudentGroupClass = () => {
     },
   });
   //   check for loading
-  if (isFetching) {
+  if (isLoading) {
     return (
       <div className=" mt-6">
         <SingleClassSkeleton />;
