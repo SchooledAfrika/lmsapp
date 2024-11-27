@@ -19,7 +19,6 @@ export async function GET(req: Request) {
         teacherId: userId,
       },
     });
-    console.log(zoomInfos);
     return new Response(JSON.stringify(zoomInfos), { status: 200 });
   } catch (error) {
     return serverError();

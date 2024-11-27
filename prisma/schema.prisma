@@ -321,7 +321,8 @@ model Classes {
 // crons job to make the meeting validity false when the time has expired
 model ClassLink {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  zoomLink   String
+  startUrl   String
+  joinUrl    String
   class      Classes  @relation(fields: [classesId], references: [id])
   classesId  String   @unique @db.ObjectId
   stillValid Boolean  @default(true)

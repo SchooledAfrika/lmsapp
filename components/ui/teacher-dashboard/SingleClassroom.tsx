@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { FiEdit } from "react-icons/fi";
 import { SiGoogleclassroom } from "react-icons/si";
@@ -18,6 +18,20 @@ interface studentProps {
 }
 
 const CheckZoomUser = () => {
+  const { id } = useParams();
+  const mutation = useMutation({
+    mutationKey: ["create-meeting-link"],
+    mutationFn: async () => {
+      const response = await fetch("/api/zoom/get-access-code", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "class",
+          id,
+        }),
+      });
+      return response;
+    },
+  });
   const { data, isLoading } = useQuery({
     queryKey: ["checkzoom"],
     queryFn: async () => {
@@ -33,6 +47,9 @@ const CheckZoomUser = () => {
     const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_ZOOM_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_ZOOM_REDIRECT_URL}`;
     window.location.href = url;
   };
+  const handleMakeZoom = () => {
+    mutation.mutate();
+  };
   return (
     <div>
       {data === null ? (
@@ -45,15 +62,13 @@ const CheckZoomUser = () => {
         </div>
       ) : (
         <div>
-          <Button
-            asChild
-            className=" bg-dimOrange hover:bg-gold rounded-md text-white text-[14px] mt-3 px-3   py-2 w-32 text-center lg:block"
+          <div
+            onClick={handleMakeZoom}
+            className=" flex items-center px-3 py-3 rounded-md bg-dimOrange w-fit cursor-pointer text-white gap-1"
           >
-            <Link href="/" className="inline">
-              <BsBroadcast className="inline mr-1" />
-              Start Session
-            </Link>
-          </Button>
+            <BsBroadcast />
+            <p className=" text-[12px]">Start Session</p>
+          </div>
         </div>
       )}
     </div>
@@ -64,7 +79,7 @@ const SingleClassroom = () => {
   const { id } = useParams();
 
   const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["add"],
+    queryKey: ["get-single-class-teacher"],
     queryFn: async () => {
       const response = await fetch(`/api/class/specific/${id}`);
       const result = await response.json();
