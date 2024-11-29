@@ -14,6 +14,7 @@ export async function GET(
       where: { id: params.id },
       include: {
         students: true,
+        ClassLink: true,
       },
     });
     if (classDetail?.teacherId !== teacherId) {

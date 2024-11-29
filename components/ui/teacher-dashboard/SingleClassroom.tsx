@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
 import { useQuery, useMutation } from "@tanstack/react-query";
 import Image from "next/image";
@@ -19,6 +19,7 @@ interface studentProps {
 
 const CheckZoomUser = () => {
   const { id } = useParams();
+  const [creating, setCreating] = useState<boolean>(false);
   const mutation = useMutation({
     mutationKey: ["create-meeting-link"],
     mutationFn: async () => {
@@ -30,6 +31,11 @@ const CheckZoomUser = () => {
         }),
       });
       return response;
+    },
+    onSuccess: async (response) => {
+      setCreating(false);
+      const result = await response.json();
+      window.location.href = result.link;
     },
   });
   const { data, isLoading } = useQuery({
@@ -48,6 +54,7 @@ const CheckZoomUser = () => {
     window.location.href = url;
   };
   const handleMakeZoom = () => {
+    setCreating(true);
     mutation.mutate();
   };
   return (
@@ -67,7 +74,9 @@ const CheckZoomUser = () => {
             className=" flex items-center px-3 py-3 rounded-md bg-dimOrange w-fit cursor-pointer text-white gap-1"
           >
             <BsBroadcast />
-            <p className=" text-[12px]">Start Session</p>
+            <p className=" text-[12px]">
+              {creating ? "Starting" : "Start"} Session {creating && "..."}
+            </p>
           </div>
         </div>
       )}

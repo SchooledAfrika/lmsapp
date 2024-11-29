@@ -88,7 +88,7 @@ export async function POST(req: Request) {
   const { type, id } = await req.json();
   const userId = await serverSessionId();
   const role = await serverSessionRole();
-  console.log(id);
+  let link: string = "";
   // check for authentication
   if (!userId) return notAuthenticated();
   if (role !== "Teacher") return onlyTeacher();
@@ -124,7 +124,7 @@ export async function POST(req: Request) {
         }
       );
       const result = await createdMeetings.json();
-      // start_url join_url
+
       await prisma.classLink.upsert({
         where: { classesId: id },
         update: {
@@ -138,8 +138,11 @@ export async function POST(req: Request) {
           classesId: id,
         },
       });
+      // update the link above
+      // to hold the value of start meeting
+      link = result.start_url;
     }
-    return new Response(JSON.stringify({ message: "sent successfully" }), {
+    return new Response(JSON.stringify({ link }), {
       status: 200,
     });
     // here we first get the meeting link from zoom
