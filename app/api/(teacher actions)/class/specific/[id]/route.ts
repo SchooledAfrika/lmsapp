@@ -15,6 +15,7 @@ export async function GET(
       include: {
         students: true,
         ClassLink: true,
+        AnnouncementByTeacherClass: true,
       },
     });
     if (classDetail?.teacherId !== teacherId) {

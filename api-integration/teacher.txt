@@ -202,3 +202,40 @@ payload:{
     resourceId:String,
 }
 comment:passing the classId and the resourceId through the above route will handle creating a resource for the class
+
+
+
+NEW ENDPOINT: DATE, DECEMBER 1 2024
+================================================================================================================
+endpoint for a teacher to create an announcement
+================================================================================================================
+====> teacher create an announcement
+router: /api/class/announcement
+method: POST
+payload:{
+    desc:string,
+    title:string,
+    classId:string
+}
+
+================================================================================================================
+endpoint for a teacher to delete an announcement
+================================================================================================================
+====> teacher deletes an announcement
+route: /api/class/announcement
+method: DELETE
+payload:{
+    id:string
+}
+comment: id is the id of the announcement you want to delete
+
+================================================================================================================
+endpoint for a teacher to update an announcement
+================================================================================================================
+====> teacher update an announcement
+route: /api/class/announcement
+payload:{
+    id:string,
+    desc:string,
+    title: string
+}
