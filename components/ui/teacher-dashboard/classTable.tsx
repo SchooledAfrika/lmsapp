@@ -14,6 +14,7 @@ import {
 import { TableSkeleton } from "@/components/TableSkeleton";
 import IndividualClass from "./IndividualClass";
 import Image from "next/image";
+import { LoadingTable } from "@/components/TeachersTable";
 
 const ClassTable = () => {
   const { isLoading, isError, error, data } = useQuery({
@@ -29,9 +30,8 @@ const ClassTable = () => {
   // If loading
   if (isLoading) {
     return (
-      <div className="">
-        <p className="my-4 font-bold">loading...</p>
-        <TableSkeleton />
+      <div className=" mt-4">
+        <LoadingTable />
       </div>
     );
   }
@@ -40,12 +40,14 @@ const ClassTable = () => {
   if (isError) {
     return <div className="flex-1">{error.message}</div>;
   }
-
+  console.log(data);
   return (
     <Table className="bg-white overflow-x-auto rounded-md mt-12">
       <TableHeader>
         <TableRow>
-          <TableHead className="text-[12px] w-[100px] text-left p-2">Subject</TableHead>
+          <TableHead className="text-[12px] w-[100px] text-left p-2">
+            Subject
+          </TableHead>
           <TableHead className="text-[12px] text-left p-2">Class</TableHead>
           <TableHead className="text-[12px] text-left p-2">Grade</TableHead>
           <TableHead className="text-[12px] text-left p-2">Students</TableHead>
@@ -69,12 +71,12 @@ const ClassTable = () => {
               <TableCell className="text-[12px]  font-semibold p-2">
                 {item.className}
               </TableCell>
-             
+
               <TableCell className="text-[12px] font-semibold p-2">
                 {item.grade}
               </TableCell>
               <TableCell className="text-[13px]  font-semibold p-2">
-                {item.studentIds ? item.studentIds.length : 0}
+                {item.studentIDs ? item.studentIDs.length : 0}
               </TableCell>
               <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
                 <IndividualClass dataId={item.id} />

@@ -23,9 +23,14 @@ export async function GET(req: Request) {
             profilePhoto: true,
           },
         },
+        ClassLink: {
+          select: {
+            stillValid: true,
+            joinUrl: true,
+          },
+        },
       },
     });
-
     return new Response(JSON.stringify(classInfo), { status: 200 });
   } catch (error) {
     return serverError();

@@ -10,7 +10,6 @@ const page = () => {
         <HandleAddClass />
       </div>
       <Classroom />
-      <DashboardPagination />
     </div>
   );
 };

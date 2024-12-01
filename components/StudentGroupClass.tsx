@@ -1,5 +1,5 @@
 "use client";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams, useRouter } from "next/navigation";
 import { SingleClassSkeleton } from "./SingleClassroom";
@@ -32,6 +32,11 @@ export interface IExam {
   test: ITest[];
 }
 
+interface IclassLink {
+  joinUrl: string;
+  stillValid: boolean;
+}
+
 interface IGroupClass {
   id: string;
   subject: string;
@@ -57,6 +62,7 @@ interface IGroupClass {
     name: string;
     profilePhoto: string;
   };
+  ClassLink: IclassLink;
 }
 
 // this component below shows the exam in the class
@@ -70,7 +76,9 @@ export const Exams: React.FC<{ exams: IExam[] }> = ({ exams }) => {
   // lets push to the exam page for student to start exam
   const handleMoveToExam = (id: string) => {
     setExamStarted(true); // Set exam started to true
-    router.push(`/student-dashboard/classroom/start-exam/?examId=${id}&examStarted=true`);
+    router.push(
+      `/student-dashboard/classroom/start-exam/?examId=${id}&examStarted=true`
+    );
   };
   return (
     <div className=" flex-1 flex flex-col gap-2 bg-white rounded-md p-5">
@@ -130,8 +138,12 @@ export const ClassInfo: React.FC<{
   grade: string;
   duration: string;
   createdAt: Date;
-}> = ({ name, banner, grade, duration, createdAt }) => {
+  classLink: IclassLink;
+}> = ({ name, banner, grade, duration, createdAt, classLink }) => {
   const { handleDate } = useConversion();
+  const handleMeeting = () => {
+    window.location.href = classLink.joinUrl;
+  };
   return (
     <div className=" bg-white w-full rounded-md px-5 py-3 flex flex-col gap-4">
       {/* first part */}
@@ -166,10 +178,30 @@ export const ClassInfo: React.FC<{
         <p className=" text-[12px] text-slate-600">
           Date created: {handleDate(createdAt.toString())}
         </p>
-        <div className=" flex items-center gap-2 px-4 py-2 bg-orange-500 rounded-md w-fit text-white text-[12px] font-bold">
-          <BsBroadcast />
-          <p>Join Session</p>
-        </div>
+        {/* rendering a button for student to join class if is active already */}
+        {classLink !== null ? (
+          <div>
+            {classLink.stillValid ? (
+              <div
+                onClick={handleMeeting}
+                className=" flex cursor-pointer items-center gap-2 px-4 py-2 bg-orange-500 rounded-md w-fit text-white text-[12px] font-bold"
+              >
+                <BsBroadcast />
+                <p>Join Session</p>
+              </div>
+            ) : (
+              <div className=" cursor-not-allowed flex items-center gap-2 px-4 py-2 bg-slate-400 rounded-md w-fit text-white text-[12px] font-bold">
+                <BsBroadcast />
+                <p>Awaiting Session</p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className=" cursor-not-allowed flex items-center gap-2 px-4 py-2 bg-slate-400 rounded-md w-fit text-white text-[12px] font-bold">
+            <BsBroadcast />
+            <p>Awaiting Session</p>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -223,10 +255,7 @@ const ClassDetails: React.FC<{
 
 const StudentGroupClass = () => {
   const { id } = useParams();
-
-  
-
-  const { data, isFetching, error, isError } = useQuery({
+  const { data, isLoading, error, isError } = useQuery({
     queryKey: ["StudentGroupClass"],
     queryFn: async () => {
       const response = await fetch(
@@ -237,7 +266,7 @@ const StudentGroupClass = () => {
     },
   });
   //   check for loading
-  if (isFetching) {
+  if (isLoading) {
     return (
       <div className=" mt-6">
         <SingleClassSkeleton />;
@@ -252,7 +281,6 @@ const StudentGroupClass = () => {
     );
   }
   const classInfo: IGroupClass = data;
-  console.log(classInfo);
   return (
     <div className=" mt-6 flex flex-col gap-3">
       <SingleTop />
@@ -263,6 +291,7 @@ const StudentGroupClass = () => {
           banner={classInfo.classBanner}
           duration={classInfo.duration}
           createdAt={classInfo.createdAt}
+          classLink={classInfo.ClassLink}
         />
         <Announcement info={classInfo.AnnouncementByTeacherClass} />
         <ClassDetails
