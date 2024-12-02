@@ -1,7 +1,7 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import Image from "next/image";
 import { FiEdit } from "react-icons/fi";
 import { SiGoogleclassroom } from "react-icons/si";
@@ -11,33 +11,96 @@ import { BsBroadcast } from "react-icons/bs";
 import SingleClassTable from "./SingleClassTable";
 import { useParams } from "next/navigation";
 import { TableSkeleton } from "@/components/TableSkeleton";
+import { SingleClassSkeleton } from "@/components/SingleClassroom";
 
 interface studentProps {
   studentIds: string[];
- 
 }
+
+const CheckZoomUser = () => {
+  const { id } = useParams();
+  const [creating, setCreating] = useState<boolean>(false);
+  const mutation = useMutation({
+    mutationKey: ["create-meeting-link"],
+    mutationFn: async () => {
+      const response = await fetch("/api/zoom/get-access-code", {
+        method: "POST",
+        body: JSON.stringify({
+          type: "class",
+          id,
+        }),
+      });
+      return response;
+    },
+    onSuccess: async (response) => {
+      setCreating(false);
+      const result = await response.json();
+      window.location.href = result.link;
+    },
+  });
+  const { data, isLoading } = useQuery({
+    queryKey: ["checkzoom"],
+    queryFn: async () => {
+      const response = await fetch("/api/zoom/isconnected");
+      const result = await response.json();
+      return result;
+    },
+  });
+  if (isLoading) {
+    return <div>loading...</div>;
+  }
+  const handleConnectZoom = () => {
+    const url = `https://zoom.us/oauth/authorize?response_type=code&client_id=${process.env.NEXT_PUBLIC_ZOOM_CLIENT_ID}&redirect_uri=${process.env.NEXT_PUBLIC_ZOOM_REDIRECT_URL}`;
+    window.location.href = url;
+  };
+  const handleMakeZoom = () => {
+    setCreating(true);
+    mutation.mutate();
+  };
+  return (
+    <div>
+      {data === null ? (
+        <div
+          onClick={handleConnectZoom}
+          className=" flex items-center px-3 py-3 rounded-md bg-dimOrange w-fit cursor-pointer text-white gap-1"
+        >
+          <BsBroadcast />
+          <p className=" text-[12px]">Connect Zoom</p>
+        </div>
+      ) : (
+        <div>
+          <div
+            onClick={handleMakeZoom}
+            className=" flex items-center px-3 py-3 rounded-md bg-dimOrange w-fit cursor-pointer text-white gap-1"
+          >
+            <BsBroadcast />
+            <p className=" text-[12px]">
+              {creating ? "Starting" : "Start"} Session {creating && "..."}
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 const SingleClassroom = () => {
   const { id } = useParams();
 
   const { isLoading, isError, error, data } = useQuery({
-    queryKey: ["add"],
+    queryKey: ["get-single-class-teacher"],
     queryFn: async () => {
       const response = await fetch(`/api/class/specific/${id}`);
       const result = await response.json();
       return result;
     },
-    
   });
-  console.log(data)
 
   //   if is loading
   if (isLoading) {
     return (
-      <div className="">
-        <p className="my-4 font-bold">loading...</p>
-
-        <TableSkeleton />
+      <div className=" mt-4">
+        <SingleClassSkeleton />;
       </div>
     );
   }
@@ -101,16 +164,7 @@ const SingleClassroom = () => {
                 <p className="text-[13px] my-3 font-semibold">
                   Date Created : {data?.classStarts}
                 </p>
-
-                <Button
-                  asChild
-                  className=" bg-dimOrange hover:bg-gold rounded-md text-white text-[14px] mt-3 px-3   py-2 w-32 text-center lg:block"
-                >
-                  <Link href="/" className="inline">
-                    <BsBroadcast className="inline mr-1" />
-                    Start Session
-                  </Link>
-                </Button>
+                <CheckZoomUser />
               </div>
             </div>
             <div className="bg-white rounded-md py-6 px-6 pb-1 ">
