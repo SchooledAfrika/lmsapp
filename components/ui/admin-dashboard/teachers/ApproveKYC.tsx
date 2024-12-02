@@ -1,20 +1,14 @@
+"use client";
+
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
-import { SubmitHandler, useForm, Controller } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { kycStatusSchema } from "@/constants/kycStatus";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -29,7 +23,7 @@ import Image from "next/image";
 import { ScrollArea } from "../../scroll-area";
 
 export type IupdatingKYC = z.infer<typeof kycStatusSchema> & {
-  teacherId: string; // Include teacherId in the type
+  teacherId: string;
 };
 
 interface TeacherProfileProps {
@@ -58,13 +52,19 @@ interface TeacherProfileProps {
 
 const ApproveKYC: React.FC<TeacherProfileProps> = ({ teacherData }) => {
   const { id } = useParams();
-  const [loading, setLoading] = useState<boolean>(false);
-  const { register, handleSubmit, reset, control, clearErrors, formState: { errors } } = useForm<IupdatingKYC>({
+  const [loadingApprove, setLoadingApprove] = useState<boolean>(false);
+  const [loadingReject, setLoadingReject] = useState<boolean>(false);
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<IupdatingKYC>({
     resolver: zodResolver(kycStatusSchema),
   });
 
   const queryClient = useQueryClient();
-  
+
   const mutation = useMutation({
     mutationKey: ["updateKYC"],
     mutationFn: async (data: IupdatingKYC) => {
@@ -72,7 +72,7 @@ const ApproveKYC: React.FC<TeacherProfileProps> = ({ teacherData }) => {
         method: "PUT",
         body: JSON.stringify(data),
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
       });
 
@@ -85,22 +85,31 @@ const ApproveKYC: React.FC<TeacherProfileProps> = ({ teacherData }) => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["updateKYC"] });
-      setLoading(false);
+      setLoadingApprove(false);
+      setLoadingReject(false);
       reset();
       toast.success(data.message);
     },
     onError: (error: Error) => {
-      setLoading(false);
+      setLoadingApprove(false);
+      setLoadingReject(false);
       toast.error(error.message);
     },
   });
 
-  const runSubmit: SubmitHandler<IupdatingKYC> = async (data) => {
-    console.log('Form data:', data);
-    setLoading(true);
+  const approveSubmit = async () => {
+    setLoadingApprove(true);
     mutation.mutate({
-      ...data,
       teacherId: teacherData.kyc.teacherId,
+      status: "APPROVED",
+    });
+  };
+
+  const rejectSubmit = async () => {
+    setLoadingReject(true);
+    mutation.mutate({
+      teacherId: teacherData.kyc.teacherId,
+      status: "REJECTED",
     });
   };
 
@@ -109,17 +118,20 @@ const ApproveKYC: React.FC<TeacherProfileProps> = ({ teacherData }) => {
       <DialogTrigger asChild>
         <Button className="bg-lightGreen text-white">
           <ShieldCheck className="mr-2" />
-          Approve KYC
+          View KYC
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:w-[500px] w-[380px] font-header">
         <ScrollArea className="h-[500px]">
           <DialogHeader>
-            <DialogTitle className="font-bold text-[30px] my-3">Approve KYC</DialogTitle>
+            <DialogTitle className="font-bold text-[30px] my-3">
+              View KYC
+            </DialogTitle>
           </DialogHeader>
           <div className="grid gap-4 text-[14px]">
             <p>
-              Approve the KYC for the teacher based on submitted Resume and Government-certified document.
+              View and approve or reject the KYC for the teacher based on
+              submitted documents.
             </p>
             <div className="flex flex-col items-center gap-4">
               {teacherData.kyc?.docType && (
@@ -128,9 +140,9 @@ const ApproveKYC: React.FC<TeacherProfileProps> = ({ teacherData }) => {
                 </p>
               )}
               <div className="flex space-x-2">
-                <div>
-                  <label className="font-bold">Document Image</label>
-                  {teacherData.kyc?.docImg && (
+                {teacherData.kyc?.docImg && (
+                  <div>
+                    <label className="font-bold">Document Image</label>
                     <Image
                       src={teacherData.kyc.docImg}
                       alt="Document Image"
@@ -138,11 +150,11 @@ const ApproveKYC: React.FC<TeacherProfileProps> = ({ teacherData }) => {
                       height={300}
                       className="rounded-md"
                     />
-                  )}
-                </div>
-                <div>
-                  <label className="font-bold">Captured Image</label>
-                  {teacherData.kyc?.verifiedImg && (
+                  </div>
+                )}
+                {teacherData.kyc?.verifiedImg && (
+                  <div>
+                    <label className="font-bold">Captured Image</label>
                     <Image
                       src={teacherData.kyc.verifiedImg}
                       alt="Verified Document"
@@ -150,49 +162,51 @@ const ApproveKYC: React.FC<TeacherProfileProps> = ({ teacherData }) => {
                       height={300}
                       className="rounded-md"
                     />
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
-          <form onSubmit={handleSubmit(runSubmit)} noValidate>
-            <div className="flex gap-[10px] pt-4">
-              <Controller
-                control={control}
-                name="status"
-                render={({ field }) => (
-                  <Select
-                    onValueChange={(value) => {
-                      field.onChange(value); 
-                      clearErrors("status"); 
-                    }}
-                  >
-                    <SelectTrigger className="w-full py-2">
-                      <SelectValue placeholder="Select Status" />
-                    </SelectTrigger>
-                    <SelectContent className="font-subtext font-medium">
-                      <SelectGroup>
-                        <SelectItem value="PENDING">PENDING</SelectItem>
-                        <SelectItem value="APPROVED">APPROVED</SelectItem>
-                        <SelectItem value="REJECTED">REJECTED</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+          <div>
+            {teacherData.kyc ? (
+              <form onSubmit={handleSubmit((data) => {})} noValidate>
+                {teacherData.kyc.status && (
+                  <div className="flex md:flex-row flex-col gap-4 pt-4">
+                    <Button
+                      type="button"
+                      className="bg-green-500 text-white w-full py-7"
+                      onClick={approveSubmit}
+                      disabled={loadingApprove}
+                    >
+                      {loadingApprove ? "Approving KYC..." : "Approve KYC"}
+                    </Button>
+                    <Button
+                      type="button"
+                      className="bg-red-500 text-white w-full py-7"
+                      onClick={rejectSubmit}
+                      disabled={loadingReject}
+                    >
+                      {loadingReject ? "Rejecting KYC..." : "Reject KYC"}
+                    </Button>
+                  </div>
                 )}
-              />
-              {errors.status && (
-                <small className="text-red-600">{errors.status.message}</small>
-              )}
-            </div>
-
-            <Button
-              type="submit"
-              className="bg-secondary w-full text-white text-[16px] py-7 my-3"
-              disabled={loading}
-            >
-              {loading ? "Approving KYC..." : "Approve KYC"}
-            </Button>
-          </form>
+              </form>
+            ) : (
+              <div className="w-full flex items-center justify-center flex-col gap-2">
+                <Image
+                  priority
+                  src="/noitem.avif"
+                  alt="noitem"
+                  width={200}
+                  height={200}
+                  className="w-[200px] h-[200px]"
+                />
+                <div className="px-4 py-2 border border-green-700 rounded-md text-sm">
+                  <p>No KYC data here.</p>
+                </div>
+              </div>
+            )}
+          </div>
         </ScrollArea>
       </DialogContent>
       <ToastContainer />

@@ -20,7 +20,7 @@ import { Input } from "../input";
 // the trigger button for adding resources to class
 const TriggerForClass = () => {
   return (
-    <div className=" text-[13px] flex items-center  font-semibold">
+    <div className="text-[13px] flex items-center font-semibold">
       <GrAnnounce className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
       <p>Announcement</p>
     </div>
@@ -43,26 +43,24 @@ const AddAnnouncement: React.FC<Iadd> = ({
   // Mutation to handle the addition of announcement
   const mutation = useMutation({
     mutationFn: async () => {
-      const result = await fetch(``, {
+      const result = await fetch(`/api/class/announcement`, {
         method: "POST",
         body: JSON.stringify({
-          classId: classId,
+          desc: content,
           title,
-          content,
+          classId,
         }),
       });
       return result;
     },
 
-    onSuccess: async (result) => {
+    onSuccess: async () => {
       queryClient.invalidateQueries({ queryKey: ["addAnnouncement"] });
       setLoading(false);
-      if (result.ok) {
-        setDialogOpen(false);
-        toast.success("Announcement successfully added");
-      } else {
-        toast.error("Error adding announcement");
-      }
+      setDialogOpen(false);
+      setTitle(""); // Reset title
+      setContent(""); // Reset content
+      toast.success("Announcement successfully added");
     },
     onError: (error) => {
       console.error("Error adding announcement:", error);
@@ -72,11 +70,14 @@ const AddAnnouncement: React.FC<Iadd> = ({
   });
 
   // handle submit or trigger mutation function to run
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // Prevent event from propagating to parent elements
     if (!title || !content) {
-      toast.error(
-        "Please provide both a title and content for the announcement."
-      );
+      if (!toast.isActive("validation-toast")) {
+        toast.error("Please provide both a title and content.", {
+          toastId: "validation-toast",
+        });
+      }
       return;
     }
 
@@ -84,13 +85,16 @@ const AddAnnouncement: React.FC<Iadd> = ({
     mutation.mutate();
   };
 
-  // loading message here
-  if (loading) {
-    return <p>loading...</p>;
-  }
-
   return (
-    <Dialog open={dialogueOpen} onOpenChange={() => setDialogOpen(false)}>
+    <Dialog
+      open={dialogueOpen}
+      onOpenChange={(isOpen) => {
+        // Prevent dialog from closing while loading
+        if (!loading) {
+          setDialogOpen(isOpen);
+        }
+      }}
+    >
       <DialogTrigger asChild>{isClass && <TriggerForClass />}</DialogTrigger>
 
       <DialogContent className="sm:w-[600px] w-[380px] font-subtext">
@@ -102,24 +106,28 @@ const AddAnnouncement: React.FC<Iadd> = ({
 
         <div className="grid gap-4 font-header py-4">
           <div className="grid items-center font-header gap-2">
-          <p className=" text-[16px]">
-              All students enrolled into this class will automatically recieve this announcement.
+            <p className="text-[16px]">
+              All students enrolled in this class will automatically receive
+              this announcement.
             </p>
             <p className="font-bold text-[18px]">
-              Are you sure you want to add announcement?
+              Are you sure you want to add an announcement?
             </p>
-           
 
             <div className="flex flex-col">
               <Input
                 id="name"
                 type="text"
                 name="title"
-                placeholder=" Title"
+                placeholder="Enter the announcement title here"
                 className="col-span-6 w-full"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
+                aria-label="Announcement title"
               />
+              {!title && (
+                <p className="text-red-500 text-sm">Title is required.</p>
+              )}
             </div>
 
             <div className="flex flex-col">
@@ -128,18 +136,21 @@ const AddAnnouncement: React.FC<Iadd> = ({
                 rows={10}
                 id="name"
                 name="content"
-                placeholder="Content"
+                placeholder="Provide the content for the announcement"
                 className="col-span-6 p-2 border text-[14px] rounded-md w-full"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
               />
+              {!content && (
+                <p className="text-red-500 text-sm">Content is required.</p>
+              )}
             </div>
           </div>
         </div>
 
         <DialogFooter>
           <Button
-            onClick={handleSubmit}
+            onClick={(e) => handleSubmit(e)}
             disabled={loading}
             type="submit"
             className="w-full py-8 text-lg bg-lightGreen hover:bg-green-700"

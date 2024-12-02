@@ -2,6 +2,7 @@
 import React from "react";
 
 import { useQuery, useQueries } from "@tanstack/react-query";
+import { useConversion } from "@/data-access/conversion";
 
 import {
   Table,
@@ -18,14 +19,13 @@ import Image from "next/image";
 import StudentOptions from "./StudentOptions";
 import SingleStudent from "./SingleStudent";
 
-
 interface ISingular {
   dataId: string;
   studentIds: string[];
-
 }
 
 const SingleClassTable: React.FC<ISingular> = ({ studentIds }) => {
+  const { handleDate } = useConversion();
   // Ensure studentIds is defined and is an array
   const validStudentIds = Array.isArray(studentIds) ? studentIds : [];
   // getting individual student IDs using parallel query with usequeries
@@ -42,6 +42,8 @@ const SingleClassTable: React.FC<ISingular> = ({ studentIds }) => {
     }),
   });
 
+ 
+
   // check if there is still any student we are fetching
   const checkFetching = queries.some((item) => item.isLoading);
   if (checkFetching) {
@@ -49,7 +51,6 @@ const SingleClassTable: React.FC<ISingular> = ({ studentIds }) => {
   }
 
   const arrayOfStudent = queries.map((item) => item.data);
-  
 
   return (
     <Table className="bg-white overflow-x-auto    rounded-md my-6">
@@ -58,35 +59,34 @@ const SingleClassTable: React.FC<ISingular> = ({ studentIds }) => {
 
         <TableRow className="text-[13px]">
           <TableHead>Name</TableHead>
-          <TableHead className="">Start Date</TableHead>
-          {/* <TableHead className="">Sessions Attended</TableHead> */}
-          <TableHead className="text-right">Options</TableHead>
+          <TableHead className="">Email</TableHead>
+          <TableHead className="">Grade</TableHead>
+          <TableHead className="">Enrolled</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {arrayOfStudent.map((student: any, index) => (
           <TableRow key={index} className="">
-            <TableCell className="font-bold text-[13px] mr-3">
+            <TableCell className="font-bold flex space-x-2 text-[13px] mr-3">
               <Image
                 src={student?.profilePhoto}
                 alt="icon"
                 width={100}
                 height={100}
-                className="w-[40px] h-[40px] mr-1"
+                className="w-[40px] rounded-md h-[40px] mr-1"
               />
               {student?.name}
             </TableCell>
             <TableCell className="text-[12px]  font-semibold">
-              {student?.createdAt}
+              {student?.email}
             </TableCell>
-            <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
-                <StudentOptions dataId={student?.id}  />
-                
-               
-              </TableCell> 
-             
+            <TableCell className="text-[12px]  font-semibold">
+              {student?.grade}
+            </TableCell>
+            <TableCell className="text-[12px]  font-semibold">
+              {handleDate(student?.createdAt)}
+            </TableCell>
           </TableRow>
-         
         ))}
       </TableBody>
     </Table>
