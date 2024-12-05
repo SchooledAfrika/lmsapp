@@ -1,11 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
 import { addingCourseSchema } from "@/constants/addCourse";
-export type IaddingCourse = z.infer<typeof addingCourseSchema>;
 import {
   Dialog,
   DialogContent,
@@ -25,12 +21,130 @@ import { useCloudinary } from "@/data-access/cloudinary";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { MdOutlineClass } from "react-icons/md";
+import { useImageSizeChecker } from "@/data-access/multimedia";
+
+const CourseMedia: React.FC<{
+  setBannerImg: React.Dispatch<React.SetStateAction<string | undefined>>;
+  bannerImg: string | undefined;
+  setCourseMainVideo: React.Dispatch<React.SetStateAction<string | undefined>>;
+  bannerError: boolean;
+  previewError: boolean;
+  mainVideoError: boolean;
+}> = ({
+  setBannerImg,
+  bannerImg,
+  setCourseMainVideo,
+  bannerError,
+  previewError,
+  mainVideoError,
+}) => {
+  const { imageUpload } = useCloudinary();
+  const { videoUpload } = useCloudinary();
+  const { getWidthAndHeight, getFileSize } = useImageSizeChecker();
+  // handles remove image that is already present
+  // if the user decides to remove it
+  const handleRemove = () => {
+    setBannerImg(undefined);
+  };
+  // the function to generate a url for the picture
+  const handleShowPix = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const file = e.target.files[0];
+    const blob = new Blob([file]);
+    const localUrl = URL.createObjectURL(blob);
+    setBannerImg(localUrl);
+  };
+
+  // Function to handle video preview for coursePreview
+  const handleShowPreview = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return; // Ensure a file is selected
+    const file = e.target.files[0];
+    const fileSize = getFileSize(file);
+    if (fileSize > 40) return toast.error(" preview video size exceeded");
+  };
+
+  // Function to handle video preview for courseVideo
+  const handleShowCourseVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || e.target.files.length === 0) return; // Ensure a file is selected
+    const file = e.target.files[0]; // Get the first selected file
+    const fileSize = getFileSize(file);
+    if (fileSize > 200) return toast.error("main video size exceeded ");
+  };
+
+  const handleShow = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    // get the width and lenght and check if
+    // it meet the requirements
+    const vals = await getWidthAndHeight(e.target.files[0]);
+    if (vals.width !== 1883 || vals.height !== 1011)
+      return toast.error("wrong image Dimensions");
+  };
+
+  return (
+    <div>
+      <div className="flex flex-col border p-3 rounded-md">
+        <label className="text-[15px] font-semibold">Course Banner</label>
+        <small className=" text-[10px] text-green-500">
+          Banner Dimension 1883*1011{" "}
+        </small>
+        <input
+          type="file"
+          multiple={false}
+          accept="image/*"
+          onChange={handleShow}
+          name="banner"
+          placeholder="Course Image"
+          className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
+        />
+        {bannerError && <small>Banner is required</small>}
+      </div>
+
+      <div className="flex flex-col border p-3 rounded-md">
+        <label className="text-[15px] font-semibold">
+          Course Preview Video
+        </label>
+        <small className=" text-[10px] text-green-500">
+          Preview video size max: 40MB
+        </small>
+        <input
+          type="file"
+          multiple={false}
+          accept="video/*"
+          onChange={handleShowPreview}
+          name="previewVideo"
+          placeholder="Course Preview Video"
+          className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
+        />
+      </div>
+
+      <div className="flex flex-col  border p-3 rounded-md">
+        <label className="text-[15px] font-semibold">Main Video</label>
+        <small className=" text-[10px] text-green-500">
+          Main video size max: 200MB
+        </small>
+        <input
+          type="file"
+          multiple={false}
+          accept="video/*"
+          onChange={handleShowCourseVideo}
+          name="mainVideo"
+          placeholder="Course Main Video"
+          className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
+        />
+      </div>
+    </div>
+  );
+};
 
 const AddCourses: React.FC<{
   showModel: boolean;
   setShowmodel: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ showModel, setShowmodel }) => {
   const [loading, setloading] = useState<boolean>(false);
+  const [title, setTitle] = useState<string | undefined>(undefined);
+  const [subject, setSubject] = useState<string | undefined>(undefined);
+  const [grade, setGrade] = useState<string | undefined>(undefined);
+  const [desc, setDesc] = useState<string | undefined>(undefined);
   const [bannerImg, setBannerImg] = useState<string | undefined>(undefined);
   const [coursePreviewVideo, setCoursePreviewVideo] = React.useState<
     string | undefined
@@ -38,26 +152,18 @@ const AddCourses: React.FC<{
   const [courseMainVideo, setCourseMainVideo] = React.useState<
     string | undefined
   >(undefined);
-  const { imageUpload } = useCloudinary();
-  const { videoUpload } = useCloudinary();
+  const [price, setPrice] = useState<string | undefined>(undefined);
+  const [bannerError, setBannerError] = useState<boolean>(false);
+  const [previewEror, setPreviewError] = useState<boolean>(false);
+  const [mainVideError, setMainVideError] = useState<boolean>(false);
   // react hook form instance below here
-  const {
-    register,
-    handleSubmit,
-    clearErrors,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm<IaddingCourse>({
-    resolver: zodResolver(addingCourseSchema),
-  });
-
   //   instance of client
+  ///api/courses-teacher
   const queryClient = useQueryClient();
   //   creating a post using mutation to the backend
   const mutation = useMutation({
     mutationKey: ["postCourse"],
-    mutationFn: async (data: IaddingCourse) => {
+    mutationFn: async (data: any) => {
       // console.log(data);
       const result = await fetch("/api/courses-teacher", {
         method: "POST",
@@ -69,85 +175,18 @@ const AddCourses: React.FC<{
 
       return result;
     },
-    onSuccess: async (result) => {
-      queryClient.invalidateQueries({ queryKey: ["getCourse"] });
-      setShowmodel(false);
-      if (result.ok) {
-        const body = await result.json();
-        setloading(false);
-        reset();
-        return toast.success(body.message);
-      } else {
-        setloading(false);
-        return toast.error("error creating course");
-      }
-    },
   });
-  // here we validate the datas in our form submission
-  // only if there is data, before the mutation function is called
-  const runSubmit: SubmitHandler<IaddingCourse> = async (data) => {
-    setloading(true);
-    //console.log(data);
-    // converting the selected image to a blob and uploading to cloudinary
-    // using the useCloudinary custom hook;
-    const bannerImageBlob = new Blob([data.banner[0]]);
-    const bannerImageUrl = await imageUpload(bannerImageBlob);
-    console.log(bannerImageUrl);
-    data.banner = bannerImageUrl;
-
-    //Convert the coursePreview Video too
-    const bannerVideoPreviewBlob = new Blob([data.previewVideo[0]]);
-    const bannerVideoPreviewUrl = await videoUpload(bannerVideoPreviewBlob);
-    console.log(bannerVideoPreviewUrl);
-    data.previewVideo = bannerVideoPreviewUrl;
-
-    //Convert the course Video
-    const bannerVideoBlob = new Blob([data.mainVideo[0]]);
-    const bannerVideoUrl = await videoUpload(bannerVideoBlob);
-    console.log(bannerVideoUrl);
-    data.mainVideo = bannerVideoUrl;
-    mutation.mutate(data);
-  };
-
-  // handles remove image that is already present
-  // if the user decides to remove it
-  const handleRemove = () => {
-    setBannerImg(undefined);
-    setValue("banner", "");
-  };
-  // the function to generate a url for the picture
-  const handleShowPix = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const file = e.target.files[0];
-    setValue("banner", e.target.files);
-    const blob = new Blob([file]);
-    const localUrl = URL.createObjectURL(blob);
-    setBannerImg(localUrl);
-    clearErrors("banner");
-  };
-
-  // Function to handle video preview for coursePreview
-  const handleShowPreview = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return; // Ensure a file is selected
-
-    const file = e.target.files[0]; // Get the first selected file
-
-    setValue("previewVideo", e.target.files); // Set the file list in the form
-    const localUrl = URL.createObjectURL(file); // Create a local URL for video preview
-    setCoursePreviewVideo(localUrl); // Update the state to show the preview
-    clearErrors("previewVideo"); // Clear any previous errors related to coursePreview
-  };
-
-  // Function to handle video preview for courseVideo
-  const handleShowCourseVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return; // Ensure a file is selected
-
-    const file = e.target.files[0]; // Get the first selected file
-
-    setValue("mainVideo", e.target.files); // Set the file list in the form
-    const localUrl = URL.createObjectURL(file); // Create a local URL for video preview
-    setCourseMainVideo(localUrl); // Update the state to show the preview
-    clearErrors("mainVideo"); // Clear any previous errors related to courseVideo
+  // function to handle uploading files
+  const handleSubmit = () => {
+    // check for basic fields
+    if (!title || !subject || !grade || !desc) {
+      return toast.error("please enter all fields");
+    }
+    // check for multi media fields
+    // and set error if they are not present yet
+    if (!bannerImg) return setBannerError(true);
+    if (!coursePreviewVideo) return setPreviewError(true);
+    if (!courseMainVideo) return setPreviewError(true);
   };
 
   return (
@@ -166,80 +205,57 @@ const AddCourses: React.FC<{
           </DialogHeader>
 
           <div className="w-[96%] mt-2">
-            <form
-              onSubmit={handleSubmit(runSubmit)}
-              className=" flex flex-col gap-2 w-full px-2"
-            >
+            <div className=" flex flex-col gap-2 w-full px-2">
               <div className=" flex flex-col">
                 <Input
                   id="name"
                   type="text"
-                  {...register("title")}
                   name="title"
-                  onChange={() => clearErrors("title")}
                   placeholder="Course Title"
                   className="col-span-6 w-full"
+                  onChange={(e) => setTitle(e.target.value)}
                 />
-                {errors.title && (
-                  <small className="text-red-600">{errors.title.message}</small>
-                )}
               </div>
               <div className=" flex flex-col">
                 <Input
                   id="name"
                   type="text"
-                  {...register("subject")}
                   name="subject"
-                  onChange={() => clearErrors("subject")}
                   placeholder="Subject"
                   className="col-span-6 w-full"
+                  onChange={(e) => setSubject(e.target.value)}
                 />
-                {errors.subject && (
-                  <small className="text-red-600">
-                    {errors.subject.message}
-                  </small>
-                )}
               </div>
               <div className=" flex flex-col">
                 <Input
                   id="name"
                   type="text"
-                  {...register("grade")}
                   name="grade"
-                  onChange={() => clearErrors("grade")}
                   placeholder="Grade(Grade 1 format)"
                   className="col-span-6 w-full"
+                  onChange={(e) => setGrade(e.target.value)}
                 />
-                {errors.grade && (
-                  <small className="text-red-600">{errors.grade.message}</small>
-                )}
               </div>
               <div className="flex flex-col">
                 <textarea
                   cols={30}
                   rows={10}
                   id="name"
-                  {...register("details")}
                   name="details"
-                  onChange={() => clearErrors("details")}
                   placeholder="Course Details"
                   className="col-span-6 p-2 border text-[14px] rounded-md w-full"
+                  onChange={(e) => setDesc(e.target.value)}
                 />
-                {errors.details && (
-                  <small className="text-red-600">
-                    {errors.details.message}
-                  </small>
-                )}
               </div>
 
               <div>
                 <div className=" w-full rounded-md h-[60px] font-header border bg-white flex items-center text-black justify-between px-2 ">
                   <input
-                    {...register("price")}
                     name="price"
                     placeholder="Price"
                     type="number"
                     className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
+                    onChange={(e) => setPrice(e.target.value)}
                   />
 
                   <div className=" w-[50px] cursor-pointer font-bold aspect-square rounded-full flex items-center justify-center">
@@ -252,73 +268,26 @@ const AddCourses: React.FC<{
                     />
                   </div>
                 </div>
-                {errors.price && (
-                  <small className="text-red-600">{errors.price.message}</small>
-                )}
               </div>
-
-              {bannerImg === undefined ? (
-                <div className="flex flex-col border p-3 rounded-md">
-                  <label className="text-[15px] font-semibold">
-                    Course Banner
-                  </label>
-                  <input
-                    type="file"
-                    multiple={false}
-                    accept="image/*"
-                    onChange={handleShowPix}
-                    name="banner"
-                    placeholder="Course Image"
-                    className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
-                  />
-                </div>
-              ) : (
-                <PreviewItem
-                  handleRemove={handleRemove}
-                  imageItem={bannerImg}
-                />
-              )}
-
-              <div className="flex flex-col border p-3 rounded-md">
-                <label className="text-[15px] font-semibold">
-                  Course Preview Video
-                </label>
-                <input
-                  type="file"
-                  multiple={false}
-                  accept="video/*"
-                  onChange={handleShowPreview}
-                  name="previewVideo"
-                  placeholder="Course Preview Video"
-                  className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
-                />
-              </div>
-
-              <div className="flex flex-col  border p-3 rounded-md">
-                <label className="text-[15px] font-semibold">Main Video</label>
-                <input
-                  type="file"
-                  multiple={false}
-                  accept="video/*"
-                  onChange={handleShowCourseVideo}
-                  name="mainVideo"
-                  placeholder="Course Main Video"
-                  className=" w-full text-[14px] text-black bg-transparent focus:outline-none"
-                />
-              </div>
-
+              <CourseMedia
+                bannerImg={bannerImg}
+                setBannerImg={setBannerImg}
+                setCourseMainVideo={setCourseMainVideo}
+                bannerError={bannerError}
+                previewError={previewEror}
+                mainVideoError={mainVideError}
+              />
               <Button
-                type="submit"
+                onClick={handleSubmit}
                 className="w-full py-6 bg-lightGreen hover:bg-green-700"
                 disabled={loading}
               >
                 {loading ? "adding course..." : "Add Course"}
               </Button>
-            </form>
+            </div>
           </div>
         </ScrollArea>
       </DialogContent>
-      <ToastContainer />
     </Dialog>
   );
 };
