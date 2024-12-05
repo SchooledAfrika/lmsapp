@@ -16,6 +16,7 @@ import { FaTableList } from "react-icons/fa6";
 import { ListCollapse } from "lucide-react";
 import AddTest from "./AddTest";
 import AddResource from "./AddResource";
+import AddAnnouncement from "./AddAnnouncement";
 
 interface Idelete {
   dataId: string;
@@ -23,6 +24,10 @@ interface Idelete {
 
 const IndividualClass: React.FC<Idelete> = ({ dataId }) => {
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [resourceDialogOpen, setResourceDialogOpen] =
+    useState<boolean>(false);
+    const [announceDialogOpen, setAnnounceDialogOpen] =
+    useState<boolean>(false);
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -42,10 +47,10 @@ const IndividualClass: React.FC<Idelete> = ({ dataId }) => {
               </Link>
             </div>
             <hr className="bg-black" />
-            <div className="flex justify-start">
+            <div  onClick={() => setResourceDialogOpen(true)} className="flex justify-start">
               <AddResource
-                setDialogOpen={setDialogOpen}
-                dialogueOpen={dialogOpen}
+                setDialogOpen={setResourceDialogOpen}
+                dialogueOpen={resourceDialogOpen}
                 classId={dataId}
                 isClass={true}
               />
@@ -58,6 +63,15 @@ const IndividualClass: React.FC<Idelete> = ({ dataId }) => {
               <AddTest
                 setDialogOpen={setDialogOpen}
                 dialogueOpen={dialogOpen}
+                classId={dataId}
+                isClass={true}
+              />
+            </div>
+            <hr className="bg-black" />
+            <div  onClick={() => setAnnounceDialogOpen(true)} className="flex justify-start">
+              <AddAnnouncement
+                setDialogOpen={setAnnounceDialogOpen}
+                dialogueOpen={announceDialogOpen}
                 classId={dataId}
                 isClass={true}
               />
