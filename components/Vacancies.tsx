@@ -405,36 +405,40 @@ const Vacancies = () => {
             </div>
           </div>
         </div>
-        <div className=" flex w-full gap-3 mt-8">
-          <div className=" flex-1 sm:flex-2 flex flex-col gap-2">
-            {queryData.map((data: Ivacancy, index) => (
-              <EachVacancy
-                key={index}
-                data={data}
+        {queryData.length === 0 ? (
+          <div>No item here</div>
+        ) : (
+          <div className=" flex w-full gap-3 mt-8">
+            <div className=" flex-1 sm:flex-2 flex flex-col gap-2">
+              {queryData.map((data: Ivacancy, index) => (
+                <EachVacancy
+                  key={index}
+                  data={data}
+                  setViewDetail={setViewDetail}
+                  currentId={viewDeatil?.id}
+                  setMobileDetails={setMobileDetails}
+                />
+              ))}
+              <div className=" mt-4 flex items-center justify-center">
+                {hasNextPage && (
+                  <div
+                    ref={ref}
+                    className=" px-4 py-2 rounded-md border bg-white w-fit flex items-center gap-2"
+                  >
+                    <CircularProgress color="success" />
+                    <p className=" text-green-800 font-bold">loading...</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className=" hidden sm:block sm:flex-3">
+              <ViewDetails
+                viewDetail={viewDeatil}
                 setViewDetail={setViewDetail}
-                currentId={viewDeatil?.id}
-                setMobileDetails={setMobileDetails}
               />
-            ))}
-            <div className=" mt-4 flex items-center justify-center">
-              {hasNextPage && (
-                <div
-                  ref={ref}
-                  className=" px-4 py-2 rounded-md border bg-white w-fit flex items-center gap-2"
-                >
-                  <CircularProgress color="success" />
-                  <p className=" text-green-800 font-bold">loading...</p>
-                </div>
-              )}
             </div>
           </div>
-          <div className=" hidden sm:block sm:flex-3">
-            <ViewDetails
-              viewDetail={viewDeatil}
-              setViewDetail={setViewDetail}
-            />
-          </div>
-        </div>
+        )}
         <ToastContainer />
       </Container>
       {mobileDetails && (

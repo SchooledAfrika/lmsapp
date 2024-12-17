@@ -85,7 +85,8 @@ export const TeacherNavbar: SchoolNavType[] = [
   },
   {
     title: "Sessions",
-    description: "An Overview of all the sections you have for easy access and management",
+    description:
+      "An Overview of all the sections you have for easy access and management",
     path: "sessions",
     subDetails: {
       title: " Single 1-on-1 section details",
@@ -126,7 +127,8 @@ export const TeacherNavbar: SchoolNavType[] = [
 export const StudentNavbar: SchoolNavType[] = [
   {
     title: "Welcome to Your Dashboard",
-    description: "All you need for a better digital learning. You are one click away from your academic success dream.",
+    description:
+      "All you need for a better digital learning. You are one click away from your academic success dream.",
     path: "overview",
   },
   {
@@ -194,7 +196,8 @@ export const StudentNavbar: SchoolNavType[] = [
 export const ParentsNavbar: SchoolNavType[] = [
   {
     title: "Welcome to Your Dashboard",
-    description: "Let's discover and shape the next generation of lifelong learners together.",
+    description:
+      "Let's discover and shape the next generation of lifelong learners together.",
     path: "overview",
   },
   {
@@ -257,7 +260,7 @@ export const AdminNavbar: SchoolNavType[] = [
       description: "",
     },
   },
- 
+
   {
     title: "Teachers",
     description: "",
@@ -297,5 +300,9 @@ export const AdminNavbar: SchoolNavType[] = [
     description: "",
     path: "setting",
   },
- 
+  {
+    title: "Job Adverts",
+    description: "list of jobs advertised so far",
+    path: "job-listing",
+  },
 ];

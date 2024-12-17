@@ -76,6 +76,7 @@ model Teacher {
   SpecialTeacherMerged    SpecialTeacherMerged[]
   // linking teacher to meeting infos
   MeetingInfo             MeetingInfo?
+  Vacancy                 Vacancy[]
 }
 
 // here, we will store all the zoom information of a particular teacher here
@@ -179,7 +180,6 @@ model School {
   SchoolTeachers   SchoolTeacher[]
   SchoolStudent    SchoolStudent[]
   // vacancies created by the school, it may be one or many
-  Vacancy          Vacancy[]
   role             Role
   SchoolClass      SchoolClass[]
   CompletedProfile Boolean         @default(false)
@@ -537,10 +537,10 @@ model Vacancy {
   jobTitle       String
   state          String
   note           String
-  // one to many relationship between school and vacancy
-  // school can have many vacancy, vacancy can have only one school
-  school         School           @relation(fields: [schoolId], references: [id])
-  schoolId       String           @db.ObjectId
+  // one to many relationship between teacher model and vacancy
+  // althou only admin will be able to create vacancies
+  creator        Teacher          @relation(fields: [creatorId], references: [id])
+  creatorId      String           @db.ObjectId
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @default(now())
   VacancyTeacher VacancyTeacher[]

@@ -10,10 +10,24 @@ import {
   serverSessionId,
   serverSessionRole,
 } from "@/prisma/utils/utils";
+import {
+  cloudinaryUpload,
+  CloudinaryItypes,
+} from "@/prisma/utils/cloudinaryBackend";
 
 // create courses here
 export async function POST(req: Request) {
-  const payloads = await req.json();
+  // first extract all the neccessary form informations as needed
+  // and perform all the uploading to cloudinary also
+  const payloads = await req.formData();
+  const uploadPromises = [
+    cloudinaryUpload(payloads.get("coursePreviewVideo") as Blob, "video"),
+    cloudinaryUpload(payloads.get("courseMainVideo") as Blob, "video"),
+    cloudinaryUpload(payloads.get("bannerImg") as Blob, "image"),
+  ];
+
+  // Use Promise.all to execute uploads concurrently
+  const [previewVideo, mainVideo, banner] = await Promise.all(uploadPromises);
   const userId = await serverSessionId();
   const role = await serverSessionRole();
   // check for authentication of the users
@@ -42,7 +56,14 @@ export async function POST(req: Request) {
       data: {
         byAdmin: role == "Admin" ? true : false,
         teacherId: userId,
-        ...payloads,
+        banner,
+        previewVideo,
+        mainVideo,
+        title: payloads.get("title") as string,
+        grade: payloads.get("grade") as string,
+        details: payloads.get("desc") as string,
+        price: Number(payloads.get("price") as string),
+        subject: payloads.get("subject") as string,
       },
     });
     return new Response(

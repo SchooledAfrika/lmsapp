@@ -23,6 +23,15 @@ export const gradeList: string[] = [
   "Grade11",
   "Grade12",
 ];
+
+export const subjectList: string[] = [
+  "English",
+  "Sciences",
+  "Yoruba",
+  "Igbo",
+  "French",
+  "Creative writing",
+];
 // the preference array
 export const preferences = [
   "HomeWork Support",
