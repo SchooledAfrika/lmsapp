@@ -1,10 +1,13 @@
+import { FullPageLoading } from "@/components/SingleTutor";
 import ZoomHandShake from "@/components/ZoomHandShake";
-import React from "react";
+import React, { Suspense } from "react";
 
 const page = () => {
   return (
     <div>
-      <ZoomHandShake />
+      <Suspense fallback={<FullPageLoading fullpage={true} />}>
+        <ZoomHandShake />
+      </Suspense>
     </div>
   );
 };
