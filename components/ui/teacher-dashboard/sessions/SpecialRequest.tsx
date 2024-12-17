@@ -18,6 +18,7 @@ import { Skeleton } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Noitem } from "../../../ApplicantsTable";
 import { ModifiedNoProfile } from "../../admin-dashboard/sessions/Sessions";
+import { HandleAttendance } from "@/components/HandleAddClass";
 
 interface Istudent {
   name: string;
@@ -27,6 +28,7 @@ interface Istudent {
 }
 // interface for the type we are getting from backend
 interface ISpecialRequest {
+  id:string;
   amt: string;
   grade: string;
   language: string;
@@ -63,20 +65,22 @@ const TimeShow: React.FC<{
     <div className=" flex flex-col items-start gap-2 pl-3">
       <div className=" flex gap-3 items-center">
         <FaRegClock className=" text-gray-500" />
-        <p className="text-[14px]">Time: {time}</p>
+        <p className="text-[14px] font-medium">Time: {time}</p>
       </div>
     </div>
   );
 };
 // start meeting btn
-const JoinSession = () => {
+const StartSession = () => {
   return (
-    <div className=" w-full flex gap-2 px-3">
-      <div className=" flex-1 flex gap-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 ">
-        <IoIosRadio />
-        <p>Start Session</p>
-      </div>
-    </div>
+
+    <Button className="bg-[tomato] mt-3 bg-none border-none rounded-lg  hover:bg-[#fd7e62]  text-white text-[13px] font-semibold  px-3 w-full    py-2 text-center lg:block transition-all ease-in-out duration-700">
+          <IoIosRadio className="sm:inline-block text-[18px] hidden mr-1" />
+          Start Session
+        </Button>
+   
+      
+   
   );
 };
 // each session component here
@@ -107,7 +111,12 @@ const EachSession: React.FC<{ item: ISpecialRequest }> = ({ item }) => {
       </div>
       <StartMeetingDiv subject={item.subject} language={item.language} />
       <TimeShow time={item.time} />
-      <JoinSession />
+      <div className="flex md:flex-row flex-col justify-between md:gap-2 gap-1  py-2">
+      <StartSession />
+      <HandleAttendance sessionId={item.id} name={item.student?.name} />
+
+      </div>
+      
     </div>
   );
 };
@@ -134,7 +143,7 @@ export const SessionLoadings = () => {
 const SpecialRequest = () => {
   const { data: session } = useSession();
   const studentId = session?.user?.id;
-  console.log(studentId);
+  //console.log(studentId);
   // here we can now fetch our session
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["getSpecialRequestByTeacher"],

@@ -16,6 +16,7 @@ import { IoIosRadio } from "react-icons/io";
 import { Skeleton } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Noitem } from "../../../ApplicantsTable";
+import { HandleAttendance } from "@/components/HandleAddClass";
 
 interface IstudentOneonOne {
   name: string;
@@ -165,9 +166,10 @@ const TimeShow: React.FC<{
   );
 };
 // start meeting btn
-const ViewDetails: React.FC<{ sessionId: string; isTeacher: boolean }> = ({
+const ViewDetails: React.FC<{ sessionId: string; isTeacher: boolean, name: string }> = ({
   sessionId,
   isTeacher,
+  name
 }) => {
   const router = useRouter();
   const navigateLink = () => {
@@ -178,18 +180,27 @@ const ViewDetails: React.FC<{ sessionId: string; isTeacher: boolean }> = ({
     }
   };
   return (
-    <div className=" w-full flex gap-2 px-3">
+    <div className=" w-full flex flex-col gap-2 px-3">
+     
+     
+     
+       <div className=" w-full flex  gap-2 px-3">
       <div
         onClick={navigateLink}
         className=" flex-1 py-3 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 "
       >
         <p>View Details</p>
       </div>
+      
       <div className=" flex-1 flex gap-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 ">
         <IoIosRadio />
         <p>{isTeacher ? "Start Session" : "Join Session"}</p>
       </div>
+     
+      </div>
+      <p>{isTeacher && <HandleAttendance sessionId={sessionId} name={name} />}</p>
     </div>
+    
   );
 };
 // each session component here
@@ -218,7 +229,7 @@ const EachSession: React.FC<{ item: IAppliedSession; isTeacher: boolean }> = ({
         duration={item.duration}
         hours={item.hoursperday}
       />
-      <ViewDetails isTeacher={isTeacher} sessionId={item.id} />
+      <ViewDetails isTeacher={isTeacher} sessionId={item.id} name={item.student.name} />
     </div>
   );
 };
