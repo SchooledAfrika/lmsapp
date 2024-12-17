@@ -179,7 +179,7 @@ const ViewDetails: React.FC<{
               </div>
               <div className=" flex items-center gap-1">
                 <FaSchoolFlag className=" text-[14px]" />
-                <p>{viewDetail?.school.name}</p>
+                <p>SchooledAfrika</p>
               </div>
             </div>
             <PricePart data={viewDetail as Ivacancy} />
@@ -271,7 +271,7 @@ const EachVacancy: React.FC<{
               </div>
               <div className=" flex items-center gap-1">
                 <FaSchoolFlag />
-                <p>{data?.school.name}</p>
+                <p>schooledAfrika</p>
               </div>
             </div>
           </div>
@@ -345,10 +345,11 @@ const Vacancies = () => {
   }
   // flaten the data gotten here
   const queryData = data?.pages.flat();
-  if (queryData && viewDeatil === undefined) {
+  if (queryData.length > 0 && viewDeatil === undefined) {
     const firstItem = queryData[0] as Ivacancy;
     setViewDetail(firstItem);
   }
+
   return (
     <div>
       <Container>
@@ -406,7 +407,17 @@ const Vacancies = () => {
           </div>
         </div>
         {queryData.length === 0 ? (
-          <div>No item here</div>
+          <div className=" w-full flex items-center justify-center">
+            <div className=" w-3/4 md:w-2/5">
+              <Image
+                src="/vacancyempty.webp"
+                alt="noitem"
+                width={200}
+                height={200}
+                className=" w-full"
+              />
+            </div>
+          </div>
         ) : (
           <div className=" flex w-full gap-3 mt-8">
             <div className=" flex-1 sm:flex-2 flex flex-col gap-2">

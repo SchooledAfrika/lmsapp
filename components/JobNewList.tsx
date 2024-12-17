@@ -61,7 +61,7 @@ const JobNewList = () => {
         reset();
         toast.success(body.message);
         setTimeout(() => {
-          return router.push("/school-dashboard/job-listing");
+          return router.push("/admin-dashboard/job-listing");
         }, 4000);
       } else {
         setloading(false);

@@ -66,6 +66,27 @@ export async function PUT(req: Request) {
     return onlyAdmin();
   }
   // here, we can make the teacher an in house teacher
+  const getTeacher = await prisma.vacancyTeacher.findUnique({
+    where: {
+      id: vacancyTeacherId,
+    },
+    select: {
+      teacherId: true,
+    },
+  });
+  try {
+    // now, lets make someone an internal teacher after applying now
+    await prisma.teacher.update({
+      where: {
+        id: getTeacher?.teacherId,
+      },
+      data: {
+        teachingRole: "INTERNAL",
+      },
+    });
+  } catch (error) {
+    return serverError();
+  }
 }
 
 // below here, the teacher can decide to delete the application they already made
