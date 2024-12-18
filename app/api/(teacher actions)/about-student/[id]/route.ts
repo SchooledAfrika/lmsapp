@@ -1,7 +1,7 @@
 // here, we return some basic information about the student in a class
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
-import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
+import { serverSessionId } from "@/prisma/utils/utils";
 
 export async function GET(
   req: Request,

@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import prisma from "@/prisma/prismaConnect";
 import bcrypt from "bcryptjs";
+import { serverError } from "@/prisma/utils/error";
 
 // here, we create a new user with their email
 // making use of post request
@@ -22,14 +23,11 @@ export async function POST(request: Request) {
   const checkTeachers = await prisma.teacher.findUnique({
     where: { email: email },
   });
-  const checkSchools = await prisma.school.findUnique({
-    where: { email: email },
-  });
   const checKParents = await prisma.parents.findUnique({
     where: { email: email },
   });
   //   returning an error if the user does not exist accross the database
-  if (checkStudents || checkTeachers || checkSchools || checKParents) {
+  if (checkStudents || checkTeachers || checKParents) {
     return new Response(
       JSON.stringify({ message: "this user already exists, please login" }),
       { status: 404, statusText: "email already exist" }
@@ -43,83 +41,72 @@ export async function POST(request: Request) {
       statusText: "roles not defined",
     });
   }
-  //   here we register the user based on the role passed from the cookies to the backend
-  //   making use of conditions based on the users role to register them
-  if (role == "Student") {
-    // register student
-    const student = await prisma.student.create({
-      data: {
-        email: email,
-        password: hashPasword,
-        role: "Student",
-      },
-      select: {
-        id: true,
-        email: true,
-      },
+  try {
+    //   here we register the user based on the role passed from the cookies to the backend
+    //   making use of conditions based on the users role to register them
+    if (role == "Student") {
+      // register student
+      const student = await prisma.student.create({
+        data: {
+          email: email,
+          password: hashPasword,
+          role: "Student",
+        },
+        select: {
+          id: true,
+          email: true,
+        },
+      });
+      // return info of the student register
+      return new Response(JSON.stringify(student), {
+        status: 200,
+        statusText: "student registered successfully",
+      });
+    }
+    //   here, we register them as teacher if the role says teachers
+    if (role == "Teacher") {
+      // register student
+      const student = await prisma.teacher.create({
+        data: {
+          email: email,
+          password: hashPasword,
+          role: "Teacher",
+        },
+        select: {
+          id: true,
+          email: true,
+        },
+      });
+      // return info of the student register
+      return new Response(JSON.stringify(student), {
+        status: 200,
+        statusText: "teacher registered successfully",
+      });
+    }
+    if (role == "Parents") {
+      // register student
+      const student = await prisma.parents.create({
+        data: {
+          email: email,
+          password: hashPasword,
+          role: "Parents",
+        },
+        select: {
+          id: true,
+          email: true,
+        },
+      });
+      // return info of the student register
+      return new Response(JSON.stringify(student), {
+        status: 200,
+        statusText: "guardian or parent registered successfully",
+      });
+    }
+    // returning a final final action incase if their is error
+    return new Response(JSON.stringify({ message: "something went wrong" }), {
+      status: 400,
     });
-    // return info of the student register
-    return new Response(JSON.stringify(student), {
-      status: 200,
-      statusText: "student registered successfully",
-    });
-  }
-  //   here, we register them as teacher if the role says teachers
-  if (role == "Teacher") {
-    // register student
-    const student = await prisma.teacher.create({
-      data: {
-        email: email,
-        password: hashPasword,
-        role: "Teacher",
-      },
-      select: {
-        id: true,
-        email: true,
-      },
-    });
-    // return info of the student register
-    return new Response(JSON.stringify(student), {
-      status: 200,
-      statusText: "teacher registered successfully",
-    });
-  }
-  if (role == "Parents") {
-    // register student
-    const student = await prisma.parents.create({
-      data: {
-        email: email,
-        password: hashPasword,
-        role: "Parents",
-      },
-      select: {
-        id: true,
-        email: true,
-      },
-    });
-    // return info of the student register
-    return new Response(JSON.stringify(student), {
-      status: 200,
-      statusText: "guardian or parent registered successfully",
-    });
-  }
-  if (role == "School") {
-    // register student
-    const student = await prisma.school.create({
-      data: {
-        email: email,
-        password: hashPasword,
-        role: "School",
-      },
-      select: {
-        id: true,
-        email: true,
-      },
-    });
-    // return info of the student register
-    return new Response(JSON.stringify(student), {
-      status: 200,
-      statusText: "school registered successfully",
-    });
+  } catch (error) {
+    return serverError();
   }
 }

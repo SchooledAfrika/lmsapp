@@ -1,12 +1,3 @@
-// continue with all the many to many relationships, teachersSubject and students
-// students and schools
-// students and teachers
-// teachers and schools
-
-// TODO: check if normal prisma many to many will be able to work, if it does not work,
-// we may default to creating array and pushing the necessary id to it
-// then mapping it to and pushing it to new set of array that will be used instead
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,11 +9,11 @@ datasource db {
 
 // creating the teachers model
 model Teacher {
-  id                   String               @id @default(auto()) @map("_id") @db.ObjectId
+  id                   String            @id @default(auto()) @map("_id") @db.ObjectId
   name                 String?
   password             String?
-  email                String               @unique
-  teachingRole         TeachersRole         @default(EXTERNAL) //weather the teacher is schooledAfrika teacher or as an external teacher
+  email                String            @unique
+  teachingRole         TeachersRole      @default(EXTERNAL) //weather the teacher is schooledAfrika teacher or as an external teacher
   subscriped           Boolean? //shows true if the subscription have not expired
   subscriptionDuration BigInt? //stores date base on the subscription the teacher made
   acceptanceVideo      String? // here we store the string for the video the teacher made for us to accept them
@@ -53,21 +44,19 @@ model Teacher {
   details              String?
   hours                String?
   // creating the many to many relationship between student and teacher
-  studentIDs           String[]             @db.ObjectId
-  students             Student[]            @relation(fields: [studentIDs], references: [id])
+  studentIDs           String[]          @db.ObjectId
+  students             Student[]         @relation(fields: [studentIDs], references: [id])
   Classes              Classes[]
-  SchoolTeachers       SchoolTeacher[]
-  SchoolClassTeacher   SchoolClassTeacher[]
   VacancyTeacher       VacancyTeacher[]
   OneOnOneSection      OneOnOneSection?
   Exams                Exams[]
-  CompletedProfile     Boolean              @default(false)
-  createdAt            DateTime             @default(now())
-  updatedAt            DateTime             @default(now())
+  CompletedProfile     Boolean           @default(false)
+  createdAt            DateTime          @default(now())
+  updatedAt            DateTime          @default(now())
   kyc                  Kyc?
   Ratting              Ratting[]
-  reviewers            String[]             @db.ObjectId
-  status               TeacherStatus        @default(Pending)
+  reviewers            String[]          @db.ObjectId
+  status               TeacherStatus     @default(Pending)
   TeachersPlans        TeachersPlans?
   Courses              Courses[]
 
@@ -123,68 +112,42 @@ model TeachersPlans {
 
 // creating the student model
 model Student {
-  id                 String               @id @default(auto()) @map("_id") @db.ObjectId
-  name               String?
-  email              String               @unique
-  password           String?
-  profilePhoto       String?
-  phoneNo            String?
-  gender             Gender?
-  address            String?
-  grade              Grade?
-  details            String?
-  disable            Boolean?
+  id               String             @id @default(auto()) @map("_id") @db.ObjectId
+  name             String?
+  email            String             @unique
+  password         String?
+  profilePhoto     String?
+  phoneNo          String?
+  gender           Gender?
+  address          String?
+  grade            Grade?
+  details          String?
+  disable          Boolean?
   // creating the many to many relationship between student and teacher
   // becasue the student can have many teachers
-  teacherIDs         String[]             @db.ObjectId
-  teachers           Teacher[]            @relation(fields: [teacherIDs], references: [id])
+  teacherIDs       String[]           @db.ObjectId
+  teachers         Teacher[]          @relation(fields: [teacherIDs], references: [id])
   // creating a many to many relationship between classes and students
   // a student can decide to join one or many classes
-  classIDs           String[]             @db.ObjectId
-  classes            Classes[]            @relation(fields: [classIDs], references: [id])
-  role               Role
-  SchoolStudent      SchoolStudent[]
-  SchoolClassStudent SchoolClassStudent[]
-  AppliedSection     AppliedSection[]
-  CompletedProfile   Boolean              @default(false)
-  createdAt          DateTime             @default(now())
-  updatedAt          DateTime             @default(now())
-  birthDate          DateTime? //the birthday of the student
-  lastLogin          DateTime? // the last time the user loggged in
-  Ratting            Ratting[]
-  AdminSectionView   AdminSectionView[]
-  status             StudentStatus        @default(Active)
-  country            String?
-  parent             Parents?             @relation(fields: [parentsId], references: [id], onDelete: Cascade)
-  parentsId          String?              @db.ObjectId
+  classIDs         String[]           @db.ObjectId
+  classes          Classes[]          @relation(fields: [classIDs], references: [id])
+  role             Role
+  AppliedSection   AppliedSection[]
+  CompletedProfile Boolean            @default(false)
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @default(now())
+  birthDate        DateTime? //the birthday of the student
+  lastLogin        DateTime? // the last time the user loggged in
+  Ratting          Ratting[]
+  AdminSectionView AdminSectionView[]
+  status           StudentStatus      @default(Active)
+  country          String?
+  parent           Parents?           @relation(fields: [parentsId], references: [id], onDelete: Cascade)
+  parentsId        String?            @db.ObjectId
 
   StudentPurchasedCourses StudentPurchasedCourses[]
   SpecialTeacherUnmerged  SpecialTeacherUnmerged[]
   SpecialTeacherMerged    SpecialTeacherMerged[]
-}
-
-// creating the school model
-model School {
-  id               String          @id @default(auto()) @map("_id") @db.ObjectId
-  name             String?
-  email            String          @unique
-  banner           String?
-  schAddress       String?
-  ownerName        String?
-  phoneNo          String?
-  homeAddress      String?
-  schoolLogo       String?
-  briefDescription String?
-  password         String?
-  profilePhoto     String?
-  SchoolTeachers   SchoolTeacher[]
-  SchoolStudent    SchoolStudent[]
-  // vacancies created by the school, it may be one or many
-  role             Role
-  SchoolClass      SchoolClass[]
-  CompletedProfile Boolean         @default(false)
-  createdAt        DateTime        @default(now())
-  updatedAt        DateTime        @default(now())
 }
 
 // creating the model for parents
@@ -562,70 +525,6 @@ model VacancyTeacher {
   @@index([teacherId, vacancyId], name: "vacancy_teacher")
 }
 
-// this is the model that creates a connection between teachers and school they are working with
-// this can help us to be able to use pending, active and rejected status
-model SchoolTeacher {
-  id        String         @id @default(auto()) @map("_id") @db.ObjectId
-  school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  schoolId  String         @db.ObjectId
-  teacher   Teacher        @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  teacherId String         @db.ObjectId
-  status    ContractStatus @default(PENDING)
-  grades    Grade[]        @default([])
-  subjects  Subjects[]     @default([])
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @default(now())
-
-  @@index([schoolId, teacherId], name: "school_teacher_id")
-}
-
-// here we also create a model for school students
-// this will contain the id of students and school for query reasons
-model SchoolStudent {
-  id        String         @id @default(auto()) @map("_id") @db.ObjectId
-  student   Student        @relation(fields: [studentId], references: [id])
-  studentId String         @db.ObjectId
-  school    School         @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  schoolId  String         @db.ObjectId
-  status    ContractStatus @default(PENDING)
-  classes   String[]       @default([])
-  createdAt DateTime       @default(now())
-  updatedAt DateTime       @default(now())
-
-  @@index([studentId, schoolId], name: "school_student_id")
-}
-
-// this is the model for school classes
-model SchoolClass {
-  id                        String                      @id @default(auto()) @map("_id") @db.ObjectId
-  grade                     Grade
-  name                      String
-  subject                   Subjects
-  time                      String
-  school                    School                      @relation(fields: [schoolId], references: [id], onDelete: Cascade)
-  schoolId                  String                      @db.ObjectId
-  SchoolClassTeacher        SchoolClassTeacher[]
-  SchoolClassStudent        SchoolClassStudent[]
-  AnnouncementBySchoolClass AnnouncementBySchoolClass[]
-  SchoolClassExam           SchoolClassExam[]
-  // this will contain the arrays of the resources the teacher ass
-  resourcesIds              String[]                    @default([])
-  createdAt                 DateTime                    @default(now())
-  updatedAt                 DateTime                    @default(now())
-
-  @@index([schoolId], name: "school_class")
-}
-
-model AnnouncementBySchoolClass {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  title         String
-  desc          String
-  schoolClass   SchoolClass @relation(fields: [schoolClassId], references: [id], onDelete: Cascade)
-  schoolClassId String      @db.ObjectId
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now())
-}
-
 model AnnouncementByTeacherClass {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   title     String
@@ -634,34 +533,6 @@ model AnnouncementByTeacherClass {
   classesId String   @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-}
-
-// creating a model for school class teachers
-// this will serve as a relationship model between the school class and the teachers working in the class
-model SchoolClassTeacher {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  class         SchoolClass @relation(fields: [schoolClassId], references: [id])
-  schoolClassId String      @db.ObjectId
-  teacher       Teacher     @relation(fields: [teacherId], references: [id], onDelete: Cascade)
-  teacherId     String      @db.ObjectId
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now())
-
-  @@index([schoolClassId, teacherId], name: "school_class_teacher")
-}
-
-// creating a model for school class and student
-// this will be a relationship model between the school class and students
-model SchoolClassStudent {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  class         SchoolClass @relation(fields: [schoolClassId], references: [id])
-  schoolClassId String      @db.ObjectId
-  student       Student     @relation(fields: [studentId], references: [id])
-  studentId     String      @db.ObjectId
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now())
-
-  @@index([schoolClassId, studentId], name: "school_class_student_id")
 }
 
 // this model depict the exams that is set by teacher
@@ -722,25 +593,6 @@ model ClassExams {
   updatedAt          DateTime        @default(now())
 
   @@index([classesId], name: "class_exam")
-}
-
-// below is the model that link schoolclass 
-// and the exam being set by teachers
-model SchoolClassExam {
-  id                 String          @id @default(auto()) @map("_id") @db.ObjectId
-  title              String
-  schoolClass        SchoolClass     @relation(fields: [schoolClassId], references: [id])
-  schoolClassId      String          @db.ObjectId
-  // this array contains the id of student in this class that have aswered this particular exam
-  answeredStudentIds String[]        @db.ObjectId
-  test               ExamQuestions[]
-  duration           String
-  grade              Grade
-  subject            String
-  createdAt          DateTime        @default(now())
-  updatedAt          DateTime        @default(now())
-
-  @@index([schoolClassId], name: "class_exam")
 }
 
 model StudentClassExam {
