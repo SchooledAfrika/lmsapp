@@ -1,6 +1,5 @@
 import React from "react";
 import Classroom from "@/components/ui/teacher-dashboard/classroom/classroom";
-import DashboardPagination from "@/components/DashboardPagination";
 import HandleAddClass from "@/components/HandleAddClass";
 
 const page = () => {

@@ -11,7 +11,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { TableSkeleton } from "@/components/TableSkeleton";
 import IndividualClass from "./IndividualClass";
 import Image from "next/image";
 import { LoadingTable } from "@/components/TeachersTable";
