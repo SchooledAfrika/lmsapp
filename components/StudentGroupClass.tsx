@@ -258,9 +258,7 @@ const StudentGroupClass = () => {
   const { data, isLoading, error, isError } = useQuery({
     queryKey: ["StudentGroupClass"],
     queryFn: async () => {
-      const response = await fetch(
-        `/api/class-action/single-group-class?classId=${id}`
-      );
+      const response = await fetch(`/api/single-classroom?classId=${id}`);
       const result = await response.json();
       return result;
     },
