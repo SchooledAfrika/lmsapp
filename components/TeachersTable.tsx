@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Skeleton } from "@mui/material";
+import Image from "next/image";
 interface ITeacherInfo {
   profilePhoto: string;
   name: string;
@@ -36,6 +37,25 @@ export const LoadingTable = () => {
       </div>
       <div className=" w-full flex items-center justify-center mt-4">
         <p>Loading...</p>
+      </div>
+    </div>
+  );
+};
+
+export const NoItem: React.FC<{ itemName: string }> = ({ itemName }) => {
+  return (
+    <div className=" mt-4 md:mt-20 w-full flex flex-col items-center justify-center gap-2">
+      <Image
+        src="/noitem.avif"
+        alt="no-item"
+        width={200}
+        height={200}
+        className=" w-[300px]"
+      />
+      <div className=" px-4 py-2 border border-green-700 rounded-md">
+        <p>
+          No {itemName}, add {itemName}
+        </p>
       </div>
     </div>
   );
