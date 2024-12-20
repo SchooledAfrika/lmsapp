@@ -13,7 +13,6 @@ import {
 import { info } from "console";
 import Image from "next/image";
 import { IgetTeachers, Iteacher } from "./AssignDialog";
-import { IExam } from "./StudentGroupClass";
 
 // component for announcements
 export const Announcement: React.FC<{
