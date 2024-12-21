@@ -6,11 +6,7 @@ import {
   onlyParents,
   serverError,
 } from "@/prisma/utils/error";
-import {
-  getQuery,
-  serverSessionId,
-  serverSessionRole,
-} from "@/prisma/utils/utils";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 import bcrypt from "bcryptjs";
 
 // here we get all the wards that relate to a parents

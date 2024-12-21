@@ -114,7 +114,6 @@ const CoursesAdmin = () => {
       return result;
     },
   });
-  console.log(data);
 
   if (isLoading) {
     return <ShowSkeleton />;

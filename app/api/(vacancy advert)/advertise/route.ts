@@ -4,32 +4,33 @@
 
 import prisma from "@/prisma/prismaConnect";
 import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
-import { json } from "stream/consumers";
 
 // first, lets create the advert
 export async function POST(req: Request) {
-  const schoolId = await serverSessionId();
+  const userId = await serverSessionId();
   const role = await serverSessionRole();
   const others = await req.json();
   // first checking if the school is login already
-  if (!schoolId) {
+  if (!userId) {
     return new Response(JSON.stringify({ message: "you must login" }), {
       status: 401,
     });
   }
   // if the user is not school, return an error message to the user
-  if (role !== "School") {
+  if (role !== "Admin") {
     return new Response(
-      JSON.stringify({ message: "only schools is allowed to create adverts" }),
-      { status: 400 }
+      JSON.stringify({ message: "illegal path detected!!!" }),
+      {
+        status: 400,
+      }
     );
   }
   // lets proceed to creating the adverts
   try {
     await prisma.vacancy.create({
       data: {
+        creatorId: userId,
         ...others,
-        schoolId,
       },
     });
     return new Response(
@@ -46,10 +47,11 @@ export async function POST(req: Request) {
 // that has the id of the vacancy
 export async function DELETE(req: Request) {
   const { vacancyId } = await req.json();
-  const schoolId = await serverSessionId();
+  const userId = await serverSessionId();
+  const role = await serverSessionRole();
   // lets check if the user is logged in first
-  if (!schoolId) {
-    return new Response(JSON.stringify({ message: "Please login" }), {
+  if (role !== "Admin") {
+    return new Response(JSON.stringify({ message: "illegal path!!!" }), {
       status: 401,
     });
   }
@@ -59,7 +61,7 @@ export async function DELETE(req: Request) {
       id: vacancyId,
     },
     select: {
-      schoolId: true,
+      creator: true,
     },
   });
   // returning error if the vacancy does not exist
@@ -67,15 +69,6 @@ export async function DELETE(req: Request) {
     return new Response(
       JSON.stringify({ message: "this vacancy does not exist" }),
       { status: 401 }
-    );
-  }
-  // returning error of the schoolId does not match the one in the advert
-  if (getVacancy.schoolId !== schoolId) {
-    return new Response(
-      JSON.stringify({
-        message: "you can't delete the advert you did not create",
-      }),
-      { status: 400 }
     );
   }
 
@@ -120,32 +113,15 @@ export async function DELETE(req: Request) {
   }
 }
 
-// incase the school want to update the vacancy or advertisement
+// this is for admin to update the advertisement
 export async function PUT(req: Request) {
   const { vacancyId, ...others } = await req.json();
-  const schoolId = await serverSessionId();
+  const role = await serverSessionRole();
   // return error if the user is not logged in
-  if (!schoolId) {
-    return new Response(JSON.stringify({ message: "Please login" }), {
+  if (role !== "Admin") {
+    return new Response(JSON.stringify({ message: "illegal path!!!" }), {
       status: 400,
     });
-  }
-  // lets fetch the vacancy and check if it belongs to the school
-  const getVacancy = await prisma.vacancy.findUnique({
-    where: {
-      id: vacancyId,
-    },
-    select: {
-      schoolId: true,
-    },
-  });
-  if (getVacancy?.schoolId !== schoolId) {
-    return new Response(
-      JSON.stringify({
-        message: "you can only update the adverts you created",
-      }),
-      { status: 404 }
-    );
   }
   // now we can proceed to update the adverts
   try {
@@ -171,13 +147,14 @@ export async function PUT(req: Request) {
 // here, a school can get there adverts
 // here we will replace the query parameter school id we pass to nextauth id
 export async function GET(req: Request) {
-  const schoolId = await serverSessionId();
-
+  const role = await serverSessionRole();
+  if (role !== "Admin") {
+    return new Response(JSON.stringify({ message: "illegal path!!!" }), {
+      status: 404,
+    });
+  }
   try {
     const schoolAdverts = await prisma.vacancy.findMany({
-      where: {
-        schoolId: schoolId!,
-      },
       include: {
         VacancyTeacher: true,
       },

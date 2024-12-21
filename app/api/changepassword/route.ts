@@ -6,9 +6,9 @@ import {
   studentPasswordUpdate,
   parentsPasswordUpdate,
   teacherPasswordUpdate,
-  schoolPasswordUpdate,
 } from "@/prisma/utils/modify";
 import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
+import { serverError } from "@/prisma/utils/error";
 
 // running the password update method below
 export async function PUT(req: Request) {
@@ -42,16 +42,8 @@ export async function PUT(req: Request) {
       );
       return result;
     }
-    // check if is student that want to change password
-    if (role === "School") {
-      const result = await schoolPasswordUpdate(
-        id as string,
-        oldPassword,
-        newPassword
-      );
-      return result;
-    }
-    // check if is student that want to change password
+
+    // check if is parents that want to change password
     if (role === "Parents") {
       const result = await parentsPasswordUpdate(
         id as string,
@@ -61,6 +53,6 @@ export async function PUT(req: Request) {
       return result;
     }
   } catch (error) {
-    throw new Error("Error updating");
+    return serverError();
   }
 }

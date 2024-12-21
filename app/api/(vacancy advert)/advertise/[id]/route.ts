@@ -8,15 +8,14 @@ export async function GET(
   req: Request,
   { params }: { params: { id: string } }
 ) {
-  const schoolId = await serverSessionId();
+  const userId = await serverSessionId();
   const role = await serverSessionRole();
 
-  if (!schoolId) return notAuthenticated();
-  if (role !== "School") {
-    return new Response(
-      JSON.stringify({ message: "only school is allowed " }),
-      { status: 400 }
-    );
+  if (!userId) return notAuthenticated();
+  if (role !== "Admin") {
+    return new Response(JSON.stringify({ message: "illegal path!!!" }), {
+      status: 400,
+    });
   }
 
   // now we try get the one vacancy advertisement
@@ -44,15 +43,6 @@ export async function GET(
         },
       },
     });
-
-    if (oneAdvert?.schoolId !== schoolId) {
-      return new Response(
-        JSON.stringify({
-          message: "you are  not allowed to assess this advert",
-        }),
-        { status: 400 }
-      );
-    }
     return new Response(JSON.stringify(oneAdvert), { status: 200 });
   } catch (error) {
     return serverError();

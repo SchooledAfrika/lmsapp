@@ -10,7 +10,7 @@ import {
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import Image from "next/image";
-import { FaBullseye, FaEnvelope, FaPhoneAlt } from "react-icons/fa";
+import { FaEnvelope, FaPhoneAlt } from "react-icons/fa";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useConversion } from "@/data-access/conversion";
@@ -39,11 +39,6 @@ interface IVacancyTeacher {
     email: string;
     id: string;
   };
-}
-
-interface IOneVacancy {
-  id: string;
-  VacancyTeacher: IVacancyTeacher[];
 }
 
 // dialog to accept a teacher into the school platform

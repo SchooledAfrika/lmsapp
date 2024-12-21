@@ -1,12 +1,10 @@
 import {
   modifyParents,
-  modifySchools,
   modifyStudent,
   modifyTeachers,
 } from "@/prisma/utils/modify";
 import {
   deleteParent,
-  deleteSchool,
   deleteStudent,
   deleteTeacher,
 } from "@/prisma/utils/delete";
@@ -52,15 +50,6 @@ export async function PUT(req: Request) {
       );
     }
     // lets update the student if the role passed was a student role
-    if (role === "School") {
-      console.log("entered");
-      await modifySchools(id, updateData);
-      return new Response(
-        JSON.stringify({ message: "account updated successfully" }),
-        { status: 200, statusText: "success" }
-      );
-    }
-    // lets update the student if the role passed was a student role
     if (role === "Parents") {
       await modifyParents(id, updateData);
       return new Response(
@@ -68,6 +57,10 @@ export async function PUT(req: Request) {
         { status: 200, statusText: "success" }
       );
     }
+    return new Response(
+      JSON.stringify({ message: "account modification failed" }),
+      { status: 404 }
+    );
   } catch (error) {
     console.log(error);
     throw new Error("Something went wrong try again later");
@@ -97,14 +90,6 @@ export async function DELETE(req: Request) {
         { status: 200, statusText: "success" }
       );
     }
-    // delete a student if the role is school
-    if (role === "school") {
-      await deleteSchool(id);
-      return new Response(
-        JSON.stringify({ message: "delete successfully completed" }),
-        { status: 200, statusText: "success" }
-      );
-    }
     // delete a student if the role is teacher
     if (role === "teacher") {
       await deleteTeacher(id);
@@ -122,7 +107,6 @@ export async function DELETE(req: Request) {
       );
     }
   } catch (error) {
-    console.log(error);
     throw new Error("Something went wrong");
   }
 }

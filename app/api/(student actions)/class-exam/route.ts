@@ -4,7 +4,6 @@
 import prisma from "@/prisma/prismaConnect";
 import {
   notAuthenticated,
-  onlyAdmin,
   onlyStudent,
   serverError,
 } from "@/prisma/utils/error";

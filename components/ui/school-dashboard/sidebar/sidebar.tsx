@@ -44,9 +44,7 @@ const Sidebar = ({ dashboard }: { dashboard: string }) => {
       </div>
       {/* the side bar menu
        Conditionally render the sidebar component based on the dashboard type */}
-      {dashboard === "school" ? (
-        <SchoolSideBarComponent findpath={findpath} />
-      ) : dashboard === "teacher" ? (
+      {dashboard === "teacher" ? (
         <TeacherSideBarComponent findpath={findpath} />
       ) : dashboard === "student" ? (
         <StudentSideBarComponent findpath={findpath} />

@@ -3,7 +3,6 @@
 import prisma from "@/prisma/prismaConnect";
 import { serverError } from "@/prisma/utils/error";
 import jwt from "jsonwebtoken";
-import { ResetPasswordEmail } from "@/prisma/utils/Emails/resetpassword";
 
 export async function POST(req: Request) {
   // get the email from frontend

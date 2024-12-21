@@ -1,6 +1,5 @@
 "use client";
 import {
-  SchoolNavbar,
   SchoolNavType,
   Subtype,
   TeacherNavbar,
@@ -20,9 +19,7 @@ const Navbar = ({ dashboard }: { dashboard: string }) => {
     const checkPath = () => {
       if (path.length === 2) {
         const getOneItem =
-          dashboard === "school"
-            ? SchoolNavbar.find((item) => item.path === "overview")
-            : dashboard === "teacher"
+          dashboard === "teacher"
             ? TeacherNavbar.find((item) => item.path === "overview")
             : dashboard === "student"
             ? StudentNavbar.find((item) => item.path === "overview")
@@ -31,9 +28,7 @@ const Navbar = ({ dashboard }: { dashboard: string }) => {
       } else if (path.length === 3) {
         const currentPathString = path[2];
         const getOneItem =
-          dashboard === "school"
-            ? SchoolNavbar.find((item) => item.path === currentPathString)
-            : dashboard === "teacher"
+          dashboard === "teacher"
             ? TeacherNavbar.find((item) => item.path === currentPathString)
             : dashboard === "student"
             ? StudentNavbar.find((item) => item.path === currentPathString)
@@ -42,9 +37,7 @@ const Navbar = ({ dashboard }: { dashboard: string }) => {
       } else {
         const currentPathString = path[2];
         const getOneItem =
-          dashboard === "school"
-            ? SchoolNavbar.find((item) => item.path === currentPathString)
-            : dashboard === "teacher"
+          dashboard === "teacher"
             ? TeacherNavbar.find((item) => item.path === currentPathString)
             : dashboard === "student"
             ? StudentNavbar.find((item) => item.path === currentPathString)

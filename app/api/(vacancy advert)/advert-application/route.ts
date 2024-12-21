@@ -3,7 +3,7 @@
 // the teacher which is the applicant can delete the his application to this school
 
 import prisma from "@/prisma/prismaConnect";
-import { notAuthenticated, serverError } from "@/prisma/utils/error";
+import { notAuthenticated, onlyAdmin, serverError } from "@/prisma/utils/error";
 import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // teacher apply here to an advertisement
@@ -52,90 +52,48 @@ export async function POST(req: Request) {
   }
 }
 
-// here, we will update the vacancy teacher model
-// only the school that avertised this is allow th update it
+// here, the admin will be able to make a teacher an in house member
+// based on the application submitted for their vacancy adverts
 export async function PUT(req: Request) {
   const { vacancyTeacherId, status } = await req.json();
-  const schoolId = await serverSessionId();
-  if (!schoolId) {
+  const userId = await serverSessionId();
+  const role = await serverSessionRole();
+  // check for authentication proper
+  if (!userId) {
     return notAuthenticated();
   }
-  // first lets fetch the vacancy teacher we have, then check if schoolId matches
-  // first fetching the info that will help us connect to the schoolid which is the vacancy
-  const getVacancyTeacher = await prisma.vacancyTeacher.findUnique({
+  if (role !== "Admin") {
+    return onlyAdmin();
+  }
+  // here, we can make the teacher an in house teacher
+  const getTeacher = await prisma.vacancyTeacher.findUnique({
     where: {
       id: vacancyTeacherId,
     },
     select: {
-      vacancyId: true,
+      teacherId: true,
     },
   });
-  if (!getVacancyTeacher) {
-    return new Response(
-      JSON.stringify({ message: "this application does not exist" })
-    );
-  }
-  const getVacancy = await prisma.vacancy.findUnique({
-    where: {
-      id: getVacancyTeacher.vacancyId,
-    },
-    select: {
-      schoolId: true,
-    },
-  });
-  //   now, we can check if is the school that has that offer
-  if (getVacancy?.schoolId !== schoolId) {
-    return new Response(
-      JSON.stringify({ message: "you can't update this application" }),
-      { status: 400 }
-    );
-  }
-  // we can now proceed to modify the application
   try {
-    // modify the status of the application
-    const updatedApplication = await prisma.vacancyTeacher.update({
+    // now, lets make someone an internal teacher after applying now
+    await prisma.teacher.update({
       where: {
-        id: vacancyTeacherId,
+        id: getTeacher?.teacherId,
       },
       data: {
-        status,
+        teachingRole: "INTERNAL",
       },
     });
-    // then add  the teacher to the teacher list of the school if the status is accepted
-    if (status === "ACCEPTED") {
-      // checking if the teacher is already existing as the school teacher
-      const checkExistence = await prisma.schoolTeacher.findFirst({
-        where: {
-          teacherId: updatedApplication.teacherId,
-          schoolId,
-        },
-      });
-      if (checkExistence) {
-        return new Response(
-          JSON.stringify({ message: "this teacher already exist" })
-        );
-      }
-      // proceed to add the teacher to the school
-      await prisma.schoolTeacher.create({
-        data: {
-          schoolId: schoolId!,
-          teacherId: updatedApplication.teacherId,
-          status: "ACTIVE",
-        },
-      });
-    }
-    return new Response(
-      JSON.stringify({ message: `applicant is now ${status}...` })
-    );
   } catch (error) {
-    throw new Error(JSON.stringify({ message: "something went wrong" }));
+    return serverError();
   }
 }
 
 // below here, the teacher can decide to delete the application they already made
 export async function DELETE(req: Request) {
   // TODO: remember to change this teacher Id to nextauth id
-  const { teacherId, vacancyTeacherId } = await req.json();
+  const { vacancyTeacherId } = await req.json();
+  const teacherId = await serverSessionId();
   // first, lets get the vacancyTeacher and check if the teacherId matches
   const getVacancyTeacher = await prisma.vacancyTeacher.findUnique({
     where: {
@@ -151,7 +109,6 @@ export async function DELETE(req: Request) {
       { status: 404 }
     );
   }
-
   // now we proceed to delete the application
   try {
     await prisma.vacancyTeacher.delete({
@@ -182,11 +139,6 @@ export async function GET(req: Request) {
       skip: skipAmt,
       take: takeAmt,
       include: {
-        school: {
-          select: {
-            name: true,
-          },
-        },
         VacancyTeacher: {
           select: {
             teacherId: true,

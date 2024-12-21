@@ -10,29 +10,15 @@ import {
 import { Input } from "@/components/ui/input";
 import { RiErrorWarningFill } from "react-icons/ri";
 import Link from "next/link";
-import React, { useState } from "react";
-import { IteacherClass } from "@/components/Tables";
-import { IoCaretDownSharp } from "react-icons/io5";
-import { BiSolidUpArrow } from "react-icons/bi";
-import {
-  QueryClient,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
-import { IoIosCheckmark } from "react-icons/io";
-import { toast } from "react-toastify";
-
-
-
+import React from "react";
 
 export const AssignTeacher = () => {
-  
   return (
     <Dialog>
       <DialogTrigger asChild>
         <Button className="py-2 bg-lightGreen hover:bg-green-400 px-6 text-[13px]">
-                  Assign Teacher
-                </Button>
+          Assign Teacher
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:w-[500px] w-[380px] font-subtext">
         <DialogHeader>
@@ -50,7 +36,7 @@ export const AssignTeacher = () => {
               className="col-span-6 font-semibold w-full"
             />
           </div>
-         
+
           <div className="flex flex-col border p-6 rounded-md">
             <p className="font-semibold inline text-[14px]">
               {" "}

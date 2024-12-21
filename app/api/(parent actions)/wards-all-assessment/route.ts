@@ -1,12 +1,8 @@
 // here we will get all the exams written by the ward
 // this will include both class exams and the session exams answered by the student
 import prisma from "@/prisma/prismaConnect";
-import { notAuthenticated, serverError } from "@/prisma/utils/error";
-import {
-  getQuery,
-  serverSessionId,
-  serverSessionRole,
-} from "@/prisma/utils/utils";
+import { serverError } from "@/prisma/utils/error";
+import { getQuery } from "@/prisma/utils/utils";
 
 export async function GET(req: Request) {
   const childId = getQuery(req.url, "childId");

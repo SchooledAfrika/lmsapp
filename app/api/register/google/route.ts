@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
 import prisma from "@/prisma/prismaConnect";
+import { serverError } from "@/prisma/utils/error";
 // =====> remember to check on upsert which can help to create or update a new user if it does not exist
 
 // here, we create a new user with their google account credentials
@@ -10,7 +11,6 @@ import prisma from "@/prisma/prismaConnect";
 // else we will register them and redirect to the login page
 
 export async function POST(request: Request) {
-  console.log("entered");
   const { email, image, name } = await request.json();
   const role = request.headers.get("role");
   console.log(`backend role = ${role}`);
@@ -52,23 +52,6 @@ export async function POST(request: Request) {
       // return the teacher immediately if it exists
       if (checkTeachers) {
         return new Response(JSON.stringify(checkTeachers), {
-          status: 200,
-          statusText: "success",
-        });
-      }
-      const checkSchools = await prisma.school.findUnique({
-        where: { email: email },
-        select: {
-          id: true,
-          email: true,
-          profilePhoto: true,
-          role: true,
-          CompletedProfile: true,
-        },
-      });
-      // return the school immediately if it exists
-      if (checkSchools) {
-        return new Response(JSON.stringify(checkSchools), {
           status: 200,
           statusText: "success",
         });
@@ -132,7 +115,7 @@ export async function POST(request: Request) {
           // return info of the student register
           return new Response(JSON.stringify(student), {
             status: 200,
-            statusText: "student registered successfully",
+            statusText: "registered successfully",
           });
         }
       }
@@ -174,7 +157,7 @@ export async function POST(request: Request) {
           // return info of the student register
           return new Response(JSON.stringify(teacher), {
             status: 200,
-            statusText: "student registered successfully",
+            statusText: "registered successfully",
           });
         }
       }
@@ -212,45 +195,7 @@ export async function POST(request: Request) {
           // return info of the student register
           return new Response(JSON.stringify(parents), {
             status: 200,
-            statusText: "student registered successfully",
-          });
-        }
-      }
-      // check is school also mistakenly want to re-register using google account
-      if (role == "School") {
-        const checkSchool = await prisma.school.findUnique({
-          where: { email: email },
-          select: {
-            id: true,
-            email: true,
-            profilePhoto: true,
-            role: true,
-            CompletedProfile: true,
-          },
-        });
-        if (checkSchool) {
-          return new Response(JSON.stringify(checkSchool), { status: 200 });
-        } else {
-          // register student
-          const school = await prisma.school.create({
-            data: {
-              email: email,
-              profilePhoto: image,
-              name,
-              role: "School",
-            },
-            select: {
-              id: true,
-              email: true,
-              profilePhoto: true,
-              role: true,
-              CompletedProfile: true,
-            },
-          });
-          // return info of the student register
-          return new Response(JSON.stringify(school), {
-            status: 200,
-            statusText: "student registered successfully",
+            statusText: "registered successfully",
           });
         }
       }
@@ -260,6 +205,6 @@ export async function POST(request: Request) {
       { status: 400 }
     );
   } catch (error) {
-    console.log(error);
+    return serverError();
   }
 }

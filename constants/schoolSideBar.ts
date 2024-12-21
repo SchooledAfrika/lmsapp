@@ -3,7 +3,7 @@ import {
   MdInsertChartOutlined,
   MdOutlineCalendarMonth,
   MdOutlineSettings,
-  MdOutlineDisplaySettings
+  MdOutlineDisplaySettings,
 } from "react-icons/md";
 import { RiParentLine, RiAdminLine, RiSecurePaymentLine } from "react-icons/ri";
 import {
@@ -42,9 +42,10 @@ export const AdminSideBar: AdminSideBarType[] = [
   { path: "courses", name: "Courses", icon: SiGoogleclassroom },
   { path: "teachers", name: "Teachers", icon: LiaChalkboardTeacherSolid },
   { path: "payments", name: "Payments", icon: RiSecurePaymentLine },
-  {path: "students", name: "Students", icon: LiaGraduationCapSolid },
+  { path: "students", name: "Students", icon: LiaGraduationCapSolid },
   { path: "parents", name: "Parents", icon: RiParentLine },
   { path: "sessions", name: "Sessions", icon: IoRadioOutline },
+  { path: "job-listing", name: "Job Listing", icon: GrGroup },
   { path: "admin-profile", name: "Admin Profile", icon: RiAdminLine },
   {
     path: "admin-setting",

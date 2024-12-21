@@ -12,18 +12,14 @@ import { Button } from "./ui/button";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-
 import { JobListingInfo, jobListingSchema } from "@/constants/jobListing";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Container from "./Container";
-
 export type IjobListing = z.infer<typeof jobListingSchema>;
 
 const JobNewList = () => {
-  const { data: session, update } = useSession();
   const router = useRouter();
   const [loading, setloading] = useState<boolean>(false);
   const [currentPage, setcurrentPage] = useState<number>(1);
@@ -65,7 +61,7 @@ const JobNewList = () => {
         reset();
         toast.success(body.message);
         setTimeout(() => {
-          return router.push("/school-dashboard/job-listing");
+          return router.push("/admin-dashboard/job-listing");
         }, 4000);
       } else {
         setloading(false);

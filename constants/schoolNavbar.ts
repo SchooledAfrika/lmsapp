@@ -10,55 +10,6 @@ export interface SchoolNavType {
   subDetails?: Subtype;
 }
 
-export const SchoolNavbar: SchoolNavType[] = [
-  {
-    title: "Welcome to Your School Dashboard",
-    description: "Manage your school at a go! Just a click!",
-    path: "overview",
-  },
-  {
-    title: "Classroom",
-    description: "Get your classroom ready",
-    path: "classroom",
-    subDetails: {
-      title: " Single class here",
-      description: " this is for single class path",
-    },
-  },
-  {
-    title: "Teachers",
-    description: "Organize your teachers and review their data",
-    path: "teachers",
-    subDetails: {
-      title: " Single teacher here",
-      description: " this is for single teacher path",
-    },
-  },
-  {
-    title: "Students",
-    description: "Organize your students and review their data",
-    path: "students",
-    subDetails: {
-      title: " Single student here",
-      description: " this is for single student path",
-    },
-  },
-  {
-    title: "Calendar",
-    description: "View schedules of your teachers and students",
-    path: "calender",
-  },
-  {
-    title: "Job Listing",
-    description: "View, update and delete jobs here.",
-    path: "job-listing",
-  },
-  {
-    title: "Settings",
-    description: "Edit your settings here",
-    path: "settings",
-  },
-];
 export const TeacherNavbar: SchoolNavType[] = [
   {
     title: "Welcome to Your Dashboard",
@@ -85,7 +36,8 @@ export const TeacherNavbar: SchoolNavType[] = [
   },
   {
     title: "Sessions",
-    description: "An Overview of all the sections you have for easy access and management",
+    description:
+      "An Overview of all the sections you have for easy access and management",
     path: "sessions",
     subDetails: {
       title: " Single 1-on-1 section details",
@@ -126,7 +78,8 @@ export const TeacherNavbar: SchoolNavType[] = [
 export const StudentNavbar: SchoolNavType[] = [
   {
     title: "Welcome to Your Dashboard",
-    description: "All you need for a better digital learning. You are one click away from your academic success dream.",
+    description:
+      "All you need for a better digital learning. You are one click away from your academic success dream.",
     path: "overview",
   },
   {
@@ -194,7 +147,8 @@ export const StudentNavbar: SchoolNavType[] = [
 export const ParentsNavbar: SchoolNavType[] = [
   {
     title: "Welcome to Your Dashboard",
-    description: "Let's discover and shape the next generation of lifelong learners together.",
+    description:
+      "Let's discover and shape the next generation of lifelong learners together.",
     path: "overview",
   },
   {
@@ -257,7 +211,7 @@ export const AdminNavbar: SchoolNavType[] = [
       description: "",
     },
   },
- 
+
   {
     title: "Teachers",
     description: "",
@@ -297,5 +251,9 @@ export const AdminNavbar: SchoolNavType[] = [
     description: "",
     path: "setting",
   },
- 
+  {
+    title: "Job Adverts",
+    description: "list of jobs advertised so far",
+    path: "job-listing",
+  },
 ];

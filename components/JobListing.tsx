@@ -127,7 +127,7 @@ const JobListing = () => {
     <section className="my-[80px] md:my-4">
       <div>
         <div className="flex justify-end mb-2">
-          <Link href={"/school-dashboard/job-listing/add-new-listing"}>
+          <Link href={"/admin-dashboard/job-listing/add-new-listing"}>
             <Button className="bg-secondary text-white text-[12px] py-5 my-3 mr-0 md:mr-6">
               <Image
                 src="/svgs/new-list.svg"

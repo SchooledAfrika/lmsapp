@@ -4,11 +4,7 @@
 // and also it will hold the overall percentage of the exam written
 import prisma from "@/prisma/prismaConnect";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
-import {
-  getQuery,
-  serverSessionId,
-  serverSessionRole,
-} from "@/prisma/utils/utils";
+import { getQuery, serverSessionId } from "@/prisma/utils/utils";
 
 export async function GET(req: Request) {
   // check for authentication first

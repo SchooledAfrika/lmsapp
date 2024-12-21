@@ -179,7 +179,7 @@ const ViewDetails: React.FC<{
               </div>
               <div className=" flex items-center gap-1">
                 <FaSchoolFlag className=" text-[14px]" />
-                <p>{viewDetail?.school.name}</p>
+                <p>SchooledAfrika</p>
               </div>
             </div>
             <PricePart data={viewDetail as Ivacancy} />
@@ -271,7 +271,7 @@ const EachVacancy: React.FC<{
               </div>
               <div className=" flex items-center gap-1">
                 <FaSchoolFlag />
-                <p>{data?.school.name}</p>
+                <p>schooledAfrika</p>
               </div>
             </div>
           </div>
@@ -345,10 +345,11 @@ const Vacancies = () => {
   }
   // flaten the data gotten here
   const queryData = data?.pages.flat();
-  if (queryData && viewDeatil === undefined) {
+  if (queryData.length > 0 && viewDeatil === undefined) {
     const firstItem = queryData[0] as Ivacancy;
     setViewDetail(firstItem);
   }
+
   return (
     <div>
       <Container>
@@ -405,36 +406,50 @@ const Vacancies = () => {
             </div>
           </div>
         </div>
-        <div className=" flex w-full gap-3 mt-8">
-          <div className=" flex-1 sm:flex-2 flex flex-col gap-2">
-            {queryData.map((data: Ivacancy, index) => (
-              <EachVacancy
-                key={index}
-                data={data}
-                setViewDetail={setViewDetail}
-                currentId={viewDeatil?.id}
-                setMobileDetails={setMobileDetails}
+        {queryData.length === 0 ? (
+          <div className=" w-full flex items-center justify-center">
+            <div className=" w-3/4 md:w-2/5">
+              <Image
+                src="/vacancyempty.webp"
+                alt="noitem"
+                width={200}
+                height={200}
+                className=" w-full"
               />
-            ))}
-            <div className=" mt-4 flex items-center justify-center">
-              {hasNextPage && (
-                <div
-                  ref={ref}
-                  className=" px-4 py-2 rounded-md border bg-white w-fit flex items-center gap-2"
-                >
-                  <CircularProgress color="success" />
-                  <p className=" text-green-800 font-bold">loading...</p>
-                </div>
-              )}
             </div>
           </div>
-          <div className=" hidden sm:block sm:flex-3">
-            <ViewDetails
-              viewDetail={viewDeatil}
-              setViewDetail={setViewDetail}
-            />
+        ) : (
+          <div className=" flex w-full gap-3 mt-8">
+            <div className=" flex-1 sm:flex-2 flex flex-col gap-2">
+              {queryData.map((data: Ivacancy, index) => (
+                <EachVacancy
+                  key={index}
+                  data={data}
+                  setViewDetail={setViewDetail}
+                  currentId={viewDeatil?.id}
+                  setMobileDetails={setMobileDetails}
+                />
+              ))}
+              <div className=" mt-4 flex items-center justify-center">
+                {hasNextPage && (
+                  <div
+                    ref={ref}
+                    className=" px-4 py-2 rounded-md border bg-white w-fit flex items-center gap-2"
+                  >
+                    <CircularProgress color="success" />
+                    <p className=" text-green-800 font-bold">loading...</p>
+                  </div>
+                )}
+              </div>
+            </div>
+            <div className=" hidden sm:block sm:flex-3">
+              <ViewDetails
+                viewDetail={viewDeatil}
+                setViewDetail={setViewDetail}
+              />
+            </div>
           </div>
-        </div>
+        )}
         <ToastContainer />
       </Container>
       {mobileDetails && (

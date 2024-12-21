@@ -4,16 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import Backwards from "./ui/Backwards";
 import { useParams } from "next/navigation";
 import { SingleClassSkeleton } from "./SingleClassroom";
-import {
-  IsingleClass,
-  ClassInfo,
-  Iannoucement,
-  IouterPart,
-} from "./SingleClassroom";
-import { info } from "console";
+import { IsingleClass, ClassInfo, Iannoucement } from "./SingleClassroom";
 import Image from "next/image";
 import { IgetTeachers, Iteacher } from "./AssignDialog";
-import { IExam } from "./StudentGroupClass";
 
 // component for announcements
 export const Announcement: React.FC<{

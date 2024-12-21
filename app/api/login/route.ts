@@ -40,19 +40,9 @@ export async function POST(request: Request) {
       CompletedProfile: true,
     },
   });
-  const fetchSchool = await prisma.school.findUnique({
-    where: { email: email },
-    select: {
-      id: true,
-      password: true,
-      name: true,
-      role: true,
-      email: true,
-      CompletedProfile: true,
-    },
-  });
+
   // here, we return an error because the user does not exist
-  if (!fetchParent && !fetchSchool && !fetchStudent && !fetchTeacher) {
+  if (!fetchParent && !fetchStudent && !fetchTeacher) {
     return new Response(JSON.stringify({ message: "user does not exist" }), {
       status: 404,
       statusText: "Not Found",
@@ -85,24 +75,6 @@ export async function POST(request: Request) {
     const comparePassword = await bcrypt.compare(
       passwordcheck,
       fetchTeacher?.password!
-    );
-    if (!comparePassword) {
-      return new Response(JSON.stringify({ message: "password mismatch" }), {
-        status: 401,
-        statusText: "Invalid password",
-      });
-    }
-    return new Response(JSON.stringify(others), {
-      status: 200,
-      statusText: "success",
-    });
-  }
-  if (fetchSchool && fetchSchool.password !== null) {
-    const { password, ...others } = fetchSchool;
-    // lets compare the password and know if it match
-    const comparePassword = await bcrypt.compare(
-      passwordcheck,
-      fetchSchool?.password!
     );
     if (!comparePassword) {
       return new Response(JSON.stringify({ message: "password mismatch" }), {
