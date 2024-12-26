@@ -103,7 +103,7 @@ const JobNewList = () => {
       <Container>
         <div className="flex md:mt-6 mb-12 mt-24 justify-between ml-[0] md:ml-[40px]">
           <p className="font-bold text-lg"></p>
-          <Link href="/school-dashboard/job-listing" className="cursor-pointer">
+          <Link href="/admin-dashboard/job-listing" className="cursor-pointer">
             <Image
               src="/closeAlt.svg"
               alt="cancel"
