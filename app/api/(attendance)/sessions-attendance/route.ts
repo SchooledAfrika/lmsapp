@@ -15,7 +15,7 @@ import {
 } from "@/prisma/utils/utils";
 
 export async function POST(req: Request) {
-  const { sessionId, ...others } = await req.json();
+  const { sessionId, classday, held, duration } = await req.json();
   const teacherId = await serverSessionId();
   const role = await serverSessionRole();
   // lets check for authentication first
@@ -37,20 +37,21 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ message: "Session not found" }), {
       status: 404,
     });
-
-  if (session.sectionOwner.id !== teacherId) {
-    return new Response(
-      JSON.stringify({ message: "you are not allowed to access this class" }),
-      { status: 400 }
-    );
-  }
+  // if (session.sectionOwner.id !== teacherId) {
+  //   return new Response(
+  //     JSON.stringify({ message: "you are not allowed to access this class" }),
+  //     { status: 400 }
+  //   );
+  // }
   //   now we can then create the attendace
   try {
     await prisma.sessionAttendance.create({
       data: {
         teacherId,
         appliedSectionId: sessionId,
-        ...others,
+        classday,
+        held,
+        duration: held ? Number(duration) : 0,
       },
     });
     return new Response(
@@ -58,6 +59,7 @@ export async function POST(req: Request) {
       { status: 200 }
     );
   } catch (error) {
+    console.log(error);
     return serverError();
   }
 }

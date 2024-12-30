@@ -4,9 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "../../button";
-import DashboardPagination from "../../../DashboardPagination";
 import Container from "../../../Container";
-import { OneOnOneList } from "@/constants/oneOnOneList";
 import { useQuery } from "@tanstack/react-query";
 import { MdContentCopy } from "react-icons/md";
 import { useCopy } from "@/data-access/copy";
@@ -17,6 +15,8 @@ import { Skeleton } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Noitem } from "../../../ApplicantsTable";
 import { HandleAttendance } from "@/components/HandleAddClass";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface IstudentOneonOne {
   name: string;
@@ -89,7 +89,6 @@ const ProfileTop: React.FC<{
   status: string;
   grade: string;
 }> = ({ profilePhoto, name, status, grade, email }) => {
-  console.log("pix here ", profilePhoto);
   return (
     <div className=" flex justify-between items-center">
       <div className=" flex items-start gap-2">
@@ -166,41 +165,42 @@ const TimeShow: React.FC<{
   );
 };
 // start meeting btn
-const ViewDetails: React.FC<{ sessionId: string; isTeacher: boolean, name: string }> = ({
-  sessionId,
-  isTeacher,
-  name
-}) => {
+const ViewDetails: React.FC<{
+  sessionId: string;
+  isTeacher: boolean;
+  name: string;
+}> = ({ sessionId, isTeacher, name }) => {
   const router = useRouter();
   const navigateLink = () => {
     if (isTeacher) {
-      router.push(`/teacher-dashboard/sessions/one-on-one-section/${sessionId}`);
+      router.push(
+        `/teacher-dashboard/sessions/one-on-one-section/${sessionId}`
+      );
     } else {
-      router.push(`/student-dashboard/sessions/one-on-one-section/${sessionId}`);
+      router.push(
+        `/student-dashboard/sessions/one-on-one-section/${sessionId}`
+      );
     }
   };
   return (
     <div className=" w-full flex flex-col gap-2 px-3">
-     
-     
-     
-       <div className=" w-full flex  gap-2 px-3">
-      <div
-        onClick={navigateLink}
-        className=" flex-1 py-3 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 "
-      >
-        <p>View Details</p>
+      <div className=" w-full flex  gap-2 px-3">
+        <div
+          onClick={navigateLink}
+          className=" flex-1 py-3 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 "
+        >
+          <p>View Details</p>
+        </div>
+
+        <div className=" flex-1 flex gap-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 ">
+          <IoIosRadio />
+          <p>{isTeacher ? "Start Session" : "Join Session"}</p>
+        </div>
       </div>
-      
-      <div className=" flex-1 flex gap-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 ">
-        <IoIosRadio />
-        <p>{isTeacher ? "Start Session" : "Join Session"}</p>
-      </div>
-     
-      </div>
-      <p>{isTeacher && <HandleAttendance sessionId={sessionId} name={name} />}</p>
+      <p>
+        {isTeacher && <HandleAttendance sessionId={sessionId} name={name} />}
+      </p>
     </div>
-    
   );
 };
 // each session component here
@@ -229,7 +229,11 @@ const EachSession: React.FC<{ item: IAppliedSession; isTeacher: boolean }> = ({
         duration={item.duration}
         hours={item.hoursperday}
       />
-      <ViewDetails isTeacher={isTeacher} sessionId={item.id} name={item.student.name} />
+      <ViewDetails
+        isTeacher={isTeacher}
+        sessionId={item.id}
+        name={item.student.name}
+      />
     </div>
   );
 };
@@ -310,7 +314,6 @@ const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
     );
 
   const oneOneOneData: IAppliedSession[] = data;
-  console.log(oneOneOneData);
 
   return (
     <section className="my-[80px] md:my-4">
@@ -339,6 +342,7 @@ const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
           )}
         </div>
       </Container>
+      <ToastContainer />
     </section>
   );
 };
