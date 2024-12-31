@@ -343,8 +343,20 @@ model AppliedSection {
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @default(now())
   SessionAttendance SessionAttendance[]
+  SingleMetting     SingleMetting?
 
   @@index([oneOnOneSectionId, studentId], name: "applied_section")
+}
+
+// creating a one to one relationship between the appled section 
+// and the model for meetings
+model SingleMetting {
+  id               String         @id @default(auto()) @map("_id") @db.ObjectId
+  link             String
+  appliedsession   AppliedSection @relation(fields: [appliedSectionId], references: [id])
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now())
+  appliedSectionId String         @unique @db.ObjectId
 }
 
 // the model below will be displayed in the admin dashbaord.

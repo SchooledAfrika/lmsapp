@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "../../button";
 import Container from "../../../Container";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MdContentCopy } from "react-icons/md";
 import { useCopy } from "@/data-access/copy";
 import { FaRegClock } from "react-icons/fa";
@@ -15,7 +15,16 @@ import { Skeleton } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Noitem } from "../../../ApplicantsTable";
 import { HandleAttendance } from "@/components/HandleAddClass";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 import "react-toastify/dist/ReactToastify.css";
 
 interface IstudentOneonOne {
@@ -23,6 +32,10 @@ interface IstudentOneonOne {
   email: string;
   profilePhoto: string;
   status: string;
+}
+interface Imeeting {
+  link: string;
+  createdAt: string;
 }
 // interface for the type we are getting from backend
 interface IAppliedSession {
@@ -40,6 +53,7 @@ interface IAppliedSession {
   sectionOwner: {
     teacher: IstudentOneonOne;
   };
+  SingleMetting: Imeeting;
   subject: string[];
   sectionType: string;
 }
@@ -164,12 +178,116 @@ const TimeShow: React.FC<{
     </div>
   );
 };
+
+const AddMettingModel: React.FC<{
+  showModel: boolean;
+  setShowmodel: React.Dispatch<React.SetStateAction<boolean>>;
+  sessionId: string;
+}> = ({ showModel, setShowmodel, sessionId }) => {
+  const [link, setLink] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(false);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ["add-class-link"],
+    mutationFn: async () => {
+      const response = await fetch("/api/one-on-one-section/class-link", {
+        method: "POST",
+        body: JSON.stringify({ link, sessionId }),
+      });
+      return response;
+    },
+    onSuccess: async (response) => {
+      const message = await response.json();
+      if (response.ok) {
+        queryClient.invalidateQueries({ queryKey: ["getSession"] });
+        setLink(undefined);
+        setLoading(false);
+        setShowmodel(false);
+        return toast.success(message.message);
+      }
+      if (!response.ok) {
+        setLoading(false);
+        return toast.error(message);
+      }
+    },
+  });
+  // here we trigger submission of our data to backend
+  const handleSubmitLink = () => {
+    if (!link) return toast.error("please enter zoom link");
+    setLoading(true);
+    mutation.mutate();
+  };
+  return (
+    <Dialog open={showModel} onOpenChange={() => setShowmodel(false)}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add zoom link</DialogTitle>
+          <DialogDescription>
+            Please add zoom link and start class. Click save when you're done.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="items-center gap-4">
+            <Input
+              id="name"
+              placeholder="enter zoom link here"
+              className=" w-full"
+              onChange={(e) => setLink(e.target.value)}
+              value={link}
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button onClick={handleSubmitLink} disabled={loading} type="submit">
+            {loading ? "Saving" : "Save"} changes
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// this div render for teachers to add the class link if not existing yet
+const AddClassLink: React.FC<{ isTeacher: boolean; sessionId: string }> = ({
+  isTeacher,
+  sessionId,
+}) => {
+  const [showModel, setShowmodel] = useState<boolean>(false);
+  return (
+    <div className="flex-1 py-3 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 ">
+      {isTeacher ? (
+        <div onClick={() => setShowmodel(true)}>
+          <p>Add Class Link</p>
+        </div>
+      ) : (
+        <p>Wait for link</p>
+      )}
+      {showModel && (
+        <AddMettingModel
+          sessionId={sessionId}
+          showModel={showModel}
+          setShowmodel={setShowmodel}
+        />
+      )}
+    </div>
+  );
+};
+// join class link component below here
+const JoinClassLink: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
+  return (
+    <div className=" flex-1 flex gap-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 ">
+      <IoIosRadio />
+      <p>{isTeacher ? "Start Session" : "Join Session"}</p>
+    </div>
+  );
+};
 // start meeting btn
 const ViewDetails: React.FC<{
   sessionId: string;
   isTeacher: boolean;
   name: string;
-}> = ({ sessionId, isTeacher, name }) => {
+  link: Imeeting;
+}> = ({ sessionId, isTeacher, name, link }) => {
   const router = useRouter();
   const navigateLink = () => {
     if (isTeacher) {
@@ -191,11 +309,11 @@ const ViewDetails: React.FC<{
         >
           <p>View Details</p>
         </div>
-
-        <div className=" flex-1 flex gap-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 ">
-          <IoIosRadio />
-          <p>{isTeacher ? "Start Session" : "Join Session"}</p>
-        </div>
+        {link !== null ? (
+          <JoinClassLink isTeacher={isTeacher} />
+        ) : (
+          <AddClassLink isTeacher={isTeacher} sessionId={sessionId} />
+        )}
       </div>
       <p>
         {isTeacher && <HandleAttendance sessionId={sessionId} name={name} />}
@@ -233,6 +351,7 @@ const EachSession: React.FC<{ item: IAppliedSession; isTeacher: boolean }> = ({
         isTeacher={isTeacher}
         sessionId={item.id}
         name={item.student.name}
+        link={item.SingleMetting}
       />
     </div>
   );
@@ -312,9 +431,8 @@ const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
         <p>{error.message}</p>
       </div>
     );
-
+  console.log(data);
   const oneOneOneData: IAppliedSession[] = data;
-
   return (
     <section className="my-[80px] md:my-4">
       <Container>
