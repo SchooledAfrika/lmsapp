@@ -35,13 +35,13 @@ export async function POST(req: Request) {
     );
   }
   // check if the user is in free plan, and prevent him from creating a section profile
-  // const teacherPlan = await checkPlans(teacherId!);
-  // if (teacherPlan === "FREE") {
-  //   return new Response(
-  //     JSON.stringify({ message: "subscribe for a plans, to create a section" }),
-  //     { status: 402 }
-  //   );
-  // }
+  const teacherPlan = await checkPlans(teacherId!);
+  if (teacherPlan === "FREE") {
+    return new Response(
+      JSON.stringify({ message: "subscribe for a plans, to create a section" }),
+      { status: 402 }
+    );
+  }
   // now, lets proceed and create the section
   try {
     // lets check if the teacher already have a session profile
@@ -115,9 +115,9 @@ export async function GET(req: Request) {
             },
           },
         },
+        SingleMeeting: true,
       },
     });
-    console.log(allSections);
     return new Response(JSON.stringify(allSections), { status: 200 });
   } catch (error) {
     console.log(error);

@@ -1,13 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "../../button";
-import DashboardPagination from "../../../DashboardPagination";
 import Container from "../../../Container";
-import { OneOnOneList } from "@/constants/oneOnOneList";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { MdContentCopy } from "react-icons/md";
 import { useCopy } from "@/data-access/copy";
 import { FaRegClock } from "react-icons/fa";
@@ -17,12 +15,27 @@ import { Skeleton } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { Noitem } from "../../../ApplicantsTable";
 import { HandleAttendance } from "@/components/HandleAddClass";
+import { toast, ToastContainer } from "react-toastify";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import "react-toastify/dist/ReactToastify.css";
 
 interface IstudentOneonOne {
   name: string;
   email: string;
   profilePhoto: string;
   status: string;
+}
+interface Imeeting {
+  link: string;
+  createdAt: string;
 }
 // interface for the type we are getting from backend
 interface IAppliedSession {
@@ -40,6 +53,7 @@ interface IAppliedSession {
   sectionOwner: {
     teacher: IstudentOneonOne;
   };
+  SingleMeeting: Imeeting;
   subject: string[];
   sectionType: string;
 }
@@ -89,7 +103,6 @@ const ProfileTop: React.FC<{
   status: string;
   grade: string;
 }> = ({ profilePhoto, name, status, grade, email }) => {
-  console.log("pix here ", profilePhoto);
   return (
     <div className=" flex justify-between items-center">
       <div className=" flex items-start gap-2">
@@ -165,42 +178,190 @@ const TimeShow: React.FC<{
     </div>
   );
 };
-// start meeting btn
-const ViewDetails: React.FC<{ sessionId: string; isTeacher: boolean, name: string }> = ({
-  sessionId,
+
+// /api/teacher-special-request/class-link
+// /api/one-on-one-section/class-link
+
+const AddMettingModel: React.FC<{
+  showModel: boolean;
+  setShowmodel: React.Dispatch<React.SetStateAction<boolean>>;
+  sessionId: string;
+  specialRequest: boolean;
+}> = ({ showModel, setShowmodel, sessionId, specialRequest }) => {
+  const [link, setLink] = useState<string | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(false);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationKey: ["add-class-link"],
+    mutationFn: async () => {
+      const response = await fetch(
+        specialRequest
+          ? "/api/teacher-special-request/class-link"
+          : "/api/one-on-one-section/class-link",
+        {
+          method: "POST",
+          body: JSON.stringify({ link, sessionId }),
+        }
+      );
+      return response;
+    },
+    onSuccess: async (response) => {
+      const message = await response.json();
+      if (response.ok) {
+        queryClient.invalidateQueries({ queryKey: ["getSession"] });
+        queryClient.invalidateQueries({ queryKey: ["getSpecialRequest"] });
+        setLink(undefined);
+        setLoading(false);
+        setShowmodel(false);
+        return toast.success(message.message);
+      }
+      if (!response.ok) {
+        setLoading(false);
+        return toast.error(message);
+      }
+    },
+  });
+  // here we trigger submission of our data to backend
+  const handleSubmitLink = () => {
+    if (!link) return toast.error("please enter zoom link");
+    setLoading(true);
+    mutation.mutate();
+  };
+  return (
+    <Dialog open={showModel} onOpenChange={() => setShowmodel(false)}>
+      <DialogContent className="sm:max-w-[425px]">
+        <DialogHeader>
+          <DialogTitle>Add zoom link</DialogTitle>
+          <DialogDescription>
+            Please add zoom link and start class. Click save when you're done.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="items-center gap-4">
+            <Input
+              id="name"
+              placeholder="enter zoom link here"
+              className=" w-full"
+              onChange={(e) => setLink(e.target.value)}
+              value={link}
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button onClick={handleSubmitLink} disabled={loading} type="submit">
+            {loading ? "Saving" : "Save"} changes
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+// this div render for teachers to add the class link if not existing yet
+const AddClassLink: React.FC<{
+  isTeacher: boolean;
+  sessionId: string;
+  specialRequest: boolean;
+}> = ({ isTeacher, sessionId, specialRequest }) => {
+  const [showModel, setShowmodel] = useState<boolean>(false);
+  return (
+    <div className="flex-1 py-3 px-2 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 ">
+      {isTeacher ? (
+        <div onClick={() => setShowmodel(true)}>
+          <p>Add Class Link</p>
+        </div>
+      ) : (
+        <p>Wait for link</p>
+      )}
+      {showModel && (
+        <AddMettingModel
+          sessionId={sessionId}
+          showModel={showModel}
+          setShowmodel={setShowmodel}
+          specialRequest={specialRequest}
+        />
+      )}
+    </div>
+  );
+};
+// join class link component below here
+const JoinClassLink: React.FC<{ isTeacher: boolean; link: string }> = ({
   isTeacher,
-  name
+  link,
 }) => {
+  const handleMoveToZoom = () => {
+    return (window.location.href = link);
+  };
+  return (
+    <div
+      onClick={handleMoveToZoom}
+      className=" flex-1 flex gap-1 px-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 "
+    >
+      <IoIosRadio />
+      <p>{isTeacher ? "Start Session" : "Join Session"}</p>
+    </div>
+  );
+};
+// the btn below will be reusuable for both special request and normal one on one session
+export const SharedAddLink: React.FC<{
+  specialRequest: boolean;
+  isTeacher: boolean;
+  sessionId: string;
+  link: Imeeting;
+}> = ({ link, isTeacher, sessionId, specialRequest }) => {
+  return (
+    <div>
+      {link !== null ? (
+        <JoinClassLink link={link.link} isTeacher={isTeacher} />
+      ) : (
+        <AddClassLink
+          specialRequest={specialRequest}
+          isTeacher={isTeacher}
+          sessionId={sessionId}
+        />
+      )}
+    </div>
+  );
+};
+// start meeting btn
+const ViewDetails: React.FC<{
+  sessionId: string;
+  isTeacher: boolean;
+  name: string;
+  link: Imeeting;
+}> = ({ sessionId, isTeacher, name, link }) => {
   const router = useRouter();
   const navigateLink = () => {
     if (isTeacher) {
-      router.push(`/teacher-dashboard/sessions/one-on-one-section/${sessionId}`);
+      router.push(
+        `/teacher-dashboard/sessions/one-on-one-section/${sessionId}`
+      );
     } else {
-      router.push(`/student-dashboard/sessions/one-on-one-section/${sessionId}`);
+      router.push(
+        `/student-dashboard/sessions/one-on-one-section/${sessionId}`
+      );
     }
   };
   return (
     <div className=" w-full flex flex-col gap-2 px-3">
-     
-     
-     
-       <div className=" w-full flex  gap-2 px-3">
-      <div
-        onClick={navigateLink}
-        className=" flex-1 py-3 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 "
-      >
-        <p>View Details</p>
+      <div className=" w-full flex  gap-2 px-3">
+        <div
+          onClick={navigateLink}
+          className=" flex-1 py-3 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 "
+        >
+          <p>View Details</p>
+        </div>
+        <SharedAddLink
+          link={link}
+          isTeacher={isTeacher}
+          specialRequest={false}
+          sessionId={sessionId}
+        />
       </div>
-      
-      <div className=" flex-1 flex gap-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 ">
-        <IoIosRadio />
-        <p>{isTeacher ? "Start Session" : "Join Session"}</p>
-      </div>
-     
-      </div>
-      <p>{isTeacher && <HandleAttendance sessionId={sessionId} name={name} />}</p>
+      <p>
+        {isTeacher && <HandleAttendance sessionId={sessionId} name={name} />}
+      </p>
     </div>
-    
   );
 };
 // each session component here
@@ -229,7 +390,12 @@ const EachSession: React.FC<{ item: IAppliedSession; isTeacher: boolean }> = ({
         duration={item.duration}
         hours={item.hoursperday}
       />
-      <ViewDetails isTeacher={isTeacher} sessionId={item.id} name={item.student.name} />
+      <ViewDetails
+        isTeacher={isTeacher}
+        sessionId={item.id}
+        name={item.student.name}
+        link={item.SingleMeeting}
+      />
     </div>
   );
 };
@@ -308,10 +474,8 @@ const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
         <p>{error.message}</p>
       </div>
     );
-
+  console.log(data);
   const oneOneOneData: IAppliedSession[] = data;
-  console.log(oneOneOneData);
-
   return (
     <section className="my-[80px] md:my-4">
       <Container>
@@ -339,6 +503,7 @@ const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
           )}
         </div>
       </Container>
+      <ToastContainer />
     </section>
   );
 };

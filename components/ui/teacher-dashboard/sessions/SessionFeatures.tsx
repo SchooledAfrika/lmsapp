@@ -45,7 +45,11 @@ const SessionFeatures = () => {
         firstTabTitle="One on one Session"
         secondTabTitle="Special Requests"
       />
-      {oneOneOne ? <OneOnOneSession isTeacher={true} /> : <SpecialRequest />}
+      {oneOneOne ? (
+        <OneOnOneSession isTeacher={true} />
+      ) : (
+        <SpecialRequest isTeacher={true} />
+      )}
     </div>
   );
 };
