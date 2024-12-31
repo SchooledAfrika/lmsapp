@@ -115,7 +115,7 @@ export async function GET(req: Request) {
             },
           },
         },
-        SingleMetting: true,
+        SingleMeeting: true,
       },
     });
     return new Response(JSON.stringify(allSections), { status: 200 });

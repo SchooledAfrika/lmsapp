@@ -343,20 +343,28 @@ model AppliedSection {
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @default(now())
   SessionAttendance SessionAttendance[]
-  SingleMetting     SingleMetting?
+  SingleMeeting     SingleMeeting?
 
   @@index([oneOnOneSectionId, studentId], name: "applied_section")
 }
 
 // creating a one to one relationship between the appled section 
 // and the model for meetings
-model SingleMetting {
+model SingleMeeting {
   id               String         @id @default(auto()) @map("_id") @db.ObjectId
   link             String
   appliedsession   AppliedSection @relation(fields: [appliedSectionId], references: [id])
+  appliedSectionId String         @unique @db.ObjectId
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @default(now())
-  appliedSectionId String         @unique @db.ObjectId
+}
+
+// model for adding meeting link for the special request
+model SpecialRequestMeeting {
+  id                     String               @id @default(auto()) @map("_id") @db.ObjectId
+  link                   String
+  specialRequest         SpecialTeacherMerged @relation(fields: [specialTeacherMergedId], references: [id])
+  specialTeacherMergedId String               @unique @db.ObjectId
 }
 
 // the model below will be displayed in the admin dashbaord.
@@ -667,6 +675,7 @@ model SpecialTeacherMerged {
   createdAt                DateTime                   @default(now())
   updatedAt                DateTime                   @default(now())
   SpecialRequestAttendance SpecialRequestAttendance[]
+  SpecialRequestMeeting    SpecialRequestMeeting?
 }
 
 // here we will create attendance model

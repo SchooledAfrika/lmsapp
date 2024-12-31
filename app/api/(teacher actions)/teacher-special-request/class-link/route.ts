@@ -17,7 +17,7 @@ export async function POST(req: Request) {
   if (role !== "Teacher") return onlyTeacher();
   // first, lets check if the applied session actually exist
   // return error if it does not exist
-  const checkSession = await prisma.appliedSection.findUnique({
+  const checkSession = await prisma.specialTeacherMerged.findUnique({
     where: {
       id: sessionId,
     },
@@ -29,10 +29,10 @@ export async function POST(req: Request) {
   }
   // now we can proceed to create the link here
   try {
-    await prisma.singleMeeting.create({
+    await prisma.specialRequestMeeting.create({
       data: {
         link,
-        appliedSectionId: sessionId,
+        specialTeacherMergedId: sessionId,
       },
     });
     return new Response(

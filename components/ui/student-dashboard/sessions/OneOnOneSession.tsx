@@ -53,7 +53,7 @@ interface IAppliedSession {
   sectionOwner: {
     teacher: IstudentOneonOne;
   };
-  SingleMetting: Imeeting;
+  SingleMeeting: Imeeting;
   subject: string[];
   sectionType: string;
 }
@@ -179,27 +179,37 @@ const TimeShow: React.FC<{
   );
 };
 
+// /api/teacher-special-request/class-link
+// /api/one-on-one-section/class-link
+
 const AddMettingModel: React.FC<{
   showModel: boolean;
   setShowmodel: React.Dispatch<React.SetStateAction<boolean>>;
   sessionId: string;
-}> = ({ showModel, setShowmodel, sessionId }) => {
+  specialRequest: boolean;
+}> = ({ showModel, setShowmodel, sessionId, specialRequest }) => {
   const [link, setLink] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationKey: ["add-class-link"],
     mutationFn: async () => {
-      const response = await fetch("/api/one-on-one-section/class-link", {
-        method: "POST",
-        body: JSON.stringify({ link, sessionId }),
-      });
+      const response = await fetch(
+        specialRequest
+          ? "/api/teacher-special-request/class-link"
+          : "/api/one-on-one-section/class-link",
+        {
+          method: "POST",
+          body: JSON.stringify({ link, sessionId }),
+        }
+      );
       return response;
     },
     onSuccess: async (response) => {
       const message = await response.json();
       if (response.ok) {
         queryClient.invalidateQueries({ queryKey: ["getSession"] });
+        queryClient.invalidateQueries({ queryKey: ["getSpecialRequest"] });
         setLink(undefined);
         setLoading(false);
         setShowmodel(false);
@@ -248,13 +258,14 @@ const AddMettingModel: React.FC<{
 };
 
 // this div render for teachers to add the class link if not existing yet
-const AddClassLink: React.FC<{ isTeacher: boolean; sessionId: string }> = ({
-  isTeacher,
-  sessionId,
-}) => {
+const AddClassLink: React.FC<{
+  isTeacher: boolean;
+  sessionId: string;
+  specialRequest: boolean;
+}> = ({ isTeacher, sessionId, specialRequest }) => {
   const [showModel, setShowmodel] = useState<boolean>(false);
   return (
-    <div className="flex-1 py-3 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 ">
+    <div className="flex-1 py-3 px-2 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 ">
       {isTeacher ? (
         <div onClick={() => setShowmodel(true)}>
           <p>Add Class Link</p>
@@ -267,17 +278,48 @@ const AddClassLink: React.FC<{ isTeacher: boolean; sessionId: string }> = ({
           sessionId={sessionId}
           showModel={showModel}
           setShowmodel={setShowmodel}
+          specialRequest={specialRequest}
         />
       )}
     </div>
   );
 };
 // join class link component below here
-const JoinClassLink: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
+const JoinClassLink: React.FC<{ isTeacher: boolean; link: string }> = ({
+  isTeacher,
+  link,
+}) => {
+  const handleMoveToZoom = () => {
+    return (window.location.href = link);
+  };
   return (
-    <div className=" flex-1 flex gap-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 ">
+    <div
+      onClick={handleMoveToZoom}
+      className=" flex-1 flex gap-1 px-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 "
+    >
       <IoIosRadio />
       <p>{isTeacher ? "Start Session" : "Join Session"}</p>
+    </div>
+  );
+};
+// the btn below will be reusuable for both special request and normal one on one session
+export const SharedAddLink: React.FC<{
+  specialRequest: boolean;
+  isTeacher: boolean;
+  sessionId: string;
+  link: Imeeting;
+}> = ({ link, isTeacher, sessionId, specialRequest }) => {
+  return (
+    <div>
+      {link !== null ? (
+        <JoinClassLink link={link.link} isTeacher={isTeacher} />
+      ) : (
+        <AddClassLink
+          specialRequest={specialRequest}
+          isTeacher={isTeacher}
+          sessionId={sessionId}
+        />
+      )}
     </div>
   );
 };
@@ -309,11 +351,12 @@ const ViewDetails: React.FC<{
         >
           <p>View Details</p>
         </div>
-        {link !== null ? (
-          <JoinClassLink isTeacher={isTeacher} />
-        ) : (
-          <AddClassLink isTeacher={isTeacher} sessionId={sessionId} />
-        )}
+        <SharedAddLink
+          link={link}
+          isTeacher={isTeacher}
+          specialRequest={false}
+          sessionId={sessionId}
+        />
       </div>
       <p>
         {isTeacher && <HandleAttendance sessionId={sessionId} name={name} />}
@@ -351,7 +394,7 @@ const EachSession: React.FC<{ item: IAppliedSession; isTeacher: boolean }> = ({
         isTeacher={isTeacher}
         sessionId={item.id}
         name={item.student.name}
-        link={item.SingleMetting}
+        link={item.SingleMeeting}
       />
     </div>
   );
