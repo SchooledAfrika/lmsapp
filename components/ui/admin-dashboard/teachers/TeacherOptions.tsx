@@ -13,6 +13,7 @@ import { FaRegEye } from "react-icons/fa";
 import { IoMailUnreadOutline } from "react-icons/io5";
 import UpdateTeacherStatus from "./UpdateTeacherStatus";
 import ChangeRole, { SendSingleMail } from "./ChangeRole";
+import { LuListRestart } from "react-icons/lu";
 import "react-toastify/dist/ReactToastify.css";
 
 interface ITeacher {
@@ -60,7 +61,14 @@ const TeacherOptions: React.FC<ITeacher> = ({ dataId, email }) => {
               />
             </div>
             <hr className="bg-black" />
-
+            <Link
+              href={`/admin-dashboard/teachers/attendance/${dataId}`}
+              className=" flex items-center text-[13px]  font-semibold"
+            >
+              <LuListRestart className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
+              <p>Attendance</p>
+            </Link>
+            <hr className="bg-black" />
             {/* Update Status Dialog Trigger */}
             <div
               onClick={() => setUpdateStatusDialogOpen(true)}
