@@ -6,13 +6,15 @@ import { useQuery } from "@tanstack/react-query";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { GoDash } from "react-icons/go";
+import { CircularProgress } from "@mui/material";
+import Image from "next/image";
+import { useConversion } from "@/data-access/conversion";
 
 interface ImonthInfo {
   name: string;
@@ -81,7 +83,19 @@ const AttendanceTable: React.FC<{
   selectedMonth: ImonthInfo;
   selectedYear: string;
 }> = ({ selectedMonth, selectedYear }) => {
+  const [daysInMonth, setDaysInMonth] = useState<number[]>([]);
+  const { makeSubstring } = useConversion();
   const { id } = useParams();
+  useEffect(() => {
+    calculateDaysInMonth();
+  }, [selectedMonth, selectedYear]);
+  // function to calculate the days in the selected month
+  const calculateDaysInMonth = () => {
+    const date = new Date(Number(selectedYear), selectedMonth.value + 1, 0);
+    // 0 gets the last day of the previous month
+    const days = Array.from({ length: date.getDate() }, (_, i) => i + 1);
+    setDaysInMonth(days);
+  };
   // now we fetch the attendance from database
   const { data, isLoading, isError, error } = useQuery<IAttendance[]>({
     queryKey: ["attendance", selectedMonth, selectedYear],
@@ -93,62 +107,130 @@ const AttendanceTable: React.FC<{
       return result;
     },
   });
-  if (isLoading) {
-    return <p>loading...</p>;
-  }
-  console.log(data);
-  const [daysInMonth, setDaysInMonth] = useState<number[]>([]);
-  useEffect(() => {
-    calculateDaysInMonth();
-  }, [selectedMonth, selectedYear]);
-  // function to calculate the days in the selected month
-  const calculateDaysInMonth = () => {
-    const date = new Date(Number(selectedYear), selectedMonth.value + 1, 0);
-    console.log(date); // 0 gets the last day of the previous month
-    const days = Array.from({ length: date.getDate() }, (_, i) => i + 1);
-    setDaysInMonth(days);
-  };
   // function to return the short name of the week of the selected date
   const getShortName = (day: number) => {
     const date = new Date(Number(selectedYear), selectedMonth.value, day);
     const shortName = date.toLocaleDateString("en-US", { weekday: "short" });
     return shortName;
   };
+  // function to calculate the total hour for each student
+  const calcTotalHours = (info: IsingleAttendance[]): number => {
+    const total = info.reduce((acc, val) => {
+      return acc + val.duration;
+    }, 0);
+    return total;
+  };
+  // function to calculate if the day has passed
+  // this will help to differentiate message rendered for passed day and future days
+  const passedDay = (): number => {
+    const date = new Date();
+    const day = date.getDate();
+    const year = date.getFullYear().toString();
+    // if the year selected is not the present year, then lets return 31
+    // this will help for other years
+    if (selectedYear !== year) {
+      return 32;
+    }
+    return day;
+  };
+  const totalHours = (): number => {
+    const mappedAttendance = data?.map((item) => item.items).flat();
+    const total = mappedAttendance!.reduce((acc, val) => {
+      return acc + val.duration;
+    }, 0);
+    return total;
+  };
+  if (isLoading) {
+    return (
+      <div className=" fixed top-0 left-0 w-full h-full flex items-center justify-center bg-white bg-opacity-50 z-50">
+        <CircularProgress size={80} color="success" />
+      </div>
+    );
+  }
+
   return (
-    <div className="w-full flex items-center justify-center">
-      <div className=" w-3/4 overflow-x-auto flex gap-1">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              {daysInMonth.map((days) => (
-                <TableHead>{days}</TableHead>
-              ))}
-              <TableHead>Total hours</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data?.map((attendance, index) => (
-              <TableRow key={index}>
-                <TableCell>{attendance.name}</TableCell>
-                {daysInMonth.map((day) => {
-                  const itemPerDay = attendance.items.find(
-                    (item) => new Date(item.classday).getDate() === day
-                  );
-                  return (
-                    <TableCell key={day}>
-                      {itemPerDay ? (
-                        <p>{itemPerDay.duration}</p>
-                      ) : (
-                        <p>no class</p>
-                      )}
-                    </TableCell>
-                  );
-                })}
+    <div className="w-full">
+      <div className="">
+        {data?.length === 0 ? (
+          <div className=" w-full flex items-center justify-center">
+            <Image
+              src={"/no-class.webp"}
+              alt="no class"
+              width={200}
+              height={200}
+              priority
+              className="  w-full md:w-1/3 rounded-md"
+            />
+          </div>
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="font-semibold">Names</TableHead>
+                {daysInMonth.map((days) => (
+                  <TableHead>
+                    <div className="flex flex-col items-center gap-1 text-slate-600 font-semibold">
+                      <p>{days}</p>
+                      <p>{getShortName(days)}</p>
+                    </div>
+                  </TableHead>
+                ))}
+                <TableHead>Total hours</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              {data?.map((attendance, index) => (
+                <TableRow key={index}>
+                  <TableCell className="md:w-[250px] w-[150px] whitespace-nowrap overflow-hidden text-ellipsis">
+                    {makeSubstring(attendance.name, 15)}
+                  </TableCell>
+                  {daysInMonth.map((day) => {
+                    const itemPerDay = attendance.items.find(
+                      (item) => new Date(item.classday).getDate() === day
+                    );
+                    return (
+                      <TableCell key={day}>
+                        {itemPerDay ? (
+                          <p
+                            className={`${
+                              itemPerDay.held
+                                ? "text-green-600"
+                                : "text-red-600"
+                            }`}
+                          >
+                            {itemPerDay.held ? itemPerDay.duration : "absent"}
+                          </p>
+                        ) : (
+                          <div>
+                            {
+                              // if the day has passed, we render the message below
+                              day < passedDay() ? (
+                                <GoDash />
+                              ) : (
+                                <p className=" text-slate-500">waiting</p>
+                              )
+                            }
+                          </div>
+                        )}
+                      </TableCell>
+                    );
+                  })}
+                  <TableCell className=" text-green-800 font-semibold">
+                    {calcTotalHours(attendance.items)}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </div>
+      <div className=" w-full flex items-center justify-center">
+        {data?.length !== 0 && (
+          <p className=" text-green-800 text-[20px] font-bold ">
+            Total: {totalHours()}
+            {totalHours() > 1 ? " hours" : " hour"}
+          </p>
+        )}
       </div>
     </div>
   );
