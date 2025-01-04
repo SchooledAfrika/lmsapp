@@ -690,8 +690,9 @@ model SessionAttendance {
   teacherId        String         @db.ObjectId
   session          AppliedSection @relation(fields: [appliedSectionId], references: [id])
   appliedSectionId String         @db.ObjectId
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   @@index([teacherId, appliedSectionId], name: "session_attendance")
 }
