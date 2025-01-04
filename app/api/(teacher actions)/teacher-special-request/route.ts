@@ -19,6 +19,7 @@ export async function GET(req: Request) {
               email: true,
             },
           },
+          SpecialRequestMeeting: true,
         },
       });
     return new Response(JSON.stringify(allSpecialRequestedSessions), {

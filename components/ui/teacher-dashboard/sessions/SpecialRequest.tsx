@@ -1,25 +1,23 @@
 "use client";
-
 import React from "react";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
-import Image from "next/image";
 import { Button } from "../../button";
-import DashboardPagination from "../../../DashboardPagination";
 import Container from "../../../Container";
-import { OneOnOneList } from "@/constants/oneOnOneList";
 import { useQuery } from "@tanstack/react-query";
-import { MdContentCopy } from "react-icons/md";
-import { useCopy } from "@/data-access/copy";
 import { FaRegClock } from "react-icons/fa";
-import { useConversion } from "@/data-access/conversion";
 import { IoIosRadio } from "react-icons/io";
 import { Skeleton } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { Noitem } from "../../../ApplicantsTable";
 import { ModifiedNoProfile } from "../../admin-dashboard/sessions/Sessions";
 import { HandleAttendance } from "@/components/HandleAddClass";
+import { SharedAddLink } from "../../student-dashboard/sessions/OneOnOneSession";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
+interface Imeeting {
+  link: string;
+  createdAt: string;
+}
 interface Istudent {
   name: string;
   email: string;
@@ -28,7 +26,7 @@ interface Istudent {
 }
 // interface for the type we are getting from backend
 interface ISpecialRequest {
-  id:string;
+  id: string;
   amt: string;
   grade: string;
   language: string;
@@ -36,6 +34,7 @@ interface ISpecialRequest {
   subject: string;
   time: string;
   student: Istudent;
+  SpecialRequestMeeting: Imeeting;
 }
 
 interface IoneonOne {
@@ -73,18 +72,17 @@ const TimeShow: React.FC<{
 // start meeting btn
 const StartSession = () => {
   return (
-
     <Button className="bg-[tomato] mt-3 bg-none border-none rounded-lg  hover:bg-[#fd7e62]  text-white text-[13px] font-semibold  px-3 w-full    py-2 text-center lg:block transition-all ease-in-out duration-700">
-          <IoIosRadio className="sm:inline-block text-[18px] hidden mr-1" />
-          Start Session
-        </Button>
-   
-      
-   
+      <IoIosRadio className="sm:inline-block text-[18px] hidden mr-1" />
+      Start Session
+    </Button>
   );
 };
 // each session component here
-const EachSession: React.FC<{ item: ISpecialRequest }> = ({ item }) => {
+const EachSession: React.FC<{ item: ISpecialRequest; isTeacher: boolean }> = ({
+  item,
+  isTeacher,
+}) => {
   return (
     <div className=" py-2 px-2 rounded-md bg-white shadow-md flex flex-col gap-2">
       <div className=" flex justify-between items-center">
@@ -111,12 +109,15 @@ const EachSession: React.FC<{ item: ISpecialRequest }> = ({ item }) => {
       </div>
       <StartMeetingDiv subject={item.subject} language={item.language} />
       <TimeShow time={item.time} />
-      <div className="flex md:flex-row flex-col justify-between md:gap-2 gap-1  py-2">
-      <StartSession />
-      <HandleAttendance sessionId={item.id} name={item.student?.name} />
-
+      <div className="flex flex-col gap-1">
+        <SharedAddLink
+          isTeacher={isTeacher}
+          specialRequest={true}
+          link={item.SpecialRequestMeeting}
+          sessionId={item.id}
+        />
+        <HandleAttendance sessionId={item.id} name={item.student?.name} />
       </div>
-      
     </div>
   );
 };
@@ -140,21 +141,19 @@ export const SessionLoadings = () => {
   );
 };
 
-const SpecialRequest = () => {
+const SpecialRequest: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
   const { data: session } = useSession();
   const studentId = session?.user?.id;
   //console.log(studentId);
   // here we can now fetch our session
   const { data, isLoading, isError, error } = useQuery({
-    queryKey: ["getSpecialRequestByTeacher"],
+    queryKey: ["getSpecialRequest"],
     queryFn: async () => {
       const response = await fetch(`/api/teacher-special-request`);
       const result = await response.json();
       return result;
     },
   });
-
-  console.log(data);
 
   if (isLoading) return <SessionLoadings />;
   if (isError)
@@ -179,7 +178,11 @@ const SpecialRequest = () => {
               ) : (
                 <div className=" w-full grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-3">
                   {oneOneOneData.map((item, index) => (
-                    <EachSession key={index} item={item} />
+                    <EachSession
+                      isTeacher={isTeacher}
+                      key={index}
+                      item={item}
+                    />
                   ))}
                 </div>
               )}
@@ -187,6 +190,7 @@ const SpecialRequest = () => {
           )}
         </div>
       </Container>
+      <ToastContainer />
     </section>
   );
 };

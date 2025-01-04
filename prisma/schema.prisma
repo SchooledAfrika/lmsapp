@@ -60,12 +60,14 @@ model Teacher {
   TeachersPlans        TeachersPlans?
   Courses              Courses[]
 
-  Revenew                 Revenew[]
-  TeacherPurchasedCourses TeacherPurchasedCourses[]
-  SpecialTeacherMerged    SpecialTeacherMerged[]
+  Revenew                  Revenew[]
+  TeacherPurchasedCourses  TeacherPurchasedCourses[]
+  SpecialTeacherMerged     SpecialTeacherMerged[]
   // linking teacher to meeting infos
-  MeetingInfo             MeetingInfo?
-  Vacancy                 Vacancy[]
+  MeetingInfo              MeetingInfo?
+  Vacancy                  Vacancy[]
+  SessionAttendance        SessionAttendance[]
+  SpecialRequestAttendance SpecialRequestAttendance[]
 }
 
 // here, we will store all the zoom information of a particular teacher here
@@ -317,11 +319,11 @@ model OneOnOneSection {
 // there will be one to many relationship between this model and oneoneoneSection model
 // there will also be one to many relationship between students model and this model
 model AppliedSection {
-  id                String          @id @default(auto()) @map("_id") @db.ObjectId
-  sectionOwner      OneOnOneSection @relation(fields: [oneOnOneSectionId], references: [id])
-  oneOnOneSectionId String          @db.ObjectId
-  student           Student         @relation(fields: [studentId], references: [id])
-  studentId         String          @db.ObjectId
+  id                String              @id @default(auto()) @map("_id") @db.ObjectId
+  sectionOwner      OneOnOneSection     @relation(fields: [oneOnOneSectionId], references: [id])
+  oneOnOneSectionId String              @db.ObjectId
+  student           Student             @relation(fields: [studentId], references: [id])
+  studentId         String              @db.ObjectId
   subject           String[]
   grade             String
   sectionType       String
@@ -335,13 +337,34 @@ model AppliedSection {
   // time to start or proposed time
   startTime         DateTime
   // this will contain the id of the resources that the teacher will push here
-  resources         String[]        @default([])
+  resources         String[]            @default([])
   StudentExam       StudentExam[]
   amt               Int
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @default(now())
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @default(now())
+  SessionAttendance SessionAttendance[]
+  SingleMeeting     SingleMeeting?
 
   @@index([oneOnOneSectionId, studentId], name: "applied_section")
+}
+
+// creating a one to one relationship between the appled section 
+// and the model for meetings
+model SingleMeeting {
+  id               String         @id @default(auto()) @map("_id") @db.ObjectId
+  link             String
+  appliedsession   AppliedSection @relation(fields: [appliedSectionId], references: [id])
+  appliedSectionId String         @unique @db.ObjectId
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now())
+}
+
+// model for adding meeting link for the special request
+model SpecialRequestMeeting {
+  id                     String               @id @default(auto()) @map("_id") @db.ObjectId
+  link                   String
+  specialRequest         SpecialTeacherMerged @relation(fields: [specialTeacherMergedId], references: [id])
+  specialTeacherMergedId String               @unique @db.ObjectId
 }
 
 // the model below will be displayed in the admin dashbaord.
@@ -638,19 +661,57 @@ model SpecialTeacherUnmerged {
 
 // this is created once the admin merges the special request 
 model SpecialTeacherMerged {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  student   Student  @relation(fields: [studentId], references: [id])
-  teacher   Teacher  @relation(fields: [teacherId], references: [id])
-  studentId String   @db.ObjectId
-  teacherId String   @db.ObjectId
-  amt       Float
-  language  String
-  subject   String
-  grade     String
-  time      String
-  merged    Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id                       String                     @id @default(auto()) @map("_id") @db.ObjectId
+  student                  Student                    @relation(fields: [studentId], references: [id])
+  teacher                  Teacher                    @relation(fields: [teacherId], references: [id])
+  studentId                String                     @db.ObjectId
+  teacherId                String                     @db.ObjectId
+  amt                      Float
+  language                 String
+  subject                  String
+  grade                    String
+  time                     String
+  merged                   Boolean                    @default(true)
+  createdAt                DateTime                   @default(now())
+  updatedAt                DateTime                   @default(now())
+  SpecialRequestAttendance SpecialRequestAttendance[]
+  SpecialRequestMeeting    SpecialRequestMeeting?
+}
+
+// here we will create attendance model
+// attendance linking the teacher to it in one to many relationship
+// and also linking the session to the attencance in one to many relationship
+model SessionAttendance {
+  id               String         @id @default(auto()) @map("_id") @db.ObjectId
+  classday         DateTime
+  duration         Float
+  held             Boolean
+  teacher          Teacher        @relation(fields: [teacherId], references: [id])
+  teacherId        String         @db.ObjectId
+  session          AppliedSection @relation(fields: [appliedSectionId], references: [id])
+  appliedSectionId String         @db.ObjectId
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now())
+
+  @@index([teacherId, appliedSectionId], name: "session_attendance")
+}
+
+// here we will create attendance model
+// attendance linking the teacher to it in one to many relationship
+// and also linking the special requests to the attencance in one to many relationship
+model SpecialRequestAttendance {
+  id                     String               @id @default(auto()) @map("_id") @db.ObjectId
+  classday               DateTime
+  duration               Int?
+  Held                   Boolean
+  teacher                Teacher              @relation(fields: [teacherId], references: [id])
+  session                SpecialTeacherMerged @relation(fields: [specialTeacherMergedId], references: [id])
+  teacherId              String               @db.ObjectId
+  specialTeacherMergedId String               @db.ObjectId
+  createdAt              DateTime             @default(now())
+  updatedAt              DateTime             @default(now())
+
+  @@index([teacherId, specialTeacherMergedId], name: "special_request_attendance")
 }
 
 // this is enum for grades
