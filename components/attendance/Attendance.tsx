@@ -168,7 +168,7 @@ const AttendanceTable: React.FC<{
               <TableRow>
                 <TableHead className="font-semibold">Names</TableHead>
                 {daysInMonth.map((days) => (
-                  <TableHead>
+                  <TableHead key={days}>
                     <div className="flex flex-col items-center gap-1 text-slate-600 font-semibold">
                       <p>{days}</p>
                       <p>{getShortName(days)}</p>
