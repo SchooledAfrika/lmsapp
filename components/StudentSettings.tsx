@@ -370,7 +370,7 @@ const StudentId = () => {
 const StudentSettings = () => {
   return (
     <section className=" flex flex-col gap-2">
-      <div className=" w-full flex items-end">
+      <div className=" w-full flex items-end justify-end">
         <StudentId />
       </div>
       <div className="flex flex-col md:flex-row gap-4">

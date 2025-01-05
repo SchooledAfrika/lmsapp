@@ -51,11 +51,22 @@ export const payForClass = async (classId: string, studentId: string) => {
 
 // here we make payment for session
 export const sessionPaymentFlutter = async (paymentInfo: any) => {
-  console.log(paymentInfo);
+  // lets check if the registraction is from the parents first,
+  // if it is, then we get the childs id and use it for creating this session
+  let wardId: string;
+  if (paymentInfo.byparents) {
+    const student = await prisma.student.findFirst({
+      where: { studentId: paymentInfo.studentId },
+      select: {
+        id: true,
+      },
+    });
+    wardId = student?.id as string;
+  }
   try {
     await prisma.adminSectionView.create({
       data: {
-        studentId: paymentInfo.studentId,
+        studentId: paymentInfo.byparents ? wardId! : paymentInfo.studentId,
         oneOnOneSectionId: paymentInfo.selectedTeacher,
         merged: false,
         amt: Number(paymentInfo.price),
@@ -80,10 +91,22 @@ export const sessionPaymentFlutter = async (paymentInfo: any) => {
   }
 };
 export const sessionPaymentPaystack = async (paymentInfo: any) => {
+  // lets check if the registraction is from the parents first,
+  // if it is, then we get the childs id and use it for creating this session
+  let wardId: string;
+  if (paymentInfo.byparents) {
+    const student = await prisma.student.findFirst({
+      where: { studentId: paymentInfo.studentId },
+      select: {
+        id: true,
+      },
+    });
+    wardId = student?.id as string;
+  }
   try {
     await prisma.adminSectionView.create({
       data: {
-        studentId: paymentInfo.studentId,
+        studentId: paymentInfo.byparents ? wardId! : paymentInfo.studentId,
         oneOnOneSectionId: paymentInfo.selectedTeacher,
         merged: false,
         amt: Number(paymentInfo.price),

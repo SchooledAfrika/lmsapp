@@ -165,7 +165,6 @@ export const FlutterWaveBtn: React.FC<{
       studentId: getValue("childId"),
       grade: getValue("grade"),
       sessionType: getValue("sessionTypes"),
-
       subjects: getValue("subject").join("-"),
       curriculum: getValue("curriculum"),
       specialNeeds: getValue("specialNeeds")?.join("-"),
@@ -211,9 +210,6 @@ const BookSessionByParents: React.FC<{
   tutorLang: string[];
   setShowDialog: React.Dispatch<React.SetStateAction<boolean>>;
 }> = ({ sessionId, tutorImg, tutorLang, tutorName, setShowDialog }) => {
-  const { data: session, update } = useSession();
-  // console.log(session?.user);
-  const router = useRouter();
   const [completed, setCompleted] = useState<boolean>(false);
   const [currentPage, setcurrentPage] = useState<number>(1);
   const [method, setMethod] = useState<string>("Paystack");
