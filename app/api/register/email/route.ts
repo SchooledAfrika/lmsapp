@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import prisma from "@/prisma/prismaConnect";
 import bcrypt from "bcryptjs";
 import { serverError } from "@/prisma/utils/error";
+import { generateId } from "@/prisma/utils/utils";
 
 // here, we create a new user with their email
 // making use of post request
@@ -51,6 +52,7 @@ export async function POST(request: Request) {
           email: email,
           password: hashPasword,
           role: "Student",
+          studentId: generateId(),
         },
         select: {
           id: true,

@@ -4,7 +4,11 @@
 // handles registering new child and encrypting the password,
 // then adding the id of the child to the student
 import prisma from "@/prisma/prismaConnect";
-import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
+import {
+  generateId,
+  serverSessionId,
+  serverSessionRole,
+} from "@/prisma/utils/utils";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import bcrypt from "bcryptjs";
 
@@ -22,11 +26,18 @@ export async function POST(req: Request) {
       })
     );
   try {
+    // lets get the students Id that the wardId matches with
+    const student = await prisma.student.findFirst({
+      where: { studentId: wardId },
+      select: {
+        id: true,
+      },
+    });
     // here, we proceed to check if the user passed the wardId
     // if the wardid is passed then we add the parents id to the student
     if (wardId) {
       await prisma.student.update({
-        where: { id: wardId },
+        where: { id: student?.id },
         data: {
           parentsId: userId,
         },
@@ -37,7 +48,7 @@ export async function POST(req: Request) {
     if (wardEmail && password) {
       const hashPassword = bcrypt.hashSync(password, 10);
       //   create the student here
-      const ward = await prisma.student.create({
+      await prisma.student.create({
         data: {
           email: wardEmail,
           password: hashPassword,
@@ -49,9 +60,7 @@ export async function POST(req: Request) {
           name: others.name,
           gender: others.gender,
           grade: others.grade,
-        },
-        select: {
-          id: true,
+          studentId: generateId(),
         },
       });
     }
