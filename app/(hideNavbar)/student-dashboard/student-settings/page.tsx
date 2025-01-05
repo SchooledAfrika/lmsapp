@@ -3,7 +3,7 @@ import React from "react";
 
 const page = () => {
   return (
-    <div>
+    <div className=" mt-[100px] md:mt-[30px]">
       <StudentSettings />
     </div>
   );
