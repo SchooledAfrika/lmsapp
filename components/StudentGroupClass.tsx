@@ -11,6 +11,7 @@ import { PiBookFill } from "react-icons/pi";
 import { SiGoogleclassroom } from "react-icons/si";
 import { Iannoucement } from "./SingleClassroom";
 import { useSession } from "next-auth/react";
+import { AnnouncementsList } from "./ui/teacher-dashboard/SingleClassroom";
 
 export interface ITest {
   answer: string;
@@ -65,9 +66,11 @@ interface IGroupClass {
   ClassLink: IclassLink;
 }
 
+
+
 // this component below shows the exam in the class
 export const Exams: React.FC<{ exams: IExam[] }> = ({ exams }) => {
-  const { getTimeAgo } = useConversion();
+  const { getTimeAgo} = useConversion();
   const { data } = useSession();
   const router = useRouter();
 
@@ -255,6 +258,7 @@ const ClassDetails: React.FC<{
 
 const StudentGroupClass = () => {
   const { id } = useParams();
+  const { handleDate } = useConversion();
   const { data, isLoading, error, isError } = useQuery({
     queryKey: ["StudentGroupClass"],
     queryFn: async () => {
@@ -263,6 +267,21 @@ const StudentGroupClass = () => {
       return result;
     },
   });
+
+  // State to manage expanded state of announcements
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [visibleItems, setVisibleItems] = useState(2); // Control how many items are visible
+
+  const handleShowMore = () => {
+    setVisibleItems(classInfo?.AnnouncementByTeacherClass.length || 0);
+    setIsExpanded(true); // Toggle expanded state to true
+  };
+
+  const handleShowLess = () => {
+    setVisibleItems(2); // Show only the initial 3 items
+    setIsExpanded(false); // Toggle expanded state to false
+  };
+  
   //   check for loading
   if (isLoading) {
     return (
@@ -278,7 +297,8 @@ const StudentGroupClass = () => {
       </div>
     );
   }
-  const classInfo: IGroupClass = data;
+  //const classInfo: IGroupClass = data;
+  const classInfo = data;
   return (
     <div className=" mt-6 flex flex-col gap-3">
       <SingleTop />
@@ -291,7 +311,16 @@ const StudentGroupClass = () => {
           createdAt={classInfo.createdAt}
           classLink={classInfo.ClassLink}
         />
-        <Announcement info={classInfo.AnnouncementByTeacherClass} />
+        {/* Announcements List */}
+        <AnnouncementsList
+          announcements={classInfo.AnnouncementByTeacherClass || []}
+          isTeacher={false}  // No editing options for students
+          handleShowMore={handleShowMore}
+          handleShowLess={handleShowLess}
+          isExpanded={isExpanded}
+          visibleItems={visibleItems}
+          handleDate={handleDate} 
+        />
         <ClassDetails
           subject={classInfo.subject}
           studentNo={classInfo.studentIDs}
