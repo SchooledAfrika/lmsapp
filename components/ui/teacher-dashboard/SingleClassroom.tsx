@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
@@ -48,34 +48,137 @@ interface Announcement {
 
 interface IndividualAnnouncementProps {
   dataId: string;
+  title: string;
+  content: string;
 }
 
 interface EditAnnouncementProps {
+  dataId: string;
+  title: string; 
+  content: string;
+  setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  dialogueOpen: boolean;
+}
+
+interface RemoveAnnouncementProps {
   dataId: string;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   dialogueOpen: boolean;
 }
 
+interface AnnouncementsListProps {
+  announcements: Announcement[];
+  isTeacher: boolean;
+  handleShowMore: () => void;
+  handleShowLess: () => void;
+  isExpanded: boolean;
+  visibleItems: number;
+  handleDate: (date: string) => string;
+}
+
+export const AnnouncementsList: React.FC<AnnouncementsListProps> = ({
+  announcements,
+  isTeacher,
+  handleShowMore,
+  handleShowLess,
+  isExpanded,
+  visibleItems,
+  handleDate,
+}) => {
+  return (
+    <div
+      className={`announcement-container bg-white px-4 py-2 rounded-md ${
+        isExpanded ? "announcement-expanded" : ""
+      }`}
+    >
+      <p className="text-slate-500 text-[14px] mb-3 font-semibold">
+        Announcements
+      </p>
+
+      {announcements?.length > 0 ? (
+        <>
+          {announcements.slice(0, visibleItems).map((announcement) => (
+            <div key={announcement.id} className="mt-3">
+              <div className="flex justify-between">
+                <p className="text-[13px] font-bold">{announcement.title}</p>
+                {/* Show edit and delete options only if the user is a teacher */}
+                {isTeacher && (
+                  <IndividualAnnouncement
+                    dataId={announcement.id}
+                    title={announcement.title}
+                    content={announcement.desc}
+                  />
+                )}
+              </div>
+              <p className="text-[12px]">{announcement.desc}</p>
+              <p className="text-[10px] text-slate-500">
+                Posted on: {handleDate(announcement.createdAt)}
+              </p>
+
+              <hr className="w-full my-3 font-semibold text-black" />
+            </div>
+          ))}
+
+          {/* Show More / Less Button */}
+          {announcements.length > 2 && (
+            <div className="flex justify-center mt-4">
+              {isExpanded ? (
+                <button
+                  onClick={handleShowLess}
+                  className="text-white w-full rounded-md p-2 text-[14px] bg-lightGreen font-semibold"
+                >
+                  Show Less Announcements
+                </button>
+              ) : (
+                <button
+                  onClick={handleShowMore}
+                  className="text-white w-full rounded-md p-2 text-[14px] bg-lightGreen font-semibold"
+                >
+                  Show More Announcements
+                </button>
+              )}
+            </div>
+          )}
+        </>
+      ) : (
+        <p className="text-slate-500 text-[13px] italic">
+          No announcements available.
+        </p>
+      )}
+    </div>
+  );
+};
+
+
 
 // Dialog that updates the announcement
 const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
   dataId,
+  title: initialTitle, // Prop for initial title
+  content: initialContent, // Prop for initial content
   setDialogOpen,
   dialogueOpen,
 }) => {
   const [loading, setLoading] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>("");
-  const [content, setContent] = useState<string>("");
+  const [title, setTitle] = useState<string>(initialTitle);
+  const [content, setContent] = useState<string>(initialContent);
   const { toast } = useToast();
 
   // Query client instance
   const queryClient = useQueryClient();
 
-  // Mutation to handle the addition of announcement
+  useEffect(() => {
+    if (dialogueOpen) {
+      setTitle(title);   // Use passed title
+      setContent(content); // Use passed content
+    }
+  }, [dialogueOpen, title, content]);
+  
   const mutation = useMutation({
     mutationFn: async () => {
       const result = await fetch(`/api/class/announcement`, {
         method: "PUT",
+        headers: { "Content-Type": "application/json" }, // Added header
         body: JSON.stringify({
           id: dataId,
           desc: content,
@@ -84,7 +187,7 @@ const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
       });
       return result;
     },
-
+  
     onSuccess: async (result) => {
       queryClient.invalidateQueries({ queryKey: ["get-single-class-teacher"] });
       if (result.ok) {
@@ -102,15 +205,15 @@ const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
         return toast({
           variant: "destructive",
           title: "Update error",
-          description: "Error updating this teacher's status",
+          description: "Error updating announcement.",
         });
       }
     },
   });
-
-  // handle submit or trigger mutation function to run
+  
+  // Handle submit
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); // Prevent event from propagating to parent elements
+    e.stopPropagation(); // Prevent event propagation
     setLoading(true);
     mutation.mutate();
   };
@@ -119,19 +222,17 @@ const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
     <Dialog
       open={dialogueOpen}
       onOpenChange={(isOpen) => {
-        // Prevent dialog from closing while loading
         if (!loading) {
           setDialogOpen(isOpen);
         }
       }}
     >
       <DialogTrigger asChild>
-        <div className="text-[13px] flex items-center font-semibold">
-          <FaRegEdit className="inline ml-0 w-4 h-4 mr-2 text-lightGreen" />
-          <p>Edit </p>
-        </div>
+        <p className="inline text-[13px] cursor-pointer  font-semibold">
+          <FaRegEdit className="inline w-4 h-4 mr-2 ml-0 text-lightGreen " />
+          Edit 
+        </p>
       </DialogTrigger>
-
       <DialogContent className="sm:w-[600px] w-[380px] font-subtext">
         <DialogHeader>
           <DialogTitle className="text-3xl font-bold">
@@ -152,11 +253,10 @@ const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
                 name="title"
                 placeholder="Enter the announcement title here"
                 className="col-span-6 w-full"
-                value={title}
+                value={title} // Pre-filled
                 onChange={(e) => setTitle(e.target.value)}
                 aria-label="Announcement title"
               />
-             
             </div>
 
             <div className="flex flex-col">
@@ -167,10 +267,9 @@ const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
                 name="content"
                 placeholder="Provide the content for the announcement"
                 className="col-span-6 p-2 border text-[14px] rounded-md w-full"
-                value={content}
+                value={content} // Pre-filled
                 onChange={(e) => setContent(e.target.value)}
               />
-              
             </div>
           </div>
         </div>
@@ -186,14 +285,12 @@ const EditAnnouncement: React.FC<EditAnnouncementProps> = ({
           </Button>
         </DialogFooter>
       </DialogContent>
-      <ToastContainer />
     </Dialog>
   );
 };
 
-
 //The Dialog that deletes the announcement
-const RemoveAnnouncement: React.FC<EditAnnouncementProps> = ({ dataId,
+const RemoveAnnouncement: React.FC<RemoveAnnouncementProps> = ({ dataId,
   setDialogOpen,
   dialogueOpen}) => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -291,7 +388,7 @@ const RemoveAnnouncement: React.FC<EditAnnouncementProps> = ({ dataId,
 };
 
 // The Update and Delete Announcement options popover
-const IndividualAnnouncement = ({ dataId }: IndividualAnnouncementProps) => {
+const IndividualAnnouncement = ({ dataId, title, content }: IndividualAnnouncementProps) => {
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
@@ -313,6 +410,8 @@ const IndividualAnnouncement = ({ dataId }: IndividualAnnouncementProps) => {
                 setDialogOpen={setEditDialogOpen}
                 dialogueOpen={editDialogOpen}
                 dataId={dataId}
+                title={title}         
+                content={content}
               />
             </div>
             <hr className="bg-black" />
@@ -404,7 +503,7 @@ const CheckZoomUser = () => {
   );
 };
 
-const SingleClassroom = () => {
+const SingleClassroom : React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
   const { id } = useParams();
   const [visibleItems, setVisibleItems] = useState(2); // State to manage visible items
   const [isExpanded, setIsExpanded] = useState(false); // To toggle between show more/less
@@ -418,7 +517,7 @@ const SingleClassroom = () => {
       return result;
     },
   });
-  console.log(data);
+  //console.log(data);
   //   if is loading
   if (isLoading) {
     return (
@@ -496,61 +595,15 @@ const SingleClassroom = () => {
               </div>
             </div>
             {/* Announcements Div */}
-            <div
-              className={`announcement-container bg-white px-4 py-2 rounded-md ${
-                isExpanded ? "announcement-expanded" : ""
-              }`}
-            >
-              <p className="text-slate-500 text-[14px] mb-3 font-semibold">
-                Announcements
-              </p>
-
-              {data?.AnnouncementByTeacherClass?.length > 0 ? (
-                <>
-                  {data.AnnouncementByTeacherClass.slice(0, visibleItems).map(
-                    (announcement: Announcement) => (
-                      <div key={announcement.id} className="mt-3">
-                        <div className="flex justify-between">
-                          <p className="text-[13px] font-bold">
-                            {announcement.title}
-                          </p>
-                          <IndividualAnnouncement dataId={announcement.id} />
-                        </div>
-                        <p className="text-[12px]">{announcement.desc}</p>
-                        <p className="text-[12px] text-slate-500">
-                          Posted on: {handleDate(announcement.createdAt)}
-                        </p>
-                        <hr className="w-full my-3 font-semibold text-black" />
-                      </div>
-                    )
-                  )}
-                  {/* Conditionally render Show More/Less buttons */}
-                  {data.AnnouncementByTeacherClass.length > 2 && (
-                    <div className="flex justify-center mt-4">
-                      {isExpanded ? (
-                        <button
-                          onClick={handleShowLess}
-                          className="text-white w-full rounded-md p-2 text-[14px] bg-lightGreen font-semibold"
-                        >
-                          Show Less Announcements
-                        </button>
-                      ) : (
-                        <button
-                          onClick={handleShowMore}
-                          className="text-white w-full rounded-md p-2 text-[14px] bg-lightGreen font-semibold"
-                        >
-                          Show More Announcements
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </>
-              ) : (
-                <p className="text-slate-500 text-[13px] italic">
-                  No announcements available.
-                </p>
-              )}
-            </div>
+            <AnnouncementsList
+              announcements={data?.AnnouncementByTeacherClass || []}
+              isTeacher={isTeacher}
+              handleShowMore={handleShowMore}
+              handleShowLess={handleShowLess}
+              isExpanded={isExpanded}
+              visibleItems={visibleItems}
+              handleDate={handleDate}
+            />
             <div className="bg-white rounded-md py-6 px-6">
               <p className="text-slate-500 text-[14px] mb-3 font-semibold">
                 Invite students

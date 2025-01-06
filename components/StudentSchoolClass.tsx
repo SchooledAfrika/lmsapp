@@ -146,7 +146,9 @@ const StudentSchoolClass = () => {
       const result = await response.json();
       return result;
     },
+    
   });
+  
   //   checking if loading is true
   if (isFetching) {
     return (
@@ -158,7 +160,7 @@ const StudentSchoolClass = () => {
   if (isError) {
     return <div>{error.message}</div>;
   }
-
+ 
   const items: IsingleClass = data;
   return (
     <div className=" mt-6 flex flex-col gap-3">
