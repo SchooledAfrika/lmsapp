@@ -33,6 +33,7 @@ import { ListCollapse } from "lucide-react";
 import { FaUserSlash } from "react-icons/fa6";
 import RemoveParent from "./RemoveParent";
 import SingleWardInfo from "./SingleWardInfo";
+import { useConversion } from "@/data-access/conversion";
 
 interface Iward {
   dataId: string;
@@ -40,6 +41,7 @@ interface Iward {
 }
 
 const WardInfo: React.FC<Iward> = ({dataId, wards}) => {
+  const { handleDate } = useConversion();
   // Ensure wards is defined and is an array
   const validWards = Array.isArray(wards) ? wards : [];
   // getting individual wards using parallel query with usequeries
@@ -108,7 +110,8 @@ const WardInfo: React.FC<Iward> = ({dataId, wards}) => {
                 {singleWard.gender}
               </TableCell>
               <TableCell className="text-[13px]  font-semibold p-2">
-                {singleWard.createdAt}
+              {handleDate(singleWard?.createdAt)}
+               
               </TableCell>
               {/* <TableCell className="text-right text-[16px] text-lightGreen cursor-pointer p-2">
                 <SingleWardInfo dataId={singleWard.id} classes={singleWard.classes}   />
