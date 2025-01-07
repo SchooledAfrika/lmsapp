@@ -79,18 +79,18 @@ const TeachersTable = () => {
       <TableBody>
         {data.map((item) => (
           <TableRow
-            className="text-[12px] font-semibold"
+            className="text-[12px] w-[100px] font-semibold"
             key={item.teacher.name}
           >
             {" "}
             {/* Use a unique key, maybe teacher's name */}
-            <TableCell className="flex items-center  mr-1">
+            <TableCell className="flex items-center  mr-3">
               <Image
                 src={item.teacher.profilePhoto}
                 alt="icon"
                 width={100}
                 height={100}
-                className="w-[40px] h-[40px] rounded-md mr-1"
+                className="w-[40px] h-[40px] rounded-md mr-2"
               />{" "}
               {item.teacher.name}
             </TableCell>

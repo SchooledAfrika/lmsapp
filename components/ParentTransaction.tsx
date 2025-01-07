@@ -14,27 +14,6 @@ import {
 } from "./ui/table";
 
 const ParentTransaction = () => {
-  const TransactionType = [
-    {
-      id: "1",
-      icon: "/teacher1.jpg",
-      name: "Rotimi Wajabs",
-      type: "Tuition Fee",
-      parent: "Parent",
-      date: "April 20, 2024",
-      amount_add: "+$17.50",
-    },
-    {
-      id: "2",
-      icon: "/parent1.jpg",
-      name: "Adeniran James",
-      type: "Tuition Fee",
-      parent: "Parent",
-      date: "April 19, 2024",
-      amount_add: "+$14.5",
-    },
-  ];
-
   return (
     <div className="md:flex md:flex-row  gap grid grid-cols-1 justify-between gap-6">
       <div className="flex  flex-6 flex-col">
@@ -60,37 +39,27 @@ const ParentTransaction = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {TransactionType.map((Transaction) => (
-              <TableRow key={Transaction.id} className="">
-                <TableCell className="font-semibold w-[200px] text-[13px] flex  mr-1">
-                  <Image
+            <TableRow className="">
+              <TableCell className="font-semibold w-[200px] text-[13px] flex  mr-1">
+                {/* <Image
                     src={Transaction.icon}
                     alt="icon"
                     width={100}
                     height={100}
                     className="w-[30px] h-[30px] mt-2 rounded-md mr-1"
-                  />{" "}
-                  <div className="flex ml-1 flex-col">
-                    <div className="text-[12px]">{Transaction.name}</div>
-                    <div className="flex justify-between">
-                      <p className="text-[10px] py-[2px] px-[10px] rounded-md mr-3 bg-[#FDA21A80]">
-                        {Transaction.parent}
-                      </p>
-                    </div>
-                  </div>
-                </TableCell>
+                  />{" "} */}
+                <div className="flex ml-1 flex-col">
+                  <div className="text-[12px]"></div>
+                  {/* <div className="flex justify-between">
+                    <p className="text-[10px] py-[2px] px-[10px] rounded-md mr-3 bg-[#FDA21A80]"></p>
+                  </div> */}
+                </div>
+              </TableCell>
 
-                <TableCell className="text-[12px] font-semibold">
-                  {Transaction.type}
-                </TableCell>
-                <TableCell className="text-[12px] font-semibold">
-                  {Transaction.date}
-                </TableCell>
-                <TableCell className="text-[12px] text-lightGreen font-semibold">
-                  {Transaction.amount_add}
-                </TableCell>
-              </TableRow>
-            ))}
+              <TableCell className="text-[12px] font-semibold"></TableCell>
+              <TableCell className="text-[12px] font-semibold"></TableCell>
+              <TableCell className="text-[12px] text-lightGreen font-semibold"></TableCell>
+            </TableRow>
           </TableBody>
         </Table>
       </div>
@@ -106,19 +75,19 @@ const ParentTransaction = () => {
 
           <p className=" font-bold py-4">Payment Information</p>
           <div className="font-semibold text-[13px] pb-4 flex mr-1">
-            <Image
+            {/* <Image
               src="/teacher1.jpg"
               alt="icon"
               width={100}
               height={100}
               className="w-[40px] h-[40px] rounded-md mr-1"
-            />
+            /> */}
             <div className="flex ml-1 flex-col">
-              <div className="text-[12px]">Rotimi Amaechi</div>
+              <div className="text-[12px]"></div>
               <div className="flex  mt-1 justify-between">
-                <p className="text-[10px] px-[10px] py-[2px] rounded-md mr-3 bg-[#FDA21A80]">
+                {/* <p className="text-[10px] px-[10px] py-[2px] rounded-md mr-3 bg-[#FDA21A80]">
                   Parent
-                </p>
+                </p> */}
               </div>
             </div>
           </div>
@@ -126,16 +95,16 @@ const ParentTransaction = () => {
           <div className="flex justify-between font-bold w-full pb-4 mt-2">
             <p className="text-[13px]">Payment Type</p>
 
-            <p className="font-semibold text-[13px]">Tution Fee</p>
+            <p className="font-semibold text-[13px]"></p>
           </div>
           <div className="flex justify-between font-bold  mt-2">
             <p className="text-[13px]">Transaction ID</p>
 
-            <p className="font-semibold text-red-500 text-[13px]">SA09786</p>
+            {/* <p className="font-semibold text-red-500 text-[13px]">SA09786</p> */}
           </div>
           <div className="flex justify-between font-bold py-4 mt-2">
             <p className="text-[13px]">Subject</p>
-            <div className="flex ">
+            {/* <div className="flex ">
               <Image
                 src="/maths.png"
                 alt=""
@@ -144,43 +113,19 @@ const ParentTransaction = () => {
                 className="w-[30px] mr-1  h-[30px]"
               />
               <p className="font-semibold text-[13px]">Mathematics</p>
-            </div>
+            </div> */}
           </div>
           <div className="flex justify-between pb-2 font-bold">
             <p className="text-[13px]">Amount</p>
 
-            <p className="font-semibold text-lightGreen text-[13px]">$17.50</p>
-          </div>
-
-          <hr className="my-1" />
-
-          <p className=" font-bold py-4">Ward Information</p>
-          <div className="font-semibold text-[13px] pb-4 flex mr-1">
-            <Image
-              src="/teacher1.jpg"
-              alt="icon"
-              width={100}
-              height={100}
-              className="w-[40px] h-[40px] rounded-md mr-1"
-            />
-            <div className="flex ml-1 flex-col">
-              <div className="text-[12px]">Rotimi Amaechi</div>
-              <div className="flex  mt-1 justify-between">
-                <p className="text-[10px] px-[10px] py-[2px] rounded-md mr-3 bg-lightGreen text-white">
-                  Student
-                </p>
-              </div>
-            </div>
+            {/* <p className="font-semibold text-lightGreen text-[13px]">$17.50</p> */}
           </div>
 
           <hr className="my-1" />
 
           <div className="space-y-2 pt-2 font-header">
             <h3 className="font-bold">Need Help ?</h3>
-            <p className="text-[13px]">
-              Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
-              commodo.
-            </p>
+
             <Button
               asChild
               variant="outline"

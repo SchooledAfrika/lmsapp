@@ -29,7 +29,7 @@ interface DetailStudent {
 const AdminCoursesList: React.FC<DetailStudent> = ({ studentData }) => {
   return (
     <div>
-      <div className="flex justify-between items-center">
+      <div className="flex flex-col md:flex-row justify-between items-center">
         <div>
           <p className="font-bold text-[25px]">Enrolled Courses</p>
           <span>Here are the courses the student registered</span>

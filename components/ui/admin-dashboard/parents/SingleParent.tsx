@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useConversion } from "@/data-access/conversion";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -27,7 +28,8 @@ import { LoadingSkeleton } from "../sessions/SingleSessionAdmin";
 
 const SingleParent = () => {
   const { id } = useParams();
-  console.log(id);
+  const { handleDate } = useConversion();
+ 
   const { isLoading, isError, error, data } = useQuery({
     queryKey: ["SingleParent"],
     queryFn: async () => {
@@ -38,7 +40,7 @@ const SingleParent = () => {
     },
   });
 
-  console.log(data);
+  
 
   //   if is loading
   if (isLoading) {
@@ -111,7 +113,8 @@ const SingleParent = () => {
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Joined On</p>
                       <p className="text-[14px] font-semibold">
-                        {data.createdAt}
+                      {handleDate(data?.createdAt)}
+                        
                       </p>
                     </div>
                     <div className=" flex space-x-12">
@@ -120,12 +123,7 @@ const SingleParent = () => {
                         {data.address}
                       </p>
                     </div>
-                    <div className=" flex space-x-12">
-                      <p className="text-[13px] font-medium">Country</p>
-                      <p className="text-[14px] font-semibold">
-                        {data.country}
-                      </p>
-                    </div>
+                    
                     <div className=" flex space-x-12">
                       <p className="text-[13px] font-medium">Total Wards</p>
                       <WardInfo dataId={data.id} wards={data.wards} />

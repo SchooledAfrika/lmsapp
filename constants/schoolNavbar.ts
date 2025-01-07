@@ -181,7 +181,7 @@ export const ParentsNavbar: SchoolNavType[] = [
 
   {
     title: "Calendar",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "",
     path: "calender",
   },
   {
@@ -191,7 +191,7 @@ export const ParentsNavbar: SchoolNavType[] = [
   },
   {
     title: "Transactions",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing eli",
+    description: "All your finances here",
     path: "transactions",
   },
 ];

@@ -154,6 +154,7 @@ const SpecialRequest: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
       return result;
     },
   });
+  //console.log(data)
 
   if (isLoading) return <SessionLoadings />;
   if (isError)

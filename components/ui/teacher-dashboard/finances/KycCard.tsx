@@ -20,10 +20,10 @@ const KycCard = () => {
           Account Balance
         </h3>
 
-        <p className="font-bold text-[22px] text-lightGreen pb-2 ">$1,090.65</p>
-        <p className="inline text-[11.5px] mt-2 font-subtext font-medium">
+        <p className="font-bold text-[22px] text-lightGreen pb-2 ">$00.00</p>
+        {/* <p className="inline text-[11.5px] mt-2 font-subtext font-medium">
           <span className="text-red-500 ">15%</span> less than last month
-        </p>
+        </p> */}
         {data === null ? (
           <p className="inline text-[13px] my-3   font-semibold">
             {" "}

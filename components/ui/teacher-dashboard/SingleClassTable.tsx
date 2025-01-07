@@ -67,7 +67,7 @@ const SingleClassTable: React.FC<ISingular> = ({ studentIds }) => {
       <TableBody>
         {arrayOfStudent.map((student: any, index) => (
           <TableRow key={index} className="">
-            <TableCell className="font-bold flex space-x-2 text-[13px] mr-3">
+            <TableCell className="font-bold w-[200px] flex space-x-2 text-[13px] mr-3">
               <Image
                 src={student?.profilePhoto}
                 alt="icon"
