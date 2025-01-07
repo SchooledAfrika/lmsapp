@@ -65,7 +65,7 @@ const SingleTeacher = () => {
     return <div className=" flex-1">{error.message}</div>;
   }
 
-  console.log(data);
+  //console.log(data);
 
   const grade =
     data.grade && data.grade.length > 0
