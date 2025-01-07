@@ -466,6 +466,7 @@ const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
       return result;
     },
   });
+  //console.log(data)
 
   if (isLoading) return <SessionLoadings isTeacher={isTeacher} />;
   if (isError)
@@ -474,7 +475,7 @@ const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
         <p>{error.message}</p>
       </div>
     );
-  console.log(data);
+  
   const oneOneOneData: IAppliedSession[] = data;
   return (
     <section className="my-[80px] md:my-4">

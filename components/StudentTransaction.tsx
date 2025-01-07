@@ -14,26 +14,7 @@ import {
 } from "./ui/table";
 
 const StudentTransaction = () => {
-  const TransactionType = [
-    {
-      id: "1",
-      icon: "/teacher1.jpg",
-      name: "Rotimi Wajabs",
-      type: "Tuition Fee",
-      teacher: "Teacher",
-      date: "April 20, 2024",
-      amount_add: "+$17.50",
-    },
-    {
-      id: "2",
-      icon: "/parent1.jpg",
-      name: "Adeniran James",
-      type: "Tuition Fee",
-      teacher: "Teacher",
-      date: "April 19, 2024",
-      amount_add: "+$14.5",
-    },
-  ];
+  
 
   return (
     <div className="md:flex md:flex-row  gap grid grid-cols-1 justify-between gap-6">
@@ -42,12 +23,7 @@ const StudentTransaction = () => {
           <TableCaption className="px-3  py-3 rounded-md bg-white">
             <div className="flex font-semibold  justify-between">
               <p>Recent Transactions</p>
-              <Link
-                href="/"
-                className="text-[11.5px] font-semibold text-right text-lightGreen "
-              >
-                View More
-              </Link>
+              
             </div>
           </TableCaption>
 
@@ -60,37 +36,37 @@ const StudentTransaction = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {TransactionType.map((Transaction) => (
-              <TableRow key={Transaction.id} className="">
+           
+              <TableRow  className="">
                 <TableCell className="font-semibold w-[200px] text-[13px] flex  mr-1">
-                  <Image
-                    src={Transaction.icon}
+                  {/* <Image
+                    src=""
                     alt="icon"
                     width={100}
                     height={100}
                     className="w-[30px] h-[30px] mt-2 rounded-md mr-1"
-                  />{" "}
+                  />{" "} */}
                   <div className="flex ml-1 flex-col">
-                    <div className="text-[12px]">{Transaction.name}</div>
+                    <div className="text-[12px]"></div>
                     <div className="flex justify-between">
-                      <p className="text-[10px] py-[2px] px-[10px] rounded-md mr-3 bg-lightGreen text-white">
-                        {Transaction.teacher}
-                      </p>
+                      {/* <p className="text-[10px] py-[2px] px-[10px] rounded-md mr-3 bg-lightGreen text-white">
+                        
+                      </p> */}
                     </div>
                   </div>
                 </TableCell>
 
                 <TableCell className="text-[12px] font-semibold">
-                  {Transaction.type}
+                 
                 </TableCell>
                 <TableCell className="text-[12px] font-semibold">
-                  {Transaction.date}
+                 
                 </TableCell>
                 <TableCell className="text-[12px] text-lightGreen font-semibold">
-                  {Transaction.amount_add}
+                 
                 </TableCell>
               </TableRow>
-            ))}
+          
           </TableBody>
         </Table>
       </div>
@@ -106,19 +82,19 @@ const StudentTransaction = () => {
 
           <p className=" font-bold py-4">Payment Information</p>
           <div className="font-semibold text-[13px] pb-4 flex mr-1">
-            <Image
-              src="/teacher1.jpg"
+            {/* <Image
+              src=""
               alt="icon"
               width={100}
               height={100}
               className="w-[40px] h-[40px] rounded-md mr-1"
-            />{" "}
+            />{" "} */}
             <div className="flex ml-1 flex-col">
-              <div className="text-[12px]">Rotimi Amaechi</div>
+              <div className="text-[12px]"></div>
               <div className="flex  mt-1 justify-between">
-                <p className="text-[10px] px-[10px] py-[2px] rounded-md mr-3 bg-lightGreen text-white">
+                {/* <p className="text-[10px] px-[10px] py-[2px] rounded-md mr-3 bg-lightGreen text-white">
                   Student
-                </p>
+                </p> */}
               </div>
             </div>
           </div>
@@ -126,30 +102,30 @@ const StudentTransaction = () => {
           <div className="flex justify-between font-bold w-full pb-4 mt-2">
             <p className="text-[13px]">Payment Type</p>
 
-            <p className="font-semibold text-[13px]">Tution Fee</p>
+            <p className="font-semibold text-[13px]"></p>
           </div>
           <div className="flex justify-between font-bold  mt-2">
             <p className="text-[13px]">Transaction ID</p>
 
-            <p className="font-semibold text-red-500 text-[13px]">SA09786</p>
+            <p className="font-semibold text-red-500 text-[13px]"></p>
           </div>
           <div className="flex justify-between font-bold py-4 mt-2">
             <p className="text-[13px]">Subject</p>
             <div className="flex ">
-              <Image
+              {/* <Image
                 src="/maths.png"
                 alt=""
                 width={100}
                 height={100}
                 className="w-[30px] mr-1  h-[30px]"
               />
-              <p className="font-semibold text-[13px]">Mathematics</p>
+              <p className="font-semibold text-[13px]">Mathematics</p> */}
             </div>
           </div>
           <div className="flex justify-between pb-2 font-bold">
             <p className="text-[13px]">Amount</p>
 
-            <p className="font-semibold text-lightGreen text-[13px]">$17.50</p>
+            <p className="font-semibold text-lightGreen text-[13px]"></p>
           </div>
 
           <hr className="my-1" />

@@ -21,7 +21,7 @@ const Parents = () => {
       return result;
     },
   });
-  console.log(data);
+  
 
   // If loading
   if (isLoading) {
