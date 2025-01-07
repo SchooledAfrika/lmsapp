@@ -84,7 +84,7 @@ const StudentDetails = () => {
               />
             </Link>
           </div>
-          <div className="flex bg-white">
+          <div className="flex flex-col md:flex-row bg-white">
             <div className="flex-1 border-r">
               <div className="py-5 pl-6">
                 <span className="text-[16px] font-bold">{data.name}</span>
@@ -123,7 +123,7 @@ const StudentDetails = () => {
                   }`}
                   onClick={handleCoursesClick}
                 >
-                  <SiGoogleclassroom className="sm:inline-block text-[18px] hidden mr-1" />
+                  <SiGoogleclassroom className="text-[18px] mr-1" />
                   <p className="text-[16px] font-bold">Courses</p>
                 </div>
               </div>
