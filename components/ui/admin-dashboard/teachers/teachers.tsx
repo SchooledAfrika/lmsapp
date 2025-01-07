@@ -21,6 +21,7 @@ const Teachers = () => {
       return result;
     },
   });
+ 
   if (isLoading) {
     return (
       <div className="">

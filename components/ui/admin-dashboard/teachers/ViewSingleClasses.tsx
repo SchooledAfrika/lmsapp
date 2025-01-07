@@ -1,6 +1,8 @@
 "use client";
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { useConversion } from "@/data-access/conversion";
+
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -50,7 +52,13 @@ const ViewSingleClasses: React.FC<IviewClasses> = ({
   currentCapacity,
   createdAt,
 }) => {
-  console.log(dataId);
+   const { handleDate } = useConversion();
+
+   const schedulesEdit =
+    schedules && schedules.length > 0
+      ? schedules.join(", ")
+      : "Unknown Subject";
+ 
 
   return (
     <Dialog>
@@ -74,11 +82,11 @@ const ViewSingleClasses: React.FC<IviewClasses> = ({
               </div>
               <div className=" flex space-x-12">
                 <p className="text-[13px] font-medium">Class Starts</p>
-                <p className="text-[14px] font-semibold">{starts}</p>
+                <p className="text-[14px] font-semibold">{handleDate(starts)}</p>
               </div>
               <div className=" flex space-x-12">
                 <p className="text-[13px] font-medium">Class Ends</p>
-                <p className="text-[14px] font-semibold">{ends}</p>
+                <p className="text-[14px] font-semibold">{handleDate(ends)}</p>
               </div>
               <div className=" flex space-x-12">
                 <p className="text-[13px] font-medium">Time of Class</p>
@@ -88,7 +96,7 @@ const ViewSingleClasses: React.FC<IviewClasses> = ({
               <div className=" flex space-x-12">
                 <p className="text-[13px] font-medium">Schedules</p>
                 <p className="text-[14px] font-semibold">
-                  {schedules[0]}, {schedules[1]}, {schedules[2]}, {schedules[3]}
+                  {schedulesEdit}
                 </p>
               </div>
               <div className=" flex space-x-12">
@@ -109,7 +117,7 @@ const ViewSingleClasses: React.FC<IviewClasses> = ({
               </div>
               <div className=" flex space-x-12">
                 <p className="text-[13px] font-medium">Created At</p>
-                <p className="text-[14px] font-semibold">{createdAt}</p>
+                <p className="text-[14px] font-semibold">{handleDate(createdAt)}</p>
               </div>
             </div>
           </div>

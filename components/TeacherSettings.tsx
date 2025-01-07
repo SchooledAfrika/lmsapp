@@ -270,10 +270,10 @@ const TeacherSettings = () => {
           <span className="font-bold pb-2">
             Upgrade and get more out of Schooled Afrika
           </span>
-          <p className="text-[14px] font-medium">
+          {/* <p className="text-[14px] font-medium">
             Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean
             commodo.
-          </p>
+          </p> */}
 
           <div className="my-[20px]">
             <p className="font-bold pb-2">Current Plan</p>
@@ -281,9 +281,9 @@ const TeacherSettings = () => {
               <span className="text-[#359C71] underline font-bold text-[14px]">
                 Basic Plan
               </span>
-              <span className="font-bold text-[14px]">
+              {/* <span className="font-bold text-[14px]">
                 Expires May 24, 2024
-              </span>
+              </span> */}
             </div>
             <Button
               onClick={() => setShowPricing(true)}

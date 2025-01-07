@@ -42,7 +42,7 @@ const EachClass: React.FC<{ item: IStudentClass }> = ({ item }) => {
   return (
     <TableRow key={item.id} className="">
       <TableCell className="text-[12px] font-bold">
-        <div className=" flex items-center gap-1">
+        <div className=" flex  items-center gap-1">
           <Image
             src={`/${item?.subjects.toLowerCase()}.png`}
             alt="icon"
@@ -50,7 +50,7 @@ const EachClass: React.FC<{ item: IStudentClass }> = ({ item }) => {
             height={25}
             className="w-[30px] h-[30px] mr-1"
           />
-          <p>{item.subjects}</p>
+          <p className="mr-3">{item.subjects}</p>
         </div>
       </TableCell>
       <TableCell className="text-[12px]  font-semibold">{item.name}</TableCell>
@@ -104,10 +104,10 @@ export default function ClassTable() {
             <Table className="bg-white overflow-x-auto rounded-md mt-12">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="text-[12px]">Subject</TableHead>
-                  <TableHead className=" text-[12px]">Class Name</TableHead>
+                  <TableHead className="text-[12px] ">Subject</TableHead>
+                  <TableHead className=" text-[12px]">ClassName</TableHead>
                   <TableHead className="text-[12px]">Grade</TableHead>
-                  <TableHead className="text-[12px]">Class type</TableHead>
+                  <TableHead className="text-[12px]">ClassType</TableHead>
                   <TableHead className="text-[12px]">action</TableHead>
                 </TableRow>
               </TableHeader>

@@ -466,6 +466,7 @@ const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
       return result;
     },
   });
+  //console.log(data)
 
   if (isLoading) return <SessionLoadings isTeacher={isTeacher} />;
   if (isError)
