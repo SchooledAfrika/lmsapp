@@ -30,7 +30,6 @@ export default async function RootLayout({
   // now, lets check if the ward is selected before visiting any of this page
   const cookieStore = cookies;
   const wardId = cookieStore().get("wardId")?.value;
-  console.log("the wardId", wardId);
   if (!wardId) return redirect("/parent-account/ward-options");
   return (
     <>
