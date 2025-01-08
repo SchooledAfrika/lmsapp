@@ -199,7 +199,7 @@ export const ParentsNavbar: SchoolNavType[] = [
 export const AdminNavbar: SchoolNavType[] = [
   {
     title: "Welcome to the Admin Dashboard",
-    description: "Begin to manage SchooledAfrika.",
+    description: "Begin to manage Schooled Afrika.",
     path: "overview",
   },
   {

@@ -5,10 +5,10 @@ import HeroSearch from "./HeroSearch";
 
 const HeroLeft = () => {
   return (
-    <div className="font-subtext flex-1 md:pr-5 flex flex-col gap-6">
+    <div className="font-subtext flex-1 md:pr-5 flex flex-col gap-4">
       <div className=" flex gap-2 items-end">
         <p className=" text-dimYellow font-header text-lg font-bold">
-          TRUSTED BY 2000+ PARENTS
+        26,000+ TUTORING SESSIONS AND COUNTING!
         </p>
         <Image
           className=" w-16"
@@ -27,13 +27,10 @@ const HeroLeft = () => {
       </div>
       <div>
         <p>
-          We help you find the perfect tutor that your child needs.
+        A personalized tutoring solution to fit your child's academic needs - anytime, anywhere.
         
         </p>
-        <p>
-          Get Personalized home tutoring that is designed to guide your children towards exam success, boost their confidence, and get better school grades.
         
-        </p>
       </div>
       <div>
         <HeroSearch />

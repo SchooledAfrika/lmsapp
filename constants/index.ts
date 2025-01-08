@@ -294,21 +294,21 @@ export const feedbacks = [
   {
     id: "feedback-1",
     content:
-      "SchooledAfrika's flexible system of learning has made life easier for me. I now have to focus on my work and still be assured that my children are recieving the best of tutulege.",
+      "Schooled Afrika's flexible system of learning has made life easier for me. I now have to focus on my work and still be assured that my children are recieving the best of tutulege.",
     rating: "⭐⭐⭐⭐⭐",
     name: "Maurice Odo",
   },
   {
     id: "feedback-2",
     content:
-      "SchooledAfrika has made my life a lot easier, their services, especially their great customer service is laudable. I recommend them to any parent and student.",
+      "Schooled Afrika has made my life a lot easier, their services, especially their great customer service is laudable. I recommend them to any parent and student.",
     rating: "⭐⭐⭐⭐⭐",
     name: "Austine David",
   },
   {
     id: "feedback-3",
     content:
-      "I am very happy and grateful that SchooledAfrika is continually contributing towards the community growth in various way like sharing the courses which is very helpful to crack or grow the subject specific knowledge. Materials are being used to increase interest in education.",
+      "I am very happy and grateful that Schooled Afrika is continually contributing towards the community growth in various way like sharing the courses which is very helpful to crack or grow the subject specific knowledge. Materials are being used to increase interest in education.",
     rating: "⭐⭐⭐⭐⭐",
     name: "Promise Bamigboye",
   },

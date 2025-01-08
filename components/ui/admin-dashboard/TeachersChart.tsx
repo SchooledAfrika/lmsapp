@@ -50,7 +50,7 @@ export function TeachersChart() {
     <Card className="md:mt-12 mb-6">
       <CardHeader>
         <CardTitle className="text-[18px]">Teachers</CardTitle>
-        <CardDescription>January - December 2024</CardDescription>
+        {/* <CardDescription>January - December 2024</CardDescription> */}
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>

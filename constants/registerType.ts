@@ -33,7 +33,7 @@ export const RegisterType: Iregister[] = [
   },
   {
     Images: "/teach.png",
-    title: "Teacher Account",
+    title: "Teach with Schooled Afrika",
     role: registerType.Teacher,
     description: "Create your ",
     link: "/teacher-account",

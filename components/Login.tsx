@@ -62,10 +62,10 @@ const Login: React.FC = () => {
             />
           </Link>
           <span className="font-bold text-[22px]">
-            Welcome to SchooledAfrika !
+            Welcome to Schooled Afrika !
           </span>
           <p className="text-gray-500 py-6 text-[14px]">
-            SchooledAfrika is a dynamic and innovative educational platform
+            Schooled Afrika is a dynamic and innovative educational platform
             dedicated to nurturing young minds and fostering a love for
             learning.
             <br />
