@@ -2,6 +2,7 @@
 // which only the teachers can create
 // this comprises the admin and normal teachers
 import prisma from "@/prisma/prismaConnect";
+import { cloudinaryUpload } from "@/prisma/utils/cloudinaryBackend";
 import { notAuthenticated, serverError } from "@/prisma/utils/error";
 import {
   checkKyc,
