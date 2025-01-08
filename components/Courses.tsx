@@ -72,7 +72,7 @@ export const CourseCreator: React.FC<{
   );
 };
 
-const CourseCard = ({ item }: { item: ICourses }) => {
+export const CourseCard = ({ item }: { item: ICourses }) => {
   const { makeSubString } = useClasses();
   const { data, status } = useSession();
 
