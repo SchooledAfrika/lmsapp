@@ -12,7 +12,7 @@ const PrivateSession = () => {
       >
         <article className="sm:w-1/2">
           <p className="mt-6 font-header text-lg font-semibold text-dimYellow">
-            1 on 1 sessions
+          1 on 1 Sessions for Students
           </p>
 
           <p className="mt-4 max-w-full text-start text-md font-subtext font-[300px] sm:text-left">
