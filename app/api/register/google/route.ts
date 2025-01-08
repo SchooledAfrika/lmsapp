@@ -1,6 +1,7 @@
 import { cookies } from "next/headers";
 import prisma from "@/prisma/prismaConnect";
 import { serverError } from "@/prisma/utils/error";
+import { generateId } from "@/prisma/utils/utils";
 // =====> remember to check on upsert which can help to create or update a new user if it does not exist
 
 // here, we create a new user with their google account credentials
@@ -103,6 +104,7 @@ export async function POST(request: Request) {
               profilePhoto: image,
               name,
               role: "Student",
+              studentId: generateId(),
             },
             select: {
               id: true,

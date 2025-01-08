@@ -114,39 +114,39 @@ model TeachersPlans {
 
 // creating the student model
 model Student {
-  id               String             @id @default(auto()) @map("_id") @db.ObjectId
-  name             String?
-  email            String             @unique
-  password         String?
-  profilePhoto     String?
-  phoneNo          String?
-  gender           Gender?
-  address          String?
-  grade            Grade?
-  details          String?
-  disable          Boolean?
+  id                      String                    @id @default(auto()) @map("_id") @db.ObjectId
+  name                    String?
+  email                   String                    @unique
+  password                String?
+  profilePhoto            String?
+  phoneNo                 String?
+  gender                  Gender?
+  address                 String?
+  grade                   Grade?
+  details                 String?
+  disable                 Boolean?
   // creating the many to many relationship between student and teacher
   // becasue the student can have many teachers
-  teacherIDs       String[]           @db.ObjectId
-  teachers         Teacher[]          @relation(fields: [teacherIDs], references: [id])
+  teacherIDs              String[]                  @db.ObjectId
+  teachers                Teacher[]                 @relation(fields: [teacherIDs], references: [id])
   // creating a many to many relationship between classes and students
   // a student can decide to join one or many classes
-  classIDs         String[]           @db.ObjectId
-  classes          Classes[]          @relation(fields: [classIDs], references: [id])
-  role             Role
-  AppliedSection   AppliedSection[]
-  CompletedProfile Boolean            @default(false)
-  createdAt        DateTime           @default(now())
-  updatedAt        DateTime           @default(now())
-  birthDate        DateTime? //the birthday of the student
-  lastLogin        DateTime? // the last time the user loggged in
-  Ratting          Ratting[]
-  AdminSectionView AdminSectionView[]
-  status           StudentStatus      @default(Active)
-  country          String?
-  parent           Parents?           @relation(fields: [parentsId], references: [id], onDelete: Cascade)
-  parentsId        String?            @db.ObjectId
-
+  classIDs                String[]                  @db.ObjectId
+  classes                 Classes[]                 @relation(fields: [classIDs], references: [id])
+  role                    Role
+  AppliedSection          AppliedSection[]
+  CompletedProfile        Boolean                   @default(false)
+  createdAt               DateTime                  @default(now())
+  updatedAt               DateTime                  @default(now())
+  birthDate               DateTime? //the birthday of the student
+  lastLogin               DateTime? // the last time the user loggged in
+  Ratting                 Ratting[]
+  AdminSectionView        AdminSectionView[]
+  status                  StudentStatus             @default(Active)
+  country                 String?
+  parent                  Parents?                  @relation(fields: [parentsId], references: [id], onDelete: Cascade)
+  parentsId               String?                   @db.ObjectId
+  studentId               String?
   StudentPurchasedCourses StudentPurchasedCourses[]
   SpecialTeacherUnmerged  SpecialTeacherUnmerged[]
   SpecialTeacherMerged    SpecialTeacherMerged[]
@@ -690,8 +690,9 @@ model SessionAttendance {
   teacherId        String         @db.ObjectId
   session          AppliedSection @relation(fields: [appliedSectionId], references: [id])
   appliedSectionId String         @db.ObjectId
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @default(now())
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
 
   @@index([teacherId, appliedSectionId], name: "session_attendance")
 }

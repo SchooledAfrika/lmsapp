@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { ShowUserId } from "./ui/student-dashboard/sessions/OneOnOneSession";
 
 export type IupdatingStudent = z.infer<typeof studentProfileSettingsSchema>;
 export type IupdatingPassword = z.infer<typeof studentPasswordUpdateSchema>;
@@ -292,7 +293,6 @@ const UpdatePassword = () => {
       onSubmit={handleSubmit(runSubmit)}
       className="h-[55%] bg-[#FFFFFF] rounded-[5px] p-4 my-4"
     >
-     
       <label className="font-bold text-[#9F9F9F] my-4">Security</label>
       <div className="relative">
         <input
@@ -353,21 +353,36 @@ const UpdatePassword = () => {
   );
 };
 
+const StudentId = () => {
+  const { data, isLoading } = useQuery<{ studentId: string }>({
+    queryKey: ["get-student-id"],
+    queryFn: async () => {
+      const response = await fetch("/api/get-student-id");
+      const result = await response.json();
+      return result;
+    },
+  });
+
+  if (isLoading) return;
+  return data && <ShowUserId userId={data?.studentId} />;
+};
+
 const StudentSettings = () => {
   return (
-    <section className="flex flex-col md:flex-row mt-[100px] md:mt-[30px] gap-4">
-      <div className="flex-5 bg-[#FFFFFF] rounded-[5px] p-5 h-[100vh] overflow-y-scroll scrollbar-hide">
-       
-        <UpdateProfile />
-
+    <section className=" flex flex-col gap-2">
+      <div className=" w-full flex items-end justify-end">
+        <StudentId />
       </div>
-
-      <div className="flex-4 rounded-[5px]">
-        <UpdatePassword />
-
-        <div></div>
+      <div className="flex flex-col md:flex-row gap-4">
+        <div className="flex-5 bg-[#FFFFFF] rounded-[5px] p-5 h-[100vh] overflow-y-scroll scrollbar-hide">
+          <UpdateProfile />
+        </div>
+        <div className="flex-4 rounded-[5px]">
+          <UpdatePassword />
+          <div></div>
+        </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </section>
   );
 };

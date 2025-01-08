@@ -80,16 +80,16 @@ const CreateSession = () => {
   );
 };
 
-const ShowSessionId: React.FC<{ sessionId: string }> = ({ sessionId }) => {
+export const ShowUserId: React.FC<{ userId: string }> = ({ userId }) => {
   const { copied, copyText } = useCopy();
   return (
     <div className=" flex items-center gap-2 ">
-      <p className=" font-bold">{sessionId}</p>
+      <p className=" font-bold">{userId}</p>
       <div className=" cursor-pointer">
         {copied ? (
           <p className=" text-green-700 text-[12px]">copied</p>
         ) : (
-          <MdContentCopy onClick={() => copyText(sessionId)} />
+          <MdContentCopy onClick={() => copyText(userId)} />
         )}
       </div>
     </div>
@@ -444,7 +444,7 @@ const ShowSectionId = () => {
   if (isLoading) return;
   return (
     <div className="flex justify-end mb-2">
-      {data ? <ShowSessionId sessionId={data.sessionId} /> : <CreateSession />}
+      {data ? <ShowUserId userId={data.sessionId} /> : <CreateSession />}
     </div>
   );
 };
@@ -475,7 +475,6 @@ const OneOnOne: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
         <p>{error.message}</p>
       </div>
     );
-  
   const oneOneOneData: IAppliedSession[] = data;
   return (
     <section className="my-[80px] md:my-4">

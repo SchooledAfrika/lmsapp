@@ -85,7 +85,7 @@ const StudentExam = () => {
           return newTime;
         });
       }, 1000);
-  
+
       return () => clearInterval(timerIdRef.current!);
     } else if (isExamSubmitted || remainingTime === 0) {
       clearInterval(timerIdRef.current!); // Stop timer if time is up or exam is submitted
@@ -192,10 +192,8 @@ const StudentExam = () => {
     }
   };
 
-
-    
   // Update the questions state with the fetched data. This logic is to handle possible errors that may arise from name convention. The getter query object "data.test" has an entry of "options" while the poster object "data.answeredExam" has an entry of "option", this is to transform the options to option so that it doesn't cause conflict in the backend.
- 
+
   useEffect(() => {
     if (data && Array.isArray(data.test)) {
       const transformedQuestions = data.test.map((question: any) => ({
@@ -269,16 +267,15 @@ const StudentExam = () => {
                 {isTimeUp && "Time is up!"}
               </p>
               <p className="text-center font-bold">
-                  You answered {questionsAnswered} out of {questions.length}{" "}
-                  questions.
-                </p>
+                You answered {questionsAnswered} out of {questions.length}{" "}
+                questions.
+              </p>
               {isExamSubmitted && (
-                 <p className="my-2 font-semibold text-center text-[16px]">
-                 Your Score
-               </p>
-               
+                <p className="my-2 font-semibold text-center text-[16px]">
+                  Your Score
+                </p>
               )}
-             
+
               <div className="border-2 border-lightGreen flex items-center mx-auto w-[100px] h-[100px] rounded-full p-2">
                 <span className="mx-auto text-lg font-bold text-lightGreen">
                   {score}/{questions.length}

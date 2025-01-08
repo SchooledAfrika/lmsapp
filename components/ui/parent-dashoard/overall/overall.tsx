@@ -28,7 +28,6 @@ const Overall = () => {
   if (isError) {
     return <div>{error.message}</div>;
   }
-  console.log(data);
   return (
     <div className="my-6 flex  md:flex-row justify-between flex-col  text-[15px] gap-3   md:gap-3 rounded-md">
       <div className="flex md:flex-4 h-full    px-3 bg-white rounded-md py-6  flex-col">
