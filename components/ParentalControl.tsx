@@ -12,12 +12,11 @@ const ParentalControl = () => {
       >
         <article className="sm:w-1/2">
           <p className="mt-6 font-header text-lg font-semibold text-dimYellow">
-            Parental Control
+          For Parents 
           </p>
 
           <p className="mt-4 max-w-full text-start text-md font-subtext font-[300px] sm:text-left">
-          Easy access + Payments Equals to Best virtual learning ride. Pick
-          from a wide range of professional teachers
+          Get Personalized home tutoring that is designed to guide your children towards exam success, boost their confidence, and get better school grades. Pick from a wide range of professional teachers.
           </p>
 
           <Button

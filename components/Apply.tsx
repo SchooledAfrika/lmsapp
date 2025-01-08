@@ -54,7 +54,7 @@ const Apply = () => {
             </h3>
             <p className="w-[300px] md:w-[668px] font-subtext md:font-[300px] mt-3 leading-[20px] md:leading-[32px]">
               {" "}
-              With schooledAfrika, you have access to students who are ready to dive into your world of
+              With Schooled Afrika, you have access to students who are ready to dive into your world of
               knowledge, right in the comfort of your home at your own scheduled time
             </p>
 
@@ -223,7 +223,7 @@ const Apply = () => {
                 <FaQuoteRight />
               </div>
               <p className="text-lightGreen text-lg font-semibold my-3">Mrs Bukola Aleriwa Idowu</p>
-              <p>Founder, SchooledAfrika</p>
+              <p>Founder, Schooled Afrika</p>
              
             </div>
           </div>
@@ -254,7 +254,7 @@ const Apply = () => {
   <Accordion type="single" className="md:w-5/6 w-full mx-auto mb-8"  collapsible>
   <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-1">
   
-  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> How Much Can I Make From SchooledAfrika?</AccordionTrigger>
+  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> How Much Can I Make From Schooled Afrika?</AccordionTrigger>
     <AccordionContent>
     You can earn six figures in two weeks depending on your periods per day
     </AccordionContent>
@@ -268,7 +268,7 @@ const Apply = () => {
   </AccordionItem>
   <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-3">
   
-  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> What do i need to be a teacher with schooled Afrika?</AccordionTrigger>
+  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> What do i need to be a teacher with Schooled Afrika?</AccordionTrigger>
     <AccordionContent>
     Teaching experience
 Good teaching skills

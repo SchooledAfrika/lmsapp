@@ -12,12 +12,13 @@ const HomeworkSupport = () => {
       >
         <article className="sm:w-1/2 mx-auto sm:mx-0 items-center">
           <p className="mt-6 font-header text-lg font-semibold text-dimYellow">
-            Homework Support
+          For Teachers 
+
           </p>
 
           <p className="mt-4 max-w-full text-start text-md font-subtext  sm:text-left">
-          The after school work of your child will be perfectly taken care of by
-          our tutors, giving them an upper edge in their conventional classes
+          Teach! Earn!! Thrive!!!
+          Earn additional income by doing what you love from the comfort of your home.
           </p>
 
           <Button

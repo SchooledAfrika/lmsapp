@@ -13,7 +13,7 @@ const Virtual = () => {
       >
         <article className="sm:w-1/2">
           <p className="mt-6 font-header text-lg font-semibold text-dimYellow">
-            Virtual School Ground
+          For Schools
           </p>
 
           <p className="mt-4 max-w-full text-start text-md font-subtext  sm:text-left">
