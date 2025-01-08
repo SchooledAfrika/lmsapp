@@ -88,6 +88,119 @@ const ScheduleBlock: React.FC<ScheduleBlockProps> = ({
   );
 };
 
+const LastInfos = () => {
+  const { wardId } = useWardId();
+  // Fetch data for each session type
+  const { data: classesParents, isLoading: loadingClassesParents } = useQuery({
+    queryKey: ["classesOverviewParents", wardId],
+    queryFn: () =>
+      fetchSessions(`/api/parents-gets-wards-teachers?childId=${wardId}`),
+  });
+
+  const {
+    data: privateSessionsParents,
+    isLoading: loadingPrivateSessionsParents,
+  } = useQuery({
+    queryKey: ["privateSessionsOverviewParents", wardId],
+    queryFn: () =>
+      fetchSessions(`/api/parents-gets-ward-sessions?childId=${wardId}`),
+  });
+
+  const {
+    data: specialRequestsParents,
+    isLoading: loadingSpecialRequestsParents,
+  } = useQuery({
+    queryKey: ["specialRequestsOverviewParents", wardId],
+    queryFn: () =>
+      fetchSessions(`/api/parents-gets-ward-sessions?childId=${wardId}`),
+  });
+
+  // Loading and Error Handling
+  if (
+    loadingClassesParents ||
+    loadingPrivateSessionsParents ||
+    loadingSpecialRequestsParents
+  ) {
+    return <div></div>;
+  }
+
+  // Extract last item from each session
+  const lastClassParents = classesParents?.[classesParents.length - 1];
+  const lastPrivateSessionParents =
+    privateSessionsParents?.[privateSessionsParents.length - 1];
+  const lastSpecialRequestParents =
+    specialRequestsParents?.[specialRequestsParents.length - 2];
+
+  const subject =
+    lastPrivateSessionParents?.subject &&
+    lastPrivateSessionParents.subject.length > 0
+      ? lastPrivateSessionParents.subject.join(", ")
+      : "Unknown Subject";
+  return (
+    <div className="bg-white h-fit  rounded-md flex-2 pt-6 pb-3 px-4 ">
+      <div className="flex  justify-between">
+        <p className="text-slate-500 text-[14px] font-semibold">
+          Ward's Schedule
+        </p>
+        <Link
+          href="/parents-dashboard/sessions"
+          className="text-[11.5px] text-lightGreen "
+        >
+          View More
+        </Link>
+      </div>
+
+      {/* 1st Div */}
+
+      {lastClassParents && (
+        <ScheduleBlock
+          profilePhoto={lastClassParents.teacher.profilePhoto}
+          name={lastClassParents.teacher.name}
+          className={lastClassParents.className}
+          status={lastClassParents.teacher.status}
+          subject={lastClassParents.subject}
+          grade={lastClassParents.grade}
+          borderColor="border-lightGreen"
+        />
+      )}
+      <hr className=" p-[0.5px] rounded-full" />
+
+      {/* 2nd Div */}
+      {lastSpecialRequestParents && (
+        <ScheduleBlock
+          profilePhoto={
+            lastPrivateSessionParents.sectionOwner.teacher.profilePhoto
+          }
+          name={lastPrivateSessionParents.sectionOwner.teacher.name}
+          startTime={lastPrivateSessionParents.startTime}
+          sectionType={lastPrivateSessionParents.sectionType}
+          subject={lastSpecialRequestParents.subject}
+          grade={lastSpecialRequestParents.grade}
+          borderColor="border-amber-500"
+        />
+      )}
+      <hr className=" p-[0.5px] rounded-full" />
+
+      {/* 3rd Div */}
+
+      {lastPrivateSessionParents && (
+        <ScheduleBlock
+          profilePhoto={
+            lastPrivateSessionParents.sectionOwner.teacher.profilePhoto
+          }
+          name={lastPrivateSessionParents.sectionOwner.teacher.name}
+          startTime={lastPrivateSessionParents.startTime}
+          sectionType={lastPrivateSessionParents.sectionType}
+          subject={subject}
+          grade={lastPrivateSessionParents.grade}
+          borderColor="border-orange-500"
+        />
+      )}
+      <hr className=" p-[0.5px] rounded-full" />
+    </div>
+  );
+};
+
 const Chart = () => {
   const [visibleItems, setVisibleItems] = useState(3); // State to manage visible items
   const [isExpanded, setIsExpanded] = useState(false); // To toggle between show more/less
@@ -116,60 +229,9 @@ const Chart = () => {
     setIsExpanded(false); // Toggle expanded state to false
   };
 
-  
-
   if (isError) {
     return <p>Error: {error.message}</p>;
   }
-
-  // Fetch data for each session type
-  const { data: classesParents, isLoading: loadingClassesParents } = useQuery({
-    queryKey: ["classesOverviewParents", wardId],
-    queryFn: () =>
-      fetchSessions(`/api/parents-gets-wards-teachers?childId=${wardId}`),
-  });
-
-  const {
-    data: privateSessionsParents,
-    isLoading: loadingPrivateSessionsParents,
-  } = useQuery({
-    queryKey: ["privateSessionsOverviewParents", wardId],
-    queryFn: () =>
-      fetchSessions(`/api/parents-gets-ward-sessions?childId=${wardId}`),
-  });
-
-  const {
-    data: specialRequestsParents,
-    isLoading: loadingSpecialRequestsParents,
-  } = useQuery({
-    queryKey: ["specialRequestsOverviewParents", wardId],
-    queryFn: () =>
-      fetchSessions(`/api/parents-gets-ward-sessions?childId=${wardId}`),
-  });
-
-  
-
-  // Loading and Error Handling
-  if (
-    loadingClassesParents ||
-    loadingPrivateSessionsParents ||
-    loadingSpecialRequestsParents
-  ) {
-    return <div></div>;
-  }
-
-  // Extract last item from each session
-  const lastClassParents = classesParents?.[classesParents.length - 1];
-  const lastPrivateSessionParents =
-    privateSessionsParents?.[privateSessionsParents.length - 1];
-  const lastSpecialRequestParents =
-    specialRequestsParents?.[specialRequestsParents.length - 2];
-
-  const subject =
-    lastPrivateSessionParents?.subject &&
-    lastPrivateSessionParents.subject.length > 0
-      ? lastPrivateSessionParents.subject.join(", ")
-      : "Unknown Subject";
 
   return (
     <div className="my-6 flex md:flex-row flex-col relative  text-[15px] gap-3   md:gap-3 rounded-md">
@@ -188,69 +250,7 @@ const Chart = () => {
         <PiechartParents />
       </div>
       {/* second flex */}
-
-      <div className="bg-white h-fit  rounded-md flex-2 pt-6 pb-3 px-4 ">
-        <div className="flex  justify-between">
-          <p className="text-slate-500 text-[14px] font-semibold">
-            Ward's Schedule
-          </p>
-          <Link
-            href="/parents-dashboard/sessions"
-            className="text-[11.5px] text-lightGreen "
-          >
-            View More
-          </Link>
-        </div>
-
-        {/* 1st Div */}
-
-        {lastClassParents && (
-          <ScheduleBlock
-            profilePhoto={lastClassParents.teacher.profilePhoto}
-            name={lastClassParents.teacher.name}
-            className={lastClassParents.className}
-            status={lastClassParents.teacher.status}
-            subject={lastClassParents.subject}
-            grade={lastClassParents.grade}
-            borderColor="border-lightGreen"
-          />
-        )}
-        <hr className=" p-[0.5px] rounded-full" />
-
-        {/* 2nd Div */}
-        {lastSpecialRequestParents && (
-          <ScheduleBlock
-            profilePhoto={
-              lastPrivateSessionParents.sectionOwner.teacher.profilePhoto
-            }
-            name={lastPrivateSessionParents.sectionOwner.teacher.name}
-            startTime={lastPrivateSessionParents.startTime}
-            sectionType={lastPrivateSessionParents.sectionType}
-            subject={lastSpecialRequestParents.subject}
-            grade={lastSpecialRequestParents.grade}
-            borderColor="border-amber-500"
-          />
-        )}
-        <hr className=" p-[0.5px] rounded-full" />
-
-        {/* 3rd Div */}
-
-        {lastPrivateSessionParents && (
-          <ScheduleBlock
-            profilePhoto={
-              lastPrivateSessionParents.sectionOwner.teacher.profilePhoto
-            }
-            name={lastPrivateSessionParents.sectionOwner.teacher.name}
-            startTime={lastPrivateSessionParents.startTime}
-            sectionType={lastPrivateSessionParents.sectionType}
-            subject={subject}
-            grade={lastPrivateSessionParents.grade}
-            borderColor="border-orange-500"
-          />
-        )}
-        <hr className=" p-[0.5px] rounded-full" />
-      </div>
-
+      <LastInfos />
       {/* third flex */}
       <div className="bg-white  rounded-md flex-2 py-6 px-4 ">
         <div className="flex justify-between">
