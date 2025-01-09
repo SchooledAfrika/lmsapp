@@ -137,8 +137,8 @@ const LastInfos = () => {
       ? lastPrivateSessionParents.subject.join(", ")
       : "Unknown Subject";
   return (
-    <div className="bg-white h-fit  rounded-md flex-2 pt-6 pb-3 px-4 ">
-      <div className="flex  justify-between">
+    <div className="bg-white h-fit  rounded-md flex-3 pt-6 pb-3 px-4 ">
+      <div className="flex   justify-between">
         <p className="text-slate-500 text-[14px] font-semibold">
           Ward's Schedule
         </p>
@@ -234,7 +234,7 @@ const Chart = () => {
   }
 
   return (
-    <div className="my-6 flex md:flex-row flex-col relative  text-[15px] gap-3   md:gap-3 rounded-md">
+    <div className="my-6 flex md:flex-row flex-col relative  text-[15px] gap-3   md:gap-2 rounded-md">
       <div className="flex md:flex-3 justify-center font-subtext h-fit  gap-3  px-3 bg-white rounded-md pt-6 pb-3 flex-col">
         <div className="flex flex-1 justify-between">
           <p className="pl-3 text-[14px] font-semibold text-slate-600">
@@ -252,7 +252,7 @@ const Chart = () => {
       {/* second flex */}
       <LastInfos />
       {/* third flex */}
-      <div className="bg-white  rounded-md flex-2 py-6 px-4 ">
+      <div className="bg-white  rounded-md flex-3 py-6 px-4 ">
         <div className="flex justify-between">
           <p className="text-slate-500 text-[14px] font-semibold">
             Ward's Status

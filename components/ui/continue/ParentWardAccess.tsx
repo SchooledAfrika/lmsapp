@@ -20,9 +20,7 @@ const ParentWardAccess: React.FC<IparentSub> = ({ register, errors }) => {
       </div>
 
       <span className="text-[14px] font-medium">
-        Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo
-        ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis
-        dis parturient montes, nascetur ridiculus mus.
+        Add your Ward's ID if there is an existing Ward. Please leave the field vacant if there is no Ward ID.
       </span>
       <div className="mt-2 flex flex-col gap-2">
         <label className="font-bold text-[16px]">New Account</label>
