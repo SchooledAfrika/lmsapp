@@ -21,6 +21,12 @@ export const Subject = [
   "LITERATURE",
   "CRS",
   "MATHEMATICS",
+  "YORUBA",
+  "IGBO",
+  "FRENCH",
+  "ACCOUNT",
+  "GENERAL SCIENCE",
+  "PHONICS",
 ];
 
 // below is the zod schema for parents that continues with their registration

@@ -145,6 +145,22 @@ const ArrayRender: React.FC<{ item: string[]; name: string }> = ({
   );
 };
 
+export const StatusType: React.FC<{ status: string }> = ({ status }) => {
+  return (
+    <div
+      className={`${
+        status === "PENDING"
+          ? "bg-yellow-500 text-black"
+          : status == "ACCEPTED"
+          ? " bg-green-700 text-white"
+          : " bg-red-700 text-white"
+      } text-[10px] font-semibold px-2 py-1 rounded-md`}
+    >
+      <p>{status}</p>
+    </div>
+  );
+};
+
 const OfferCard: React.FC<{ item: Ioffer }> = ({ item }) => {
   const { handleDate } = useConversion();
   return (
@@ -182,17 +198,7 @@ const OfferCard: React.FC<{ item: Ioffer }> = ({ item }) => {
         <ArrayRender item={item.vacancy.responsibility} name="Responsibility" />
         <div className=" flex items-center gap-1">
           <p>Status: </p>
-          <div
-            className={`${
-              item.status === "PENDING"
-                ? "bg-yellow-500 text-black"
-                : item.status == "ACCEPTED"
-                ? " bg-green-700 text-white"
-                : " bg-red-700 text-white"
-            } text-[10px] font-semibold px-2 py-1 rounded-md`}
-          >
-            <p>{item.status}</p>
-          </div>
+          <StatusType status={item.status} />
         </div>
       </div>
     </div>

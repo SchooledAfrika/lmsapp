@@ -76,14 +76,36 @@ export async function PUT(req: Request) {
   });
   try {
     // now, lets make someone an internal teacher after applying now
-    await prisma.teacher.update({
-      where: {
-        id: getTeacher?.teacherId,
-      },
+    if (status === "ACCEPTED") {
+      await prisma.teacher.update({
+        where: {
+          id: getTeacher?.teacherId,
+        },
+        data: {
+          teachingRole: "INTERNAL",
+        },
+      });
+    } else {
+      await prisma.teacher.update({
+        where: {
+          id: getTeacher?.teacherId,
+        },
+        data: {
+          teachingRole: "EXTERNAL",
+        },
+      });
+    }
+    // now, let's change the status of vacancy teacher from pending to accepted or rejected
+    await prisma.vacancyTeacher.update({
+      where: { id: vacancyTeacherId },
       data: {
-        teachingRole: "INTERNAL",
+        status,
       },
     });
+
+    return new Response(
+      JSON.stringify({ message: `applicant successfully ${status}` })
+    );
   } catch (error) {
     return serverError();
   }
