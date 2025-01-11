@@ -14,23 +14,26 @@ import "react-toastify/dist/ReactToastify.css";
 import { Skeleton } from "@mui/material";
 import { Noitem } from "@/components/ApplicantsTable";
 
-interface ISchoolInfo {
-  name: string;
-  banner: string;
-  schAddress: string;
-  ownerName: string;
-  briefDescription: string | null;
+interface Ivacancy {
+  role: string;
+  description: string;
+  qualifications: string[];
+  responsibility: string[];
+  minSalary: string;
+  maxSalary: string;
+  note: string;
+  jobTitle: string;
+  state: string;
 }
 
-interface IOffers {
+interface Ioffer {
   id: string;
-  schoolId: string;
   teacherId: string;
-  status: string;
-  grades: string[];
-  subjects: string[];
+  vacancyId: string;
   createdAt: string;
-  school: ISchoolInfo;
+  updatedAt: string;
+  status: string;
+  vacancy: Ivacancy;
 }
 
 // this dailog handles confirmation
@@ -126,37 +129,46 @@ export const Approval: React.FC<{
   );
 };
 
-const OfferCard: React.FC<{ item: IOffers }> = ({ item }) => {
-  const [showDialog, setShowDialog] = useState<boolean>(false);
-  const [action, setAction] = useState(" ");
+const ArrayRender: React.FC<{ item: string[]; name: string }> = ({
+  item,
+  name,
+}) => {
+  return (
+    <div className=" flex flex-col">
+      <p className=" font-semibold">{name}</p>
+      {item.map((value, index) => (
+        <p className=" text-[12px]" key={index}>
+          {value}
+        </p>
+      ))}
+    </div>
+  );
+};
+
+const OfferCard: React.FC<{ item: Ioffer }> = ({ item }) => {
   const { handleDate } = useConversion();
   return (
     <div className=" flex rounded-md flex-col overflow-hidden gap-2 bg-white pb-2">
-      <div className=" w-full h-[200px]">
+      <div className=" w-full h-[200px] flex items-center justify-center border flex-col gap-2 bg-[rgba(0,0,0,0.4)]">
         <Image
-          src={item.school.banner}
+          src={`/${item.vacancy.jobTitle.toLowerCase()}.png`}
           alt=""
           width={200}
           height={200}
-          className=" w-full h-full"
+          className=" w-10 aspect-square"
         />
+        <p className=" font-semibold text-white">{item.vacancy.jobTitle}</p>
       </div>
-      <div className=" w-full px-3 flex flex-col gap-3">
+      <div className=" w-full px-3 flex flex-col gap-2">
         <div className=" text-black font-semibold">
           <p>
-            School name:{" "}
-            <span className=" font-normal text-[14px]">{item.school.name}</span>
-          </p>
-          <p>
             Owner:{" "}
-            <span className=" font-normal text-[14px]">
-              {item.school.ownerName}
-            </span>
+            <span className=" font-normal text-[14px]">schooled Afrika</span>
           </p>
           <p>
-            Address:{" "}
+            State:{" "}
             <span className=" font-normal text-[14px]">
-              {item.school.schAddress}
+              {item.vacancy.state}
             </span>
           </p>
           <p>
@@ -166,36 +178,20 @@ const OfferCard: React.FC<{ item: IOffers }> = ({ item }) => {
             </span>
           </p>
         </div>
-        <div className=" w-full flex gap-2 items-center">
+        <ArrayRender item={item.vacancy.qualifications} name="Qualifications" />
+        <ArrayRender item={item.vacancy.responsibility} name="Responsibility" />
+        <div className=" flex items-center gap-1">
+          <p>Status: </p>
           <div
-            onClick={() => {
-              setAction("approve");
-              setShowDialog(true);
-            }}
+            className={`${
+              item.status === "PENDING"
+                ? "bg-yellow-500 text-black"
+                : item.status == "ACCEPTED"
+                ? " bg-green-700 text-white"
+                : " bg-red-700 text-white"
+            } text-[10px] font-semibold px-2 py-1 rounded-md`}
           >
-            <Approval
-              showDialog={showDialog}
-              setShowDialog={setShowDialog}
-              id={item.id}
-              action={action}
-              name={"approve"}
-              setAction={setAction}
-            />
-          </div>
-          <div
-            onClick={() => {
-              setAction("reject");
-              setShowDialog(true);
-            }}
-          >
-            <Approval
-              showDialog={showDialog}
-              setShowDialog={setShowDialog}
-              id={item.id}
-              action={action}
-              name={"reject"}
-              setAction={setAction}
-            />
+            <p>{item.status}</p>
           </div>
         </div>
       </div>
@@ -222,7 +218,7 @@ export const ShowSkeleton = () => {
 
 const OpenOffers = () => {
   // making use of react query to get all the offers
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery<Ioffer[]>({
     queryKey: ["get-offers-for-teacher"],
     queryFn: async () => {
       const response = await fetch("/api/teachers-offer");
@@ -230,7 +226,7 @@ const OpenOffers = () => {
       return result;
     },
   });
-  if (isFetching) {
+  if (isLoading) {
     return <ShowSkeleton />;
   }
   if (isError) {
@@ -248,7 +244,7 @@ const OpenOffers = () => {
               </div>
             ) : (
               <div className="grid  grid-cols-1 xs:grid-cols-2 gap-3  md:grid-cols-3">
-                {data.map((item: IOffers, index) => (
+                {data.map((item: Ioffer, index) => (
                   <OfferCard item={item} key={index} />
                 ))}
               </div>

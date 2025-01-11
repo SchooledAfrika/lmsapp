@@ -39,10 +39,13 @@ export async function GET(
           },
         },
         StudentExam: true,
+        SingleMeeting: {
+          select: {
+            link: true,
+          },
+        },
       },
     });
-    console.log("checking here...");
-    console.log(appliedSection);
     if (!appliedSection)
       return new Response(
         JSON.stringify({ message: "this session does not exist" }),
@@ -53,7 +56,6 @@ export async function GET(
       select: { id: true, teacherId: true },
     });
     if (session?.teacherId !== userId && appliedSection.studentId !== userId) {
-      console.log(session?.teacherId);
       return new Response(JSON.stringify({ message: "ilegal parameter!!!" }), {
         status: 401,
       });

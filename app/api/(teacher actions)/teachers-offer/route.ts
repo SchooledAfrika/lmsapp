@@ -19,7 +19,7 @@ export async function GET(req: Request) {
   //   proceed to getting information
   try {
     const openOffers = await prisma.vacancyTeacher.findMany({
-      where: { teacherId, status: "PENDING" },
+      where: { teacherId },
       include: {
         vacancy: {
           select: {
@@ -30,6 +30,8 @@ export async function GET(req: Request) {
             minSalary: true,
             maxSalary: true,
             note: true,
+            jobTitle: true,
+            state: true,
           },
         },
       },
