@@ -215,7 +215,7 @@ const OneTeacher: React.FC<{ applicant: IVacancyTeacher; vacancy: string }> = ({
             </PopoverTrigger>
             <PopoverContent className=" flex flex-col gap-1 w-fit px-4">
               <Link
-                href={`/school-dashboard/job-listing/applicant/${vacancy}/${applicant?.teacher.id}`}
+                href={`/admin-dashboard/job-listing/applicant/${vacancy}/${applicant?.teacher.id}`}
                 className=" text-[14px] font-bold transform transition-all duration-700 text-black hover:text-green-800"
               >
                 View details
@@ -298,7 +298,6 @@ export default function ApplicantsTable() {
             </div>
           ) : (
             <div className="!w-full overflow-x-auto flex flex-col gap-1">
-              <TableStatus active="Active" canceled="Canceled" />
               <Table className="bg-white w-full md:w-full rounded-md">
                 <TableHeader className="">
                   <TableRow className=" flex  ">
