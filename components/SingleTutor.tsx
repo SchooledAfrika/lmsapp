@@ -24,6 +24,7 @@ import { IoClose } from "react-icons/io5";
 import ShareLink from "./Share";
 import { CircularProgress } from "@mui/material";
 import BookSession from "./BookSession";
+import { Noprofile } from "./ui/admin-dashboard/sessions/Sessions";
 
 // this is to show that item is not submitted yet
 const BeforeReviewSubmit: React.FC<{
@@ -310,13 +311,17 @@ const Rattings: React.FC<{
     <div className=" flex flex-col w-full px-5 py-2 bg-white rounded-md ">
       <div className=" w-full flex gap-4 items-center">
         <div className=" flex-1 aspect-square border border-orange-600 rounded-sm p-1">
-          <Image
-            src={rate.ratter.profilePhoto}
-            alt="dp"
-            width={200}
-            height={200}
-            className=" w-full h-full"
-          />
+          {rate.ratter.profilePhoto ? (
+            <Image
+              src={rate.ratter.profilePhoto}
+              alt="dp"
+              width={200}
+              height={200}
+              className=" w-full h-full"
+            />
+          ) : (
+            <Noprofile />
+          )}
         </div>
         <div className=" flex-11">
           <div className=" flex items-center justify-between">

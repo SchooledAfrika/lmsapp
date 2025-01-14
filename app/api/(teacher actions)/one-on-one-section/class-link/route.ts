@@ -43,3 +43,39 @@ export async function POST(req: Request) {
     return serverError();
   }
 }
+
+// here, we will make a put request to modify the class link
+export async function PUT(req: Request) {
+  const userId = await serverSessionId();
+  const role = await serverSessionRole();
+  const { link, sessionId } = await req.json();
+
+  if (!userId) return notAuthenticated();
+  if (role !== "Teacher") return onlyTeacher();
+
+  // check if the meeting exist first,
+  // if not throw an error
+  const checkMeeting = await prisma.singleMeeting.findFirst({
+    where: { appliedSectionId: sessionId },
+    select: { id: true },
+  });
+  if (!checkMeeting) {
+    return new Response(
+      JSON.stringify({ message: "create meeting before updating it" }),
+      { status: 400 }
+    );
+  }
+
+  try {
+    await prisma.singleMeeting.update({
+      where: { id: checkMeeting.id },
+      data: { link },
+    });
+    return new Response(
+      JSON.stringify({ message: "class link successfully updated" }),
+      { status: 200 }
+    );
+  } catch (error) {
+    return serverError();
+  }
+}

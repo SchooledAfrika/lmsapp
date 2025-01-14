@@ -27,6 +27,7 @@ interface IsingleAttendance {
   duration: number;
   held: boolean;
   classday: string;
+  heldType: string;
 }
 
 interface IAttendance {
@@ -189,16 +190,20 @@ const AttendanceTable: React.FC<{
                       (item) => new Date(item.classday).getDate() === day
                     );
                     return (
-                      <TableCell key={day}>
+                      <TableCell key={day} className=" items-center">
                         {itemPerDay ? (
                           <p
                             className={`${
                               itemPerDay.held
                                 ? "text-green-600"
                                 : "text-red-600"
-                            }`}
+                            } text-[12px]`}
                           >
-                            {itemPerDay.held ? itemPerDay.duration : "absent"}
+                            {itemPerDay.held
+                              ? itemPerDay.duration
+                              : itemPerDay.heldType == "Absent"
+                              ? "abs"
+                              : "rsd"}
                           </p>
                         ) : (
                           <div>

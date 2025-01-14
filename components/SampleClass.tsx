@@ -33,14 +33,6 @@ const SampleClass = () => {
               <PopularClassesCard key={index} item={item} />
             ))}
         </div>
-        <div className=" w-full flex items-center justify-center mt-3">
-          <Link
-            className=" px-4 py-2 rounded-md bg-orange-500 text-white"
-            href={"/find-classes"}
-          >
-            More classes
-          </Link>
-        </div>
         <ToastContainer />
       </Container>
     </div>

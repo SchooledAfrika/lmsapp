@@ -3,6 +3,7 @@ import BookSessionByParents from "./BookSessionByParents";
 import BookSessionByStudent from "./BookSessionByStudent";
 import { useSession } from "next-auth/react";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const BookSession: React.FC<{
   sessionId: string;
@@ -12,10 +13,11 @@ const BookSession: React.FC<{
 }> = ({ sessionId, tutorImg, tutorLang, tutorName }) => {
   const [showDialog, setShowDialog] = useState<boolean>(false);
   const { data, status } = useSession();
+  const router = useRouter();
   //   function to return error message if the user is not logged in or not student or parents
   const handleShow = () => {
     if (status === "unauthenticated") {
-      return toast.error("login to book a session");
+      return router.push("/login");
     }
     if (data?.user.role === "Student") {
       return setShowDialog(true);

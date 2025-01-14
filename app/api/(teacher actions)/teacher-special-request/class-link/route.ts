@@ -1,4 +1,5 @@
 // here we will create a class link for the student to join for a class
+import SingleSpecialRequest from "@/components/ui/admin-dashboard/sessions/SingleSpecialRequest";
 import prisma from "@/prisma/prismaConnect";
 import {
   notAuthenticated,
@@ -37,6 +38,40 @@ export async function POST(req: Request) {
     });
     return new Response(
       JSON.stringify({ message: "class link created successfully" }),
+      { status: 200 }
+    );
+  } catch (error) {
+    return serverError();
+  }
+}
+
+// here we will update a link if is created already before
+export async function PUT(req: Request) {
+  const user = await serverSessionId();
+  const role = await serverSessionRole();
+  const { link, sessionId } = await req.json();
+
+  if (!user) return notAuthenticated();
+  if (role !== "Teacher") return onlyTeacher();
+
+  const checkClass = await prisma.specialRequestMeeting.findFirst({
+    where: { specialTeacherMergedId: sessionId },
+    select: { id: true },
+  });
+
+  if (!checkClass) {
+    return new Response(JSON.stringify({ message: "class not found" }), {
+      status: 400,
+    });
+  }
+
+  try {
+    await prisma.specialRequestMeeting.update({
+      where: { id: checkClass.id },
+      data: { link },
+    });
+    return new Response(
+      JSON.stringify({ message: "class link updated successfully" }),
       { status: 200 }
     );
   } catch (error) {

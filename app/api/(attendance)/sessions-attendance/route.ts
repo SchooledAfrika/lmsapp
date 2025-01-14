@@ -15,7 +15,7 @@ import {
 } from "@/prisma/utils/utils";
 
 export async function POST(req: Request) {
-  const { sessionId, classday, held, duration } = await req.json();
+  const { sessionId, classday, held, duration, heldType } = await req.json();
   const teacherId = await serverSessionId();
   const role = await serverSessionRole();
   // lets check for authentication first
@@ -37,13 +37,21 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ message: "Session not found" }), {
       status: 404,
     });
-  // if (session.sectionOwner.id !== teacherId) {
-  //   return new Response(
-  //     JSON.stringify({ message: "you are not allowed to access this class" }),
-  //     { status: 400 }
-  //   );
-  // }
-  //   now we can then create the attendace
+  // check if attendance is already taken for the day
+  // return error if its already taken or existing
+  const checkExistence = await prisma.sessionAttendance.findFirst({
+    where: {
+      appliedSectionId: sessionId,
+      classday,
+    },
+  });
+  console.log(checkExistence);
+  if (checkExistence) {
+    return new Response(
+      JSON.stringify({ message: "attendance already taken for the day" }),
+      { status: 400 }
+    );
+  }
   try {
     await prisma.sessionAttendance.create({
       data: {
@@ -52,6 +60,7 @@ export async function POST(req: Request) {
         classday,
         held,
         duration: held ? Number(duration) : 0,
+        heldType,
       },
     });
     return new Response(
