@@ -337,7 +337,7 @@ model AppliedSection {
   // time to start or proposed time
   startTime         DateTime
   // this will contain the id of the resources that the teacher will push here
-  resources         String[]            @default([])
+  resources         String[]            @default([]) @db.ObjectId
   StudentExam       StudentExam[]
   amt               Int
   createdAt         DateTime            @default(now())

@@ -2,14 +2,16 @@
 // the appliedsection is the model that handles this relationship
 // this route is just about creating this exam and get this exams for students
 import prisma from "@/prisma/prismaConnect";
-import { notAuthenticated } from "@/prisma/utils/error";
-import { serverSessionId } from "@/prisma/utils/utils";
+import { notAuthenticated, onlyTeacher } from "@/prisma/utils/error";
+import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // post request to add an exam for a one on one session
 export async function POST(req: Request) {
   const teacherId = await serverSessionId();
+  const role = await serverSessionRole();
   const { examId, appliedSectionId } = await req.json();
   if (!teacherId) return notAuthenticated();
+  if (role !== "Teacher") return onlyTeacher();
   //   then lets get the exam we want to add in the session
   const exam = await prisma.exams.findUnique({ where: { id: examId } });
   if (!exam)
