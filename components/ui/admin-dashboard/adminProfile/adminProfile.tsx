@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import React from "react";
-import { LuFilePieChart } from "react-icons/lu";
+import { LuFileHeart } from "react-icons/lu";
 import EditProfile from "./EditProfile";
 import { useSession } from "next-auth/react";
 import { useQuery } from "@tanstack/react-query";
@@ -119,7 +119,7 @@ const DownProfile = () => {
       </div>
       <div className=" flex space-x-12">
         <p className="text-[13px] inline font-medium">
-          <LuFilePieChart className="inline w-4 h-4" /> Status:
+          <LuFileHeart className="inline w-4 h-4" /> Status:
         </p>
         <p className="text-[14px] font-semibold">{basicInfo?.status}</p>
       </div>

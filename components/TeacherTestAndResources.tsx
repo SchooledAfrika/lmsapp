@@ -52,7 +52,7 @@ interface IallTest {
 const AllTest: React.FC<IallTest> = ({ setId, id, setShowExam, showExam }) => {
   const { getTimeAgo, handleDate, handleTime } = useConversion();
   // here we get all the exams from teacher
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ["allexam"],
     queryFn: async () => {
       const response = await fetch("/api/exam-by-teachers");
@@ -60,7 +60,7 @@ const AllTest: React.FC<IallTest> = ({ setId, id, setShowExam, showExam }) => {
       return result;
     },
   });
-  if (isFetching) {
+  if (isLoading) {
     return <LoadingView heading="Test" />;
   }
   if (isError) {
@@ -147,7 +147,7 @@ interface IResouces {
 }
 const AllResources: React.FC<IallTest> = ({ id, setId, setShowExam }) => {
   const { handleDate, handleTime, getTimeAgo, makeSubstring } = useConversion();
-  const { data, isFetching, error, isError } = useQuery({
+  const { data, isLoading, error, isError } = useQuery({
     queryKey: ["resources"],
     queryFn: async () => {
       const response = await fetch("/api/manage-resources");
@@ -155,7 +155,7 @@ const AllResources: React.FC<IallTest> = ({ id, setId, setShowExam }) => {
       return result;
     },
   });
-  if (isFetching) {
+  if (isLoading) {
     return <LoadingView heading="Resources" />;
   }
   if (isError) {

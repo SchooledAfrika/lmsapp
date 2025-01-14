@@ -15,12 +15,24 @@ import { Skeleton } from "@mui/material";
 import { useConversion } from "@/data-access/conversion";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { MdOutlineRemoveRedEye } from "react-icons/md";
+interface IOneResources {
+  id: String;
+  subject: String;
+  title: String;
+  sourceLink: String;
+  type: String;
+  grade: String;
+  teacherId: String;
+  createdAt: String;
+}
 
 interface IResource {
   id: string | undefined;
 }
 const TestResources: React.FC<IResource> = ({ id }) => {
   const { handleDate, handleTime } = useConversion();
+  const router = useRouter();
   const mutation = useMutation({
     mutationKey: ["deleteresource"],
     mutationFn: async () => {
@@ -34,9 +46,7 @@ const TestResources: React.FC<IResource> = ({ id }) => {
       router.push("/teacher-dashboard/test-and-resources");
     },
   });
-
-  const router = useRouter();
-  const { data, isFetching, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery<IOneResources>({
     queryKey: ["oneexam", id],
     queryFn: async () => {
       const response = await fetch(`/api/manage-resources/${id}`);
@@ -45,9 +55,16 @@ const TestResources: React.FC<IResource> = ({ id }) => {
     },
     enabled: Boolean(id),
   });
-  
 
-  if (isFetching) {
+  // here, we delete the resources
+  const handleDelete = () => {
+    mutation.mutate();
+  };
+  const handleViewLink = (link: string) => {
+    return (window.location.href = link);
+  };
+
+  if (isLoading) {
     return (
       <div className=" w-full h-full p-2">
         <Skeleton
@@ -59,12 +76,10 @@ const TestResources: React.FC<IResource> = ({ id }) => {
       </div>
     );
   }
-
-  // here, we delete the resources
-  const handleDelete = () => {
-    mutation.mutate();
-  };
-
+  if (isError) {
+    return <div>something went wrong!!!</div>;
+  }
+  console.log(data);
   return (
     <section>
       <div className="flex items-center px-4 pt-3 pb-2 gap-3 ">
@@ -90,30 +105,24 @@ const TestResources: React.FC<IResource> = ({ id }) => {
             <TableRow>
               <TableCell>{data?.grade}</TableCell>
               <TableCell>{data?.subject}</TableCell>
-              <TableCell>{handleDate(data?.createdAt)}</TableCell>
-              <TableCell>{handleTime(data?.createdAt)}</TableCell>
+              <TableCell>{handleDate(data?.createdAt as string)}</TableCell>
+              <TableCell>{handleTime(data?.createdAt as string)}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
         <div className=" flex items-center">
-          <button
+          <div
             onClick={handleDelete}
-            className=" bg-red-600 px-4 py-2 rounded-md text-white"
+            className=" bg-red-600 text-[12px] cursor-pointer px-4 py-2 rounded-md text-white"
           >
             Delete
-          </button>
-          {data?.type == "LINK" && (
-            <Link
-              href="https://www.denhubb.com"
-              className="ml-4"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Button className="bg-secondary text-white text-[12px] py-5 my-3 mr-0 md:mr-6">
-                Visit Link
-              </Button>
-            </Link>
-          )}
+          </div>
+          <div
+            onClick={() => handleViewLink(data?.sourceLink as string)}
+            className="bg-secondary cursor-pointer px-3 rounded-md ml-4 flex w-fit gap-1 items-center text-white text-[12px] py-2  my-3 mr-0 md:mr-6"
+          >
+            <p>View</p> <MdOutlineRemoveRedEye />
+          </div>
         </div>
       </div>
     </section>

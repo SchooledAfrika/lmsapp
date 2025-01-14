@@ -183,6 +183,7 @@ model TeachersArticle {
   title      String
   sourceLink String
   type       ResourceType
+  grade      String
   teacher    Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId  String       @db.ObjectId
   createdAt  DateTime     @default(now())
