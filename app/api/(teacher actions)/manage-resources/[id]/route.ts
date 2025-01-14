@@ -24,6 +24,7 @@ export async function GET(
         JSON.stringify({ message: "not permitted to view this resources" }),
         { status: 400 }
       );
+    console.log(oneResources);
     return new Response(JSON.stringify(oneResources), { status: 200 });
   } catch (error) {
     return serverError();
