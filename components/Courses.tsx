@@ -1,7 +1,6 @@
 "use client";
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import React, { useState, useEffect } from "react";
-import { FaStar } from "react-icons/fa";
 import { MdVerified } from "react-icons/md";
 import { useClasses } from "@/data-access/class";
 import { ToastContainer } from "react-toastify";

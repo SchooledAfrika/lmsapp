@@ -222,7 +222,7 @@ const Apply = () => {
               <div className="flex my-3 justify-end text-lightGreen items-center">
                 <FaQuoteRight />
               </div>
-              <p className="text-lightGreen text-lg font-semibold my-3">Mrs Bukola Aleriwa Idowu</p>
+              <p className="text-lightGreen text-lg font-semibold my-3">Bukola Aleriwa</p>
               <p>Founder, Schooled Afrika</p>
              
             </div>
@@ -268,12 +268,9 @@ const Apply = () => {
   </AccordionItem>
   <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-3">
   
-  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> What do i need to be a teacher with Schooled Afrika?</AccordionTrigger>
+  <AccordionTrigger className="text-start inline"> <MdPlayArrow className="inline text-lightGreen text-xl" /> What do I need to be a teacher with Schooled Afrika?</AccordionTrigger>
     <AccordionContent>
-    Teaching experience
-Good teaching skills
-Good internet connection
-A good phone or laptop
+    Teaching experience, Good teaching skills, Good Internet connection, A laptop, and good communication skills.
     </AccordionContent>
   </AccordionItem>
   <AccordionItem className="bg-white border-2 my-2 border-white p-3 rounded-md" value="item-4">
