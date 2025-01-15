@@ -12,6 +12,7 @@ import { ModifiedNoProfile } from "../../admin-dashboard/sessions/Sessions";
 import { HandleAttendance } from "@/components/HandleAddClass";
 import { SharedAddLink } from "../../student-dashboard/sessions/OneOnOneSession";
 import { ToastContainer } from "react-toastify";
+import { useRouter } from "next/navigation";
 import "react-toastify/dist/ReactToastify.css";
 
 interface Imeeting {
@@ -39,6 +40,7 @@ interface ISpecialRequest {
 
 interface IoneonOne {
   AppliedSection: ISpecialRequest[];
+  sessionId: string;
 }
 
 const StartMeetingDiv: React.FC<{ subject: string; language: string }> = ({
@@ -78,6 +80,45 @@ const StartSession = () => {
     </Button>
   );
 };
+
+const ViewDetails: React.FC<{
+  sessionId: string;
+  isTeacher: boolean;
+  name: string;
+  link: Imeeting;
+}> = ({ sessionId, isTeacher, name, link }) => {
+  const router = useRouter();
+  const navigateLink = () => {
+    if (isTeacher) {
+      router.push(
+        `/teacher-dashboard/sessions/special-request/${sessionId}`
+      );
+    } else {
+      router.push(
+        `/student-dashboard/sessions/special-request/${sessionId}`
+      );
+    }
+  };
+  return (
+    <div className=" w-full flex flex-col gap-2 px-3">
+      <div className=" w-full flex  gap-2 px-3">
+        <div
+          onClick={navigateLink}
+          className=" flex-1 py-3 flex items-center justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 "
+        >
+          <p>View Details</p>
+        </div>
+        <SharedAddLink
+          link={link}
+          isTeacher={isTeacher}
+          specialRequest={true}
+          sessionId={sessionId}
+        />
+      </div>
+      
+    </div>
+  );
+};
 // each session component here
 const EachSession: React.FC<{ item: ISpecialRequest; isTeacher: boolean }> = ({
   item,
@@ -110,12 +151,13 @@ const EachSession: React.FC<{ item: ISpecialRequest; isTeacher: boolean }> = ({
       <StartMeetingDiv subject={item.subject} language={item.language} />
       <TimeShow time={item.time} />
       <div className="flex flex-col gap-1">
-        <SharedAddLink
-          isTeacher={isTeacher}
-          specialRequest={true}
-          link={item.SpecialRequestMeeting}
-          sessionId={item.id}
-        />
+      <ViewDetails
+         isTeacher={isTeacher}
+         name={item.student?.name}
+         link={item.SpecialRequestMeeting}
+         sessionId={item.id}
+      />
+        
         <HandleAttendance sessionId={item.id} name={item.student?.name} />
       </div>
     </div>
