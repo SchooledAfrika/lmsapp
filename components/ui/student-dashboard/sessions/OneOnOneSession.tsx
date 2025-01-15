@@ -182,12 +182,13 @@ const TimeShow: React.FC<{
 // /api/teacher-special-request/class-link
 // /api/one-on-one-section/class-link
 
-const AddMettingModel: React.FC<{
+export const AddMettingModel: React.FC<{
   showModel: boolean;
   setShowmodel: React.Dispatch<React.SetStateAction<boolean>>;
   sessionId: string;
   specialRequest: boolean;
-}> = ({ showModel, setShowmodel, sessionId, specialRequest }) => {
+  isCreate: boolean;
+}> = ({ showModel, setShowmodel, sessionId, specialRequest, isCreate }) => {
   const [link, setLink] = useState<string | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(false);
   const queryClient = useQueryClient();
@@ -199,7 +200,7 @@ const AddMettingModel: React.FC<{
           ? "/api/teacher-special-request/class-link"
           : "/api/one-on-one-section/class-link",
         {
-          method: "POST",
+          method: isCreate ? "POST" : "PUT",
           body: JSON.stringify({ link, sessionId }),
         }
       );
@@ -231,9 +232,10 @@ const AddMettingModel: React.FC<{
     <Dialog open={showModel} onOpenChange={() => setShowmodel(false)}>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add zoom link</DialogTitle>
+          <DialogTitle>{isCreate ? "Add" : "Change"} zoom link</DialogTitle>
           <DialogDescription>
-            Please add zoom link and start class. Click save when you're done.
+            Please {isCreate ? "Add" : "Change"} zoom link and start class.
+            Click save when you're done.
           </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
@@ -279,6 +281,7 @@ const AddClassLink: React.FC<{
           showModel={showModel}
           setShowmodel={setShowmodel}
           specialRequest={specialRequest}
+          isCreate={true}
         />
       )}
     </div>

@@ -27,8 +27,29 @@ export const Subject = [
   "LITERATURE",
   "CRS",
   "MATHEMATICS",
+  "YORUBA",
+  "IGBO",
+  "FRENCH",
+  "ACCOUNT",
+  "GENERAL SCIENCE",
+  "PHONICS",
 ];
 
+export const AllGrade: string[] = [
+  "KG",
+  "Grade 1",
+  "Grade 2",
+  "Grade 3",
+  "Grade 4",
+  "Grade 5",
+  "Grade 6",
+  "Grade 7",
+  "Grade 8",
+  "Grade 9",
+  "Grade 10",
+  "Grade 11",
+  "Grade 12",
+];
 // below is the zod schema for parents that continues with their registration
 const MAX_FILE_SIZE = 5000000;
 const ACCEPTED_IMAGE_TYPES = [

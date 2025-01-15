@@ -19,7 +19,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Container from "./Container";
 import SingleCourses from "./SingleCourses";
-import { useConversion } from "@/data-access/conversion";
+import { useRouter } from "next/navigation";
 export interface TeacherInfo {
   id: string;
   name: string;
@@ -71,10 +71,10 @@ export const CourseCreator: React.FC<{
   );
 };
 
-const CourseCard = ({ item }: { item: ICourses }) => {
+export const CourseCard = ({ item }: { item: ICourses }) => {
   const { makeSubString } = useClasses();
   const { data, status } = useSession();
-
+  const router = useRouter();
   // Add a state to toggle the checkout visibility
   const [isCheckoutVisible, setIsCheckoutVisible] = useState<boolean>(false);
   const [dialogBox, setDialogBox] = useState<boolean>(false);
@@ -132,8 +132,7 @@ const CourseCard = ({ item }: { item: ICourses }) => {
           ) : (
             <Button
               onClick={() => {
-                if (status === "unauthenticated")
-                  return toast.error("login to purchase courses");
+                if (status === "unauthenticated") return router.push("/login");
                 handlePurchaseClick();
               }}
               className="bg-dimOrange cursor-pointer absolute -translate-y-1/2 right-3 rounded-md text-white text-[12px] font-bold px-4 py-2 text-center lg:block"

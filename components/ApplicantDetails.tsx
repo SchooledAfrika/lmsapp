@@ -128,13 +128,12 @@ const VacancyDesc = () => {
 const TeacherInfo = () => {
   const params = useParams();
   const teacherId = params.slug[1];
-  const [dataSize, setDataSize] = useState<any>(null);
 
   // make query to get information about only one vacancy
   const { data, isFetching, isError, error } = useQuery({
     queryKey: ["get-one-teacher"],
     queryFn: async () => {
-      const response = await fetch(`/api/add-teacher-by-school/${teacherId}`);
+      const response = await fetch(`/api/teacher-details-vacancy/${teacherId}`);
       const result = await response.json();
       return result;
     },

@@ -239,3 +239,41 @@ payload:{
     desc:string,
     title: string
 }
+
+NEW ENDPOINTS
+date: 13/01/2025
+================================================================================================================
+endpoint for teacher to add resources for one on one section
+================================================================================================================
+====> teacher add resources in one on one section.
+route:/api/one-on-one-section/resources
+payload:{
+    resourceId: string,
+    sectionId:string
+}
+method: POST
+comment: resourceId is the id of the resources you want to add, while sectionId is the id of the one on one section.
+
+================================================================================================================
+endpoint for teacher to delete resources for one on one section
+================================================================================================================
+====> teacher delete resources in one on one section.
+route:/api/one-on-one-section/resources
+payload:{
+    resourceId:string,
+    sectionId:string,
+}
+method:DELETE
+
+================================================================================================================
+endpoint for teacher to add exam for one on one section
+================================================================================================================
+====> teacher set exam in one on one section
+route: /api/exam-for-students
+payload:{
+    examId:string,
+    appliedSectionId:string
+}
+method: POST
+comment: examId is the id of the exam you want to add to one on one section, and appliedSectionId is the id of the one on one section.
+

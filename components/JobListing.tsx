@@ -93,7 +93,7 @@ const OneJobListing: React.FC<{ item: IJoblist }> = ({ item }) => {
           Edit Listing
         </Link>
         <Link
-          href={`/school-dashboard/job-listing/applicants/${item.id}`}
+          href={`/admin-dashboard/job-listing/applicants/${item.id}`}
           className=" px-4 py-3 rounded-md border  bg-green-700 text-white"
         >
           View Applicants

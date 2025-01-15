@@ -23,14 +23,15 @@ import {
 import { MdMoreHoriz } from "react-icons/md";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { IoWarning } from "react-icons/io5";
-import TableStatus from "./ui/TableStatus";
 import Container from "./Container";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { StatusType } from "./ui/teacher-dashboard/openOffers/openOffers";
 
 interface IVacancyTeacher {
   createdAt: string;
   id: string;
+  status: string;
   teacher: {
     name: string;
     phoneNo: string;
@@ -47,6 +48,7 @@ const AcceptDialog: React.FC<{
   showAccept: boolean;
   vacancyId: string;
 }> = ({ setShowAccept, showAccept, vacancyId }) => {
+  const [loading, setLoading] = useState<boolean>(false);
   const queryClient = useQueryClient();
   // here we accept a teacher or admit the teacher
   const mutation = useMutation({
@@ -65,9 +67,12 @@ const AcceptDialog: React.FC<{
       const result = await response.json();
       if (!response.ok) {
         toast.error(result.message);
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["get-one-vacancy"] });
+        setShowAccept(false);
+        setLoading(false);
+        return toast.success(result.message);
       }
-      setShowAccept(false);
-      return toast.success(result.message);
     },
   });
   // this is to close the dialog
@@ -87,17 +92,21 @@ const AcceptDialog: React.FC<{
           <IoWarning className=" text-[70px] text-yellow-500" />
           <div className=" flex flex-col items-center justify-center">
             <p className=" font-bold">
-              Are you sure you want to accept this Teacher
+              Are you sure you want to accept this tutor
             </p>
             <p className=" text-[14px]">
-              This action can not be reversed, be sure before you proceed
+              By accepting this, you will make the tutor an inhouse teacher
             </p>
           </div>
           <div
-            onClick={() => mutation.mutate(vacancyId)}
+            onClick={() => {
+              if (loading) return;
+              setLoading(true);
+              mutation.mutate(vacancyId);
+            }}
             className=" cursor-pointer hover:bg-green-800 transition-all transform ease-in-out duration-700 w-full flex items-center justify-center py-4 text-white bg-green-700 rounded-md"
           >
-            <p>Proceed</p>
+            <p>{loading ? "Approving request..." : "Proceed"}</p>
           </div>
           <div onClick={handleClose} className=" cursor-pointer">
             <p className=" text-black font-bold">Cancel</p>
@@ -112,7 +121,9 @@ const RejectDialog: React.FC<{
   setShowReject: React.Dispatch<React.SetStateAction<boolean>>;
   showReject: boolean;
   vacancyId: string;
-}> = ({ showReject, setShowReject }) => {
+}> = ({ showReject, setShowReject, vacancyId }) => {
+  const [loading, setLoading] = useState<boolean>(false);
+  const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationKey: ["accept-teacher-by-vacancy"],
     mutationFn: async (id: string) => {
@@ -129,9 +140,12 @@ const RejectDialog: React.FC<{
       const result = await response.json();
       if (!response.ok) {
         toast.error(result.message);
+      } else {
+        queryClient.invalidateQueries({ queryKey: ["get-one-vacancy"] });
+        setShowReject(false);
+        setLoading(false);
+        return toast.success(result.message);
       }
-      setShowReject(false);
-      return toast.success(result.message);
     },
   });
   // this is to close the dialog
@@ -154,11 +168,19 @@ const RejectDialog: React.FC<{
               Are you sure you want to reject this Teacher
             </p>
             <p className=" text-[14px]">
-              This action can not be reversed, be sure before you proceed
+              By performing this action, if the tutor was internal teacher he
+              will be made external.
             </p>
           </div>
-          <div className=" cursor-pointer hover:bg-green-800 transition-all transform ease-in-out duration-700 w-full flex items-center justify-center py-4 text-white bg-green-700 rounded-md">
-            <p>Proceed</p>
+          <div
+            onClick={() => {
+              if (loading) return;
+              setLoading(true);
+              mutation.mutate(vacancyId);
+            }}
+            className=" cursor-pointer hover:bg-green-800 transition-all transform ease-in-out duration-700 w-full flex items-center justify-center py-4 text-white bg-green-700 rounded-md"
+          >
+            <p>{loading ? "Approving request..." : "Proceed"}</p>
           </div>
           <div onClick={handleClose} className=" cursor-pointer">
             <p className=" text-black font-bold">Cancel</p>
@@ -208,14 +230,14 @@ const OneTeacher: React.FC<{ applicant: IVacancyTeacher; vacancy: string }> = ({
         {handleDate(applicant?.createdAt)}
       </TableCell>
       <TableCell className="text-[11px]  flex-1 flex justify-center text-center ">
-        <div>
+        <div className=" flex items-center flex-col">
           <Popover>
             <PopoverTrigger className="">
               <MdMoreHoriz className=" text-[25px] text-black" />
             </PopoverTrigger>
             <PopoverContent className=" flex flex-col gap-1 w-fit px-4">
               <Link
-                href={`/school-dashboard/job-listing/applicant/${vacancy}/${applicant?.teacher.id}`}
+                href={`/admin-dashboard/job-listing/applicant/${vacancy}/${applicant?.teacher.id}`}
                 className=" text-[14px] font-bold transform transition-all duration-700 text-black hover:text-green-800"
               >
                 View details
@@ -238,6 +260,7 @@ const OneTeacher: React.FC<{ applicant: IVacancyTeacher; vacancy: string }> = ({
               </div>
             </PopoverContent>
           </Popover>
+          <StatusType status={applicant.status} />
         </div>
       </TableCell>
     </TableRow>
@@ -298,7 +321,6 @@ export default function ApplicantsTable() {
             </div>
           ) : (
             <div className="!w-full overflow-x-auto flex flex-col gap-1">
-              <TableStatus active="Active" canceled="Canceled" />
               <Table className="bg-white w-full md:w-full rounded-md">
                 <TableHeader className="">
                   <TableRow className=" flex  ">

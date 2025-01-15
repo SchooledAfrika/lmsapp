@@ -27,6 +27,7 @@ export async function POST(req: Request) {
       JSON.stringify({ message: "article uploaded successfully" })
     );
   } catch (error) {
+    console.log(error);
     return serverError();
   }
 }

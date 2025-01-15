@@ -9,6 +9,7 @@ import Testimonials from "@/components/Testimonials";
 import ParentalControl from "@/components/ParentalControl";
 import SampleClass from "@/components/SampleClass";
 import PreviewInternalTeachers from "@/components/PreviewInternalTeachers";
+import SampleCourses from "@/components/SampleCourses";
 
 export default function Home() {
   return (
@@ -31,11 +32,11 @@ export default function Home() {
         <h2 className="text-2xl font-header text-lightGreen font-bold">
           {" "}
           <span className="hidden  md:inline-flex w-20 md:w-60 mb-2 py-[.5px]  lgl:w-72 h-[.5px] bg-lightGreen mr-6"></span>
-          Popular Classes{" "}
+          Popular Courses{" "}
           <span className="hidden md:inline-flex mb-2 w-20 py-[.5px] md:w-60 lgl:w-72 h-[.5px] bg-lightGreen ml-6"></span>
         </h2>
       </div>
-      <SampleClass />
+      <SampleCourses />
       <PreviewInternalTeachers />
       <Testimonials />
       <GetStarted />

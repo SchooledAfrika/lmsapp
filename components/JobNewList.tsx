@@ -72,6 +72,8 @@ const JobNewList = () => {
 
   const runSubmit: SubmitHandler<IjobListing> = async (data) => {
     setloading(true);
+    const responsibility = data.responsibility.filter((item) => item !== "");
+    data.responsibility = responsibility;
     mutation.mutate(data);
     // handle file submission to the backend server
   };

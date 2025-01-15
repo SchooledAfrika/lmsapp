@@ -49,6 +49,7 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
   const [duration, setDuration] = useState<string | undefined>(undefined);
   const [classHeld, setClassHeld] = useState<boolean>(false);
   const [classError, setClassError] = useState<boolean>(false);
+  const [heldType, setHeldType] = useState<string>("");
   // useEffect to watch for field changes
   useEffect(() => {
     if (selectedDate) {
@@ -73,6 +74,7 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
           held: classHeld,
           duration: classHeld && duration,
           sessionId,
+          heldType,
         }),
       });
 
@@ -95,6 +97,7 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
       }
     },
   });
+
   // submit the form
   const handleSubmit = () => {
     if (!selectedDate) {
@@ -104,6 +107,14 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
       return setClassError(true);
     }
     setloading(true);
+    // function to check todays date and know if it matches
+    // teacher can only mark attendanc for the present day
+    const date = new Date().toDateString();
+    const dateSelected = new Date(selectedDate as Date).toDateString();
+    if (date !== dateSelected) {
+      toast.error("you can only mark the current day");
+      return setloading(false);
+    }
     mutation.mutate();
   };
 
@@ -155,6 +166,7 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
                 <Select
                   onValueChange={(value) => {
                     setClassHeld(value === "true");
+                    return setHeldType(value);
                   }}
                 >
                   <SelectTrigger className=" w-full py-6">
@@ -164,8 +176,9 @@ const AttendanceForm: React.FC<AttendanceFormProps> = ({
                   <SelectContent className=" font-subtext font-medium">
                     <ScrollArea className="h-[200px] w-full ">
                       <SelectGroup>
-                        <SelectItem value="true">True</SelectItem>
-                        <SelectItem value="false">False</SelectItem>
+                        <SelectItem value="true">Done</SelectItem>
+                        <SelectItem value="Absent">Absent</SelectItem>
+                        <SelectItem value="Rescheduled">Rescheduled</SelectItem>
                       </SelectGroup>
                     </ScrollArea>
                   </SelectContent>

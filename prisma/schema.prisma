@@ -183,6 +183,7 @@ model TeachersArticle {
   title      String
   sourceLink String
   type       ResourceType
+  grade      String
   teacher    Teacher      @relation(fields: [teacherId], references: [id], onDelete: Cascade)
   teacherId  String       @db.ObjectId
   createdAt  DateTime     @default(now())
@@ -337,7 +338,7 @@ model AppliedSection {
   // time to start or proposed time
   startTime         DateTime
   // this will contain the id of the resources that the teacher will push here
-  resources         String[]            @default([])
+  resources         String[]            @default([]) @db.ObjectId
   StudentExam       StudentExam[]
   amt               Int
   createdAt         DateTime            @default(now())
@@ -526,10 +527,10 @@ model Vacancy {
   // one to many relationship between teacher model and vacancy
   // althou only admin will be able to create vacancies
   creator        Teacher          @relation(fields: [creatorId], references: [id])
+  VacancyTeacher VacancyTeacher[]
   creatorId      String           @db.ObjectId
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @default(now())
-  VacancyTeacher VacancyTeacher[]
 }
 
 // creating a model that will link teacher and the vancancy advert model
@@ -690,9 +691,10 @@ model SessionAttendance {
   teacherId        String         @db.ObjectId
   session          AppliedSection @relation(fields: [appliedSectionId], references: [id])
   appliedSectionId String         @db.ObjectId
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  // heldStatement, to help show done, absent and rescheduled in frontend
+  heldType         String
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @default(now())
 
   @@index([teacherId, appliedSectionId], name: "session_attendance")
 }

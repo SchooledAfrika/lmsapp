@@ -8,19 +8,19 @@ import {
   SingleRowWithArray,
 } from "./ui/admin-dashboard/sessions/SingleSessionAdmin";
 import { useConversion } from "@/data-access/conversion";
-import { IoMdAdd } from "react-icons/io";
 import { useQuery } from "@tanstack/react-query";
-import { info } from "console";
-import { NoItem } from "./TeachersTable";
 import { Noitem } from "./ApplicantsTable";
 import { SingleClassSkeleton } from "./SingleClassroom";
 import AddTest from "./ui/teacher-dashboard/AddTest";
-import { boolean } from "zod";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AddResource from "./ui/teacher-dashboard/AddResource";
 import Link from "next/link";
+import { AddMettingModel } from "./ui/student-dashboard/sessions/OneOnOneSession";
 
+interface IMeetingLink {
+  link: string;
+}
 // interface for the session
 interface ISingleSession {
   id: string;
@@ -55,6 +55,7 @@ interface ISingleSession {
     details: string;
   };
   StudentExam: [];
+  SingleMeeting: IMeetingLink;
 }
 
 // the top left session
@@ -65,7 +66,11 @@ export const TopLeftSession: React.FC<{
   contact: string;
   isTeacher: boolean;
   teacherDesc: string;
-}> = ({ dp, name, grade, contact, isTeacher, teacherDesc }) => {
+  link: IMeetingLink;
+}> = ({ dp, name, grade, contact, isTeacher, teacherDesc, link }) => {
+  console.log(link);
+  const { id } = useParams();
+  const [showModel, setShowmodel] = useState<boolean>(false);
   return (
     <div className=" flex flex-col gap-3">
       <div className=" px-4 py-3 rounded-md bg-white flex gap-4">
@@ -90,6 +95,23 @@ export const TopLeftSession: React.FC<{
         <div className=" w-full flex flex-col gap-2 bg-white rounded-md px-4 py-3">
           <p className=" text-[14px] font-bold">Teachers Desc</p>
           <p className=" text-[12px]">{teacherDesc}</p>
+        </div>
+      )}
+      {isTeacher && link && (
+        <div>
+          <button
+            onClick={() => setShowmodel(true)}
+            className=" w-fit px-2 py-2 border border-green-900 text-[10px] rounded-md hover:bg-green-700 hover:text-white transition-all ease-in-out duration-700"
+          >
+            Edit class Link
+          </button>
+          <AddMettingModel
+            sessionId={id as string}
+            showModel={showModel}
+            setShowmodel={setShowmodel}
+            specialRequest={false}
+            isCreate={false}
+          />
         </div>
       )}
     </div>
@@ -201,6 +223,7 @@ export const TopSection: React.FC<{
         }
         isTeacher={isTeacher}
         teacherDesc={infos.sectionOwner.teacher.details}
+        link={infos.SingleMeeting}
       />
       <TopMiddleSession
         hours={infos.hoursperday}
@@ -360,7 +383,7 @@ const DownSection: React.FC<{
 
 const SingleSessionShow: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
   const { id } = useParams();
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError, error } = useQuery<ISingleSession>({
     queryKey: ["single-section-show"],
     queryFn: async () => {
       const response = await fetch(`/api/one-on-one-section/session/${id}`);
@@ -380,30 +403,34 @@ const SingleSessionShow: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
       </div>
     );
   }
-  const SingleSession: ISingleSession = data;
+
   return (
     <div className=" w-full flex flex-col gap-3">
       <div className="flex justify-between my-12">
-            <p className="font-bold text-lg">Details</p>
-            <Link
-               href={isTeacher ? "/teacher-dashboard/sessions" : "/student-dashboard/sessions"}
-              className="cursor-pointer"
-            >
-              <Image
-                src="/closeAlt.svg"
-                alt="cancel"
-                width={100}
-                height={100}
-                className="w-[20px] h-[20px]"
-              />
-            </Link>
-          </div>
-      <TopSection isTeacher={isTeacher} infos={SingleSession} />
+        <p className="font-bold text-lg">Details</p>
+        <Link
+          href={
+            isTeacher
+              ? "/teacher-dashboard/sessions"
+              : "/student-dashboard/sessions"
+          }
+          className="cursor-pointer"
+        >
+          <Image
+            src="/closeAlt.svg"
+            alt="cancel"
+            width={100}
+            height={100}
+            className="w-[20px] h-[20px]"
+          />
+        </Link>
+      </div>
+      <TopSection isTeacher={isTeacher} infos={data!} />
       <DownSection
         isTeacher={isTeacher}
-        exams={SingleSession.StudentExam}
-        resources={SingleSession.resources}
-        sessionId={SingleSession.id}
+        exams={data!.StudentExam}
+        resources={data!.resources}
+        sessionId={data!.id}
       />
       <ToastContainer />
     </div>

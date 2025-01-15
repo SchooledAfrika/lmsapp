@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "./ui/select";
 import { ScrollArea } from "./ui/scroll-area";
-import { Subject, urlRegex } from "@/constants/addClassroom";
+import { AllGrade, Subject, urlRegex } from "@/constants/addClassroom";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { toast, useToast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -39,6 +39,8 @@ export const TestUploadResource: React.FC<IdialogUpload> = ({
   const [title, settitle] = useState<string | undefined>(undefined);
   const [linka, setLinka] = useState<string | undefined>(undefined);
   const [linkb, setLinkb] = useState<Blob | undefined>(undefined);
+  const [grade, setGrade] = useState<string>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const { imageUpload } = useCloudinary();
   const queryclient = useQueryClient();
   const mutation = useMutation({
@@ -52,16 +54,20 @@ export const TestUploadResource: React.FC<IdialogUpload> = ({
           title,
           sourceLink: linka ?? img,
           type: linka ? "LINK" : "DOCS",
+          grade,
         }),
       });
       return response;
     },
     onSuccess: async (response) => {
+      setIsLoading(false);
       if (response.ok) {
         const message = await response.json();
         setDialog(false);
         toast.success(message.message);
         queryclient.invalidateQueries({ queryKey: ["resources"] });
+      } else {
+        toast.error("something ent wrong");
       }
     },
   });
@@ -72,8 +78,8 @@ export const TestUploadResource: React.FC<IdialogUpload> = ({
     e.preventDefault();
     const verifyUrl = urlRegex.test(linka as string);
     // check if there is nothing in the two main fields
-    if (!subject || !title) {
-      return alert("both subject and title are required");
+    if (!subject || !title || !grade) {
+      return alert("both subject, grade and title are required");
     }
     // check if user want to submit both
     if (linka && linkb) {
@@ -86,6 +92,7 @@ export const TestUploadResource: React.FC<IdialogUpload> = ({
     }
     // get image link is image was passed
     const imgUrl = await imageUpload(linkb as Blob);
+    setIsLoading(true);
     mutation.mutate(imgUrl);
   };
 
@@ -124,6 +131,27 @@ export const TestUploadResource: React.FC<IdialogUpload> = ({
                 <SelectGroup>
                   {Subject.map((item, index) => (
                     <SelectItem key={index} value={item}>
+                      {item}
+                    </SelectItem>
+                  ))}
+                </SelectGroup>
+              </ScrollArea>
+            </SelectContent>
+          </Select>
+          <Select
+            onValueChange={(value) => {
+              setGrade(value);
+            }}
+          >
+            <SelectTrigger className=" w-full py-6">
+              <SelectValue placeholder="Grade" />
+            </SelectTrigger>
+
+            <SelectContent className=" font-subtext font-medium">
+              <ScrollArea className="h-[500px] w-full ">
+                <SelectGroup>
+                  {AllGrade.map((item, value) => (
+                    <SelectItem key={item} value={item}>
                       {item}
                     </SelectItem>
                   ))}
@@ -191,10 +219,11 @@ export const TestUploadResource: React.FC<IdialogUpload> = ({
           </div>
           <DialogFooter>
             <Button
+              disabled={isLoading}
               type="submit"
               className="w-full py-6 bg-lightGreen hover:bg-green-700"
             >
-              Submit
+              {isLoading ? "Submitting..." : "Submit"}
             </Button>
           </DialogFooter>
         </form>

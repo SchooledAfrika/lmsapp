@@ -9,9 +9,12 @@ const Offers = () => {
     <Container>
       <section className="grid font-subtext  grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-center xl:grid-cols-4 gap-3  mt-10">
         <div>
-          <h3 className="text-3xl sm:text-[24px] font-header font-bold">Our Offers</h3>
+          <h3 className="text-3xl sm:text-[24px] font-header font-bold">
+            Our Offers
+          </h3>
           <p className="mt-2 text-[16px]">
-          We offer quality online classes that carters for all your child needs for a successful academic pursuit.
+            We offer quality online classes that cater for all your child needs
+            for a successful academic pursuit.
           </p>
         </div>
         <div className="bg-white  md:bg-stone-100 py-3 pl-4 rounded-xl">
@@ -25,9 +28,9 @@ const Offers = () => {
           <h3 className="text-[18px] mt-3 font-bold">Expert tutoring</h3>
 
           <p className="mb-3 mt-1 text-[16px]">
-          We have a plethora of professional tutors who are dedicated to success of students.
+            We have a plethora of professional tutors who are dedicated to
+            success of students.
           </p>
-          
         </div>
         <div className="bg-white md:bg-stone-100 py-3 pl-3 rounded-xl">
           <Image
@@ -37,14 +40,12 @@ const Offers = () => {
             height={50}
             className="w-1/6"
           />
-          <h3 className="text-[18px] mt-3 font-bold">
-            Virtual Quiz & Test
-          </h3>
+          <h3 className="text-[18px] mt-3 font-bold">Virtual Quiz & Test</h3>
 
           <p className="mb-3 mt-1 text-[16px]">
-          Easy Access to a vast library of quiz and test videos that helps boost the confidence of your child at their convenience.
+            Easy Access to a vast library of quiz and test videos that helps
+            boost the confidence of your child at their convenience.
           </p>
-          
         </div>
         <div className="bg-white md:bg-stone-100 py-3 pl-6 rounded-xl">
           <Image
@@ -59,12 +60,10 @@ const Offers = () => {
           </h3>
 
           <p className="mb-3 mt-1 text-[16px]">
-          Monitor the progress of your child and hire one on one tutors that suit the needs of your child.
-
+            Monitor the progress of your child and hire one on one tutors that
+            suit the needs of your child.
           </p>
-          
         </div>
-       
       </section>
     </Container>
   );

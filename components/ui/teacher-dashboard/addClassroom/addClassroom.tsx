@@ -8,6 +8,7 @@ import {
   addingClassroomSchema,
   Schedules,
   Subject,
+  AllGrade,
 } from "@/constants/addClassroom";
 export type IaddingClassroom = z.infer<typeof addingClassroomSchema>;
 import {
@@ -245,18 +246,11 @@ const AddClassroom: React.FC<{
                       <SelectContent className=" font-subtext font-medium">
                         <ScrollArea className="h-[500px] w-full ">
                           <SelectGroup>
-                            <SelectItem value="Grade1">Grade 1</SelectItem>
-                            <SelectItem value="Grade2">Grade 2</SelectItem>
-                            <SelectItem value="Grade3">Grade 3</SelectItem>
-                            <SelectItem value="Grade4">Grade 4</SelectItem>
-                            <SelectItem value="Grade5">Grade 5</SelectItem>
-                            <SelectItem value="Grade6">Grade 6</SelectItem>
-                            <SelectItem value="Grade7">Grade 7</SelectItem>
-                            <SelectItem value="Grade8">Grade 8</SelectItem>
-                            <SelectItem value="Grade9">Grade 9</SelectItem>
-                            <SelectItem value="Grade10">Grade 10</SelectItem>
-                            <SelectItem value="Grade11">Grade 11</SelectItem>
-                            <SelectItem value="Grade12">Grade 12</SelectItem>
+                            {AllGrade.map((item, value) => (
+                              <SelectItem key={value} value={item}>
+                                {item}
+                              </SelectItem>
+                            ))}
                           </SelectGroup>
                         </ScrollArea>
                       </SelectContent>
