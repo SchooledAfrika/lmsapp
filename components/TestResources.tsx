@@ -34,7 +34,7 @@ const TestResources: React.FC<IResource> = ({ id }) => {
   const { handleDate, handleTime } = useConversion();
   const router = useRouter();
   const mutation = useMutation({
-    mutationKey: ["deleteresource"],
+    mutationKey: ["deleteresource", id],
     mutationFn: async () => {
       const response = await fetch("/api/manage-resources", {
         method: "DELETE",

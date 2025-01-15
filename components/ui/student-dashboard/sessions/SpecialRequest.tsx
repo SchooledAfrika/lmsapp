@@ -26,6 +26,7 @@ interface Iteacher {
 }
 // interface for the type we are getting from backend
 interface ISpecialRequest {
+    id: string;
     amt: string;
     grade: string;
     language: string;
@@ -85,18 +86,52 @@ const JoinSession = () => {
   
 
   return (
-    <div className=" w-full flex gap-2 px-3">
+   
       
-      <div className=" flex-1 flex gap-2 py-3 text-[14px] items-center justify-center bg-[tomato] text-white rounded-md cursor-pointer hover:bg-[#fd7e62] transition-all ease-in-out duration-700 ">
-        <IoIosRadio />
-        <p>Join Session</p>
+      <Button className=" bg-[tomato]  bg-none border-none rounded-lg  hover:bg-[#fd7e62]  text-white text-[13px] font-semibold  px-3 w-full    py-2 text-center lg:block transition-all ease-in-out duration-700">
+        <IoIosRadio className="sm:inline-block text-[18px] hidden mr-1" />
+       Join Session
+      </Button>
+    
+  );
+};
+
+const ViewDetails: React.FC<{
+  sessionId: string;
+  isTeacher: boolean;
+  name: string;
+}> = ({ sessionId, isTeacher, name}) => {
+  const router = useRouter();
+  const navigateLink = () => {
+    if (isTeacher) {
+      router.push(
+        `/teacher-dashboard/sessions/special-request/${sessionId}`
+      );
+    } else {
+      router.push(
+        `/student-dashboard/sessions/special-request/${sessionId}`
+      );
+    }
+  };
+  return (
+    <div className=" w-full flex flex-col gap-2 px-3">
+      <div className=" w-full flex  px-3">
+        <div
+          onClick={navigateLink}
+          className=" flex-1 py-3 flex w-full  justify-center border border-green-800 rounded-md text-[14px] text-green-900 cursor-pointer hover:bg-green-800 hover:text-white transition-all ease-in-out duration-700 "
+        >
+          <p>View Details</p>
+        </div>
+       
       </div>
+      
     </div>
   );
 };
 // each session component here
-const EachSession: React.FC<{ item: ISpecialRequest}> = ({
+const EachSession: React.FC<{ item: ISpecialRequest; isTeacher: boolean}> = ({
   item,
+  isTeacher
  
 }) => {
 
@@ -126,7 +161,15 @@ const EachSession: React.FC<{ item: ISpecialRequest}> = ({
         time={item.time}
         
       />
-       <JoinSession />
+      <div className="flex md:flex-row flex-col gap-2 justify-between">
+        <ViewDetails 
+          isTeacher={isTeacher}
+          name={item.teacher?.name}
+          sessionId={item.id}
+       />
+         <JoinSession/>
+       </div>
+       
     </div>
   );
 };
@@ -161,7 +204,7 @@ const SessionHeading = () => {
     </div>
   );
 };
-const SpecialRequest = () => {
+const SpecialRequest: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
     const { data: session } = useSession();
     const studentId = session?.user?.id; 
     console.log(studentId);
@@ -205,6 +248,7 @@ const SpecialRequest = () => {
                     <EachSession
                       key={index}
                       item={item}
+                      isTeacher={isTeacher}
                     />
                   ))}
                 </div>

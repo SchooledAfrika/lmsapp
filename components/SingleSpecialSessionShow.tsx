@@ -515,7 +515,7 @@ const DownSection: React.FC<{
   );
 };
 
-const SingleSessionShow: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
+const SingleSpecialSessionShow: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
   const { id } = useParams();
   const { data, isLoading, isError, error } = useQuery<ISingleSession>({
     queryKey: ["single-section-show"],
@@ -561,16 +561,16 @@ const SingleSessionShow: React.FC<{ isTeacher: boolean }> = ({ isTeacher }) => {
           />
         </Link>
       </div>
-      <TopSection isTeacher={isTeacher} infos={data!} />
-      <DownSection
+      {/* <TopSection isTeacher={isTeacher} infos={data!} /> */}
+      {/* <DownSection
         isTeacher={isTeacher}
         exams={data!.StudentExam}
         resources={data!.resources}
         sessionId={data!.id}
-      />
+      /> */}
       <ToastContainer />
     </div>
   );
 };
 
-export default SingleSessionShow;
+export default SingleSpecialSessionShow;

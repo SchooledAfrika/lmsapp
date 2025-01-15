@@ -123,6 +123,8 @@ export const AllTeacherCreatedCourses = () => {
       return result;
     },
   });
+
+  console.log(coursesData)
   if (isLoading) {
     return <ShowSkeleton />;
   }
@@ -198,7 +200,7 @@ export const PurchasedCourseCard: React.FC<{ item: ICourses }> = ({ item }) => {
 };
 
 export const AllPurchasedCourses = () => {
-  const { data, isLoading, isError, error } = useQuery({
+  const { data:purchasedCourseData, isLoading, isError, error } = useQuery({
     queryKey: ["getPurchasedCourseByTeacher"],
     queryFn: async () => {
       const response = await fetch("/api/courses-bought");
@@ -212,15 +214,15 @@ export const AllPurchasedCourses = () => {
   if (isError) {
     return <p>{error.message}</p>;
   }
-  console.log(data);
+  console.log(purchasedCourseData);
   return (
     <div className=" flex flex-col gap-3">
       <h2 className="font-bold text-center text-[25px]">Purchased Courses</h2>
-      {Array.isArray(data) && data.length === 0 ? (
+      {Array.isArray(purchasedCourseData) && purchasedCourseData.length === 0 ? (
         <Noitem desc="No purchased courses" />
       ) : (
         <div className="grid grid-cols-1 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-3 p-4 gap-3">
-          {data?.map((item: ICourses, index: number) => (
+          {purchasedCourseData?.map((item: ICourses, index: number) => (
             <PurchasedCourseCard item={item} key={index} />
           ))}
         </div>

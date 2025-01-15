@@ -227,7 +227,7 @@ const TeacherTestAndResources = () => {
   const [showexam, setShowexam] = useState(true);
   const [id, setId] = useState<undefined | string>(undefined);
   const [dialog, setDialog] = useState<boolean>(false);
-  console.log(id);
+  //console.log(id);
   return (
     <section>
       <Container>

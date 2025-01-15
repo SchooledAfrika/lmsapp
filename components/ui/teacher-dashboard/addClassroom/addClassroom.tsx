@@ -423,13 +423,19 @@ const AddClassroom: React.FC<{
                       <SelectContent className=" font-subtext font-medium">
                         <ScrollArea className="h-[250px] w-full ">
                           <SelectGroup>
-                            <SelectItem value="8AM-10AM">8AM-10AM</SelectItem>
-                            <SelectItem value="10AM-12PM">10AM-12PM</SelectItem>
-                            <SelectItem value="12PM-2PM">12PM-2PM</SelectItem>
-                            <SelectItem value="2PM-4PM">2PM-4PM</SelectItem>
-                            <SelectItem value="4PM-6PM">4PM-6PM</SelectItem>
-                            <SelectItem value="6PM-8PM">6PM-8PM</SelectItem>
-                            <SelectItem value="8PM-10PM">8PM-10PM</SelectItem>
+                            <SelectItem value="7AM">7AM</SelectItem>
+                            <SelectItem value="8AM">8AM</SelectItem>
+                            <SelectItem value="9AM">9AM</SelectItem>
+                            <SelectItem value="10AM">10AM</SelectItem>
+                            <SelectItem value="11AM">11AM</SelectItem>
+                            <SelectItem value="12PM">12PM</SelectItem>
+                            <SelectItem value="1PM">1PM</SelectItem>
+                            <SelectItem value="2PM">2PM</SelectItem>
+                            <SelectItem value="3PM">3PM</SelectItem>
+                            <SelectItem value="4PM">4PM</SelectItem>
+                            <SelectItem value="5PM">5PM</SelectItem>
+                            <SelectItem value="6PM">6PM</SelectItem>
+                            <SelectItem value="7PM">7PM</SelectItem>
                           </SelectGroup>
                         </ScrollArea>
                       </SelectContent>
