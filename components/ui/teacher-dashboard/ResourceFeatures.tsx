@@ -17,7 +17,7 @@ const ResourceFeatures = () => {
         firstTabTitle="Created Courses"
         secondTabTitle="Purchased Courses"
       />
-      {createdCourse ? <HandleComingSoon /> : <AllPurchasedCourses />}
+      {createdCourse ? <AllTeacherCreatedCourses /> : <AllPurchasedCourses />}
     </div>
   );
 };
