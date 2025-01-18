@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import OneOnOneSession from "./OneOnOneSession";
 import SpecialRequest from "./SpecialRequest";
 
-
 const SessionFeatures = () => {
   const [oneOneOne, setOneOneOne] = useState<boolean>(true);
   const handleChange = (value: boolean) => {
@@ -30,7 +29,11 @@ const SessionFeatures = () => {
           Special Requests
         </button>
       </div>
-      {oneOneOne ? <OneOnOneSession isTeacher={false} /> : <SpecialRequest />}
+      {oneOneOne ? (
+        <OneOnOneSession isTeacher={false} />
+      ) : (
+        <SpecialRequest isTeacher={false} />
+      )}
     </div>
   );
 };
