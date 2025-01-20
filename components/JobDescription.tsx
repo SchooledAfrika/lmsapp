@@ -59,6 +59,7 @@ const JobDescription: React.FC<IJobSub> = ({
             name="jobTitle"
             render={({ field }) => (
               <Select
+                value={getValues("jobTitle") && getValues("jobTitle")}
                 onValueChange={(value) => {
                   field.onChange(value);
                   clearErrors("jobTitle");
@@ -92,6 +93,7 @@ const JobDescription: React.FC<IJobSub> = ({
             name="role"
             render={({ field }) => (
               <Select
+                value={getValues("role") && getValues("role")}
                 onValueChange={(value) => {
                   field.onChange(value);
                   clearErrors("role");
@@ -119,6 +121,7 @@ const JobDescription: React.FC<IJobSub> = ({
             name="state"
             render={({ field }) => (
               <Select
+                value={getValues("state") && getValues("state")}
                 onValueChange={(value) => {
                   field.onChange(value);
                   clearErrors("state");
@@ -151,6 +154,7 @@ const JobDescription: React.FC<IJobSub> = ({
             name="level"
             render={({ field }) => (
               <Select
+                value={getValues("level") && getValues("level")}
                 onValueChange={(value) => {
                   field.onChange(value);
                   clearErrors("level");

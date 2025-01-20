@@ -22,9 +22,8 @@ const JobQualification: React.FC<IJobSub> = ({
   const handleAddedQualification = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     const newQualification = [...qualifications, ""];
-
     setQualifications(newQualification);
-    setValue("responsibility", newQualification);
+    setValue("qualifications", newQualification);
   };
 
   const handleQualificationChange = (

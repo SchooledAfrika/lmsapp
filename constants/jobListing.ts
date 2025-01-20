@@ -79,28 +79,10 @@ export const jobListingSchema = z.object({
   }),
   location: z.string().min(3, { message: "field is required" }),
   state: z.string().min(3, { message: "field is required" }),
-  level: z.enum(
-    [
-      "Grade1",
-      "Grade2",
-      "Grade3",
-      "Grade4",
-      "Grade5",
-      "Grade6",
-      "Grade7",
-      "Grade8",
-      "Grade9",
-      "Grade10",
-      "Grade11",
-      "Grade12",
-    ],
-    {
-      message: "you can only enter Grade1 format",
-    }
-  ),
+  level: z.string().min(3, { message: "field is required" }),
   description: z.string().min(3, { message: "field is required" }),
-  minSalary: z.string().min(3, { message: "field is required" }),
-  maxSalary: z.string().min(3, { message: "field is required" }),
+  minSalary: z.string().min(1, { message: "field is required" }),
+  maxSalary: z.string().min(1, { message: "field is required" }),
   responsibility: z.array(z.string(), {
     message: "please enter job responsibilities",
   }),

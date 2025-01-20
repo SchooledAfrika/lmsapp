@@ -18,7 +18,6 @@ export async function GET(
     const oneVacancy = await prisma.vacancy.findUnique({
       where: { id: params.id },
     });
-
     return new Response(JSON.stringify(oneVacancy), { status: 200 });
   } catch (error) {
     return serverError();

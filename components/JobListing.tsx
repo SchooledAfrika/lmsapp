@@ -87,7 +87,7 @@ const OneJobListing: React.FC<{ item: IJoblist }> = ({ item }) => {
       {/* the last part */}
       <div className=" flex items-center gap-3 text-[10px] font-semibold">
         <Link
-          href={""}
+          href={`/admin-dashboard/job-listing/add-new-listing?id=${item.id}`}
           className=" px-4 py-3 rounded-md border border-red-600 text-red-600"
         >
           Edit Listing
