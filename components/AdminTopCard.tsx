@@ -19,7 +19,7 @@ const getTotalItem = async (link: string) => {
 // loading component of the home page top
 const LoadingFirst = () => {
   return (
-    <div className=" mt-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
+    <div className=" mt-3 mb-3 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2">
       <Skeleton
         className=" rounded-md"
         variant="rectangular"
