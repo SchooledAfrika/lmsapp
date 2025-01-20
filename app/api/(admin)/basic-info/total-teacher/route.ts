@@ -8,11 +8,12 @@ export async function GET(req: Request) {
   if (!userId) return notAuthenticated();
   if (role !== "Admin") return onlyAdmin();
   try {
-    const allTeachers = await prisma.teacher.findMany();
+    const allTeachers = await prisma.teacher.findMany({ select: { id: true } });
     return new Response(
       JSON.stringify({ total: allTeachers ? allTeachers.length : 0 })
     );
   } catch (error) {
+    console.log(error);
     return serverError();
   }
 }
