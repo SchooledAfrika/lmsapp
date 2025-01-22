@@ -277,3 +277,29 @@ payload:{
 method: POST
 comment: examId is the id of the exam you want to add to one on one section, and appliedSectionId is the id of the one on one section.
 
+NEW ENDPOINTS
+date: 22/01/2025
+================================================================================================================
+endpoint for teacher to delete exam for one on one section
+================================================================================================================
+=====> teacher delete one on one exam
+route: /api/exam-for-students
+payload:{
+    examId:string
+}
+method:DELETE
+
+================================================================================================================
+endpoint for getting all the resources attached to one on one section
+================================================================================================================
+=====> both teacher and student can see the one on one section resources
+route: /api/get-single-resources/id
+method:GET
+comment: you will make a paraquery to this endpoint, the params id in the url is id of the resouces you want to fetch.
+
+================================================================================================================
+endpoint for getting single special request 
+================================================================================================================
+route:/api/teacher-special-request/single-special-request/id
+method:GET
+comment: id in the url is the single special request id

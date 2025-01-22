@@ -9,7 +9,7 @@ import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 export async function POST(req: Request) {
   const userId = await serverSessionId();
   const role = await serverSessionRole();
-  const others = await req.json();
+  const { vacancyId, ...others } = await req.json();
   // first checking if the school is login already
   if (!userId) {
     return new Response(JSON.stringify({ message: "you must login" }), {

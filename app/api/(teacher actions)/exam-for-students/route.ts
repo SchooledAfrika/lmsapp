@@ -2,7 +2,11 @@
 // the appliedsection is the model that handles this relationship
 // this route is just about creating this exam and get this exams for students
 import prisma from "@/prisma/prismaConnect";
-import { notAuthenticated, onlyTeacher } from "@/prisma/utils/error";
+import {
+  notAuthenticated,
+  onlyTeacher,
+  serverError,
+} from "@/prisma/utils/error";
 import { serverSessionId, serverSessionRole } from "@/prisma/utils/utils";
 
 // post request to add an exam for a one on one session
@@ -42,5 +46,21 @@ export async function POST(req: Request) {
     );
   } catch (error) {
     throw new Error(JSON.stringify({ message: "something went wrong" }));
+  }
+}
+
+// enpoint for teacher to delete a particular exam he set before;
+export async function DELETE(req: Request) {
+  const { examId } = await req.json();
+  const userId = await serverSessionId();
+  if (!userId) return notAuthenticated();
+  try {
+    await prisma.studentExam.delete({ where: { id: examId } });
+    return new Response(
+      JSON.stringify({ message: "exam deleted successfully" }),
+      { status: 200 }
+    );
+  } catch (error) {
+    return serverError();
   }
 }

@@ -705,7 +705,7 @@ model SessionAttendance {
 model SpecialRequestAttendance {
   id                     String               @id @default(auto()) @map("_id") @db.ObjectId
   classday               DateTime
-  duration               Int?
+  duration               Float
   Held                   Boolean
   teacher                Teacher              @relation(fields: [teacherId], references: [id])
   session                SpecialTeacherMerged @relation(fields: [specialTeacherMergedId], references: [id])

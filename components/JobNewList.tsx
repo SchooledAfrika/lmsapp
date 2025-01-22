@@ -1,6 +1,6 @@
 "use client";
-import React, { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import React, { useEffect, useState } from "react";
+import { useMutation, useQueryClient, useQuery } from "@tanstack/react-query";
 import JobDescription from "./JobDescription";
 import JobResponsibility from "./ui/JobResponsibility";
 import JobQualification from "./JobQualification";
@@ -17,12 +17,28 @@ import { JobListingInfo, jobListingSchema } from "@/constants/jobListing";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Container from "./Container";
+import { useSearchParams } from "next/navigation";
 export type IjobListing = z.infer<typeof jobListingSchema>;
 
+interface IUpdateListing {
+  id: string;
+  level: string;
+  location: string;
+  role: "FULLTIME" | "PARTTIME";
+  description: string;
+  responsibility: string[];
+  qualifications: string[];
+  minSalary: string;
+  maxSalary: string;
+  jobTitle: string;
+  state: string;
+  note: string;
+}
 const JobNewList = () => {
   const router = useRouter();
   const [loading, setloading] = useState<boolean>(false);
   const [currentPage, setcurrentPage] = useState<number>(1);
+  const search = useSearchParams();
 
   const {
     register,
@@ -38,6 +54,34 @@ const JobNewList = () => {
   } = useForm<IjobListing>({
     resolver: zodResolver(jobListingSchema),
   });
+  // here, we will fetch all information for a particular job
+  // this is when the user actually wants to update a particular job
+  // else, the person just want to create a new job.
+  const { data } = useQuery<IUpdateListing>({
+    queryKey: ["update-job-listing", search.get("id")],
+    queryFn: async () => {
+      const response = await fetch(`/api/one-vacancy/${search.get("id")}`);
+      const result = await response.json();
+      return result;
+    },
+    enabled: Boolean(search.get("id")),
+  });
+
+  useEffect(() => {
+    if (data) {
+      setValue("qualifications", data.qualifications);
+      setValue("responsibility", data.responsibility);
+      setValue("description", data.description);
+      setValue("jobTitle", data.jobTitle);
+      setValue("level", data.level);
+      setValue("role", data.role);
+      setValue("minSalary", data.minSalary);
+      setValue("maxSalary", data.maxSalary);
+      setValue("state", data.state);
+      setValue("note", data.note);
+      setValue("location", data.location);
+    }
+  }, [data]);
 
   //   instance of client
   const queryClient = useQueryClient();
@@ -46,9 +90,10 @@ const JobNewList = () => {
     mutationKey: ["postjob"],
     mutationFn: async (data: IjobListing) => {
       const result = await fetch("/api/advertise", {
-        method: "POST",
+        method: search.get("id") ? "PUT" : "POST",
         body: JSON.stringify({
           ...data,
+          vacancyId: search.get("id"),
         }),
       });
       return result;
@@ -65,7 +110,9 @@ const JobNewList = () => {
         }, 4000);
       } else {
         setloading(false);
-        return toast.error("error posting job");
+        return toast.error(
+          search.get("id") ? "error updating job" : "error posting job"
+        );
       }
     },
   });
@@ -94,6 +141,12 @@ const JobNewList = () => {
 
   // function to display submiting
   const submittingState = (): string => {
+    if (search.get("id")) {
+      if (loading === false) {
+        return "Update";
+      }
+      return "Updating...";
+    }
     if (loading === false) {
       return "Post";
     }
