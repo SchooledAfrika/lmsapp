@@ -295,7 +295,7 @@ endpoint for getting all the resources attached to one on one section
 =====> both teacher and student can see the one on one section resources
 route: /api/get-single-resources/id
 method:GET
-comment: you will make a paraquery to this endpoint, the params id in the url is id of the resouces you want to fetch.
+comment: you will make a paraquery to this endpoint, the params id in the url is id of the resources you want to fetch.
 
 ================================================================================================================
 endpoint for getting single special request 

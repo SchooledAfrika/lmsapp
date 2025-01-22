@@ -5,7 +5,6 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { FiEdit } from "react-icons/fi";
 import { SiGoogleclassroom } from "react-icons/si";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { BsBroadcast } from "react-icons/bs";
 import SingleClassTable from "./SingleClassTable";
